@@ -1,20 +1,9 @@
 import logoRu from '../../images/logo_fut_ru.webp';
-import logoEn from '../../images/logo_fut_en.webp';
 import Styles from './footer.module.scss';
 import { useTranslation } from 'react-i18next';
 
 export const Footer = () => {
   const { t, i18n } = useTranslation('footer');
-
-  const getLogoByLanguage = (language) => {
-    switch(language) {
-      case 'en': return logoEn;
-      case 'ru': return logoRu;
-      default: return logoRu;
-    }
-  };
-
-  const currentLogo = getLogoByLanguage(i18n.language);
 
   return (
     <footer className={Styles.footer}>
@@ -22,7 +11,7 @@ export const Footer = () => {
         {/* Контактная информация */}
         <div className={Styles.contactSection}>
           <div className={Styles.logoContainer}>
-            <img src={currentLogo.src} alt="Новые Технологии"/>
+            <img src={logoRu.src} alt="Новые Технологии"/>
           </div>
           
           <div className={Styles.contactInfo}>
@@ -44,17 +33,17 @@ export const Footer = () => {
             <h3>{t('Каталог')}</h3>
             <ul>
               <li>
-                <a href={`/${i18n.language}/products`}>{t('Продукция')}</a>
+                <a href={`/products`}>{t('Продукция')}</a>
               </li>
               <li>
-                <a href={`/${i18n.language}/services`}>{t('Сервисные услуги')}</a>
+                <a href={`/services`}>{t('Сервисные услуги')}</a>
               </li>
             </ul>
             
             <h3>{t('Карьера')}</h3>
             <ul>
               <li>
-                <a href={`/${i18n.language}/careers`}>{t('Вакансия')}</a>
+                <a href={`/careers`}>{t('Вакансия')}</a>
               </li>
             </ul>
           </div>
@@ -63,16 +52,16 @@ export const Footer = () => {
             <h3>{t('Компания')}</h3>
             <ul>
               <li>
-                <a href={`/${i18n.language}/about`}>{t('О компании')}</a>
+                <a href={`/about`}>{t('О компании')}</a>
               </li>
               <li>
-                <a href={`/${i18n.language}/documents`}>{t('Документы')}</a>
+                <a href={`/documents`}>{t('Документы')}</a>
               </li>
               <li>
-                <a href={`/${i18n.language}/news`}>{t('Новости')}</a>
+                <a href={`/news`}>{t('Новости')}</a>
               </li>
               <li>
-                <a href={`/${i18n.language}/contact`}>{t('Контакты')}</a>
+                <a href={`/contact`}>{t('Контакты')}</a>
               </li>
             </ul>
           </div>

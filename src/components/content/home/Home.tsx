@@ -16,7 +16,7 @@ import item_10_ru from '../../../images/home/luc_ysb.webp';
 
 import homeItem from '../../../images/home/geography.webp';
 
-export const HomeRu = () => {
+export const Home = () => {
   const { t, i18n } = useTranslation('home');
 
   // Создаем объекты с изображениями для каждого языка

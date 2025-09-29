@@ -17,7 +17,7 @@ export const Careers = () => {
 
     const vacancyLinks: Record<TCareers, string> = {
         vacancy1: "https://ufa.hh.ru/vacancy/125521079?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy2: "",        
+        vacancy2: "https://ufa.hh.ru/vacancy/125823249?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy3: "https://ufa.hh.ru/vacancy/125412859?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy4: "https://ufa.hh.ru/vacancy/124368711?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy5: "https://ufa.hh.ru/vacancy/124709966?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
@@ -108,6 +108,13 @@ export const Careers = () => {
                                     experience={t('Полная')}
                                     employmentType={t('График')}
                                     onClick={() => window.open(vacancyLinks.vacancy16, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Заместитель генерального директора по финансам"
+                                    title="Опыт работы: более 6 лет"
+                                    experience={t('Полная')}
+                                    employmentType={t('График')}
+                                    onClick={() => window.open(vacancyLinks.vacancy2, "_blank")}
                                 />
                             </div>
                         </div>

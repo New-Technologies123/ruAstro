@@ -1,0 +1,18 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { Header } from "../components/base/Header";
+import { Footer } from "../components/base/Footer";
+import { Content } from "../components/base/Content";
+import { Contact as ContactContent } from "../components/content/contact/Contact";
+import { changeLanguage } from "i18next";
+
+changeLanguage("ru");
+---
+
+<Layout>
+  <Header pageType="contact" client:load />
+  <Content>
+    <ContactContent client:load />
+  </Content>
+  <Footer client:load/>
+</Layout>

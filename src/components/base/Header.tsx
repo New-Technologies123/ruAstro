@@ -109,42 +109,42 @@ export const Header = ({ pageType }) => {
 
         <ul id="nav-menu" className={`${Styles.navMenu} ${isActiveMobileMenu ? Styles.active : ''}`}>
           <li>
-            <a href={`/${i18n.language}/home`} className={pageType === 'home' ? Styles.active : ''}>
+            <a href={`/home`} className={pageType === 'home' ? Styles.active : ''}>
               {t('Главная')}
             </a>
           </li>
           <li>
-            <a href={`/${i18n.language}/about`} className={pageType === 'about' ? Styles.active : ''}>
+            <a href={`/about`} className={pageType === 'about' ? Styles.active : ''}>
               {t('О компании')}
             </a>
           </li>
           <li>
-            <a href={`/${i18n.language}/products`} className={pageType === 'products' ? Styles.active : ''}>
+            <a href={`/products`} className={pageType === 'products' ? Styles.active : ''}>
               {t('Продукция')}
             </a>
           </li>
           <li>
-            <a href={`/${i18n.language}/services`} className={pageType === 'services' ? Styles.active : ''}>
+            <a href={`/services`} className={pageType === 'services' ? Styles.active : ''}>
               {t('Сервисные услуги')}
             </a>
           </li>
           <li>
-            <a href={`/${i18n.language}/documents`} className={pageType === 'documents' ? Styles.active : ''}>
+            <a href={`/documents`} className={pageType === 'documents' ? Styles.active : ''}>
               {t('Документы')}
             </a>
           </li>
           <li>
-            <a href={`/${i18n.language}/news`} className={pageType === 'news' ? Styles.active : ''}>
+            <a href={`/news`} className={pageType === 'news' ? Styles.active : ''}>
               {t('Новости')}
             </a>
           </li>
           <li>
-            <a href={`/${i18n.language}/careers`} className={pageType === 'careers' ? Styles.active : ''}>
+            <a href={`/careers`} className={pageType === 'careers' ? Styles.active : ''}>
               {t('Карьера')}
             </a>
           </li>
           <li>
-            <a href={`/${i18n.language}/contact`} className={pageType === 'contact' ? Styles.active : ''}>
+            <a href={`/contact`} className={pageType === 'contact' ? Styles.active : ''}>
               {t('Контакты')}
             </a>
           </li>
