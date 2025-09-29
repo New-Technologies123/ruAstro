@@ -1,0 +1,109 @@
+.bloc {
+    background-color: #e6f7ff93;
+    padding: 14px; 
+    width: 260px; 
+    text-align: left;
+    color: #000000;
+    will-change: opacity, transform;
+    // Общие параметры анимации
+    transition: 
+      opacity 0.5s ease-out,
+      transform 0.5s ease-out;    
+    p {
+      font-size: 16px;
+    }     
+    // Состояние скрытия
+    &.hidden {
+      opacity: 0;
+      transform: translateY(20px);
+    }  
+    // Состояние показа
+    &.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
+
+.headerText{
+    display: flex;
+    align-items: center;
+    h3{
+        font-size: 26px;
+        margin-bottom: 8px;
+    }   
+}
+
+.explanationText{
+    display: flex;
+    align-items: center;
+    h4{
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+    h5{
+        margin-left: 10px;
+        font-size: 18px;
+        margin-bottom: 8px;
+    }
+}
+
+@media (max-width: 1400px){
+    .bloc{
+        width: 240px;
+        p{
+            font-size: 15px;
+        }
+    }
+    .headerText{
+        h3{
+            font-size: 24px;
+        }
+    }
+    .explanationText{
+        h4{
+            font-size: 16px;
+        }
+        h5{
+            font-size: 16px;
+        }
+    }
+}
+
+@media (max-width: 1030px){
+    .bloc{
+        width: 225px;
+        p{
+            font-size: 14px;
+        }
+    }
+    .headerText{
+        h3{
+            font-size: 20px;
+            margin-bottom: 5px;
+        }        
+    }
+    .explanationText{
+        h4{
+            font-size: 12px;
+        }
+        h5{
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+    }
+}
+
+@media (max-width: 520px){
+    .headerText{
+        h3{
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+    }
+    .explanationText{
+        h5{
+            font-size: 14px;
+        }
+    }
+}

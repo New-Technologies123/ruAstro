@@ -1,0 +1,138 @@
+.certificatesList {
+    background: linear-gradient(135deg, #6ec9f7, #0c8ed4);
+    padding: 10px 15px;
+    width: 100%;
+    text-align: center;
+    color: #000000;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 1.5s cubic-bezier(0.42, 0, 0.58, 1);
+    position: relative;
+    overflow: hidden;
+    
+    /* Начальное состояние для анимации входа */
+    opacity: 0;
+    transform: translateX(100%);
+    transition-delay: 0s;
+
+    /* Анимация при наведении */
+    &:hover {
+        transform: translateX(0) translateY(-5px) scale(1.03);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        &::before {
+            transform: translateX(0);
+        }
+    }
+    
+    /* Эффект "подсветки" при наведении */
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.2),
+            rgba(255, 255, 255, 0.4),
+            rgba(255, 255, 255, 0.2)
+        );
+        transform: translateX(-100%);
+        transition: transform 1.5s ease;
+    }
+}
+
+.actionTitle{
+    display: flex;
+    align-items: center;
+    position: relative;
+    justify-content: center;
+    z-index: 1;
+    p {
+        font-size: 20px;
+        margin: 5px 0;
+        transition: transform 0.3s ease;        
+        .certificatesList:hover & {
+            transform: translateX(5px);
+        }
+    }
+    img {
+        width: 28px;
+        height: 28px;
+        margin-right: 8px;
+        transition: none !important;
+    }
+}
+  
+@media (max-width: 1400px) {
+    .actionTitle {
+        p{
+            font-size: 18px; 
+        }               
+        img {
+            width: 20px;
+            height: 20px;
+        }
+    }
+}
+
+@media (max-width: 1200px) {
+    .actionTitle {
+        p{
+            font-size: 17px; 
+        }
+    }
+}
+  
+@media (max-width: 1030px) {
+    .actionTitle {
+        p{
+            font-size: 16px; 
+        }               
+        img {
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+  
+@media (max-width: 770px) {
+    .actionTitle {
+        p{
+            font-size: 14px;
+        }
+        img {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}
+  
+@media (max-width: 515px) {
+    .actionTitle {
+        p{
+            font-size: 15px;
+        }
+    }    
+    .certificatesList {
+        &:hover {
+            transform: translateX(0) translateY(-3px) scale(1.02);
+        }
+    }
+}
+
+@media (max-width: 500px){
+    .certificatesList{
+        &:hover {
+            transform: none;
+            box-shadow: none; 
+        }
+        &::before {            
+            background: none;
+            transform: none;
+            transition: none;
+        }
+    }
+}

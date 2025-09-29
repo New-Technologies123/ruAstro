@@ -1,0 +1,226 @@
+.employeeCardWrapper {
+  // Задаем задержки для последовательного появления
+  &:nth-child(1) { --delay: 0.1s; }
+  &:nth-child(2) { --delay: 0.4s; }
+  &:nth-child(3) { --delay: 0.7s; }
+  &:nth-child(4) { --delay: 0.9s; }
+  &:nth-child(5) { --delay: 1.2s; }
+}
+
+.employeeCard {
+  background: linear-gradient(135deg, #36a9e1, #1e88e5);
+  padding: 20px;
+  width: 250px;
+  min-height: 350px;
+  text-align: center;
+  color: #fff;
+  border-radius: 12px;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  opacity: 0;
+  animation: fadeInUp 0.6s var(--delay, 0.3s) ease-out forwards;
+  p {
+    min-height: 50px;
+    word-break: break-word;
+    font-size: 19px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+    position: relative;
+    padding-bottom: 2px;    
+    &::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0px;
+      left: 0;
+      background-color: #000000;
+      transition: width 0.3s ease;
+    }    
+    &:hover::after {
+      width: 100%;
+    }
+  }  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1), rgba(255,255,255,0.3));
+    transform: translateX(-100%);
+    transition: transform 0.6s ease;
+    z-index: -1;
+  }
+
+  &:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);    
+    &::before {
+      transform: translateX(0);
+    }    
+    p {
+      color: #000000;
+      &::after {
+        width: 100%;
+      }
+    }    
+    .system {
+      transform: scale(1.05) rotate(2deg);
+      filter: brightness(1.1);
+    }
+  }
+}
+
+.system {
+  width: 210px;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  margin: 0 auto;
+  border-radius: 8px;
+  transition: transform 0.5s ease, filter 0.5s ease !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  opacity: 0;
+  animation: fadeIn 0.6s calc(var(--delay, 0.3s) + 0.2s) ease-out forwards;
+  transform: scale(1);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (max-width: 1400px) {
+  .employeeCard {
+    width: 240px;
+    min-height: 335px;
+    p {
+      font-size: 18px;
+    }
+  }  
+  .system {
+    width: 200px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .employeeCard {
+    width: 230px;
+    min-height: 320px;
+    p{
+      font-size: 17px;
+    }
+  }  
+  .system {
+    width: 190px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 1030px) {
+  .employeeCard {
+    padding: 15px;    
+    p{
+      margin-top: 15px;
+    }
+  }  
+  .system {
+    width: 200px;
+    height: 190px;
+  }
+}
+
+@media (max-width: 740px) {  
+  .employeeCard{
+    min-height: 310px;
+    p{
+      font-size: 16px;
+    }
+  } 
+}
+
+@media (max-width: 500px){
+  .employeeCard{
+    p{
+      &::after{
+        height: 0;
+        background-color: #00000000;
+        transition: none;
+      }    
+      &:hover::after {
+        width: none;
+      }
+    }
+    &:hover {
+      transform: none;
+      box-shadow: none;    
+      &::before {
+        transform: none;
+      }    
+      p {
+        color: white;
+        &::after {
+          width: none;
+        }
+      }    
+      .system {
+        transform: none;
+        filter: none;
+      }
+    }
+    &::before {      
+      background: none;
+      transform: none;
+      transition: none;
+    }
+  }
+}
+
+@media (max-width: 430px) {
+  .employeeCard {
+    width: 220px;
+    min-height: 295px;
+    p{
+      margin-top: 10px;
+    }
+  }  
+  .system {
+    width: 190px;
+    height: 180px;
+  }
+}
+
+@media (max-width: 375px) {
+  .employeeCard {
+    width: 200px;
+    min-height: 270px;    
+    p {
+      font-size: 14px;
+    }
+  }  
+  .system {
+    width: 170px;
+    height: 160px;
+  }
+}

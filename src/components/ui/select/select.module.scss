@@ -1,0 +1,150 @@
+.customSelect {
+  position: relative;
+  border: 1px solid #00a8cc;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 800px;
+  margin: 10px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(77, 225, 252, 0.2);
+}
+
+.selectHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #f8fdff;
+  }
+  
+  &.active {
+    background-color: #f0faff;
+  }
+}
+
+.selectedOption {
+  flex-grow: 1;
+  font-size: 18px;
+  transition: color 0.2s ease;
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid #0051ff;
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  
+  &.down {
+    transform: rotate(0deg);
+  }
+  
+  &.up {
+    transform: rotate(180deg);
+  }
+}
+
+.options {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border: 1px solid #00a8cc;
+  background-color: white;
+  z-index: 10;
+  border-radius: 6px;
+  font-size: 18px;
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: 
+    max-height 0.3s ease-out,
+    opacity 0.2s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  
+  &.open {
+    max-height: 300px;
+    opacity: 1;
+  }
+}
+
+.option {
+  padding: 10px;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background-color: #e6f7ff;
+    transform: translateX(5px);
+  }
+  
+  &:active {
+    background-color: #d0f8ff;
+  }
+}
+
+/* Медиа-запросы остаются без изменений */
+@media (max-width: 1360px) {
+  .customSelect {
+    width: 600px;
+  }
+  .selectedOption {
+    font-size: 16px;
+  }
+  .options {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1030px) {
+  .customSelect {
+    width: 500px;
+  }
+  .selectedOption {
+    font-size: 14px;
+  }
+  .options {
+    font-size: 14px;
+  }
+  .option {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 770px) {
+  .customSelect {
+    width: 350px;
+  }
+  .selectedOption {
+    font-size: 15px;
+  }
+  .options {
+    font-size: 15px;
+  }
+  .option {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 430px) {
+  .customSelect {
+    width: 320px;
+  }
+  .selectedOption {
+    font-size: 14px;
+  }
+  .options {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .customSelect {
+    width: 270px;
+  }
+}

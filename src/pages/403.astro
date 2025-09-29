@@ -1,0 +1,52 @@
+---
+Astro.redirect('//src/pages/403.astro');
+---
+
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 — Доступ запрещен</title>
+    <style>
+      body { 
+        font-family: Arial, sans-serif; 
+        text-align: center; 
+        padding: 2rem; 
+      }
+      h1 { color: #dc2626; font-size: 34px;}
+      p,button{ font-size: 18px;}
+      .buttons {
+        display: flex;
+        gap: 50px;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+      button {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+      }
+      @media (max-width: 1030px){
+        h1 { font-size: 28px;}
+        p,button{ font-size: 16px;}
+      }
+      @media (max-width: 500px){
+        h1 { font-size: 22px;}
+        p,button{ font-size: 14px;}
+        .buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>⛔ 403 — Доступ запрещен</h1>
+    <p>У вас нет прав для просмотра этой страницы.</p>
+    
+    <div class="buttons">
+      <button onclick="history.back()">← Вернуться назад</button>
+      <button onclick="window.location.href='https://tech-new.ru/'">На главную</button>
+    </div>
+  </body>
+</html>

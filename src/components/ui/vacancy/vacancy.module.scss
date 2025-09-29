@@ -1,0 +1,138 @@
+.employeeVacancy {
+  background-color: #44c1ff;
+  padding: 10px 15px;
+  width: 350px;
+  color: #000000;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 0.8s ease-out forwards;
+  h3{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+  }
+  p {
+    font-size: 18px;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+  }
+  
+  // Эффект "пульсации" при наведении
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(0);
+    border-radius: 8px;
+    transition: transform 0.6s ease-out;
+  }
+  
+  &:hover {
+    transform: scale(1.06) translateY(-5px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);    
+    &::before {
+      transform: scale(1);
+    }    
+    h3 {
+      color: #ffffffde;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Анимация появления
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1400px){
+  .employeeVacancy{
+    width: 320px;
+    h3{
+      font-size: 19px;
+    }
+    p{
+      font-size: 17px;
+    }
+  }
+}
+
+@media (max-width: 1020px) {
+  .employeeVacancy {
+    width: 300px;
+    animation: fadeInUp 0.6s ease-out forwards;
+    h3{
+      font-size: 18px;
+    }
+    p {
+      font-size: 16px;
+    }
+    &:hover {
+      transform: scale(1.05) translateY(-3px);
+    }
+  }
+}
+
+@media (max-width: 800px){
+  .employeeVacancy{
+    width: 260px;
+    h3{
+      font-size: 17px;
+    }
+    p{
+      font-size: 15px;
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .employeeVacancy {
+    // width: 245px;
+    h3{
+      font-size: 16px;
+    }
+    p {
+      font-size: 14px;
+    }
+    &::before {
+      background: none;
+      transform: none;
+      transition: none;
+    }
+    &:hover {
+      transform: none;
+      box-shadow: none;    
+      &::before {
+        transform: none;
+      }    
+      h3 {
+        color: #000000;
+        text-shadow: none;
+      }
+    }
+  }
+}

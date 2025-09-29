@@ -1,0 +1,56 @@
+.ramca{
+  display: grid;
+  gap: 15px;
+}
+
+.vacancies{
+  margin: 15px 20px;
+  background-color: #e6f7ff;
+  padding: 20px 0;
+  border-radius: 24px;
+  p{
+    margin-bottom: 10px;
+    font-size: 20px;
+    margin-left: 70px;
+  }
+}
+
+.team{
+    display: flex;
+    justify-content: center;
+    gap: 55px;    
+    flex-wrap: wrap;    
+}
+
+@media (max-width: 1400px){
+  .vacancies{
+    p{
+      font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 1030px){
+  .vacancies{
+    margin: 10px 15px;
+    p{
+      font-size: 16px;
+      margin-left: 80px;
+    }
+  }
+  .team{
+      gap: 40px;
+  }
+}
+
+@media (max-width: 500px){
+  .vacancies{
+    margin: 8px 12px;
+    p{
+      margin-left: 15px;
+    }
+  }
+  .team{
+    gap: 20px;
+  }
+}

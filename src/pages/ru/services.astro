@@ -1,0 +1,18 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Header } from "../../components/base/Header";
+import { Footer } from "../../components/base/Footer";
+import { Content } from "../../components/base/Content";
+import { Services as ServicesContent } from "../../components/content/services/Services";
+import { changeLanguage } from "i18next";
+
+changeLanguage("ru");
+---
+
+<Layout>
+  <Header pageType="services" client:load />
+  <Content>
+    <ServicesContent client:load />
+  </Content>
+  <Footer client:load/>
+</Layout>

@@ -1,0 +1,203 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 300px;
+  background-color: rgb(32, 187, 239); 
+  // &Image {
+  //   width: 100%;
+  //   object-fit: cover;
+  //   display: block;
+  // } 
+}
+
+.heroOverlay{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 25px 50px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+  color: white;
+  h1{
+    font-size: 36px;
+    margin-bottom: 5px;
+    font-weight: 700;
+  }    
+  p{
+    font-size: 24px;
+    opacity: 0.9;
+  }
+}
+
+.homeImg {
+  width: 100%;
+}
+
+/* Слайдер на главной странице */
+.brandParent {
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: nowrap;
+  -webkit-flex-wrap: nowrap;
+  align-items: center;
+  -webkit-align-items: center;
+  overflow: hidden;
+}
+.brandsCarousel {
+  height: 270px;
+  display: flex;
+  display: -webkit-flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  -webkit-align-items: center;
+  animation: animate 30s linear infinite;
+}
+.brandsCarousel .slideContent {
+  height: 100%;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 320px;
+}
+.brandsCarousel .slideContent a {
+  height: 100%;
+  display: flex;
+  display: -webkit-flex;
+  align-items: center;
+  -webkit-align-items: center;
+  justify-content: center;
+  -webkit-justify-content: center;
+  white-space: nowrap;
+  text-transform: uppercase;
+  padding: 20px;
+  width: 100%;
+  transition: all 0.3s ease-in-out 0s;
+}
+/* Отвечает за выделение карточки заказчиков цветом.*/
+// .brandsCarousel .slideContent a:hover,
+// .brandsCarousel .slideContent a:active {
+//   box-shadow: 0 0 25px rgb(41, 194, 255);
+// }
+
+.brandsCarousel .slideContent a img {
+  display: inline-block;
+  width: auto;
+  max-width: 100% !important;
+  height: auto;
+  max-height: 100%;
+  /* Отвечает за затемнение заказчиков. 
+      Если код работает, то фото черно белое и при наведении на него становица цветным*/
+  // filter: grayscale(100%);
+  // -webkit-filter: grayscale(100%);
+  // opacity: 0.5;
+  // transition: all 0.3s ease-in-out;
+}
+// .brandsCarousel .slideContent a:hover img,
+// .brandsCarousel .slideContent a:active img {
+//   filter: grayscale(0);
+//   -webkit-filter: grayscale(0);
+//   opacity: 1;
+// }
+
+@keyframes animate {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+@-webkit-keyframes animate {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@media (max-width: 1400px){
+  .brandsCarousel{
+    height: 200px;
+  }
+  .brandsCarousel .slideContent{
+    width: 250px;
+  }
+  .heroOverlay{
+    h1{
+      font-size: 34px;
+    }
+    p{
+      font-size: 22px;
+    }
+  }
+}
+
+@media (max-width: 1200px){
+  .heroOverlay{
+    h1{
+      font-size: 32px;
+    }
+    p{
+      font-size: 20px;
+    }
+  }
+}
+
+@media (max-width: 1030px){
+  .hero{
+    height: 250px;
+  }
+  .brandsCarousel{
+    height: 150px;
+  }
+  .brandsCarousel .slideContent{
+    width: 200px;
+  }
+  .brandsCarousel .slideContent a{
+    padding: 10px;
+  }
+  .heroOverlay{
+    h1{
+      font-size: 30px;
+    }
+  }
+}
+
+@media (max-width: 770px){
+  .hero{
+    height: 200px;
+  }
+  .heroOverlay{
+    padding: 20px 30px;
+    h1{
+      font-size: 25px;
+    }
+    p{
+      font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 430px) {
+  .hero{
+    height: 150px;
+  }  
+  .brandsCarousel{
+    height: 120px;
+  }
+  .brandsCarousel .slideContent{
+    width: 170px;
+  }
+  .heroOverlay{
+    padding: 15px 20px;
+    h1{
+      font-size: 20px;
+    }
+    p{
+      font-size: 16px;
+    }
+  }
+}
