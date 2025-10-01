@@ -16,10 +16,10 @@ export const Footer = () => {
           
           <div className={Styles.contactInfo}>
             <p>
-              {t('Адрес')}
+              г.Уфа, ул Заки Валиди 32/2
             </p>
             <p>
-              <a href="tel:+74951234567">{t('Телефон')}</a>
+              <a href="tel:+74951234567">+7(347) 293-93-33</a>
             </p>
             <p>
               <a href="mailto:nt@tech-new.ru">nt@tech-new.ru</a>
@@ -30,38 +30,38 @@ export const Footer = () => {
         {/* Навигационные ссылки */}
         <div className={Styles.navSections}>
           <div className={Styles.navColumn}>
-            <h3>{t('Каталог')}</h3>
+            <h3>Каталог</h3>
             <ul>
               <li>
-                <a href={`/products`}>{t('Продукция')}</a>
+                <a href={`/products`}>Продукция</a>
               </li>
               <li>
-                <a href={`/services`}>{t('Сервисные услуги')}</a>
+                <a href={`/services`}>Сервисные услуги</a>
               </li>
             </ul>
             
             <h3>{t('Карьера')}</h3>
             <ul>
               <li>
-                <a href={`/careers`}>{t('Вакансия')}</a>
+                <a href={`/careers`}>Открытые вакансии</a>
               </li>
             </ul>
           </div>
 
           <div className={Styles.navColumn}>
-            <h3>{t('Компания')}</h3>
+            <h3>Компания</h3>
             <ul>
               <li>
-                <a href={`/about`}>{t('О компании')}</a>
+                <a href={`/about`}>О компании</a>
               </li>
               <li>
-                <a href={`/documents`}>{t('Документы')}</a>
+                <a href={`/documents`}>Документы</a>
               </li>
               <li>
-                <a href={`/news`}>{t('Новости')}</a>
+                <a href={`/news`}>Новости</a>
               </li>
               <li>
-                <a href={`/contact`}>{t('Контакты')}</a>
+                <a href={` /contact`}>Контакты</a>
               </li>
             </ul>
           </div>
@@ -71,7 +71,7 @@ export const Footer = () => {
       {/* Нижняя часть футера */}
       <div className={Styles.footerBottom}>
         <p>
-          © {new Date().getFullYear()} {t('Права')}
+          © {new Date().getFullYear()}  ООО ИПП Новые технологии. Все права защищены.
         </p>
       </div>
     </footer>

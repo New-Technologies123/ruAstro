@@ -1,9 +1,8 @@
 ---
-import i18next, { t } from "i18next";
 import { ViewTransitions } from 'astro:transitions';
 ---
 
-<html lang={i18next.language}>
+<html>
   <head>
     <ViewTransitions /> <!-- Добавляем поддержку плавных переходов -->
     <meta charset="UTF-8">
@@ -14,9 +13,8 @@ import { ViewTransitions } from 'astro:transitions';
     <meta content="ООО Инженерно-Производственное Предприятие 'Новые Технологии' динамично развивающаяся компания, оказывающая комплекс услуг ряду отраслей ТЭК." name="description">
     <meta content="ООО ИПП «Новые технологии», нефтяное оборудование, оборудование нефтяной скважины, компания нефтяного оборудования, нефтяное оборудование уфа" name="keywords">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- <title>ООО ИПП «Новые технологии»</title> -->
 
-    <title>{t('Новые Технологии')}</title>
+    <title>ООО ИПП «Новые Технологии»</title>
     <link rel="icon" type="image/png" href="/images/icon.png">
   </head>
 

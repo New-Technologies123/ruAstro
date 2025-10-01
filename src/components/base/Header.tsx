@@ -1,6 +1,5 @@
 import Styles from './header.module.scss';
 import logoRu from '../../images/logo_ru.webp';
-import logoEn from '../../images/logo_en.webp';
 
 import menu from '../../images/header/menu.svg';
 import cross from '../../images/header/cross.svg';
@@ -8,25 +7,18 @@ import location from '../../images/location.svg';
 import email from '../../images/email.svg';
 import phone from '../../images/phone.svg';
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 
 export const Header = ({ pageType }) => {
-  const { t, i18n } = useTranslation('header');
 
   const [isActiveMobileMenu, setIsActiveMobileMenu] = useState(false);
 
   const onToggleMobileMenu = () => {
     setIsActiveMobileMenu((prev) => !prev);
   };
-
-  const onToggleLanguage = () => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const typeFromQuery = queryParams.get('type');
-
-    const newUrl = `${window.location.origin}/${i18n.language === 'ru' ? 'en' : 'ru'}/${pageType}${typeFromQuery ? `?type=${typeFromQuery}` : ''}`;
-    window.history.pushState({}, '', newUrl);
-
-    i18n.changeLanguage(i18n.language === 'ru' ? 'en' : 'ru');
+   
+   // Функция для перехода на сайт tech-new
+  const redirectEngToTechNew = () => {
+    window.location.href = 'https://eng.tech-new.ru';
   };
 
   // Закрытие меню при клике вне его области
@@ -53,28 +45,16 @@ export const Header = ({ pageType }) => {
     };
   }, [isActiveMobileMenu]);
 
-  // Выбираем логотип в зависимости от текущего языка
-  const getLogoByLanguage = (language) => {
-    switch(language) {
-      case 'en':
-        return logoEn;
-      case 'ru':
-        return logoRu;
-    }
-  };
-
-  const currentLogo = getLogoByLanguage(i18n.language);
-
   return (
     <>
       <header>
         <div className={Styles.headerContainer}>
-          <img src={currentLogo.src} alt="Новые Технологии" />
+          <img src={logoRu.src} alt="Новые Технологии" />
           <div className={Styles.contactBloc}>
             <div className={Styles.contactInfo}>
               <p>
                 <img src={location.src} alt="Адрес"/>
-                {t('Адрес')}
+                Адрес: 450076, г. Уфа, ул Заки Валиди 32/2
               </p>
               <p>
                 <img src={email.src} alt="Email"/>
@@ -82,16 +62,13 @@ export const Header = ({ pageType }) => {
               </p>
               <p>
                 <img src={phone.src} alt="Телефон"/>
-                {t('Телефон')}
+                Телефон: +7(347) 293-93-33
               </p>
             </div>
 
             <div className={Styles.languageSwitch}>
-              <a className={Styles.buttonMenu} onClick={() => {
-                  onToggleLanguage();
-                  window.location.reload(); // Перезагружаем страницу
-                }}>
-                {t('Рус/Eng')}
+              <a className={Styles.buttonMenu} onClick={redirectEngToTechNew}>
+                Рус/Eng
               </a>
             </div>
             
@@ -110,42 +87,42 @@ export const Header = ({ pageType }) => {
         <ul id="nav-menu" className={`${Styles.navMenu} ${isActiveMobileMenu ? Styles.active : ''}`}>
           <li>
             <a href={`/home`} className={pageType === 'home' ? Styles.active : ''}>
-              {t('Главная')}
+              Главная
             </a>
           </li>
           <li>
             <a href={`/about`} className={pageType === 'about' ? Styles.active : ''}>
-              {t('О компании')}
+              О компании
             </a>
           </li>
           <li>
             <a href={`/products`} className={pageType === 'products' ? Styles.active : ''}>
-              {t('Продукция')}
+              Продукция
             </a>
           </li>
           <li>
             <a href={`/services`} className={pageType === 'services' ? Styles.active : ''}>
-              {t('Сервисные услуги')}
+              Сервисные услуги
             </a>
           </li>
           <li>
             <a href={`/documents`} className={pageType === 'documents' ? Styles.active : ''}>
-              {t('Документы')}
+              Документы
             </a>
           </li>
           <li>
             <a href={`/news`} className={pageType === 'news' ? Styles.active : ''}>
-              {t('Новости')}
+              Новости
             </a>
           </li>
           <li>
             <a href={`/careers`} className={pageType === 'careers' ? Styles.active : ''}>
-              {t('Карьера')}
+              Карьера
             </a>
           </li>
           <li>
             <a href={`/contact`} className={pageType === 'contact' ? Styles.active : ''}>
-              {t('Контакты')}
+              Контакты
             </a>
           </li>
         </ul>

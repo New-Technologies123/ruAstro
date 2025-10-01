@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
 import Styles from './contact.module.scss';
-import { useTranslation } from 'react-i18next';
 import { Title } from '../../ui/title/Title';
 
 export const Contact = () => {
-  const { t, i18n } = useTranslation('contact');
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -14,8 +12,8 @@ export const Contact = () => {
   const contacts = [
     {
       type: 'office',
-      title: t('Офис'),
-      text: t('Валиди'),
+      title: 'Офис:',
+      text: '450076, Россия, Республика Башкортостан, г. Уфа, ул. Заки Валиди 32/2',
       icon: (
         <svg viewBox="0 0 24 24">
           <path d="M19 2H5a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-1 18H6V4h12v16z"/>
@@ -24,8 +22,8 @@ export const Contact = () => {
     },
     {
       type: 'legal',
-      title: t('Юридический'),
-      text: t('Менделеева'),
+      title: 'Юридический адрес:',
+      text: '450106, Россия, Республика Башкортостан, г. Уфа, ул. Менделеева 114',
       icon: (
         <svg viewBox="0 0 24 24">
           <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11V11.99z"/>
@@ -34,8 +32,8 @@ export const Contact = () => {
     },
     {
       type: 'details',
-      title: t('Реквизиты'),
-      text: t('ИннОгрн'),
+      title: 'Реквизиты',
+      text: 'ИНН: 0274106520 | ОГРН: 1050204014651',
       icon: (
         <svg viewBox="0 0 24 24">
           <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11z"/>
@@ -44,7 +42,7 @@ export const Contact = () => {
     },
     {
       type: 'phone',
-      title: t('Вопросы'),
+      title: 'По вопросам вакансии звоните:',
       text: '+7(347) 293-93-33',
       icon: (
         <svg viewBox="0 0 24 24">
@@ -56,7 +54,7 @@ export const Contact = () => {
 
   return (
     <>
-      <Title text={t('Контакты')}/>
+      <Title text="Контакты"/>
       <div className={`${Styles.wrapper} ${loaded ? Styles.loaded : ''}`}> 
         <div className={Styles.content}>
           <div className={Styles.contacts}>
@@ -85,14 +83,11 @@ export const Contact = () => {
           
           <div className={Styles.mapContainer}>
             <iframe
-              src={i18n.language === 'en' 
-                ? "https://yandex.ru/map-widget/v1/?um=constructor%3A7e310988bcfd232d57415d059b582e872e6f9b30a42d2aad2a15aa82885ad21f&amp;source=constructor"
-                : "https://yandex.ru/map-widget/v1/?um=constructor%3Af1bd327c32b7c5c037613d0c1228b955362997bce9338237e5b612e6449e8c86&amp;source=constructor"}
+              src={"https://yandex.ru/map-widget/v1/?um=constructor%3Af1bd327c32b7c5c037613d0c1228b955362997bce9338237e5b612e6449e8c86&amp;source=constructor"}
               frameBorder="0"
               allowFullScreen
               aria-hidden="false"
               tabIndex={0}
-              key={i18n.language}
             />
           </div>
         </div>
