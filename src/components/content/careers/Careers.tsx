@@ -15,11 +15,11 @@ export const Careers = () => {
     const { t, i18n } = useTranslation('careers');
 
     const vacancyLinks: Record<TCareers, string> = {
-        vacancy1: "",
+        vacancy1: "https://ufa.hh.ru/vacancy/126006933?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy2: "https://ufa.hh.ru/vacancy/125823249?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy3: "https://ufa.hh.ru/vacancy/125412859?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy4: "https://ufa.hh.ru/vacancy/124368711?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
-        vacancy5: "",        
+        vacancy5: "https://ufa.hh.ru/vacancy/125953389?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy6: "https://ufa.hh.ru/vacancy/125412835?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy7: "",
         vacancy8: "https://ufa.hh.ru/vacancy/122969761?hhtmFrom=vacancy_search_list",
@@ -87,6 +87,20 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy14, "_blank")}
                                 />
                                 <Vacancy
+                                    header="Коммерческий директор (CCO)"
+                                    title="Опыт работы: 3–6 лет"
+                                    experience={t('Полная')}
+                                    employmentType={t('График')}
+                                    onClick={() => window.open(vacancyLinks.vacancy1, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Инженер по снабжению"
+                                    title="Опыт работы: 3–6 лет"
+                                    experience={t('Полная')}
+                                    employmentType={t('График')}
+                                    onClick={() => window.open(vacancyLinks.vacancy5, "_blank")}
+                                />
+                                <Vacancy
                                     header={t('НачальникОхраны')}
                                     title={t('Опыт3')}
                                     experience={t('Полная')}
@@ -99,7 +113,7 @@ export const Careers = () => {
                                     experience={t('Полная')}
                                     employmentType={t('График')}
                                     onClick={() => window.open(vacancyLinks.vacancy2, "_blank")}
-                                />
+                                />                                
                             </div>
                         </div>
                         <div className={Styles.vacancies}>
