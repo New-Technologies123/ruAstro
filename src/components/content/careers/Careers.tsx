@@ -73,45 +73,45 @@ export const Careers = () => {
                             <p>{t('Офис')}</p>
                             <div className={Styles.team}>
                                 <Vacancy
-                                    header={t('ГлавныйМетролог')}
-                                    title={t('Опыт6')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Главный метролог"
+                                    title="Опыт работы: более 6 лет"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy7, "_blank")}
                                 />                                
                                 <Vacancy
                                     header="Ведущий инженер отдела ПТО"
                                     title="Опыт работы: 3–6 лет"
                                     experience="Проект или разовое задание"
-                                    employmentType={t('График')}
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy2, "_blank")}
                                 />
                                 <Vacancy
                                     header="Инженер-конструктор"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
-                                    employmentType={t('График')}
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy6, "_blank")}
                                 />
                                 <Vacancy
                                     header="Специалист по подбору персонала"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
-                                    employmentType={t('График')}
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy5, "_blank")}
                                 />
                                 <Vacancy
                                     header="Специалист службы безопасности"
                                     title="Опыт работы: 1–3 года"
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy1, "_blank")}
                                 />
                                 <Vacancy
                                     header="Секретарь/помощник руководителя"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость" 
-                                    employmentType={t('График')}
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy10, "_blank")}
                                 />
                             </div>
@@ -122,64 +122,64 @@ export const Careers = () => {
                                 <Vacancy
                                     header="Водитель с категорией С, Е"
                                     title="Опыт работы: 1–3 года"
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy12, "_blank")}
                                 />
                                 <Vacancy
-                                    header={t('НачальникКонструктор')}
-                                    title={t('Опыт3')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Начальник конструкторского отдела"
+                                    title="Опыт работы: 3-6 лет"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy13, "_blank")}
                                 />
                                 <Vacancy
-                                    header={t('Бухгалтера')}
-                                    title={t('Опыт3')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Заместитель главного бухгалтера"
+                                    title="Опыт работы: 3-6 лет"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy22, "_blank")}
                                 />
                                 <Vacancy
-                                    header={t('КонтролерОТК')}
-                                    title={t('Опыт')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Контролер ОТК металлургия"
+                                    title="Опыт работы: 1-3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy18, "_blank")}
                                 />
                                 <Vacancy
-                                    header={t('Наладчик')}
-                                    title={t('Опыт')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Наладчик станков с ЧПУ"
+                                    title="Опыт работы: 1-3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy11, "_blank")}
                                 />
                                 <Vacancy
-                                    header={t('Монтажник')}
-                                    title={t('Опыт')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Монтажник ТТ"
+                                    title="Опыт работы: 1-3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy17, "_blank")}
                                 />
                                 <Vacancy
-                                    header={t('Слесарь')}
-                                    title={t('Опыт')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Слесарь КИПиА"
+                                    title="Опыт работы: 1-3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy4, "_blank")}
                                 />
                                 <Vacancy
-                                    header={t('Маляр')}
-                                    title={t('Опыт')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Маляр по металлу"
+                                    title="Опыт работы: 1-3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy19, "_blank")}
                                 />
                                 <Vacancy
-                                    header={t('Электрогазосварщик')}
-                                    title={t('Опыт')}
-                                    experience={t('Полная')}
-                                    employmentType={t('График')}
+                                    header="Электрогазосварщик ТТ"
+                                    title="Опыт работы: 1-3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy3, "_blank")}
                                 />
                             </div> 
