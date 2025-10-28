@@ -8,8 +8,7 @@ import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 type TCareers = 'vacancy1' | 'vacancy2' | 'vacancy3' | 'vacancy4' | 'vacancy5' | 'vacancy6' 
  | 'vacancy7' | 'vacancy8' | 'vacancy9' | 'vacancy10' | 'vacancy11' | 'vacancy12' | 'vacancy13'
- | 'vacancy14' | 'vacancy15' | 'vacancy16' | 'vacancy17' | 'vacancy18' | 'vacancy19' | 'vacancy20'
- | 'vacancy21' | 'vacancy22';
+ | 'vacancy14' | 'vacancy15' | 'vacancy16' | 'vacancy17' | 'vacancy18';
 
 export const Careers = () => {
     const { t, i18n } = useTranslation('careers');
@@ -22,21 +21,17 @@ export const Careers = () => {
         vacancy5: "https://ufa.hh.ru/vacancy/126695188?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy6: "https://ufa.hh.ru/vacancy/126473582?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy7: "https://ufa.hh.ru/vacancy/122969761?hhtmFrom=vacancy_search_list",
-        vacancy8: "",
-        vacancy9: "",
+        vacancy8: "https://ufa.hh.ru/vacancy/126187855?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy9: "https://ufa.hh.ru/vacancy/124588968?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy10: "https://ufa.hh.ru/vacancy/126589136?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy11: "https://ufa.hh.ru/vacancy/125148681?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy12: "https://ufa.hh.ru/vacancy/126589206?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy13: "https://ufa.hh.ru/vacancy/125148803?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
-        vacancy14: "",
-        vacancy15: "",
-        vacancy16: "",
-        vacancy17: "https://ufa.hh.ru/vacancy/126174218?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
-        vacancy18: "https://ufa.hh.ru/vacancy/125460589?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy19: "https://ufa.hh.ru/vacancy/126174382?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy20: "",
-        vacancy21: "",
-        vacancy22: "https://ufa.hh.ru/vacancy/124588968?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy14: "https://ufa.hh.ru/vacancy/126174218?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy15: "https://ufa.hh.ru/vacancy/125460589?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy16: "https://ufa.hh.ru/vacancy/126174382?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy17: "",        
+        vacancy18: "",        
     };
 
     const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TCareers | null>(null);
@@ -138,14 +133,14 @@ export const Careers = () => {
                                     title="Опыт работы: 3-6 лет"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy22, "_blank")}
+                                    onClick={() => window.open(vacancyLinks.vacancy9, "_blank")}
                                 />
                                 <Vacancy
                                     header="Контролер ОТК металлургия"
                                     title="Опыт работы: 1-3 года"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy18, "_blank")}
+                                    onClick={() => window.open(vacancyLinks.vacancy15, "_blank")}
                                 />
                                 <Vacancy
                                     header="Наладчик станков с ЧПУ"
@@ -159,7 +154,7 @@ export const Careers = () => {
                                     title="Опыт работы: 1-3 года"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy17, "_blank")}
+                                    onClick={() => window.open(vacancyLinks.vacancy14, "_blank")}
                                 />
                                 <Vacancy
                                     header="Слесарь КИПиА"
@@ -173,7 +168,7 @@ export const Careers = () => {
                                     title="Опыт работы: 1-3 года"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy19, "_blank")}
+                                    onClick={() => window.open(vacancyLinks.vacancy16, "_blank")}
                                 />
                                 <Vacancy
                                     header="Электрогазосварщик ТТ"
@@ -181,6 +176,13 @@ export const Careers = () => {
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy3, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Грузчик"
+                                    title="Опыт работы: не требуется"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy8, "_blank")}
                                 />
                             </div> 
                         </div>
