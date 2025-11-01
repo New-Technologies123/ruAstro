@@ -23,7 +23,7 @@ export const Careers = () => {
         vacancy7: "https://ufa.hh.ru/vacancy/127175649?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy8: "https://ufa.hh.ru/vacancy/126187855?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy9: "https://ufa.hh.ru/vacancy/127099692?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy10: "",
+        vacancy10: "http://ufa.hh.ru/vacancy/127184615?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy11: "https://ufa.hh.ru/vacancy/125148681?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy12: "https://ufa.hh.ru/vacancy/126589206?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy13: "https://ufa.hh.ru/vacancy/125148803?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
@@ -62,10 +62,10 @@ export const Careers = () => {
         <>
             {typeLayoutBackOpen === null && (
                 <>
-                    <Title text={t('Вакансии')}></Title>
+                    <Title text="Открытые вакансии"></Title>
                     <div className={Styles.ramca}>                                           
                         <div className={Styles.vacancies}>
-                            <p>{t('Офис')}</p>
+                            <p>Заки Валиди 32/2</p>
                             <div className={Styles.team}>
                                 <Vacancy
                                     header="Ведущий инженер отдела ПТО"
@@ -96,6 +96,13 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy7, "_blank")}
                                 />
                                 <Vacancy
+                                    header="Юрист"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy10, "_blank")}
+                                />
+                                <Vacancy
                                     header="Специалист службы безопасности"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
@@ -105,7 +112,7 @@ export const Careers = () => {
                             </div>
                         </div>
                         <div className={Styles.vacancies}>
-                            <p>{t('Завод')}</p>
+                            <p>Благоварская 16/2</p>
                             <div className={Styles.team}>
                                 <Vacancy
                                     header="Водитель с категорией С, Е"
