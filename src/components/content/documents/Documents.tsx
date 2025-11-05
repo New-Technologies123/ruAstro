@@ -2,12 +2,10 @@ import Styles from './documents.module.scss';
 import { Select } from '../../ui/select/Select';
 import { useState} from 'react';
 import { Cards } from './Cards';
-import { useTranslation } from 'react-i18next';
 import { Title } from '../../ui/title/Title';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 export const Documents = () => {
-  const { t, i18n } = useTranslation('documents');
   const [selectedId, setSelectedId] = useState<TTitleOptions>('all');
   const [showId, setShowId] = useState<TTitleOptions>('all');
 
