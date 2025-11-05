@@ -16,27 +16,27 @@ export const Documents = () => {
   const options: { id: TTitleOptions; title: string }[] = [
     {
       id: 'all',
-      title: t('Вся'),
+      title: 'Вся продукция',
     },
     {
       id: 'accountingSystem',
-      title: t('Система учета'),
+      title: 'Автоматизированная замерная установка (АГЗУ)',
     },
     {
       id: 'components',
-      title: t('Комплектующие'),
+      title: 'Комплектующие для автоматизированной групповой замерной установки',
     },
     {
       id: 'measurementSystem',
-      title: t('Система измерения'),
+      title: 'Система учёта углеводородов и пластовой жидкости',
     },
     { 
       id: 'trainingSystem',
-      title: t('Системы подготовки'),
+      title: 'Системы подготовки нефти, газа и воды',
     },
     {
       id: 'pumpingStations',
-      title: t('Насосные станции'),
+      title: 'Насосные станции перекачки нефти, нефтепродуктов и воды',
     },
   ];
 
@@ -46,15 +46,15 @@ export const Documents = () => {
 
   return (
     <>
-      <Title text={t('Документы')}></Title>
+      <Title text={'Документы'}></Title>
       
       <div className={Styles.documentList}>
-        <p>{t('Выбор')}</p>
+        <p>Выберите вид продукции:</p>
         <div className={Styles.list}>
           <Select options={options} selectedId={selectedId} onSelect={(id) => setSelectedId(id as TTitleOptions)}/>
 
           <div className={Styles.documentButton}>
-            <button onClick={onShowClick}>{t('Показать')}</button>
+            <button onClick={onShowClick}>Показать</button>
           </div>
         </div>
       </div>
