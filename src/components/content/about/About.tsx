@@ -1,10 +1,8 @@
 import Styles from './about.module.scss';
 import { Title } from '../../ui/title/Title';
-import { useTranslation } from 'react-i18next';
 import { CountCard } from '../../ui/count-card/CountCard';
 
 export const About = () => {
-  const { t } = useTranslation('about');
   return (
     <>
       <Title text="О компании"></Title>

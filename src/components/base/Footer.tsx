@@ -1,9 +1,7 @@
 import logoRu from '../../images/logo_fut_ru.webp';
 import Styles from './footer.module.scss';
-import { useTranslation } from 'react-i18next';
 
 export const Footer = () => {
-  const { t, i18n } = useTranslation('footer');
 
   return (
     <footer className={Styles.footer}>
@@ -40,7 +38,7 @@ export const Footer = () => {
               </li>
             </ul>
             
-            <h3>{t('Карьера')}</h3>
+            <h3>Карьера</h3>
             <ul>
               <li>
                 <a href={`/careers`}>Открытые вакансии</a>

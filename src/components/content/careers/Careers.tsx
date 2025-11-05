@@ -1,5 +1,4 @@
 import Styles from './careers.module.scss';
-import { useTranslation } from 'react-i18next';
 import { Vacancy } from '../../ui/vacancy/Vacancy';
 import { useState } from 'react';
 import { Title } from '../../ui/title/Title';
@@ -11,7 +10,6 @@ type TCareers = 'vacancy1' | 'vacancy2' | 'vacancy3' | 'vacancy4' | 'vacancy5' |
  | 'vacancy14' | 'vacancy15' | 'vacancy16' | 'vacancy17' | 'vacancy18';
 
 export const Careers = () => {
-    const { t, i18n } = useTranslation('careers');
 
     const vacancyLinks: Record<TCareers, string> = {
         vacancy1: "https://ufa.hh.ru/vacancy/126589484?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
@@ -30,7 +28,7 @@ export const Careers = () => {
         vacancy14: "https://ufa.hh.ru/vacancy/126174218?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy15: "https://ufa.hh.ru/vacancy/125460589?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy16: "https://ufa.hh.ru/vacancy/126174382?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy17: "",        
+        vacancy17: "https://ufa.hh.ru/vacancy/127293929?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy18: "",        
     };
 
@@ -176,6 +174,13 @@ export const Careers = () => {
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy9, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Ведущий инженер ПНР КИПиА"
+                                    title="Опыт работы: 3-6 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy17, "_blank")}
                                 />
                                 <Vacancy
                                     header="Начальник конструкторского отдела"
