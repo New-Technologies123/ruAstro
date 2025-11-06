@@ -19,10 +19,10 @@ export const Services = () => {
   const { t } = useTranslation('services');
 
   const cardTitle: Record<TServices, string> = {
-    repair: t('АГЗУ'),
-    metering: t('Замер'),
-    service: t('Обслуживание'),
-    dewaxing: t('Депарафинизация'),
+    repair: 'Обслуживание, капитальный ремонт и модернизация АГЗУ',
+    metering: 'Замер дебита нефтяных скважин с помощью мобильной замерной установки',
+    service: 'Обслуживание устройства очистки колонны УОК-НКТ',
+    dewaxing: 'Услуги депарафинизации нефтяных скважин',
   };
 
   const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TServices | null>(null);
@@ -52,7 +52,9 @@ export const Services = () => {
   return (
     <>
       {typeLayoutBackOpen === null && (
-        <Layout title="Сервисные услуги" description="Текст о сервисных услугах">
+        <Layout title="Сервисные услуги" 
+            description="ООО Инженерно-Производственное предприятие «Новые Технологии» имеет многолетний опыт оказания 
+              услуг по ремонту нефтепромыслового оборудования, а также по депарафинизации и замеру дебита скважин">
           <>
             <Card
               imgSrc={serves_12.src}
