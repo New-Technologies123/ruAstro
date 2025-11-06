@@ -1,5 +1,4 @@
 import Styles from './card.module.scss';
-import { useTranslation } from 'react-i18next';
 
 type TProps = {
   imgSrc: string;
@@ -9,7 +8,6 @@ type TProps = {
 };
 
 export const Card = ({ imgSrc, title, header, onClick }: TProps) => {
-  const { t } = useTranslation('layout');
   
   return (
     <div className={Styles.employeeCardWrapper}>
