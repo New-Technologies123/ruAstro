@@ -6,11 +6,9 @@ import product_4_3 from '../../../images/products/product_4_3.webp';
 import product_4_4 from '../../../images/products/product_4_4.webp';
 import { BigPhoto } from '../../ui/big-photo/BigPhoto';
 import { useClickToScroll } from '../../../hooks/useClickToScroll';
-import { useTranslation } from 'react-i18next';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 export const PreparationSystems = () => {
-  const { t } = useTranslation('products');
 
   const [oneIsOpen, setOneIsOpen] = useState(false);
   const [twoIsOpen, setTwoIsOpen] = useState(false);
@@ -27,32 +25,32 @@ export const PreparationSystems = () => {
           <div className={Styles.navMenu}>
             <button onClick={() => handleClick('products-1')} className={`${Styles.navItem}`}>
               <span className={Styles.navIcon}>🚀</span>
-              <p>{t('Запуск')}</p>
+              <p>Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП</p>
             </button>
             <button onClick={() => handleClick('products-2')} className={`${Styles.navItem}`}>
               <span className={Styles.navIcon}>🔘</span>
-              <p>{t('Блок')}</p>
+              <p>Блок гребенки (БГ)</p>
             </button>
             <button onClick={() => handleClick('products-3')} className={`${Styles.navItem}`}>
               <span className={Styles.navIcon}>🧹</span>
-              <p>{t('Очистка')}</p>
+              <p>Устройство очистки колонны УОК-НКТ</p>
             </button>
             <button onClick={() => handleClick('products-4')} className={`${Styles.navItem}`}>
               <span className={Styles.navIcon}>🧪</span>
-              <p>{t('БДР')}</p>
+              <p>Установка дозирования химического реагента (БДР)</p>
             </button>
           </div>
         </aside>
         <div className={Styles.content}>
           <section id="products-1"  ref={el => sectionsRef.current[0] = el} className={Styles.section}>
             <div className={Styles.sectionHeader}>
-              <h2>{t('Запуск')}</h2>
+              <h2>Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП</h2>
             </div>
             <div className={Styles.mainImageContainer}>
               <div className={Styles.imageCard} onClick={() => setOneIsOpen(true)}>
                 <img src={product_4.src} alt="#" className={Styles.mainImage} />
                 <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>{t('Увеличение')}</span>
+                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
                 </div>
               </div>
             </div>
@@ -61,15 +59,16 @@ export const PreparationSystems = () => {
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>⏱️</div>
                   <div className={Styles.featureText}>
-                    <h4>{t('Назначение')}</h4>
-                    <p>{t('Переодического')}</p>
+                    <h4>Назначение:</h4>
+                    <p>Для периодического запуска в трубопровод (с целью его очистки и диагностики) и приёма из него внутритрубных 
+                      снарядов — дефектоскопов, очистных скребков и других поточных средств.</p>
                   </div>
                 </li>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>⛽</div>
                   <div className={Styles.featureText}>
-                    <h4>{t('Область')}</h4>
-                    <p>{t('Узлы')}</p>
+                    <h4>Область применения:</h4>
+                    <p>Системы сбора и транспорта нефти и газа (нефтепроводы, газопроводы).</p>
                   </div>
                 </li>
               </ul>
@@ -78,13 +77,13 @@ export const PreparationSystems = () => {
 
           <section id="products-2"  ref={el => sectionsRef.current[1] = el} className={Styles.section}>
             <div className={Styles.sectionHeader}>
-              <h2>{t('Блок')}</h2>
+              <h2>Блок гребенки (БГ)</h2>
             </div>
             <div className={Styles.mainImageContainer}>
               <div className={Styles.imageCard} onClick={() => setTwoIsOpen(true)}>
                 <img src={product_4_1.src} alt="#" className={Styles.mainImage} />
                 <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>{t('Увеличение')}</span>
+                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
                 </div>
               </div>
             </div>
@@ -93,8 +92,9 @@ export const PreparationSystems = () => {
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>🌊</div>
                   <div className={Styles.featureText}>
-                    <h4>{t('Назначение')}</h4>
-                    <p>{t('Распределение')}</p>
+                    <h4>Назначение:</h4>
+                    <p>Для распределения потоков подаваемой блочными кустовыми насосными станциями пластовой или чистой 
+                      воды под высоким давлением в нагнетательные скважины с целью поддержания пластового давления.</p>
                   </div>
                 </li>
               </ul>
@@ -103,13 +103,13 @@ export const PreparationSystems = () => {
 
           <section id="products-3"  ref={el => sectionsRef.current[2] = el} className={Styles.section}>
             <div className={Styles.sectionHeader}>
-              <h2>{t('Очистка')}</h2>
+              <h2>Устройство очистки колонны УОК-НКТ</h2>
             </div>
             <div className={Styles.mainImageContainer}>
               <div className={Styles.imageCard} onClick={() => setThreeIsOpen(true)}>
                 <img src={product_4_3.src} alt="#" className={Styles.mainImage} />
                 <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>{t('Увеличение')}</span>
+                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
                 </div>
               </div>
             </div>
@@ -118,43 +118,46 @@ export const PreparationSystems = () => {
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>🔄</div>
                   <div className={Styles.featureText}>
-                    <h4>{t('Назначение')}</h4>
-                    <p>{t('Поверхности')}</p>
+                    <h4>Назначение:</h4>
+                    <p>Для автоматической непрерывной очистки всей внутренней поверхности колонны НКТ нефтяной 
+                      скважины путём срезания слоя парафина со стенок.</p>
                   </div>
                 </li>
               </ul>
             </div>
             <div className={Styles.features}>
-              <h3>{t('Аналог')}</h3>
+              <h3>Преимущества перед аналогами:</h3>
               <ul className={Styles.featuresList}>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>🧵</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Сматывание')}</p>
+                    <p>Сматывание проволоки с барабана предотвращается благодаря применению подпружинного подвижного ролика с датчиком веса;</p>
                   </div>
                 </li>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>⚙️</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Процесс')}</p>
+                    <p>Полностью автоматизированный процесс ликвидации пробок;</p>
                   </div>
                 </li>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>📏</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Положения')}</p>
+                    <p>Колибровка положения скребка с точностью до 40 см.;</p>
                   </div>
                 </li>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>🔪</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Скребок')}</p>
+                    <p>Скребок имеет несколько основных исполнений: раздвижной, кольцевой,фрезерный, лезвийный, шнековый и др.;</p>
                   </div>
                 </li>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>🧲</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Магниты')}</p>
+                    <p>Магниты установлены на ролике, датчики оборотов (герконовые) — на стойке подвижного ролика, на расстоянии, 
+                      при котором перекрывается зона взаимодействия их магнитных полей. Такое расположение обеспечивает последовательное 
+                      срабатывание герконов по направлению вращения ролика.</p>
                   </div>
                 </li>
               </ul>
@@ -162,23 +165,25 @@ export const PreparationSystems = () => {
           </section>
           <section id="products-4" ref={el => sectionsRef.current[3] = el} className={Styles.section}>
             <div className={Styles.sectionHeader}>
-              <h2>{t('БДР')}</h2>
+              <h2>Установка дозирования химического реагента (БДР)</h2>
             </div>
             <div className={Styles.mainImageContainer}>
               <div className={Styles.imageCard} onClick={() => setFourIsOpen(true)}>
                 <img src={product_4_4.src} alt="Мобильная АГЗУ" className={Styles.mainImage} />
                 <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>{t('Увеличение')}</span>
+                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
                 </div>
               </div>
             </div>
             <div className={Styles.features}>
-              <h3>{t('Назначение')}</h3>
+              <h3>Назначение:</h3>
               <ul className={Styles.featuresList}>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>⚖️</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Установка')}</p>
+                    <p>Установка дозирования реагента УДХ (БДР) предназначена для дозированного ввода различных жидких химреагентов (деэмульгаторов 
+                      и ингибиторов коррозии и т.п.) в трубопроводы системы сбора, транспорта и подготовки нефти с целью осуществления 
+                      внутритрубопроводной деэмульгации нефти, а также защиты трубопроводов и оборудования от коррозии, парафиноотложений и др.</p>
                   </div>
                 </li>                
               </ul>

@@ -12,20 +12,18 @@ import product_2_5 from '../../../images/products/product_2_5.webp';
 import product_3 from '../../../images/products/product_3.webp';
 import product_4 from '../../../images/products/product_4.webp';
 import product_5 from '../../../images/products/product_5.webp';
-import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
 
 type TProducts = 'accountingSystem' | 'accessories' | 'measuringSystem' | 'preparationSystems' | 'pumpingStations';
 
 export const Products = () => {
-  const { t } = useTranslation('products');
 
   const cardTitle: Record<TProducts, string> = {
-    accountingSystem: t('Система учета'),
-    accessories: t('Комплектующие'),
-    measuringSystem: t('Система измерения'),
-    preparationSystems: t('Системы подготовки'),
-    pumpingStations: t('Насосные станции'),
+    accountingSystem: 'Автоматизированная замерная установка (АГЗУ)',
+    accessories: 'Комплектующие для автоматизированной групповой замерной установки',
+    measuringSystem: 'Система учёта углеводородов и пластовой жидкости',
+    preparationSystems: 'Системы подготовки нефти, газа и воды',
+    pumpingStations: 'Насосные станции перекачки нефти, нефтепродуктов и воды',
   };
 
   const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TProducts | null>(null);
@@ -55,7 +53,12 @@ export const Products = () => {
   return (
     <>
       {typeLayoutBackOpen === null && (
-        <Layout title="Продукция" description="Текст о продукции">
+        <Layout title="Продукция" 
+          description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области 
+            безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
+            Таможенного союза. На предприятии разработана, внедрена и успешно работает Интегрированная система 
+            менеджмента качества, сертифицированная на соответствие с требованиями ГОСТ ISO 9001-2015 (ISO 9001:2015), 
+            ГОСТ Р ИСО 14001-2016 (ISO 14001:2016), ГОСТ Р 45001-2020 (ISO 45001-2018), ГОСТ Р ИСО 29001-2023 (ISO 29001:2020).">
           <>
             <Card
               imgSrc={product_1.src}

@@ -4,12 +4,10 @@ import product_1_1 from '../../../images/products/product_1_1.webp';
 import product_1_2 from '../../../images/products/product_1_2.webp';
 import { BigPhoto } from '../../ui/big-photo/BigPhoto';
 import Styles from './products.module.scss';
-import { useTranslation } from 'react-i18next';
 import { useClickToScroll } from '../../../hooks/useClickToScroll';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 export const AccountingSystem = () => {
-  const { t } = useTranslation('products');
   
   const [firstIsOpen, setFirstIsOpen] = useState(false);
   const [secondIsOpen, setSecondIsOpen] = useState(false);
@@ -25,11 +23,11 @@ export const AccountingSystem = () => {
           <div className={Styles.navMenu}>
             <button onClick={() => handleClick('products-1')} className={`${Styles.navItem}`}>
               <span className={Styles.navIcon}>🏢</span>
-              <p>{t('Стационарная')}</p>
+              <p>Автоматизированная замерная установка (АГЗУ) «Спутник — массомер НТ.1» стационарная</p>
             </button>
             <button onClick={() => handleClick('products-2')} className={`${Styles.navItem}`}>
               <span className={Styles.navIcon}>🚚</span>
-              <p>{t('Мобильная')}</p>
+              <p>Автоматизированная замерная установка (АГЗУ) «Спутник — массомер НТ.1» мобильная</p>
             </button>
           </div>
         </aside>
@@ -37,43 +35,45 @@ export const AccountingSystem = () => {
         <div className={Styles.content}>
           <section id="products-1" ref={el => sectionsRef.current[0] = el} className={Styles.section}>
             <div className={Styles.sectionHeader}>
-              <h2>{t('стацинарная')}</h2>
+              <h2>Стационарная система</h2>
             </div>
 
             <div className={Styles.gallery}>
               <div className={Styles.imageCard} onClick={() => setFirstIsOpen(true)}>
                 <img src={product_1.src} alt="Стационарная АГЗУ" className={Styles.image} />
                 <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>{t('Увеличение')}</span>
+                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
                 </div>
               </div>
               <div className={Styles.imageCard} onClick={() => setSecondIsOpen(true)}>
                 <img src={product_1_1.src} alt="Стационарная АГЗУ" className={Styles.image} />
                 <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>{t('Увеличение')}</span>
+                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
                 </div>
               </div>
             </div>
 
             <div className={Styles.features}>
-              <h3>{t('Назначение')}</h3>
+              <h3>Назначение:</h3>
               <ul className={Styles.featuresList}>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>📊</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Массы')}</p>
+                    <p>Для измерения массы и массового расхода скважинной жидкости (сырой нефти) в составе нефтегазовой 
+                      смеси, добываемой из нефтяных скважин.</p>
                   </div>
                 </li>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>🚱</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Расхода')}</p>
+                    <p>Для определения массы и массового расхода сырой нефти без учёта воды.</p>
                   </div>
                 </li>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>📏</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Приведённого')}</p>
+                    <p>Для измерения объёма и объёмного расхода свободного нефтяного газа, приведённого к стандартным 
+                      условиям, после процесса сепарации.</p>
                   </div>
                 </li>
               </ul>
@@ -83,14 +83,14 @@ export const AccountingSystem = () => {
           <section 
             id="products-2" ref={el => sectionsRef.current[1] = el} className={Styles.section}>
             <div className={Styles.sectionHeader}>
-              <h2>{t('мобильная')}</h2>
+              <h2>Мобильная система</h2>
             </div>
 
             <div className={Styles.mainImageContainer}>
               <div className={Styles.imageCard} onClick={() => setThirdIsOpen(true)}>
                 <img src={product_1_2.src} alt="Мобильная АГЗУ" className={Styles.mainImage} />
                 <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>{t('Увеличение')}</span>
+                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
                 </div>
               </div>
             </div>
@@ -100,13 +100,15 @@ export const AccountingSystem = () => {
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>🏭</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Изготовлении')}</p>
+                    <p>При изготовлении установок в мобильном варианте блоки АГЗУ устанавливаются в кузове или на шасси прицепа или автомобиля.</p>
                   </div>
                 </li>
                 <li className={Styles.feature}>
                   <div className={Styles.featureIcon}>⚡</div>
                   <div className={Styles.featureText}>
-                    <p>{t('Действия')}</p>
+                    <p>Принцип действия установок основан на измерениях массы и массового расхода сырой нефти с учетом и без 
+                      учета воды, объема и объемного расхода свободного нефтяного газа, приведенного к стандартным условиям, 
+                      после процесса сепарации.</p>
                   </div>
                 </li>
               </ul>
