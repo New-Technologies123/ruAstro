@@ -16,7 +16,7 @@ export const Card = ({ imgSrc, title, header, onClick }: TProps) => {
       <div className={Styles.employeeCard} onClick={onClick}>
         <div className={Styles.system} style={{ backgroundImage: `url(${imgSrc})` }}></div>
         <p>
-          {t(title)}
+          {title}
         </p>
       </div>
     </div>

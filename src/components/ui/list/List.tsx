@@ -1,5 +1,4 @@
 import Styles from './list.module.scss';
-import { useTranslation } from 'react-i18next';
 import sign from '../../../images/doc.svg';
 import { useEffect, useRef } from 'react';
 
@@ -10,7 +9,6 @@ type TProps = {
 };
 
 export const List = ({ title, onClick, index }: TProps) => {
-  const { t } = useTranslation('layout');
   const listRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
@@ -30,7 +28,7 @@ export const List = ({ title, onClick, index }: TProps) => {
     <div className={Styles.certificatesList} onClick={onClick} ref={listRef}>
       <div className={Styles.actionTitle}>
         <img src={sign.src} alt="document icon" />
-        <p>{t(title)}</p>
+        <p>{title}</p>
       </div>
     </div>
   );
