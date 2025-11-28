@@ -3,7 +3,6 @@ import { Vacancy } from '../../ui/vacancy/Vacancy';
 import { useState } from 'react';
 import { Title } from '../../ui/title/Title';
 import { useEffect } from 'react';
-import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 type TCareers = 'vacancy1' | 'vacancy2' | 'vacancy3' | 'vacancy4' | 'vacancy5' | 'vacancy6' 
  | 'vacancy7' | 'vacancy8' | 'vacancy9' | 'vacancy10' | 'vacancy11' | 'vacancy12' | 'vacancy13'
@@ -219,7 +218,6 @@ export const Careers = () => {
                     </div>
                 </> 
             )}
-            <BackToTop/>
         </>
     );
 };

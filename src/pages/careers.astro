@@ -4,6 +4,7 @@ import { Header } from "../components/base/Header";
 import { Footer } from "../components/base/Footer";
 import { Content } from "../components/base/Content";
 import { Careers as CareersContent} from "../components/content/careers/Careers";
+import { BackToTop } from "../components/ui/back-to-top/BackToTop";
 ---
 
 <Layout>
@@ -12,4 +13,5 @@ import { Careers as CareersContent} from "../components/content/careers/Careers"
     <CareersContent client:load />
   </Content>
   <Footer client:load/>
+  <BackToTop client:load/>
 </Layout>

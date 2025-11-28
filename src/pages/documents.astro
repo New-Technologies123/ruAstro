@@ -4,6 +4,7 @@ import { Header } from "../components/base/Header";
 import { Footer } from "../components/base/Footer";
 import { Content } from "../components/base/Content";
 import { Documents as DocumentsContent } from "../components/content/documents/Documents";
+import { BackToTop } from "../components/ui/back-to-top/BackToTop";
 ---
 
 <Layout>
@@ -12,4 +13,5 @@ import { Documents as DocumentsContent } from "../components/content/documents/D
     <DocumentsContent client:load />
   </Content>
   <Footer client:load/>
+  <BackToTop client:load/>
 </Layout>

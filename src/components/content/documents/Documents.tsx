@@ -3,7 +3,6 @@ import { Select } from '../../ui/select/Select';
 import { useState} from 'react';
 import { Cards } from './Cards';
 import { Title } from '../../ui/title/Title';
-import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 export const Documents = () => {
   const [selectedId, setSelectedId] = useState<TTitleOptions>('all');
@@ -57,7 +56,6 @@ export const Documents = () => {
         </div>
       </div>
       <Cards selectId={showId} key={showId}/>
-      <BackToTop/>
     </>
   );
 };

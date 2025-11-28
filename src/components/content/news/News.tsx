@@ -7,7 +7,6 @@ import { Gallery } from '../../ui/gallery/Gallery';
 import { useState, useEffect } from 'react';
 import { BigPhoto } from '../../ui/big-photo/BigPhoto';
 import { Title } from '../../ui/title/Title';
-import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 export const News = () => {
   const [photoIsOpen, setPhotoIsOpen] = useState(false);
@@ -59,7 +58,6 @@ export const News = () => {
       </div>
       {photoIsOpen && <BigPhoto src={news_3.src} onClose={() => setPhotoIsOpen(false)} />}
       {photoTwoIsOpen && <BigPhoto src={news_4.src} onClose={() => setPhotoTwoIsOpen(false)} />}
-      <BackToTop/>
     </>
     
   );
