@@ -18,6 +18,13 @@ export const AccountingSystem = () => {
 
   return (
     <div className={Styles.container}>
+      
+      <div className={Styles.price}>
+        <a className={Styles.buttonPrice} href={`/calculator`}>
+          Калькулятор для расчета цен
+        </a>
+      </div>
+
       <div className={Styles.mainContent}>
         <aside className={Styles.sidebar}>
           <div className={Styles.navMenu}>
