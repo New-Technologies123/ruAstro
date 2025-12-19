@@ -41,84 +41,73 @@ export const AccountingSystem = () => {
 
         <div className={Styles.content}>
           <section id="products-1" ref={el => sectionsRef.current[0] = el} className={Styles.section}>
-            <div className={Styles.sectionHeader}>
-              <h2>Стационарная система</h2>
-            </div>
-
-            <div className={Styles.gallery}>
-              <div className={Styles.imageCard} onClick={() => setFirstIsOpen(true)}>
-                <img src={product_1.src} alt="Стационарная АГЗУ" className={Styles.image} />
-                <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
+            <h2 className={Styles.sectionHeader}>Стационарная система</h2>
+            <div className={Styles.fotoText}>
+              <div className={Styles.mainImageContainer}>
+                <div className={Styles.imageCard} onClick={() => setThirdIsOpen(true)}>
+                  <img src={product_1.src} alt="Стационарная АГЗУ" className={Styles.mainImage} />
+                  <div className={Styles.imageOverlay}>
+                    <span className={Styles.zoomText}>Нажмите для увеличения</span>
+                  </div>
                 </div>
               </div>
-              <div className={Styles.imageCard} onClick={() => setSecondIsOpen(true)}>
-                <img src={product_1_1.src} alt="Стационарная АГЗУ" className={Styles.image} />
-                <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
-                </div>
+              <div className={Styles.features}>
+                <h3>Назначение:</h3>
+                <ul className={Styles.featuresList}>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Для измерения массы и массового расхода скважинной жидкости (сырой нефти) в составе нефтегазовой 
+                        смеси, добываемой из нефтяных скважин.</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Для определения массы и массового расхода сырой нефти без учёта воды.</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Для измерения объёма и объёмного расхода свободного нефтяного газа, приведённого к стандартным 
+                        условиям, после процесса сепарации.</p>
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
+            
 
-            <div className={Styles.features}>
-              <h3>Назначение:</h3>
-              <ul className={Styles.featuresList}>
-                <li className={Styles.feature}>
-                  <div className={Styles.featureIcon}>📊</div>
-                  <div className={Styles.featureText}>
-                    <p>Для измерения массы и массового расхода скважинной жидкости (сырой нефти) в составе нефтегазовой 
-                      смеси, добываемой из нефтяных скважин.</p>
-                  </div>
-                </li>
-                <li className={Styles.feature}>
-                  <div className={Styles.featureIcon}>🚱</div>
-                  <div className={Styles.featureText}>
-                    <p>Для определения массы и массового расхода сырой нефти без учёта воды.</p>
-                  </div>
-                </li>
-                <li className={Styles.feature}>
-                  <div className={Styles.featureIcon}>📏</div>
-                  <div className={Styles.featureText}>
-                    <p>Для измерения объёма и объёмного расхода свободного нефтяного газа, приведённого к стандартным 
-                      условиям, после процесса сепарации.</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
+            
           </section>
 
           <section 
             id="products-2" ref={el => sectionsRef.current[1] = el} className={Styles.section}>
-            <div className={Styles.sectionHeader}>
-              <h2>Мобильная система</h2>
-            </div>
-
-            <div className={Styles.mainImageContainer}>
-              <div className={Styles.imageCard} onClick={() => setThirdIsOpen(true)}>
-                <img src={product_1_2.src} alt="Мобильная АГЗУ" className={Styles.mainImage} />
-                <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
+            <h2 className={Styles.sectionHeader}>Мобильная система</h2>
+            <div className={Styles.fotoText}>            
+              <div className={Styles.mainImageContainer}>
+                <div className={Styles.imageCard} onClick={() => setThirdIsOpen(true)}>
+                  <img src={product_1_2.src} alt="Мобильная АГЗУ" className={Styles.mainImage} />
+                  <div className={Styles.imageOverlay}>
+                    <span className={Styles.zoomText}>Нажмите для увеличения</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className={Styles.features}>
-              <ul className={Styles.featuresList}>
-                <li className={Styles.feature}>
-                  <div className={Styles.featureIcon}>🏭</div>
-                  <div className={Styles.featureText}>
-                    <p>При изготовлении установок в мобильном варианте блоки АГЗУ устанавливаются в кузове или на шасси прицепа или автомобиля.</p>
-                  </div>
-                </li>
-                <li className={Styles.feature}>
-                  <div className={Styles.featureIcon}>⚡</div>
-                  <div className={Styles.featureText}>
-                    <p>Принцип действия установок основан на измерениях массы и массового расхода сырой нефти с учетом и без 
-                      учета воды, объема и объемного расхода свободного нефтяного газа, приведенного к стандартным условиям, 
-                      после процесса сепарации.</p>
-                  </div>
-                </li>
-              </ul>
+              <div className={Styles.features}>
+                <ul className={Styles.featuresList}>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>При изготовлении установок в мобильном варианте блоки АГЗУ устанавливаются в кузове или на шасси прицепа или автомобиля.</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Принцип действия установок основан на измерениях массы и массового расхода сырой нефти с учетом и без 
+                        учета воды, объема и объемного расхода свободного нефтяного газа, приведенного к стандартным условиям, 
+                        после процесса сепарации.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </section>
         </div>

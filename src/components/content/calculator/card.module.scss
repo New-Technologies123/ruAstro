@@ -10,6 +10,37 @@
   }
 }
 
+.formGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.checkboxListCompact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.checkboxItemCompact {
+    font-size: 0.85rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 4px;
+}
+
+.selectGroup label {
+    font-size: 0.9rem;
+}
+
+.paramHeader {
+    margin-bottom: 2px;
+}
+
+
+/* Заголовок установки */
 .cardHeader {
   display: flex;
   justify-content: space-between;
@@ -18,32 +49,15 @@
   cursor: pointer;
   background: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
+  font-size: 23px;
 }
 
-.toggleIcon {
-  font-size: 18px;
-  transition: transform 0.3s ease;
 
-  &.open {
-    transform: rotate(180deg);
-  }
-}
-
-/* 🔥 Плавное появление карточки */
+/* Карточки */
 .cardContent {
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: max-height 0.45s ease, opacity 0.35s ease, padding 0.3s ease;
   display: flex;
   gap: 20px;
-  padding: 0 20px;
-
-  &.open {
-    max-height: 1200px;
-    opacity: 1;
-    padding: 15px 20px;
-  }
+  padding: 15px 20px;
 }
 
 .formLeft {
@@ -84,28 +98,14 @@
   font-weight: 600;
 }
 
-.arrow {
-  font-size: 12px;
-  opacity: 0.7;
-  transition: transform 0.3s ease;
-
-  &.open {
-    transform: rotate(180deg);
-  }
+.arrow,
+.toggleIcon {
+  display: none;
 }
 
 /* 🔥 Плавное раскрытие списка */
 .checkboxListWrapper {
-  overflow: hidden;
-  max-height: 0;
-  opacity: 0;
-  transition: max-height 0.35s ease, opacity 0.25s ease, margin 0.25s ease;
-
-  &.open {
-    max-height: 500px;
-    opacity: 1;
-    margin-top: 6px;
-  }
+  margin-top: 10px;
 }
 
 .checkboxList {
