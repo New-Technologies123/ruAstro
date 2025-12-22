@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Styles from './card.module.scss';
+import { ParamCard } from '../../ui/param-card/ParamCard';
 
 interface InstallationCardProps {
     inst: any;
@@ -71,97 +72,77 @@ export const InstallationCard = ({
             )}
 
             <div className={`${Styles.cardContent} ${Styles.open}`}>
-                <div className={Styles.formGrid}>
+                <div className={Styles.paramsGrid}>
 
-                    {/* Количество скважин */}
-                    <div className={`${Styles.selectGroup} ${errors.quantity ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Количество скважин</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('quantity', inst.quantityOptions, true)}
-                        </div>
-                        {errors.quantity && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Количество скважин"
+                        error={errors.quantity}
+                    >
+                        {renderCheckboxes('quantity', inst.quantityOptions, true)}
+                    </ParamCard>
 
-                    {/* Максимальное рабочее давление */}
-                    <div className={`${Styles.selectGroup} ${errors.heating ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Максимальное рабочее давление</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('heating', inst.heatingOptions)}
-                        </div>
-                        {errors.heating && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Максимальное рабочее давление"
+                        error={errors.heating}
+                    >
+                        {renderCheckboxes('heating', inst.heatingOptions)}
+                    </ParamCard>
 
-                    {/* Емкость */}
-                    <div className={`${Styles.selectGroup} ${errors.volume ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Емкость</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('volume', inst.volumeOptions)}
-                        </div>
-                        {errors.volume && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Емкость"
+                        error={errors.volume}
+                    >
+                        {renderCheckboxes('volume', inst.volumeOptions)}
+                    </ParamCard>
 
-                    {/* Габариты блока технологий */}
-                    <div className={`${Styles.selectGroup} ${errors.pressure ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Габариты блока технологий</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('pressure', inst.pressureOptions)}
-                        </div>
-                        {errors.pressure && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Габариты блока автоматики"
+                        error={errors.pressure1}
+                    >
+                        {renderCheckboxes('pressure1', inst.pressure1Options)}
+                    </ParamCard>
 
-                    {/* Габариты блока автоматики */}
-                    <div className={`${Styles.selectGroup} ${errors.pressure1 ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Габариты блока автоматики</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('pressure1', inst.pressure1Options)}
-                        </div>
-                        {errors.pressure1 && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Габариты блока технологий"
+                        error={errors.pressure}
+                    >
+                        {renderCheckboxes('pressure', inst.pressureOptions)}
+                    </ParamCard>
 
-                    {/* Расходомер на линии газа */}
-                    <div className={`${Styles.selectGroup} ${errors.vagometer ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Расходомер на линии газа</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('vagometer', inst.vagometerOptions)}
-                        </div>
-                        {errors.vagometer && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Наличие поточного влагомера"
+                        error={errors.pollution}
+                    >
+                        {renderCheckboxes('pollution', inst.pollutionOptions)}
+                    </ParamCard>
 
-                    {/* Расходомер на линии жидкости */}
-                    <div className={`${Styles.selectGroup} ${errors.vagometer1 ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Расходомер на линии жидкости</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('vagometer1', inst.vagometer1Options)}
-                        </div>
-                        {errors.vagometer1 && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Расходомер на линии жидкости"
+                        error={errors.vagometer1}
+                    >
+                        {renderCheckboxes('vagometer1', inst.vagometer1Options)}
+                    </ParamCard>
 
-                    {/* Дублирующий расходомер */}
-                    <div className={`${Styles.selectGroup} ${errors.vagometer2 ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Дублирующий расходомер</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('vagometer2', inst.vagometer2Options)}
-                        </div>
-                        {errors.vagometer2 && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Расходомер на линии газа"
+                        error={errors.vagometer}
+                    >
+                        {renderCheckboxes('vagometer', inst.vagometerOptions)}
+                    </ParamCard>
 
-                    {/* Наличие поточного влагомера */}
-                    <div className={`${Styles.selectGroup} ${errors.pollution ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Наличие поточного влагомера, метод измерения</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('pollution', inst.pollutionOptions)}
-                        </div>
-                        {errors.pollution && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Дублирующий расходомер"
+                        error={errors.vagometer2}
+                    >
+                        {renderCheckboxes('vagometer2', inst.vagometer2Options)}
+                    </ParamCard>
 
-                    {/* Шкафное оборудование */}
-                    <div className={`${Styles.selectGroup} ${errors.closet ? Styles.errorBorder : ''}`}>
-                        <div className={Styles.paramHeader}><label>Шкафное оборудование</label></div>
-                        <div className={`${Styles.checkboxListWrapper} ${Styles.open}`}>
-                            {renderCheckboxes('closet', inst.closetOptions)}
-                        </div>
-                        {errors.closet && <div className={Styles.errorSelect}>Поле обязательно заполнить</div>}
-                    </div>
+                    <ParamCard
+                        title="Шкафное оборудование"
+                        error={errors.closet}
+                    >
+                        {renderCheckboxes('closet', inst.closetOptions)}
+                    </ParamCard>
 
                 </div>
             </div>

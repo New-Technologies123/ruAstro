@@ -8,7 +8,7 @@ import { useClickToScroll } from '../../../hooks/useClickToScroll';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 export const AccountingSystem = () => {
-  
+
   const [firstIsOpen, setFirstIsOpen] = useState(false);
   const [secondIsOpen, setSecondIsOpen] = useState(false);
   const [thirdIsOpen, setThirdIsOpen] = useState(false);
@@ -18,7 +18,7 @@ export const AccountingSystem = () => {
 
   return (
     <div className={Styles.container}>
-      
+
       <div className={Styles.price}>
         <a className={Styles.buttonPrice} href={`/calculator`}>
           Калькулятор для расчета цен
@@ -56,7 +56,7 @@ export const AccountingSystem = () => {
                 <ul className={Styles.featuresList}>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Для измерения массы и массового расхода скважинной жидкости (сырой нефти) в составе нефтегазовой 
+                      <p>Для измерения массы и массового расхода скважинной жидкости (сырой нефти) в составе нефтегазовой
                         смеси, добываемой из нефтяных скважин.</p>
                     </div>
                   </li>
@@ -67,31 +67,18 @@ export const AccountingSystem = () => {
                   </li>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Для измерения объёма и объёмного расхода свободного нефтяного газа, приведённого к стандартным 
+                      <p>Для измерения объёма и объёмного расхода свободного нефтяного газа, приведённого к стандартным
                         условиям, после процесса сепарации.</p>
                     </div>
                   </li>
                 </ul>
               </div>
             </div>
-            
-
-            
           </section>
 
-          <section 
-            id="products-2" ref={el => sectionsRef.current[1] = el} className={Styles.section}>
+          <section id="products-2" ref={el => sectionsRef.current[1] = el} className={Styles.section}>
             <h2 className={Styles.sectionHeader}>Мобильная система</h2>
-            <div className={Styles.fotoText}>            
-              <div className={Styles.mainImageContainer}>
-                <div className={Styles.imageCard} onClick={() => setThirdIsOpen(true)}>
-                  <img src={product_1_2.src} alt="Мобильная АГЗУ" className={Styles.mainImage} />
-                  <div className={Styles.imageOverlay}>
-                    <span className={Styles.zoomText}>Нажмите для увеличения</span>
-                  </div>
-                </div>
-              </div>
-
+            <div className={Styles.fotoText}>
               <div className={Styles.features}>
                 <ul className={Styles.featuresList}>
                   <li className={Styles.feature}>
@@ -101,19 +88,27 @@ export const AccountingSystem = () => {
                   </li>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Принцип действия установок основан на измерениях массы и массового расхода сырой нефти с учетом и без 
-                        учета воды, объема и объемного расхода свободного нефтяного газа, приведенного к стандартным условиям, 
+                      <p>Принцип действия установок основан на измерениях массы и массового расхода сырой нефти с учетом и без
+                        учета воды, объема и объемного расхода свободного нефтяного газа, приведенного к стандартным условиям,
                         после процесса сепарации.</p>
                     </div>
                   </li>
                 </ul>
+              </div>
+              <div className={Styles.mainImageContainer}>
+                <div className={Styles.imageCard} onClick={() => setThirdIsOpen(true)}>
+                  <img src={product_1_2.src} alt="Мобильная АГЗУ" className={Styles.mainImage} />
+                  <div className={Styles.imageOverlay}>
+                    <span className={Styles.zoomText}>Нажмите для увеличения</span>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
         </div>
       </div>
 
-      <BackToTop/>
+      <BackToTop />
       {firstIsOpen && <BigPhoto src={product_1.src} onClose={() => setFirstIsOpen(false)} />}
       {secondIsOpen && <BigPhoto src={product_1_1.src} onClose={() => setSecondIsOpen(false)} />}
       {thirdIsOpen && <BigPhoto src={product_1_2.src} onClose={() => setThirdIsOpen(false)} />}

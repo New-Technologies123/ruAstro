@@ -1,0 +1,137 @@
+// .shopPage {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 2rem;
+//   padding: 2rem;  
+// }
+
+.products {
+    // display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 100px;
+    padding: 20px;
+    // margin: 15px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  } 
+
+  .productPage {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+
+    p {
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  padding: 20px;
+
+  .search{
+    flex: 1; // занимает остаток строки
+    min-width: 100px;
+
+    input[type="text"] {
+      width: 100%;
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+  }
+
+  .categories {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto; // если кнопок много → горизонтальный скролл
+    flex-shrink: 0;   // не сжимается
+    padding-bottom: 2px; // чтобы скролл не резал контент
+    width: 80%;
+
+    button {
+      padding: 0.5rem 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #f7f7f7;
+      cursor: pointer;
+      transition: 0.2s;
+
+      &.filter--active {
+        background: #5a87fc;
+        color: #fff;
+        border-color: #5a87fc;
+      }
+
+      sup {
+        font-size: 0.7rem;
+        margin-left: 0.3rem;
+      }
+    }
+  }
+}
+
+.filter {
+  padding: 0.5rem 0.75rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #f7f7f7;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &--active {
+    background: #5a87fc;
+    color: #fff;
+    border-color: #5a87fc;
+  }
+}
+
+.filterSup {
+  font-size: 0.7rem;
+  margin-left: 0.3rem;
+}
+
+.loadMore {
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background: #5a87fc;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    background: #3f6fe0;
+  }
+}
+
+
+/* Адаптив для маленьких экранов */
+@media (max-width: 768px) {
+  .shopPage {
+    flex-direction: column;
+
+    .filters {
+      flex: unset;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .products {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+  }
+}

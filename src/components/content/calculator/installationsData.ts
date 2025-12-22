@@ -12,13 +12,11 @@ export const installations = [
         { label: 14, price: 21000000 }
       ],
       volumeOptions: [
-        { label: 'Не выбрано', price: 0 },
         { label: '400', price: 561324 },
         { label: '800', price: 1100000 },
         { label: '1500', price: 1300000 }
       ],
       pressureOptions: [
-        { label: 'Не выбрано', price: 0 },
         { label: '5х3,1', price: 1700000 },
         { label: '5,5х3,1', price: 1850000 },
         { label: '6х3,1', price: 2000000 },
@@ -37,34 +35,31 @@ export const installations = [
         { label: '12,5х3,1', price: 3950000 }
       ],
       pressure1Options: [
-        { label: 'Не выбрано', price: 0 },
+        { label: 'Не требуется', price: 0 },
         { label: '3х3,1', price: 465000 },
         { label: '4х3,1', price: 620000 },
         { label: '6х3,1', price: 930000 }
       ],
       vagometerOptions: [
-        { label: 'Не выбрано', price: 0 },
         { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },
         { label: 'Счетчик расходомер вихревой СВГ.М ', price: 290000 },
       ],
       vagometer1Options: [
-        { label: 'Не выбрано', price: 0 },
+        { label: 'Не требуется', price: 0 },
         { label: 'Расходомер на линию жидкости ЭМИС-МАСС', price: 296000 },
         { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },
         { label: 'Расходомер на линию жидкости Micro Motion ', price: 2000000 }
       ],
       vagometer2Options: [
-        { label: 'Не выбрано', price: 0 },       
+        { label: 'Не требуется', price: 0 },
         { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },       
         { label: 'ТОР50(Дублирующий счетчик жидкости) ', price: 35000 }
       ],      
       heatingOptions: [
-        { label: 'Не выбрано', price: 0 },
         { label: '40', price: 0 },
         { label: '63', price: 500000 }
       ],
       pollutionOptions: [
-        { label: 'Не выбрано', price: 0 },
         { label: 'Без влагомера', price: 0 },
         { label: 'Влагомер микроволновый', price: 300000 },
         { label: 'Влагомер оптический', price: 800000 },
@@ -72,7 +67,6 @@ export const installations = [
         { label: 'Влагомер комбинированный (диэлькометрический + оптический)', price: 800000 }
       ],
       closetOptions: [
-        { label: 'Не выбрано', price: 0 },
         { label: 'Шкаф управления', price: 350000 },
         { label: 'Шкаф силовой', price: 120000 },
         { label: 'Шкаф пожарной сигнализации', price: 90000 }

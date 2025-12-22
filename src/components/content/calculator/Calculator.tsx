@@ -195,7 +195,7 @@ export const Calculator = () => {
               );
             })}
             <div className={Styles.totalPriceText}>
-              <h3>Итого {totalPrice.toLocaleString('ru-RU')} руб.</h3>
+              <h3>Итого {totalPrice.toLocaleString('ru-RU')} руб. с НДС</h3>
             </div>
           </div>
         )}

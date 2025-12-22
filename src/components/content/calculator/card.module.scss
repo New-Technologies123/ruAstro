@@ -1,77 +1,55 @@
 .card {
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
 }
-
-.formGrid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-}
-
-.checkboxListCompact {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.checkboxItemCompact {
-    font-size: 0.85rem;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 2px 4px;
-}
-
-.selectGroup label {
-    font-size: 0.9rem;
-}
-
-.paramHeader {
-    margin-bottom: 2px;
-}
-
 
 /* Заголовок установки */
 .cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   padding: 15px 20px;
-  cursor: pointer;
   background: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
   font-size: 23px;
+  cursor: default;
 }
 
-
-/* Карточки */
+/* Контент карточки */
 .cardContent {
   display: flex;
-  gap: 20px;
-  padding: 15px 20px;
+  // gap: 150px;
+  padding: 20px 45px;
 }
 
-.formLeft {
+/* Сетка параметров */
+.paramsGrid {
+  display: grid;
+  // grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(4, 1fr); /* ровно 4 колонки */
+  gap: 60px;
   flex: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
 }
 
+/* Чекбоксы (компактный вариант) */
+.checkboxListCompact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.checkboxItemCompact {
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Правая часть с кнопкой */
 .rightBlock {
   flex: 1;
   display: flex;
   align-items: flex-start;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 .addButton {
@@ -84,82 +62,16 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s ease;
-
-  &:hover {
-    background: #0056b3;
-  }
 }
 
-.paramHeader {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
-  padding: 6px 0;
-  font-weight: 600;
+.addButton:hover {
+  background: #0056b3;
 }
 
-.arrow,
-.toggleIcon {
-  display: none;
-}
-
-/* 🔥 Плавное раскрытие списка */
-.checkboxListWrapper {
-  margin-top: 10px;
-}
-
-.checkboxList {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.checkboxItem {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-  user-select: none;
-  font-size: 14px;
-}
-
-.checkboxItem input[type="checkbox"] {
-  appearance: none;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #777;
-  border-radius: 4px;
-  cursor: pointer;
-  position: relative;
-  background: #fff;
-  transition: all 0.2s ease;
-}
-
-.checkboxItem input[type="checkbox"]::after {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  top: 2px;
-  left: 2px;
-  background: #0075ff;
-  border-radius: 2px;
-  opacity: 0;
-  transition: opacity .2s ease;
-}
-
-.checkboxItem input[type="checkbox"]:checked {
-  border-color: #0075ff;
-}
-
-.checkboxItem input[type="checkbox"]:checked::after {
-  opacity: 1;
-}
-
+/* Ошибки */
 .errorBorder {
   border: 1px solid #d9534f;
   border-radius: 6px;
-  padding: 5px;
 }
 
 .errorSelect {
@@ -173,17 +85,33 @@
   background: #d9534f;
   padding: 10px;
   border-radius: 6px;
-  margin: 10px 0;
+  margin: 10px 20px;
   text-align: center;
-  animation: fadeOut 3s forwards;
 }
 
-@keyframes fadeOut {
-  0% { opacity: 1; }
-  80% { opacity: 1; }
-  100% { opacity: 0; }
+.checkboxItemCompact {
+  font-size: 15px;
+  /* текст побольше */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
+/* 🔥 подсветка текста при выборе */
+.checkboxItemCompact input:checked+span,
+.checkboxItemCompact input:checked {
+  color: #0b3c5d;
+  font-weight: 600;
+}
+
+
+/* Адаптив */
 @media (max-width: 768px) {
   .cardContent {
     flex-direction: column;
