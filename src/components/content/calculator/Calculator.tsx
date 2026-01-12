@@ -3,7 +3,6 @@ import Styles from './calculator.module.scss';
 import { Title } from '../../ui/title/Title';
 import { installations } from './installationsData';
 import { InstallationCard } from './InstallationCard';
-import { QuestionForm } from './QuestionForm';
 
 export const Calculator = () => {
   const [loaded, setLoaded] = useState(false);
@@ -13,13 +12,7 @@ export const Calculator = () => {
   const [fieldErrors, setFieldErrors] = useState<any>({});
   const [openSelected, setOpenSelected] = useState<Record<number, boolean>>({});
   const [errorMessages, setErrorMessages] = useState<Record<number, boolean>>({});
-  const [questionFormVisible, setQuestionFormVisible] = useState(false);
 
-  const [questionForm, setQuestionForm] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
 
   useEffect(() => setLoaded(true), []);
 
@@ -70,8 +63,8 @@ export const Calculator = () => {
 
   const validateSelection = (instId: number, selection: any) => {
     const required = [
-      'quantity','volume','pressure','pressure1','vagometer','vagometer1',
-      'vagometer2','heating','pollution','closet'
+      'quantity', 'volume', 'pressure', 'pressure1', 'vagometer', 'vagometer1',
+      'vagometer2', 'heating', 'pollution', 'closet'
     ];
 
     const errors: any = {};
@@ -118,16 +111,7 @@ export const Calculator = () => {
     setSelectedInstallations(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleQuestionChange = (field: string, value: string) => {
-    setQuestionForm(prev => ({ ...prev, [field]: value }));
-  };
 
-  const handleQuestionSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    alert('Спасибо! Ваш вопрос отправлен.');
-    setQuestionForm({ name: '', email: '', message: '' });
-    setQuestionFormVisible(false);
-  };
 
   return (
     <>
@@ -205,27 +189,9 @@ export const Calculator = () => {
         </p>
         <p>
           Для получения индивидуального предложения направьте запрос на почту:{' '}
-          <a href="mailto:nt@tech-new.ru">nt@tech-new.ru</a>
+          <a href="mailto:tendernt@tech-new.ru">tendernt@tech-new.ru</a>
         </p>
 
-        {/* Кнопка для показа формы */}
-        {/* <div className={Styles.communicationButtonWrapper}>
-          <button
-            className={Styles.communicationButton}
-            onClick={() => setQuestionFormVisible(prev => !prev)}
-          >
-            Общение
-          </button>
-        </div> */}
-
-        {/* Форма QuestionForm */}
-        {questionFormVisible && (
-          <QuestionForm
-            formData={questionForm}
-            onChange={handleQuestionChange}
-            onSubmit={handleQuestionSubmit}
-          />
-        )}
       </div>
     </>
   );

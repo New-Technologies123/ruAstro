@@ -1,4 +1,3 @@
-
 @mixin flex-center {
   display: flex;
   align-items: center;
@@ -27,12 +26,13 @@
   box-shadow: 0 4px 14px rgba(66, 99, 235, 0.35);
   transition: all 0.25s ease;
 
-  &:hover{
+  &:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 20px rgba(66, 99, 235, 0.45);
     filter: brightness(1.08);
   }
-  &:active{
+
+  &:active {
     transform: translateY(-1px);
     box-shadow: 0 5px 14px rgba(66, 99, 235, 0.35);
   }
@@ -69,17 +69,18 @@
   color: #000000;
   cursor: pointer;
   transition: all 0.7s ease;
-  
+
   &:hover {
     background: #91d3ff;
   }
-  p{
+
+  p {
     font-size: 16px;
     text-align: left;
   }
 }
 
-.navIcon {  
+.navIcon {
   font-size: 20px;
   transition: transform 0.3s ease;
 }
@@ -99,31 +100,21 @@
 
 .sectionHeader {
   margin-bottom: 15px;
-  h2{
+
+  h2 {
     font-size: 32px;
     color: #14213d;
     padding-top: 0;
-    span{
+
+    span {
       color: #4361ee;
     }
   }
-  p{
+
+  p {
     color: #58728b;
     font-size: 20px;
   }
-}
-
-/* Бокс для фото и текста */
-.fotoText {
-  display: flex;  
-  gap: 20px;
-  margin-top: 15px;
-}
-
-/* Фото */
-.mainImageContainer {
-  margin-top: 5px;
-  width: 50%;
 }
 
 .imageCard {
@@ -132,24 +123,20 @@
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
+
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    
+
     .imageOverlay {
       opacity: 1;
     }
   }
 }
 
-.minFoto{
-  width: 32%;
-  margin-left: auto;
-  margin-right: auto;
-}
 
-.image, .mainImage {
+.image,
+.mainImage {
   width: 100%;
   height: auto;
   display: block;
@@ -186,14 +173,15 @@
 .features {
   margin-top: 10px;
   margin-bottom: 15px;
+
   // display: grid;
   // gap: 15px;
-  h3{
+  h3 {
     font-size: 24px;
     margin-bottom: 24px;
     position: relative;
     display: inline-block;
-    
+
     &::after {
       content: '';
       position: absolute;
@@ -225,26 +213,16 @@
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Иконка возле фото */
-.featureIcon {
-  @include flex-center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 50px;
-  height: 50px;
-  background: rgba(#4361ee, 0.1);
-  border-radius: 12px;
-  font-size: 28px;
-}
 
-.featureText{
-  h4{
+.featureText {
+  h4 {
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 8px;
     color: #14213d;
   }
-  p{
+
+  p {
     font-size: 18px;
     line-height: 1.4;
     margin: 0;
@@ -252,217 +230,272 @@
   }
 }
 
-@media (max-width: 1400px){
-  .sidebar{
+.cardContent {
+  flex: 1;
+  display: grid;
+  gap: 24px;
+}
+
+.textBlock {
+  h3 {
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #14213d;
+  }
+
+  p {
+    font-size: 18px;
+    line-height: 1.5;
+    text-indent: 20px;
+  }
+}
+
+/* ===== КАРТОЧКА (ФОТО + ТЕКСТ) ===== */
+
+.card {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.reverse {
+  flex-direction: row-reverse;
+}
+
+.cardImage {
+  flex: 0 0 30%;
+}
+
+
+
+@media (max-width: 1400px) {
+  .sidebar {
     flex: 0 0 260px;
   }
-  .navItem{
+
+  .navItem {
     padding: 12px 17px;
     gap: 15px;
   }
-  .sectionHeader{
-    h2{
+
+  .sectionHeader {
+    h2 {
       margin: 0 0 10px;
       font-size: 28px;
     }
-    p{
+
+    p {
       font-size: 18px;
     }
   }
-  .features{
-    h3{
+
+  .features {
+    h3 {
       font-size: 22px;
     }
   }
-  .featureText{
-    h4{
+
+  .featureText {
+    h4 {
       font-size: 19px;
     }
-    p{
+
+    p {
       font-size: 17px;
     }
   }
-  .zoomText{
+
+  .zoomText {
     font-size: 16px;
   }
-  .minFoto{
-    width: 39%;
-  }
+
 }
 
-@media (max-width: 1200px){
-  .navItem{
-    P{
+@media (max-width: 1200px) {
+  .navItem {
+    P {
       font-size: 15px;
-    }    
+    }
   }
-  .zoomText{
+
+  .zoomText {
     font-size: 15px;
   }
-  .sectionHeader{
-    h2{
+
+  .sectionHeader {
+    h2 {
       font-size: 26px;
     }
-    p{
+
+    p {
       font-size: 16px;
     }
   }
-  .features{
-    h3{
+
+  .features {
+    h3 {
       font-size: 20px;
     }
   }
-  .featureText{
-    h4{
+
+  .featureText {
+    h4 {
       font-size: 17px;
     }
-    p{
+
+    p {
       font-size: 16px;
     }
   }
-  .featureIcon{
-    font-size: 24px;
-  }
-  .minFoto{
-    width: 45%;
-  }
+
+
 }
 
 @media (max-width: 1024px) {
-  .container{
+  .container {
     margin: 20px 18px;
   }
-  .mainContent{
+
+  .mainContent {
     gap: 20px;
   }
-  .sidebar{
+
+  .sidebar {
     flex: 0 0 210px;
   }
-  .sectionHeader{
-    h2{
+
+  .sectionHeader {
+    h2 {
       font-size: 24px;
     }
-    p{
+
+    p {
       font-size: 15px;
     }
   }
-  .features{
-    h3{
+
+  .features {
+    h3 {
       font-size: 18px;
     }
   }
-  .featureIcon{
-    font-size: 20px;
-  }
-  .featureText{
-    h4{
+
+
+  .featureText {
+    h4 {
       font-size: 16px;
     }
-    p{
+
+    p {
       font-size: 15px;
     }
   }
-  .minFoto{
-    width: 50%;
-  }
+
 }
 
-@media (max-width: 800px){
-  .container{
+@media (max-width: 800px) {
+  .container {
     margin: 0 15px;
   }
-  .mainContent{
+
+  .mainContent {
     display: grid;
   }
-  .sidebar{
+
+  .sidebar {
     position: static;
     top: auto;
   }
-  .navItem{
+
+  .navItem {
     padding: 10px 15px;
-    p{
+
+    p {
       font-size: 14px;
-    }    
+    }
   }
-  .navIcon{
+
+  .navIcon {
     font-size: 18px;
   }
-  .features{
-    h3{
+
+  .features {
+    h3 {
       font-size: 20px;
     }
   }
-  .feature{
+
+  .feature {
     padding: 18px;
     gap: 20px;
   }
-  .featureText{
-    h4{
+
+  .featureText {
+    h4 {
       margin-bottom: 5px;
     }
   }
 }
 
-@media (max-width: 600px){
-  .sectionHeader{
-    h2{
+@media (max-width: 600px) {
+  .sectionHeader {
+    h2 {
       font-size: 20px;
     }
   }
-  .features{
-    h3{
+
+  .features {
+    h3 {
       font-size: 17px;
     }
   }
-  .featureIcon{
-    font-size: 18px;
-  }
-  .featureText{
-    h4{
+
+  .featureText {
+    h4 {
       font-size: 15px;
     }
-    p{
+
+    p {
       font-size: 14px;
     }
   }
-  .minFoto{
-    width: 60%;
-  }
+
 }
 
-@media (max-width: 500px){
-  .navMenu{
+@media (max-width: 500px) {
+  .navMenu {
     padding: 3px;
     gap: 3px;
   }
-  .navItem{
+
+  .navItem {
     padding: 8px 13px;
-    p{
+
+    p {
       font-size: 13px;
     }
   }
-  .imageCard{
+
+  .imageCard {
     &:hover {
       transform: none;
       box-shadow: none;
-      
+
       .imageOverlay {
         opacity: 0;
       }
     }
   }
-  .mainImageContainer{
-    width: 78%;
-  }
-  .gallery{
+
+  .gallery {
     display: grid;
   }
-  .image{
+
+  .image {
     width: 70%;
     margin-left: auto;
     margin-right: auto;
   }
-  .minFoto{
-    width: 50%;
-  }
+
 }

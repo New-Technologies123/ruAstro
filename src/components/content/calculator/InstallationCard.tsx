@@ -149,7 +149,9 @@ export const InstallationCard = ({
 
             <div className={Styles.rightBlock}>
                 <button className={Styles.addButton} onClick={onAdd}>
-                    Получить расчет
+                    <p>
+                        Получить расчет
+                    </p>
                 </button>
             </div>
         </div>
