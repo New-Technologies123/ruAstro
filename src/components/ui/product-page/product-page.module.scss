@@ -1,12 +1,12 @@
 .page {
   display: grid;
   grid-template-columns: 420px 1fr 340px;
-  gap: 30px;
   align-items: flex-start;
   padding: 20px;
-  margin: 20px 200px;
+  width: 850px;
   background: #c0ebffc7;
   border-radius: 12px;
+  margin: 0 auto;
 }
 
 /* ===== Кнопка корзины ===== */
@@ -41,49 +41,10 @@
   }
 }
 
-/* ===== INFO ===== */
-.info {
-  width: 180px;
-
-  h1 {
-    font-size: 32px;
-    margin-bottom: 16px;
-  }
-}
-
-.description {
-  color: #555;
-  margin-bottom: 24px;
-  line-height: 1.5;
-}
-
-.params {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  li {
-    display: flex;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 6px 0;
-    border-bottom: 1px dotted #ccc;
-    font-size: 14px;
-  }
-
-  span {
-    color: #777;
-    white-space: nowrap;
-  }
-
-  b {
-    text-align: right;
-    font-weight: 500;
-  }
-}
-
 /* ===== ORDER ===== */
 .order {
+  margin-left: 30px;
+  width: 350px;
   background: #2f3c8f;
   color: #fff;
   padding: 24px;

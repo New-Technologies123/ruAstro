@@ -158,6 +158,13 @@ export const InstallationCard = ({
                         {renderCheckboxes('closet', inst.closetOptions)}
                     </ParamCard>
 
+                    <ParamCard
+                        title="Плотность измеряемой жидкости"
+                        error={errors.density}
+                    >
+                        {renderCheckboxes('density', inst.densityOptions)}
+                    </ParamCard>
+
                 </div>
             </div>
 

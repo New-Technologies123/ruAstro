@@ -50,7 +50,8 @@ export const Calculator = () => {
       { field: 'vagometer1', options: inst.vagometer1Options },
       { field: 'vagometer2', options: inst.vagometer2Options },
       { field: 'pollution', options: inst.pollutionOptions },
-      { field: 'closet', options: inst.closetOptions }
+      { field: 'closet', options: inst.closetOptions },
+      { field: 'density', options: inst.densityOptions }
     ];
 
     fields.forEach(({ field, options }) => {
@@ -69,7 +70,7 @@ export const Calculator = () => {
       'quantity', 'volume', 'fittings', 'max_gas',
       // 'pressure', 'pressure1', 
       'vagometer', 'vagometer1',
-      'vagometer2', 'heating', 'pollution', 'closet'
+      'vagometer2', 'heating', 'pollution', 'closet', 'density'
     ];
 
     const errors: any = {};
@@ -180,6 +181,7 @@ export const Calculator = () => {
                       <p>Дублирующий расходомер: {item.vagometer2?.join(', ')}</p>
                       <p>Наличие поточного влагомера: {item.pollution?.join(', ')}</p>
                       <p>Шкафное оборудование: {item.closet?.join(', ')}</p>
+                      <p>Плотность измеряемой жидкости: {item.density?.join(', ')}</p>
                     </div>
                   )}
                 </div>

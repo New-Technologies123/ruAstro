@@ -43,19 +43,6 @@ export const ProductPage = ({ product }: Props) => {
           <img src={product.image} alt={product.title} />
         </div>
 
-        {/* ЦЕНТР */}
-        <div className={styles.info}>
-          <p className={styles.description}>{product.description}</p>
-
-          <ul className={styles.params}>
-            {product.params.map(p => (
-              <li key={p.label}>
-                <span>{p.label}</span>
-                <b>{p.value}</b>
-              </li>
-            ))}
-          </ul>
-        </div>
 
         {/* ПРАВО */}
         <div className={styles.order}>
