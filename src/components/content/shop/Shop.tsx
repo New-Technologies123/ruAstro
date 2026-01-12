@@ -1,56 +1,73 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './shop.module.scss';
 import { LayoutBack } from '../../layout/LayoutBack';
-import { ProductCard } from '../../ui/product-card/ProductCard';
+import { ProductCard } from './ProductCard';
 import { products } from './products';
 import type { Product } from './products';
 import { Title } from '../../ui/title/Title';
+import { ProductPage } from '../../ui/product-page/ProductPage';
+import { useShopFilters } from './useShopFilters';
 
 export const Shop = () => {
   const [openedProduct, setOpenedProduct] = useState<Product | null>(null);
-  const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('Все');
 
-  const categories = ['Все', ...Array.from(new Set(products.map(p => p.category)))];
+  // 👉 читаем /shop/1
+  useEffect(() => {
+    const match = window.location.pathname.match(/\/shop\/(\d+)/);
+    if (match) {
+      const productId = Number(match[1]);
+      const product = products.find(p => p.id === productId);
+      if (product) setOpenedProduct(product);
+    }
+  }, []);
+
+  const {
+    search,
+    setSearch,
+    selectedCategory,
+    setSelectedCategory,
+    categories,
+    filteredProducts,
+  } = useShopFilters(products);
 
   const openProduct = (product: Product) => {
     setOpenedProduct(product);
-    window.history.pushState({}, '', `${window.location.pathname}?product=${product.id}`);
+    window.history.pushState({}, '', `/shop/${product.id}`);
   };
 
   const onBack = () => {
     setOpenedProduct(null);
-    window.history.pushState({}, '', window.location.pathname);
+    window.history.pushState({}, '', '/shop');
   };
-
-  /* фильтрация и поиск */
-  const filteredProducts = products
-    .filter(p => selectedCategory === 'Все' || p.category === selectedCategory)
-    .filter(p => p.title.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <>
       {!openedProduct && (
-        <> 
+        <>
           <Title text="Магазин" />
-          {/* Фильтры и поиск над карточками */}
+
+          {/* ФИЛЬТРЫ */}
           <div className={styles.filters}>
             <div className={styles.categories}>
               {categories.map(cat => {
-                const count = cat === 'Все'
-                  ? products.length
-                  : products.filter(p => p.category === cat).length;
+                const count =
+                  cat === 'Все'
+                    ? products.length
+                    : products.filter(p => p.category === cat).length;
+
                 return (
                   <button
                     key={cat}
-                    className={`${styles.filter} ${cat === selectedCategory ? styles['filter--active'] : ''}`}
+                    className={`${styles.filter} ${cat === selectedCategory ? styles['filter--active'] : ''
+                      }`}
                     onClick={() => setSelectedCategory(cat)}
                   >
-                    {cat} <sup className={styles.filterSup}>{count}</sup>
+                    {cat} <sup>{count}</sup>
                   </button>
                 );
               })}
             </div>
+
             <div className={styles.search}>
               <input
                 type="text"
@@ -58,12 +75,17 @@ export const Shop = () => {
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               />
-            </div>            
+            </div>
           </div>
-          {/* Сетка карточек */}
+
+          {/* КАРТОЧКИ */}
           <div className={styles.products}>
             {filteredProducts.map(product => (
-              <ProductCard key={product.id} product={product} onClick={() => openProduct(product)} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                onClick={() => openProduct(product)}
+              />
             ))}
           </div>
         </>
@@ -71,11 +93,7 @@ export const Shop = () => {
 
       {openedProduct && (
         <LayoutBack onBack={onBack} title={openedProduct.title}>
-          <div className={styles.productPage}>
-            <p>{openedProduct.description}</p>
-            <p><strong>Категория:</strong> {openedProduct.category}</p>
-            <p><strong>Цена:</strong> {openedProduct.price}</p>
-          </div>
+          <ProductPage product={openedProduct} />
         </LayoutBack>
       )}
     </>

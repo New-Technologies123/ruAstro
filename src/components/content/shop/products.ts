@@ -1,71 +1,110 @@
-/* Тип продукта */
+
+/* ===== ТИПЫ ===== */
+export interface ProductParam {
+  label: string;
+  value: string;
+}
+
 export interface Product {
   id: number;
   title: string;
   description: string;
   category: string;
   price: string;
+  nds: string;
   inStock: boolean;
   shipmentTime: string;
   deliveryTime: string;
   image: string;
+
+  params: ProductParam[];
 }
 
-/* Данные каталога */
+/* ===== ДАННЫЕ ===== */
 export const products: Product[] = [
   {
     id: 1,
-    title: 'Блок подготовки газа',
-    description: 'Используется для очистки и подготовки газа перед транспортировкой.',
-    category: 'Газовое оборудование',
-    price: 'По запросу',
+    title: 'Корпус верхний НТ.202.000.002.0',
+    description: '',
+    category: 'Клапан магниторегулируемый',
+    price: '12 500',
+    nds: 'без НДС',
     inStock: true,
     shipmentTime: '3–5 рабочих дней',
-    deliveryTime: '7–10 дней',
-    image: '/src/images/products/product_1.webp'
+    deliveryTime: '60–90 дней',
+    image: '/src/images/shop/1.png',
+
+    params: [
+      { label: 'Шифр', value: 'НТ.202.000.002.0' },
+      { label: 'Материал', value: 'Полиамид' },
+    ],
   },
   {
     id: 2,
-    title: 'Сепаратор газожидкостный',
-    description: 'Высокоэффективная система разделения газа и жидкости.',
-    category: 'Сепарация',
-    price: 'По запросу',
+    title: 'Шток НТ.200.000.003.0',
+    description: '',
+    category: 'Клапан магниторегулируемый',
+    price: '7 120',
+    nds: 'без НДС',
     inStock: false,
     shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '14–21 день',
-    image: '/src/images/products/product_2.webp'
+    deliveryTime: '60–90 день',
+    image: '/src/images/shop/2.png',
+
+    params: [
+      { label: 'Шифр', value: 'НТ.200.000.003.0' },
+      { label: 'Материал', value: 'Полиамид' },
+    ],
   },
   {
     id: 3,
-    title: 'Сепаратор газожидкостный',
-    description: 'Высокоэффективная система разделения газа и жидкости.',
-    category: 'Сепарация',
-    price: 'По запросу',
+    title: 'Втулка немагнитная НТ.200.000.004.0',
+    description: '',
+    category: 'Клапан магниторегулируемый',
+    price: '2 600',
+    nds: 'без НДС',
     inStock: false,
     shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '14–21 день',
-    image: '/src/images/products/product_3.webp'
+    deliveryTime: '60–90 день',
+    image: '/src/images/shop/3.png',
+
+    params: [
+      { label: 'Шифр', value: 'НТ.200.000.004.0' },
+      { label: 'Материал', value: 'Полиамид' },
+    ],
   },
   {
     id: 4,
-    title: 'Сепаратор газожидкостный',
-    description: 'Высокоэффективная система разделения газа и жидкости.',
-    category: 'Сепарация',
-    price: 'По запросу',
-    inStock: false,
+    title: 'Шайба магнитная НТ.200.000.006.0',
+    description: '',
+    category: 'Клапан магниторегулируемый',
+    price: '16 730',
+    nds: 'без НДС',
+    inStock: true,
     shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '14–21 день',
-    image: '/src/images/products/product_4.webp'
+    deliveryTime: '60–90 день',
+    image: '/src/images/shop/4.png',
+
+    params: [
+      { label: 'Шифр', value: 'НТ.200.000.006.0' },
+      { label: 'Материал', value: 'Полиамид' },
+    ],
   },
   {
     id: 5,
-    title: 'Сепаратор газожидкостный',
-    description: 'Высокоэффективная система разделения газа и жидкости.',
-    category: 'Сепарация',
-    price: 'По запросу',
-    inStock: false,
+    title: 'Шайба пружины опорная НТ.200.000.007.0',
+    description: '',
+    category: 'Клапан магниторегулируемый',
+    price: '2 580',
+    nds: 'без НДС',
+    inStock: true,
     shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '14–21 день',
-    image: '/src/images/products/product_5.webp'
-  }
+    deliveryTime: '60–90 день',
+    image: '/src/images/shop/5.png',
+
+    params: [
+      { label: 'Шифр', value: 'НТ.200.000.007.0' },
+      { label: 'Материал', value: 'Полиамид' },
+    ],
+  },
 ];

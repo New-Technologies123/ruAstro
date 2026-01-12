@@ -3,6 +3,7 @@ import Styles from './calculator.module.scss';
 import { Title } from '../../ui/title/Title';
 import { installations } from './installationsData';
 import { InstallationCard } from './InstallationCard';
+import { exportToPDF } from '../calculator/exportToPDF';
 
 export const Calculator = () => {
   const [loaded, setLoaded] = useState(false);
@@ -41,8 +42,10 @@ export const Calculator = () => {
     const fields = [
       { field: 'volume', options: inst.volumeOptions },
       { field: 'heating', options: inst.heatingOptions },
-      { field: 'pressure', options: inst.pressureOptions },
-      { field: 'pressure1', options: inst.pressure1Options },
+      { field: 'fittings', options: inst.fittingsOptions },
+      { field: 'max_gas', options: inst.max_gasOptions },
+      // { field: 'pressure', options: inst.pressureOptions },
+      // { field: 'pressure1', options: inst.pressure1Options },
       { field: 'vagometer', options: inst.vagometerOptions },
       { field: 'vagometer1', options: inst.vagometer1Options },
       { field: 'vagometer2', options: inst.vagometer2Options },
@@ -63,7 +66,9 @@ export const Calculator = () => {
 
   const validateSelection = (instId: number, selection: any) => {
     const required = [
-      'quantity', 'volume', 'pressure', 'pressure1', 'vagometer', 'vagometer1',
+      'quantity', 'volume', 'fittings', 'max_gas',
+      // 'pressure', 'pressure1', 
+      'vagometer', 'vagometer1',
       'vagometer2', 'heating', 'pollution', 'closet'
     ];
 
@@ -165,9 +170,11 @@ export const Calculator = () => {
                     <div className={Styles.selectedDetails}>
                       <p>Количество скважин: {item.quantity}</p>
                       <p>Максимальное рабочее давление: {item.heating?.join(', ')}</p>
-                      <p>Емкость: {item.volume?.join(', ')}</p>
-                      <p>Габариты блока технологии: {item.pressure?.join(', ')}</p>
-                      <p>Габариты блока автоматики: {item.pressure1?.join(', ')}</p>
+                      <p>Максимальная производительность по жидкости: {item.volume?.join(', ')}</p>
+                      <p>Запорная арматура: {item.fittings?.join(', ')}</p>
+                      <p>Максимальная производительность по газу: {item.max_gas?.join(', ')}</p>
+                      {/* <p>Габариты блока технологии: {item.pressure?.join(', ')}</p>
+                      <p>Габариты блока автоматики: {item.pressure1?.join(', ')}</p> */}
                       <p>Расходомер на линии газа: {item.vagometer?.join(', ')}</p>
                       <p>Расходомер на линии жидкости: {item.vagometer1?.join(', ')}</p>
                       <p>Дублирующий расходомер: {item.vagometer2?.join(', ')}</p>
@@ -180,6 +187,13 @@ export const Calculator = () => {
             })}
             <div className={Styles.totalPriceText}>
               <h3>Итого {totalPrice.toLocaleString('ru-RU')} руб. с НДС</h3>
+
+              <button
+                className={Styles.pdfButton}
+                onClick={() => exportToPDF(selectedInstallations, totalPrice)}
+              >
+                Скачать PDF
+              </button>
             </div>
           </div>
         )}

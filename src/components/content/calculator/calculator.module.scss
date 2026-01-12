@@ -84,45 +84,21 @@
   }
 }
 
-/* ===== Задать вопрос ===== */
-
-.questionSection {
-  margin-top: 60px;
-  padding: 32px;
-  background: #f7f7f7;
-  border-radius: 12px;
-}
-
-.questionForm {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: 500px;
-}
-
-.questionForm input,
-.questionForm textarea {
-  padding: 12px 14px;
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-}
-
-.questionForm button {
-  align-self: flex-start;
-  padding: 12px 24px;
-  border-radius: 8px;
-  border: none;
-  background: #1e1e1e;
+/* ===== Кнопка для скачивания пдф ===== */
+.pdfButton {
+  margin-top: 14px;
+  padding: 10px 16px;
+  background-color: #0748fc;
   color: #fff;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 14px;
+
+  &:hover {
+    background-color: #1600df;
+  }
 }
-
-.questionForm button:hover {
-  opacity: 0.9;
-}
-
-
 
 
 

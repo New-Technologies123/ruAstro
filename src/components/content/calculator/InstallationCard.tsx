@@ -89,25 +89,39 @@ export const InstallationCard = ({
                     </ParamCard>
 
                     <ParamCard
-                        title="Емкость"
+                        title="Максимальная производительность по жидкости"
                         error={errors.volume}
                     >
                         {renderCheckboxes('volume', inst.volumeOptions)}
                     </ParamCard>
 
                     <ParamCard
+                        title="Запорная арматура"
+                        error={errors.fittings}
+                    >
+                        {renderCheckboxes('fittings', inst.fittingsOptions)}
+                    </ParamCard>
+
+                    <ParamCard
+                        title="Максимальная производительность по газу"
+                        error={errors.max_gas}
+                    >
+                        {renderCheckboxes('max_gas', inst.max_gasOptions)}
+                    </ParamCard>
+
+                    {/* <ParamCard
                         title="Габариты блока автоматики"
                         error={errors.pressure1}
                     >
                         {renderCheckboxes('pressure1', inst.pressure1Options)}
-                    </ParamCard>
+                    </ParamCard> */}
 
-                    <ParamCard
+                    {/* <ParamCard
                         title="Габариты блока технологий"
                         error={errors.pressure}
                     >
                         {renderCheckboxes('pressure', inst.pressureOptions)}
-                    </ParamCard>
+                    </ParamCard> */}
 
                     <ParamCard
                         title="Наличие поточного влагомера"
