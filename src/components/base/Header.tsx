@@ -15,8 +15,8 @@ export const Header = ({ pageType }) => {
   const onToggleMobileMenu = () => {
     setIsActiveMobileMenu((prev) => !prev);
   };
-   
-   // Функция для перехода на сайт tech-new
+
+  // Функция для перехода на сайт tech-new
   const redirectEngToTechNew = () => {
     window.location.href = 'https://eng.tech-new.ru';
   };
@@ -38,7 +38,7 @@ export const Header = ({ pageType }) => {
       }
     };
 
-    document.addEventListener('click', handleClickOutside);    
+    document.addEventListener('click', handleClickOutside);
 
     return () => {
       document.removeEventListener('click', handleClickOutside);
@@ -53,15 +53,15 @@ export const Header = ({ pageType }) => {
           <div className={Styles.contactBloc}>
             <div className={Styles.contactInfo}>
               <p>
-                <img src={location.src} alt="Адрес"/>
+                <img src={location.src} alt="Адрес" />
                 Адрес: 450076, г. Уфа, ул Заки Валиди 32/2
               </p>
               <p>
-                <img src={email.src} alt="Email"/>
+                <img src={email.src} alt="Email" />
                 Email: nt@tech-new.ru
               </p>
               <p>
-                <img src={phone.src} alt="Телефон"/>
+                <img src={phone.src} alt="Телефон" />
                 Телефон: +7(347) 293-93-33
               </p>
             </div>
@@ -71,7 +71,7 @@ export const Header = ({ pageType }) => {
                 Рус/Eng
               </a>
             </div>
-            
+
           </div>
         </div>
       </header>
@@ -86,42 +86,47 @@ export const Header = ({ pageType }) => {
 
         <ul id="nav-menu" className={`${Styles.navMenu} ${isActiveMobileMenu ? Styles.active : ''}`}>
           <li>
-            <a href={`/home`} className={pageType === 'home' ? Styles.active : ''}>
+            <a href={`/home/`} className={pageType === 'home' ? Styles.active : ''}>
               Главная
             </a>
           </li>
           <li>
-            <a href={`/about`} className={pageType === 'about' ? Styles.active : ''}>
+            <a href={`/about/`} className={pageType === 'about' ? Styles.active : ''}>
               О компании
             </a>
           </li>
           <li>
-            <a href={`/products`} className={pageType === 'products' ? Styles.active : ''}>
+            <a href={`/products/`} className={pageType === 'products' ? Styles.active : ''}>
               Продукция
             </a>
           </li>
           <li>
-            <a href={`/services`} className={pageType === 'services' ? Styles.active : ''}>
+            <a href={`/services/`} className={pageType === 'services' ? Styles.active : ''}>
               Сервисные услуги
             </a>
           </li>
           <li>
-            <a href={`/documents`} className={pageType === 'documents' ? Styles.active : ''}>
+            <a href={`/documents/`} className={pageType === 'documents' ? Styles.active : ''}>
               Документы
             </a>
           </li>
           <li>
-            <a href={`/news`} className={pageType === 'news' ? Styles.active : ''}>
+            <a href={`/news/`} className={pageType === 'news' ? Styles.active : ''}>
               Новости
             </a>
           </li>
           <li>
-            <a href={`/careers`} className={pageType === 'careers' ? Styles.active : ''}>
+            <a href={`/procurement/`} className={pageType === 'procurement' ? Styles.active : ''}>
+              Закупки
+            </a>
+          </li>
+          <li>
+            <a href={`/careers/`} className={pageType === 'careers' ? Styles.active : ''}>
               Карьера
             </a>
           </li>
           <li>
-            <a href={`/contact`} className={pageType === 'contact' ? Styles.active : ''}>
+            <a href={`/contact/`} className={pageType === 'contact' ? Styles.active : ''}>
               Контакты
             </a>
           </li>

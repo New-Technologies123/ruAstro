@@ -9,9 +9,9 @@ export const Footer = () => {
         {/* Контактная информация */}
         <div className={Styles.contactSection}>
           <div className={Styles.logoContainer}>
-            <img src={logoRu.src} alt="Новые Технологии"/>
+            <img src={logoRu.src} alt="Новые Технологии" />
           </div>
-          
+
           <div className={Styles.contactInfo}>
             <p>
               г.Уфа, ул Заки Валиди 32/2
@@ -21,7 +21,7 @@ export const Footer = () => {
             </p>
             <p>
               <a href="mailto:nt@tech-new.ru">nt@tech-new.ru</a>
-            </p>           
+            </p>
           </div>
         </div>
 
@@ -31,17 +31,17 @@ export const Footer = () => {
             <h3>Каталог</h3>
             <ul>
               <li>
-                <a href={`/products`}>Продукция</a>
+                <a href={`/products/`}>Продукция</a>
               </li>
               <li>
-                <a href={`/services`}>Сервисные услуги</a>
+                <a href={`/services/`}>Сервисные услуги</a>
               </li>
             </ul>
-            
+
             <h3>Карьера</h3>
             <ul>
               <li>
-                <a href={`/careers`}>Открытые вакансии</a>
+                <a href={`/careers/`}>Открытые вакансии</a>
               </li>
             </ul>
           </div>
@@ -50,16 +50,19 @@ export const Footer = () => {
             <h3>Компания</h3>
             <ul>
               <li>
-                <a href={`/about`}>О компании</a>
+                <a href={`/about/`}>О компании</a>
               </li>
               <li>
-                <a href={`/documents`}>Документы</a>
+                <a href={`/documents/`}>Документы</a>
               </li>
               <li>
-                <a href={`/news`}>Новости</a>
+                <a href={`/news/`}>Новости</a>
               </li>
               <li>
-                <a href={` /contact`}>Контакты</a>
+                <a href={`/procurement/`}>Закупки</a>
+              </li>
+              <li>
+                <a href={`/contact/`}>Контакты</a>
               </li>
             </ul>
           </div>

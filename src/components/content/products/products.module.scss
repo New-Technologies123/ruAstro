@@ -142,10 +142,10 @@
   display: block;
 }
 
-.mainImage {
-  max-height: 500px;
-  object-fit: cover;
-}
+// .mainImage {
+//   max-height: 500px;
+//   object-fit: cover;
+// }
 
 .imageOverlay {
   @include flex-center;

@@ -1,5 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
+import { QuestionEntry } from '../components/ui/question-form/QuestionEntry';
 ---
 
 <html lang="ru">
@@ -63,6 +64,8 @@ import { ViewTransitions } from 'astro:transitions';
 
     <slot />
 
+    <!-- ПЛАВАЮЩАЯ КНОПКА -->
+    <QuestionEntry client:load />
   </body>
 </html>
 

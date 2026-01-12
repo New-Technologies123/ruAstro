@@ -1,0 +1,11 @@
+.floatingWrapper {
+    position: fixed;
+    bottom: 0px;
+    left: 24px;
+    z-index: 9999;
+
+    @media (max-width: 768px) {
+        bottom: 16px;
+        right: 16px;
+    }
+}
