@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Styles from './card.module.scss';
 import { ParamCard } from '../../ui/param-card/ParamCard';
+import { useEffect } from 'react';
 
 interface InstallationCardProps {
     inst: any;
@@ -19,6 +20,30 @@ export const InstallationCard = ({
     onChange,
     onAdd
 }: InstallationCardProps) => {
+
+    const getVagometer1Options = () => {
+        const hasNonSepGas =
+            sel.max_gas_1?.length &&
+            !sel.max_gas_1.includes('Не требуется');
+
+        if (hasNonSepGas) {
+            return inst.vagometer1Options.filter(
+            (o: any) => o.label === 'Многофазный расходомер'
+            );
+        }
+
+        return inst.vagometer1Options;
+    };
+
+    useEffect(() => {
+        const hasNonSepGas =
+            sel.max_gas_1?.length &&
+            !sel.max_gas_1.includes('Не требуется');
+
+        if (hasNonSepGas && sel.vagometer1?.[0] !== 'Многофазный расходомер') {
+            onChange('vagometer1', ['Многофазный расходомер']);
+        }
+    }, [sel.max_gas_1]);
 
     const handleToggleOption = (field: string, option: any, numeric?: boolean) => {
         if (numeric) {
@@ -89,24 +114,31 @@ export const InstallationCard = ({
                     </ParamCard>
 
                     <ParamCard
-                        title="Максимальная производительность по жидкости"
+                        title="Максимальная производительность по жидкости, т/сут"
                         error={errors.volume}
                     >
                         {renderCheckboxes('volume', inst.volumeOptions)}
                     </ParamCard>
 
                     <ParamCard
-                        title="Запорная арматура"
-                        error={errors.fittings}
+                        title="Исполнение по входным трубопроводам"
+                        error={errors.density}
                     >
-                        {renderCheckboxes('fittings', inst.fittingsOptions)}
-                    </ParamCard>
+                        {renderCheckboxes('density', inst.densityOptions)}
+                    </ParamCard>                    
 
                     <ParamCard
-                        title="Максимальная производительность по газу"
+                        title="Максимальная производительность по газу для сепарационного способа измерения, м³/сут"
                         error={errors.max_gas}
                     >
                         {renderCheckboxes('max_gas', inst.max_gasOptions)}
+                    </ParamCard>
+
+                    <ParamCard
+                        title="Максимальная производительность по газу для бессепарационного способа измерения, м³/сут"
+                        error={errors.max_gas_1}
+                    >
+                        {renderCheckboxes('max_gas_1', inst.max_gas_1Options)}
                     </ParamCard>
 
                     {/* <ParamCard
@@ -130,11 +162,17 @@ export const InstallationCard = ({
                         {renderCheckboxes('pollution', inst.pollutionOptions)}
                     </ParamCard>
 
-                    <ParamCard
+                    {/* <ParamCard
                         title="Расходомер на линии жидкости"
                         error={errors.vagometer1}
                     >
                         {renderCheckboxes('vagometer1', inst.vagometer1Options)}
+                    </ParamCard> */}
+                    <ParamCard
+                        title="Расходомер на линии жидкости"
+                        error={errors.vagometer1}
+                    >
+                        {renderCheckboxes('vagometer1', getVagometer1Options())}
                     </ParamCard>
 
                     <ParamCard
@@ -159,10 +197,10 @@ export const InstallationCard = ({
                     </ParamCard>
 
                     <ParamCard
-                        title="Плотность измеряемой жидкости"
-                        error={errors.density}
+                        title="Запорная арматура"
+                        error={errors.fittings}
                     >
-                        {renderCheckboxes('density', inst.densityOptions)}
+                        {renderCheckboxes('fittings', inst.fittingsOptions)}
                     </ParamCard>
 
                 </div>

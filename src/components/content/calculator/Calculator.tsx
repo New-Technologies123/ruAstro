@@ -4,6 +4,7 @@ import { Title } from '../../ui/title/Title';
 import { installations } from './installationsData';
 import { InstallationCard } from './InstallationCard';
 import { exportToPDF } from '../calculator/exportToPDF';
+import { maxGasSepRules  } from './maxGasSepRules';
 
 export const Calculator = () => {
   const [loaded, setLoaded] = useState(false);
@@ -14,6 +15,27 @@ export const Calculator = () => {
   const [openSelected, setOpenSelected] = useState<Record<number, boolean>>({});
   const [errorMessages, setErrorMessages] = useState<Record<number, boolean>>({});
 
+  const gasGroupMap: Record<string, 'LOW' | 'MID' | 'HIGH'> = {
+    'До 40 000': 'LOW',
+    'Свыше 40 000 до 80 000': 'MID',
+    'Свыше 80 000 до 150 000': 'MID',
+    'Свыше 150 000 до 300 000': 'HIGH',
+    'Свыше 300 000 до 500 000': 'HIGH'
+  };
+
+  const getSepGasPrice = (selection: any, gasLabel: string) => {
+    const gasGroup = gasGroupMap[gasLabel];
+    if (!gasGroup) return undefined;
+
+    const rule = maxGasSepRules.find(r =>
+      r.quantity === selection.quantity &&
+      r.volume === selection.volume?.[0] &&
+      r.density === selection.density?.[0] &&
+      r.gasGroup === gasGroup
+    );
+
+    return rule?.price;
+  };
 
   useEffect(() => setLoaded(true), []);
 
@@ -31,19 +53,20 @@ export const Calculator = () => {
 
   const calculatePrice = (inst: any, selection: any) => {
     if (!selection) return 0;
+
     let total = 0;
 
-    if (selection.quantity) {
-      const quantityPrice =
-        inst.quantityOptions?.find(q => q.label === selection.quantity)?.price || 0;
-      total += quantityPrice;
-    }
+    // Количество скважин
+    total +=
+      inst.quantityOptions.find(q => q.label === selection.quantity)?.price || 0;
+
 
     const fields = [
       { field: 'volume', options: inst.volumeOptions },
       { field: 'heating', options: inst.heatingOptions },
       { field: 'fittings', options: inst.fittingsOptions },
-      { field: 'max_gas', options: inst.max_gasOptions },
+      // { field: 'max_gas', options: inst.max_gasOptions },
+      // { field: 'max_gas_1', options: inst.max_gas_1Options },
       // { field: 'pressure', options: inst.pressureOptions },
       // { field: 'pressure1', options: inst.pressure1Options },
       { field: 'vagometer', options: inst.vagometerOptions },
@@ -54,20 +77,42 @@ export const Calculator = () => {
       { field: 'density', options: inst.densityOptions }
     ];
 
-    fields.forEach(({ field, options }) => {
-      const selectedValues: any[] = selection[field] || [];
-      selectedValues.forEach(value => {
-        const price = options.find(o => o.label === value)?.price || 0;
-        total += price;
+    // fields.forEach(({ field, options }) => {
+    //   const selectedValues: any[] = selection[field] || [];
+    //   selectedValues.forEach(value => {
+    //     const price = options.find(o => o.label === value)?.price || 0;
+    //     total += price;
+    //   });
+    // });
+
+     fields.forEach(({ field, options }) => {
+        (selection[field] || []).forEach((value: any) => {
+          total += options.find(o => o.label === value)?.price || 0;
+        });
       });
-    });
+
+      // max_gas — сепарационный способ (групповая цена)
+      (selection.max_gas || []).forEach((gasLabel: string) => {
+        const dynamicPrice = getSepGasPrice(selection, gasLabel);
+
+        total +=
+          dynamicPrice ??
+          inst.max_gasOptions.find(o => o.label === gasLabel)?.price ??
+          0;
+      });
+
+      // max_gas_1 (бессепарационный) — обычная цена
+      (selection.max_gas_1 || []).forEach((gasLabel: string) => {
+        total +=
+          inst.max_gas_1Options.find(o => o.label === gasLabel)?.price || 0;
+      });
 
     return total;
   };
 
   const validateSelection = (instId: number, selection: any) => {
     const required = [
-      'quantity', 'volume', 'fittings', 'max_gas',
+      'quantity', 'volume', 'fittings', 'max_gas', 'max_gas_1',
       // 'pressure', 'pressure1', 
       'vagometer', 'vagometer1',
       'vagometer2', 'heating', 'pollution', 'closet', 'density'
@@ -116,8 +161,6 @@ export const Calculator = () => {
     setTotalPrice(prev => prev - removed.price);
     setSelectedInstallations(prev => prev.filter((_, i) => i !== index));
   };
-
-
 
   return (
     <>
@@ -172,8 +215,9 @@ export const Calculator = () => {
                       <p>Количество скважин: {item.quantity}</p>
                       <p>Максимальное рабочее давление: {item.heating?.join(', ')}</p>
                       <p>Максимальная производительность по жидкости: {item.volume?.join(', ')}</p>
-                      <p>Запорная арматура: {item.fittings?.join(', ')}</p>
-                      <p>Максимальная производительность по газу: {item.max_gas?.join(', ')}</p>
+                      <p>Исполнение по входным трубопроводам: {item.density?.join(', ')}</p>                      
+                      <p>Максимальная производительность по газу для сепарационного способа измерения: {item.max_gas?.join(', ')}</p>
+                      <p>Максимальная производительность по газу для бессепарационного способа измерения: {item.max_gas_1?.join(', ')}</p>
                       {/* <p>Габариты блока технологии: {item.pressure?.join(', ')}</p>
                       <p>Габариты блока автоматики: {item.pressure1?.join(', ')}</p> */}
                       <p>Расходомер на линии газа: {item.vagometer?.join(', ')}</p>
@@ -181,7 +225,7 @@ export const Calculator = () => {
                       <p>Дублирующий расходомер: {item.vagometer2?.join(', ')}</p>
                       <p>Наличие поточного влагомера: {item.pollution?.join(', ')}</p>
                       <p>Шкафное оборудование: {item.closet?.join(', ')}</p>
-                      <p>Плотность измеряемой жидкости: {item.density?.join(', ')}</p>
+                      <p>Запорная арматура: {item.fittings?.join(', ')}</p>
                     </div>
                   )}
                 </div>

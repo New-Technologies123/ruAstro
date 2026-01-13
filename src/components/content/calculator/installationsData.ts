@@ -11,23 +11,31 @@ export const installations = [
         { label: 12, price: 20000000 },
         { label: 14, price: 21000000 }
       ],
+      heatingOptions: [
+        { label: '40', price: 0 },
+        { label: '63', price: 500000 }
+      ],
       volumeOptions: [
         { label: 'До 400', price: 561324 },
         { label: 'До 800', price: 1100000 },
         { label: 'До 1500', price: 1300000 }
       ],
-      fittingsOptions: [
-        { label: 'Задвижки клиновые', price: 0 },
-        { label: 'Задвижки дисковые', price: 0 }
-      ],
+      densityOptions: [
+        { label: 'Одностороннее', price: 0 },
+        { label: 'Двустороннее', price: 0 }
+      ],      
       max_gasOptions: [
-        { label: 'До 40 000 для сепарационного способа измерения', price: 0 },
-        { label: 'Свыше 40 000 до 80 000 для сепарационного способа измерения', price: 0 },
-        { label: 'Свыше 80 000 до 150 000 для сепарационного способа измерения', price: 0 },
-        { label: 'Свыше 150 000 до 300 000 для сепарационного способа измерения', price: 0 },
-        { label: 'Свыше 300 000 до 500 000 для сепарационного способа измерения', price: 0 },
-        { label: 'До 500 000 для бессепарационного способа измерения', price: 0 },
-        { label: 'Свыше 500 000 до 1 500 000 для бессепарационного способа измерения', price: 0 }
+        { label: 'Не требуется', price: 0 },
+        { label: 'До 40 000', price: 0 },
+        { label: 'Свыше 40 000 до 80 000', price: 0 },
+        { label: 'Свыше 80 000 до 150 000', price: 0 },
+        { label: 'Свыше 150 000 до 300 000', price: 0 },
+        { label: 'Свыше 300 000 до 500 000', price: 0 }
+      ],
+      max_gas_1Options: [
+        { label: 'Не требуется', price: 0 },
+        { label: 'До 500 000', price: 0 },
+        { label: 'Свыше 500 000 до 1 500 000', price: 0 }
       ],
       // pressureOptions: [
       //   { label: '5х3,1', price: 1700000 },
@@ -53,25 +61,6 @@ export const installations = [
       //   { label: '4х3,1', price: 620000 },
       //   { label: '6х3,1', price: 930000 }
       // ],
-      vagometerOptions: [
-        { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },
-        { label: 'Счетчик расходомер вихревой СВГ.М ', price: 290000 },
-      ],
-      vagometer1Options: [
-        { label: 'Не требуется', price: 0 },
-        { label: 'Расходомер на линию жидкости ЭМИС-МАСС', price: 296000 },
-        { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },
-        { label: 'Расходомер на линию жидкости Micro Motion ', price: 2000000 }
-      ],
-      vagometer2Options: [
-        { label: 'Не требуется', price: 0 },
-        { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },       
-        { label: 'ТОР50 (Дублирующий счетчик жидкости) ', price: 35000 }
-      ],      
-      heatingOptions: [
-        { label: '40', price: 0 },
-        { label: '63', price: 500000 }
-      ],
       pollutionOptions: [
         { label: 'Без влагомера', price: 0 },
         { label: 'Влагомер микроволновый', price: 300000 },
@@ -79,14 +68,30 @@ export const installations = [
         { label: 'Влагомер диэлькометрический', price: 300000 },
         { label: 'Влагомер комбинированный (диэлькометрический + оптический)', price: 800000 }
       ],
+      vagometer1Options: [
+        { label: 'Не требуется', price: 0 },
+        { label: 'Расходомер на линию жидкости ЭМИС-МАСС', price: 296000 },
+        { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },
+        { label: 'Расходомер на линию жидкости Micro Motion ', price: 2000000 },
+        { label: 'Многофазный расходомер', price: 15000000 }
+      ],
+      vagometerOptions: [
+        { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },
+        { label: 'Счетчик расходомер вихревой СВГ.М', price: 290000 }
+      ],      
+      vagometer2Options: [
+        { label: 'Не требуется', price: 0 },
+        { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },       
+        { label: 'ТОР50 (Дублирующий счетчик жидкости) ', price: 35000 }
+      ],      
       closetOptions: [
         { label: 'Шкаф управления', price: 350000 },
         { label: 'Шкаф силовой', price: 120000 },
         { label: 'Шкаф пожарной сигнализации', price: 90000 }
       ],
-      densityOptions: [
-        { label: 'при минимальной в течение года температуре жидкости', price: 350000 },
-        { label: 'при максимальной в течение года температуре жидкости', price: 120000 }
+      fittingsOptions: [
+        { label: 'Задвижки клиновые', price: 0 },
+        { label: 'Задвижки дисковые', price: 0 }
       ]
     }
   ];

@@ -8,7 +8,7 @@ import { MeasuringSystem } from './MeasuringSystem';
 import { PreparationSystems } from './PreparationSystems';
 import { PumpingStations } from './PumpingStations';
 import product_1 from '../../../images/products/product_1.webp';
-import product_2_5 from '../../../images/products/product_2_5.webp';
+import product_2 from '../../../images/products/product_2.0.webp';
 import product_3 from '../../../images/products/product_3.webp';
 import product_4 from '../../../images/products/product_4.webp';
 import product_5 from '../../../images/products/product_5.webp';
@@ -68,7 +68,7 @@ export const Products = () => {
               }}
             />
             <Card
-              imgSrc={product_2_5.src}
+              imgSrc={product_2.src}
               title={cardTitle.accessories}
               onClick={() => {
                 onClickCard('accessories');
