@@ -5,6 +5,7 @@ import { installations } from './installationsData';
 import { InstallationCard } from './InstallationCard';
 import { exportToPDF } from '../calculator/exportToPDF';
 import { maxGasSepRules  } from './maxGasSepRules';
+import { maxGasNonSepPriceRules } from './maxGasNonSepPriceRules';
 
 export const Calculator = () => {
   const [loaded, setLoaded] = useState(false);
@@ -28,6 +29,25 @@ export const Calculator = () => {
     if (!gasGroup) return undefined;
 
     const rule = maxGasSepRules.find(r =>
+      r.quantity === selection.quantity &&
+      r.volume === selection.volume?.[0] &&
+      r.density === selection.density?.[0] &&
+      r.gasGroup === gasGroup
+    );
+
+    return rule?.price;
+  };
+
+  const gasGroupNonSepMap: Record<string, 'LOW'> = {
+    'До 500 000': 'LOW',
+    'Свыше 500 000 до 1 500 000': 'LOW'
+  };
+
+  const getNonSepGasPrice = (selection: any, gasLabel: string) => {
+    const gasGroup = gasGroupNonSepMap[gasLabel];
+    if (!gasGroup) return undefined;
+
+    const rule = maxGasNonSepPriceRules.find(r =>
       r.quantity === selection.quantity &&
       r.volume === selection.volume?.[0] &&
       r.density === selection.density?.[0] &&
@@ -101,10 +121,14 @@ export const Calculator = () => {
           0;
       });
 
-      // max_gas_1 (бессепарационный) — обычная цена
+      // max_gas_1 — бессепарационный способ (групповая цена)
       (selection.max_gas_1 || []).forEach((gasLabel: string) => {
+        const dynamicPrice = getNonSepGasPrice(selection, gasLabel);
+
         total +=
-          inst.max_gas_1Options.find(o => o.label === gasLabel)?.price || 0;
+          dynamicPrice ??
+          inst.max_gas_1Options.find(o => o.label === gasLabel)?.price ??
+          0;
       });
 
     return total;

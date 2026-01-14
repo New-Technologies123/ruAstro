@@ -34,20 +34,6 @@ export const maxGasSepRules = [
     gasGroup: 'LOW',
     price: 3050000
   },
-  {
-    quantity: 12,
-    volume: 'До 400',
-    density: 'Одностороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 400',
-    density: 'Одностороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
 
   {
     quantity: 1,
@@ -83,20 +69,6 @@ export const maxGasSepRules = [
     density: 'Одностороннее',
     gasGroup: 'MID',
     price: 3050000
-  },
-  {
-    quantity: 12,
-    volume: 'До 400',
-    density: 'Одностороннее',
-    gasGroup: 'MID',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 400',
-    density: 'Одностороннее',
-    gasGroup: 'MID',
-    price: 0
   },
 
   {
@@ -134,29 +106,8 @@ export const maxGasSepRules = [
     gasGroup: 'HIGH',
     price: 3500000
   },
-  {
-    quantity: 12,
-    volume: 'До 400',
-    density: 'Одностороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 400',
-    density: 'Одностороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
 
 
-  {
-    quantity: 1,
-    volume: 'До 400',
-    density: 'Двустороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
   {
     quantity: 4,
     volume: 'До 400',
@@ -251,13 +202,6 @@ export const maxGasSepRules = [
   },
 
   {
-    quantity: 1,
-    volume: 'До 400',
-    density: 'Двустороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
-  {
     quantity: 4,
     volume: 'До 400',
     density: 'Двустороннее',
@@ -338,20 +282,6 @@ export const maxGasSepRules = [
     gasGroup: 'LOW',
     price: 3050000
   },
-  {
-    quantity: 12,
-    volume: 'До 800',
-    density: 'Одностороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 800',
-    density: 'Одностороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
 
   {
     quantity: 1,
@@ -387,20 +317,6 @@ export const maxGasSepRules = [
     density: 'Одностороннее',
     gasGroup: 'MID',
     price: 3050000
-  },
-  {
-    quantity: 12,
-    volume: 'До 800',
-    density: 'Одностороннее',
-    gasGroup: 'MID',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 800',
-    density: 'Одностороннее',
-    gasGroup: 'MID',
-    price: 0
   },
 
   {
@@ -438,29 +354,9 @@ export const maxGasSepRules = [
     gasGroup: 'HIGH',
     price: 3500000
   },
-  {
-    quantity: 12,
-    volume: 'До 800',
-    density: 'Одностороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 800',
-    density: 'Одностороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
 
 
-  {
-    quantity: 1,
-    volume: 'До 800',
-    density: 'Двустороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
+  
   {
     quantity: 4,
     volume: 'До 800',
@@ -554,13 +450,7 @@ export const maxGasSepRules = [
     price: 2900000
   },
 
-  {
-    quantity: 1,
-    volume: 'До 800',
-    density: 'Двустороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
+  
   {
     quantity: 4,
     volume: 'До 800',
@@ -642,20 +532,6 @@ export const maxGasSepRules = [
     gasGroup: 'LOW',
     price: 3500000
   },
-  {
-    quantity: 12,
-    volume: 'До 1500',
-    density: 'Одностороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 1500',
-    density: 'Одностороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
 
   {
     quantity: 1,
@@ -691,20 +567,6 @@ export const maxGasSepRules = [
     density: 'Одностороннее',
     gasGroup: 'MID',
     price: 3800000
-  },
-  {
-    quantity: 12,
-    volume: 'До 1500',
-    density: 'Одностороннее',
-    gasGroup: 'MID',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 1500',
-    density: 'Одностороннее',
-    gasGroup: 'MID',
-    price: 0
   },
 
   {
@@ -742,29 +604,9 @@ export const maxGasSepRules = [
     gasGroup: 'HIGH',
     price: 3950000
   },
-  {
-    quantity: 12,
-    volume: 'До 1500',
-    density: 'Одностороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
-  {
-    quantity: 14,
-    volume: 'До 1500',
-    density: 'Одностороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
 
 
-  {
-    quantity: 1,
-    volume: 'До 1500',
-    density: 'Двустороннее',
-    gasGroup: 'LOW',
-    price: 0
-  },
+ 
   {
     quantity: 4,
     volume: 'До 1500',
@@ -808,13 +650,7 @@ export const maxGasSepRules = [
     price: 2750000
   },
 
-  {
-    quantity: 1,
-    volume: 'До 1500',
-    density: 'Двустороннее',
-    gasGroup: 'MID',
-    price: 0
-  },
+  
   {
     quantity: 4,
     volume: 'До 1500',
@@ -858,13 +694,7 @@ export const maxGasSepRules = [
     price: 3050000
   },
 
-  {
-    quantity: 1,
-    volume: 'До 1500',
-    density: 'Двустороннее',
-    gasGroup: 'HIGH',
-    price: 0
-  },
+  
   {
     quantity: 4,
     volume: 'До 1500',

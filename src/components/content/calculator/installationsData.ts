@@ -76,6 +76,7 @@ export const installations = [
         { label: 'Многофазный расходомер', price: 15000000 }
       ],
       vagometerOptions: [
+        { label: 'Не требуется', price: 0 },
         { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },
         { label: 'Счетчик расходомер вихревой СВГ.М', price: 290000 }
       ],      
