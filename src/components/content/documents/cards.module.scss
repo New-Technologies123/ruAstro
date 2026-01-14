@@ -12,7 +12,7 @@
   padding: 20px;
   align-items: center;
   display: flex;
-  max-width: 300px;
+  width: 300px;
   min-height: 150px;
   text-align: center;
   color: #fff;
@@ -92,9 +92,8 @@
 
 
 @media (max-width: 1400px) {
-  .employeeCard {
-    width: 240px;
-    min-height: 335px;
+  .actionTitle {
+    width: 280px;
     p {
       font-size: 18px;
     }
@@ -102,35 +101,23 @@
 }
 
 @media (max-width: 1200px) {
-  .employeeCard {
-    width: 230px;
-    min-height: 320px;
+  .actionTitle {
+    width: 260px;
     p{
       font-size: 17px;
     }
-  }  
-  .system {
-    width: 190px;
-    height: 180px;
   }
 }
 
 @media (max-width: 1030px) {
-  .employeeCard {
-    padding: 15px;    
-    p{
-      margin-top: 15px;
-    }
-  }  
-  .system {
-    width: 200px;
-    height: 190px;
+  .actionTitle {
+    padding: 15px;
   }
 }
 
 @media (max-width: 740px) {  
-  .employeeCard{
-    min-height: 310px;
+  .actionTitle{
+    min-height: 100px;
     p{
       font-size: 16px;
     }
@@ -138,7 +125,7 @@
 }
 
 @media (max-width: 500px){
-  .employeeCard{
+  .actionTitle{
     p{
       &::after{
         height: 0;
@@ -160,10 +147,6 @@
         &::after {
           width: none;
         }
-      }    
-      .system {
-        transform: none;
-        filter: none;
       }
     }
     &::before {      
@@ -175,29 +158,17 @@
 }
 
 @media (max-width: 430px) {
-  .employeeCard {
-    width: 220px;
-    min-height: 295px;
-    p{
-      margin-top: 10px;
-    }
-  }  
-  .system {
-    width: 190px;
-    height: 180px;
+  .actionTitle {
+    width: 200px;
+    min-height: 90px;
   }
 }
 
 @media (max-width: 375px) {
-  .employeeCard {
-    width: 200px;
-    min-height: 270px;    
+  .actionTitle {
+    width: 180px;    
     p {
       font-size: 14px;
     }
-  }  
-  .system {
-    width: 170px;
-    height: 160px;
   }
 }

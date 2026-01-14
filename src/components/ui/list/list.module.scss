@@ -1,7 +1,7 @@
 .certificatesList {
     background: linear-gradient(135deg, #6ec9f7, #0c8ed4);
     padding: 10px 15px;
-    width: 30%;
+    width: 500px;
     text-align: center;
     color: #000000;
     border-radius: 12px;
@@ -67,6 +67,9 @@
 }
   
 @media (max-width: 1400px) {
+    .certificatesList{
+        width: 450px;
+    }
     .actionTitle {
         p{
             font-size: 18px; 
@@ -79,6 +82,9 @@
 }
 
 @media (max-width: 1200px) {
+    .certificatesList{
+        width: 380px;
+    }
     .actionTitle {
         p{
             font-size: 17px; 
