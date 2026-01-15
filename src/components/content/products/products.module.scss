@@ -3,10 +3,7 @@
   align-items: center;
 }
 
-.container {
-  margin: 40px 30px;
-}
-
+/* ===== Кнопка калькулятора ===== */
 .price {
   display: flex;
   justify-content: flex-end;
@@ -38,84 +35,41 @@
   }
 }
 
-.mainContent {
-  display: flex;
-  gap: 32px;
+.container {
+  display: block;
+  justify-items: center;
+  margin: 40px 30px;
 }
 
-.sidebar {
-  flex: 0 0 280px;
-  position: sticky;
-  top: 100px;
-  height: fit-content;
-}
-
-.navMenu {
-  display: grid;
-  border-radius: 10px;
-  padding: 5px;
-  gap: 5px;
-  background: linear-gradient(#03000e, #0019a5);
-}
-
-.navItem {
-  @include flex-center;
-  gap: 15px;
-  width: 100%;
-  padding: 15px;
-  background: #ffffff;
-  border: none;
-  border-radius: 10px;
-  color: #000000;
-  cursor: pointer;
-  transition: all 0.7s ease;
-
-  &:hover {
-    background: #91d3ff;
-  }
-
-  p {
-    font-size: 16px;
-    text-align: left;
-  }
-}
-
-.navIcon {
-  font-size: 20px;
-  transition: transform 0.3s ease;
-}
-
+/* ===== Информация о продукции ===== */
 .content {
-  flex: 1;
-}
-
-.section {
+  width: 1000px;
   background: rgba(186, 229, 253, 0.534);
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   padding: 10px 15px;
-  margin-bottom: 30px;
+  margin-top: 25px;
 }
 
-.sectionHeader {
-  margin-bottom: 15px;
+// .sectionHeader {
+//   margin-bottom: 15px;
 
-  h2 {
-    font-size: 32px;
-    color: #14213d;
-    padding-top: 0;
+//   h2 {
+//     font-size: 32px;
+//     color: #14213d;
+//     padding-top: 0;
 
-    span {
-      color: #4361ee;
-    }
-  }
+//     span {
+//       color: #4361ee;
+//     }
+//   }
 
-  p {
-    color: #58728b;
-    font-size: 20px;
-  }
-}
+//   p {
+//     color: #58728b;
+//     font-size: 20px;
+//   }
+// }
 
 .imageCard {
   position: relative;

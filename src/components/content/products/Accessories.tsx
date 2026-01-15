@@ -40,7 +40,7 @@ export const Accessories = () => {
 
   // 👇 ВАЖНО: НИКАКИХ Layout / LayoutBack
   if (selectedItem === 'accessories_1') {
-    return <Accessories_1 onBack={onBack} />;
+    return <Accessories_1 />;
   }
 
   if (selectedItem === 'accessories_2') {

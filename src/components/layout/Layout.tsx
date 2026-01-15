@@ -6,6 +6,7 @@ export const Layout = ({ title, description, children }) => {
 
   return (
     <>
+    <div className={Styles.bloc}>
       <section className={Styles.companyInfo}>
         <Title text={title}></Title>
         <p>
@@ -16,6 +17,8 @@ export const Layout = ({ title, description, children }) => {
       <section className={Styles.team}>
         {children}
       </section>
+    </div>
+      
     </>
   );
 };
