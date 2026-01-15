@@ -1,7 +1,7 @@
 import Styles from '../products.module.scss'
 import { useState, useRef } from 'react'
 
-import product_2 from '../../../../images/products/product_2_1.webp'
+import product_1 from '../../../../images/products/product_1.webp'
 
 import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
@@ -9,14 +9,14 @@ import { useClickToScroll } from '../../../../hooks/useClickToScroll'
 import { Title } from '../../../ui/title/Title';
 
 
-export const Accessories_2 = () => {
+export const AccountingSystem_1 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
   const handleClick = useClickToScroll()
 
   return (
     <div className={Styles.container}>
-      <Title text="Устройство регулирования перепада давления (УРПД)"></Title>
+      <Title text="Стационарная система"></Title>
         
 
         {/* ===== CONTENT ===== */}
@@ -25,8 +25,8 @@ export const Accessories_2 = () => {
             <div className={Styles.card}>
               {/* Фото */}
               <div className={Styles.cardImage}>
-                <div className={Styles.imageCard} onClick={() => setBigPhoto(product_2.src)}>
-                  <img src={product_2.src} alt="" className={Styles.mainImage}/>
+                <div className={Styles.imageCard} onClick={() => setBigPhoto(product_1.src)}>
+                  <img src={product_1.src} alt="" className={Styles.mainImage}/>
                   <div className={Styles.imageOverlay}>
                     <span className={Styles.zoomText}>
                       Нажмите для увеличения
@@ -42,11 +42,22 @@ export const Accessories_2 = () => {
                     <ul className={Styles.featuresList}>
                       <li className={Styles.feature}>
                         <div className={Styles.featureText}>
-                          <p>Работа в системе регулирования уровня и перепада давления в АГЗУ типа «Спутник».</p>
+                          <p>Для измерения массы и массового расхода скважинной жидкости в составе нефтегазовой смеси.</p>
                         </div>
                       </li>
-                    </ul>
-                  </div>                  
+                      <li className={Styles.feature}>
+                        <div className={Styles.featureText}>
+                          <p>Для измерения массы и массового расхода скважинной жидкости в составе нефтегазовой смеси.</p>
+                        </div>
+                      </li>
+                      <li className={Styles.feature}>
+                        <div className={Styles.featureText}>
+                          <p>Для измерения объема и расхода свободного нефтяного газа после сепарации.</p>
+                        </div>
+                      </li>
+                    </ul>                    
+                  </div>
+                  
               </div>
             </div>
           </section>

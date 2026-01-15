@@ -1,7 +1,7 @@
 import Styles from '../products.module.scss'
 import { useState, useRef } from 'react'
 
-import product_2 from '../../../../images/products/product_2_1.webp'
+import product_1_1 from '../../../../images/products/product_1_2.webp'
 
 import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
@@ -9,14 +9,14 @@ import { useClickToScroll } from '../../../../hooks/useClickToScroll'
 import { Title } from '../../../ui/title/Title';
 
 
-export const Accessories_2 = () => {
+export const AccountingSystem_2 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
   const sectionsRef = useRef<(HTMLElement | null)[]>([])
   const handleClick = useClickToScroll()
 
   return (
     <div className={Styles.container}>
-      <Title text="Устройство регулирования перепада давления (УРПД)"></Title>
+      <Title text="Мобильная система"></Title>
         
 
         {/* ===== CONTENT ===== */}
@@ -25,8 +25,8 @@ export const Accessories_2 = () => {
             <div className={Styles.card}>
               {/* Фото */}
               <div className={Styles.cardImage}>
-                <div className={Styles.imageCard} onClick={() => setBigPhoto(product_2.src)}>
-                  <img src={product_2.src} alt="" className={Styles.mainImage}/>
+                <div className={Styles.imageCard} onClick={() => setBigPhoto(product_1_1.src)}>
+                  <img src={product_1_1.src} alt="" className={Styles.mainImage}/>
                   <div className={Styles.imageOverlay}>
                     <span className={Styles.zoomText}>
                       Нажмите для увеличения
@@ -37,16 +37,21 @@ export const Accessories_2 = () => {
 
               {/* Текст (НЕСКОЛЬКО БЛОКОВ) */}
               <div className={Styles.cardContent}>
-                  <div className={Styles.features}>
-                    <h3>Назначение:</h3>
-                    <ul className={Styles.featuresList}>
-                      <li className={Styles.feature}>
-                        <div className={Styles.featureText}>
-                          <p>Работа в системе регулирования уровня и перепада давления в АГЗУ типа «Спутник».</p>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>                  
+                <div className={Styles.features}>
+                  <ul className={Styles.featuresList}>
+                    <li className={Styles.feature}>
+                      <div className={Styles.featureText}>
+                        <p>Блоки АГЗУ размещаются в кузове автомобиля или на шасси прицепа.</p>
+                      </div>
+                    </li>
+                    <li className={Styles.feature}>
+                      <div className={Styles.featureText}>
+                        <p>Измерение массы нефти и газа с учетом и без учета воды, после процесса сепарации.</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                  
               </div>
             </div>
           </section>
