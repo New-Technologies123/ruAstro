@@ -29,7 +29,7 @@ export const Careers = () => {
         vacancy15: "https://ufa.hh.ru/vacancy/126174218?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy16: "https://ufa.hh.ru/vacancy/128707716?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy17: "https://ufa.hh.ru/vacancy/128299897?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
-        vacancy18: "https://ufa.hh.ru/vacancy/128952300?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy18: "",
         vacancy19: "https://ufa.hh.ru/vacancy/129445385?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy20: "https://ufa.hh.ru/vacancy/127389162?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy21: "https://ufa.hh.ru/vacancy/129446854?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
@@ -186,13 +186,6 @@ export const Careers = () => {
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy15, "_blank")}
-                                />
-                                <Vacancy
-                                    header="Инженер ПТО"
-                                    title="Опыт работы: 1–3 года"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy18, "_blank")}
                                 />
                                 <Vacancy
                                     header="Водитель с категорией C,E"
