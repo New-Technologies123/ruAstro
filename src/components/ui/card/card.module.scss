@@ -93,6 +93,8 @@
   opacity: 0;
   animation: fadeIn 0.6s calc(var(--delay, 0.3s) + 0.2s) ease-out forwards;
   transform: scale(1);
+  background-repeat: no-repeat; // не повторять
+  background-size: contain;
 }
 
 @keyframes fadeInUp {

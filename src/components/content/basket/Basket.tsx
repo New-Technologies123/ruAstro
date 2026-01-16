@@ -26,6 +26,10 @@ export const Basket = () => {
         <>
             <Title text="Корзина" />
 
+            <a href="/shop" className={Styles.back}>
+                ← Назад в магазин
+            </a>
+
             <div className={Styles.items}>
                 {cart.map(item => (
                     <div key={item.id} className={Styles.item}>
@@ -57,6 +61,9 @@ export const Basket = () => {
                 <button className={Styles.order}>
                     <p>Оформить заказ</p>
                 </button>
+                <a href="/order" className={Styles.order}>
+                Оформить заказ
+            </a>
             </div>
         </>
     );

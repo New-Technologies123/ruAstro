@@ -3,13 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import { Header } from '../components/base/Header';
 import { Footer } from '../components/base/Footer';
 import { Content } from '../components/base/Content';
-import { Basket as BasketContent } from '../components/content/basket/Basket';
+import { Order as OrderContent } from '../components/content/order/Order';
 ---
 
 <Layout>
   <Header pageType="shop" client:load />
   <Content>
-    <BasketContent client:load />
+    <OrderContent client:load />
   </Content>
   <Footer client:load />
 </Layout>

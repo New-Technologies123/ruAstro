@@ -1,231 +1,67 @@
-import Styles from './products.module.scss';
-import { useState, useRef } from 'react';
-import product_5 from '../../../images/products/product_5.webp';
-import product_5_1 from '../../../images/products/product_5_1.webp';
-import { BigPhoto } from '../../ui/big-photo/BigPhoto';
-import { useClickToScroll } from '../../../hooks/useClickToScroll';
-import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { useState, useEffect } from 'react';
+import { Card } from '../../ui/card/Card';
+import { PumpingStations_1 } from './PumpingStations/PumpingStations_1';
+import { PumpingStations_2 } from './PumpingStations/PumpingStations_2';
+import Styles from './products.module.scss'
 
+import product_5_1 from '../../../images/products/product_5.webp';
+import product_5_2 from '../../../images/products/product_5_1.webp';
+
+type TPumping = 'pumpingStations_1' | 'pumpingStations_2' ;
 
 export const PumpingStations = () => {
+  const cardTitle: Record<TPumping, string> = {
+    pumpingStations_1: 'Блочная насосная станция внутренней и внешней перекачки нефти',
+    pumpingStations_2: 'Блочная мультифазная насосная станция',
+  };
 
-  const [oneIsOpen, setOneIsOpen] = useState(false);
-  const [twoIsOpen, setTwoIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<TPumping | null>(null);
 
-  const sectionsRef = useRef([]);
-  const handleClick = useClickToScroll();
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const itemFromQuery = params.get('item') as TPumping | null;
+    setSelectedItem(itemFromQuery);
+  }, []);
+
+  const handleClickCard = (item: TPumping) => {
+    setSelectedItem(item);
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('item', item);
+    window.history.pushState({}, '', url.toString());
+  };
+
+  const onBack = () => {
+    setSelectedItem(null);
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete('item');
+    window.history.pushState({}, '', url.toString());
+  };
+
+  // 👇 ВАЖНО: НИКАКИХ Layout / LayoutBack
+  if (selectedItem === 'pumpingStations_1') {
+    return <PumpingStations_1 />;
+  }
+
+  if (selectedItem === 'pumpingStations_2') {
+    return <PumpingStations_2/>;
+  }
 
   return (
-    <div className={Styles.container}>
-      <div className={Styles.mainContent}>
-        <aside className={Styles.sidebar}>
-          <div className={Styles.navMenu}>
-            <button onClick={() => handleClick('products-1')} className={`${Styles.navItem}`}>
-              <span className={Styles.navIcon}>⛽</span>
-              <p>Блочная насосная станция внутренней и внешней перекачки нефти</p>
-            </button>
-            <button onClick={() => handleClick('products-2')} className={`${Styles.navItem}`}>
-              <span className={Styles.navIcon}>🔄</span>
-              <p>Блочная мультифазная насосная станция</p>
-            </button>
-          </div>
-        </aside>
-
-        <div className={Styles.content}>
-          <section id="products-1" ref={el => sectionsRef.current[0] = el} className={Styles.section}>
-            <div className={Styles.sectionHeader}>
-              <h2>Блочная насосная станция внутренней и внешней перекачки нефти</h2>
-            </div>
-
-            <div className={Styles.card}>
-              {/* Фото */}
-              <div className={Styles.cardImage}>
-                <div className={Styles.imageCard} onClick={() => setOneIsOpen(true)}>
-                  <img src={product_5.src} alt="СИКН" className={Styles.mainImage} />
-                  <div className={Styles.imageOverlay}>
-                    <span className={Styles.zoomText}>Нажмите для увеличения</span>
-                  </div>
-                </div>
-              </div>
-              {/* Текст */}
-              <div className={Styles.cardContent}>
-                <div className={Styles.features}>
-                  <h3>Назначение:</h3>
-                  <ul className={Styles.featuresList}>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Для обеспечения дальнейшего транспорта нефти в межпромысловые трубопроводы в системах сбора и подготовки нефти,
-                          внутрипарковой и внешней перекачки нефти, нефтепродуктов и конденсата.</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Насосные станции проектируются и изготавливаются на базе центробежных насосных агрегатов российского или зарубежного
-                          производства. В зависимости от марки насосных агрегатов станция может быть выполнена в нескольких исполнениях.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div className={Styles.features}>
-                  <h3>Типовой состав:</h3>
-                  <ul className={Styles.featuresList}>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Насосные агрегаты;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Приемный и нагнетательный коллекторы с запорной арматурой;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Трубопроводы дренажа и слива утечек;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система пожароохранной сигнализации и контроля загазованности;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система пенного пожаротушения;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Средства автоматизации и КИП;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Грузоподъемные устройства для монтажа и демонтажа арматуры и деталей трубопроводной обвязки;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система управления подпорными насосами;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система передачи информации на верхний уровень;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система электроснабжения насосных агрегатов;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система жизнеобеспечения блок-бокса.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section id="products-2" ref={el => sectionsRef.current[1] = el} className={Styles.section}>
-            <div className={Styles.sectionHeader}>
-              <h2>Блочная мультифазная насосная станция</h2>
-            </div>
-
-            <div className={`${Styles.card} ${Styles.reverse}`}>
-              {/* Фото */}
-              <div className={Styles.cardImage}>
-                <div className={Styles.imageCard} onClick={() => setTwoIsOpen(true)}>
-                  <img src={product_5_1.src} alt="СИКГ" className={Styles.mainImage} />
-                  <div className={Styles.imageOverlay}>
-                    <span className={Styles.zoomText}>Нажмите для увеличения</span>
-                  </div>
-                </div>
-              </div>
-              {/* Текст */}
-              <div className={Styles.cardContent}>
-                <div className={Styles.features}>
-                  <ul className={Styles.featuresList}>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <h4>Назначение:</h4>
-                        <p>Для перекачивания газожидкостной смеси из скважин без предварительной сепарации газа с содержанием газовой фазы до 100%.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-                <div className={Styles.features}>
-                  <h3>Типовой состав:</h3>
-                  <ul className={Styles.featuresList}>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Мультифазные насосные агрегаты;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Блок-бокс насосной станции;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Технологические трубопроводы;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Дренажные трубопроводы;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Комплект КИПиА;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Системы жизнеобеспечения блок-бокса насосной станции (отопление, вентиляция);</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система управления мультифазными насосными агрегатами;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система противоаварийной автоматической защиты ПАЗ;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Блок частотных преобразователей;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система передачи информации на верхний уровень;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Система электроснабжения насосных агрегатов.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-
-      <BackToTop />
-      {oneIsOpen && <BigPhoto src={product_5.src} onClose={() => setOneIsOpen(false)} />}
-      {twoIsOpen && <BigPhoto src={product_5_1.src} onClose={() => setTwoIsOpen(false)} />}
-    </div>
+    <>
+      <div className={Styles.ramca}>
+        <Card
+          imgSrc={product_5_1.src}
+          title={cardTitle.pumpingStations_1}
+          onClick={() => handleClickCard('pumpingStations_1')}
+        />
+        <Card
+          imgSrc={product_5_2.src}
+          title={cardTitle.pumpingStations_2}
+          onClick={() => handleClickCard('pumpingStations_2')}
+        />
+      </div>      
+    </>
   );
 };

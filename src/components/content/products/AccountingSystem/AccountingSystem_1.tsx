@@ -47,7 +47,7 @@ export const AccountingSystem_1 = () => {
                       </li>
                       <li className={Styles.feature}>
                         <div className={Styles.featureText}>
-                          <p>Для измерения массы и массового расхода скважинной жидкости в составе нефтегазовой смеси.</p>
+                          <p>Для определения массы и массового расхода сырой нефти без учета воды.</p>
                         </div>
                       </li>
                       <li className={Styles.feature}>
