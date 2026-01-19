@@ -126,6 +126,11 @@ export const Header = ({ pageType }) => {
             </a>
           </li>
           <li>
+            <a href={`/shop/`} className={pageType === 'shop' ? Styles.active : ''}>
+              Магазин
+            </a>
+          </li>
+          <li>
             <a href={`/contact/`} className={pageType === 'contact' ? Styles.active : ''}>
               Контакты
             </a>

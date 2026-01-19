@@ -8,7 +8,7 @@ import { Title } from '../../ui/title/Title';
 import { ProductPage } from '../../ui/product-page/ProductPage';
 import { useShopFilters } from './useShopFilters';
 
-export const Shop = () => {
+export const Shop_12 = () => {
   const [openedProduct, setOpenedProduct] = useState<Product | null>(null);
 
   // 👉 читаем /shop/1
@@ -66,7 +66,7 @@ export const Shop = () => {
                   </button>
                 );
               })}
-            </div>
+            </div>            
 
             <div className={styles.search}>
               <input
@@ -76,6 +76,12 @@ export const Shop = () => {
                 onChange={e => setSearch(e.target.value)}
               />
             </div>
+          </div>
+
+          <div className={styles.topBar}>
+            <a href="/basket" className={styles.cartButton}>
+              🛒 Корзина
+            </a>
           </div>
 
           {/* КАРТОЧКИ */}

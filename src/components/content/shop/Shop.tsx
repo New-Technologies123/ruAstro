@@ -1,99 +1,124 @@
-import { useEffect, useState } from 'react';
-import styles from './shop.module.scss';
+import { Layout } from '../../layout/Layout';
 import { LayoutBack } from '../../layout/LayoutBack';
-import { ProductCard } from './ProductCard';
-import { products } from './products';
-import type { Product } from './products';
-import { Title } from '../../ui/title/Title';
-import { ProductPage } from '../../ui/product-page/ProductPage';
-import { useShopFilters } from './useShopFilters';
+import { Card } from '../../ui/card/Card';
+import { useState } from 'react';
+import { AccountingSystem } from './AccountingSystem';
+import { Accessories } from './Accessories';
+import { MeasuringSystem } from './MeasuringSystem';
+import { PreparationSystems } from './PreparationSystems';
+import { PumpingStations } from './PumpingStations';
+import product_1 from '../../../images/products/product_1.webp';
+import product_2 from '../../../images/products/product_2.0.webp';
+import product_3 from '../../../images/products/product_3.webp';
+import product_4 from '../../../images/products/product_4.webp';
+import product_5 from '../../../images/products/product_5.webp';
+import { useEffect } from 'react';
+
+type TProducts = 'accountingSystem' | 'accessories' | 'measuringSystem' | 'preparationSystems' | 'pumpingStations';
 
 export const Shop = () => {
-  const [openedProduct, setOpenedProduct] = useState<Product | null>(null);
 
-  // 👉 читаем /shop/1
-  useEffect(() => {
-    const match = window.location.pathname.match(/\/shop\/(\d+)/);
-    if (match) {
-      const productId = Number(match[1]);
-      const product = products.find(p => p.id === productId);
-      if (product) setOpenedProduct(product);
-    }
-  }, []);
-
-  const {
-    search,
-    setSearch,
-    selectedCategory,
-    setSelectedCategory,
-    categories,
-    filteredProducts,
-  } = useShopFilters(products);
-
-  const openProduct = (product: Product) => {
-    setOpenedProduct(product);
-    window.history.pushState({}, '', `/shop/${product.id}`);
+  const cardTitle: Record<TProducts, string> = {
+    accountingSystem: 'Автоматизированная замерная установка (АГЗУ)',
+    accessories: 'Комплектующие для автоматизированной групповой замерной установки',
+    measuringSystem: 'Система учёта углеводородов и пластовой жидкости',
+    preparationSystems: 'Системы подготовки нефти, газа и воды',
+    pumpingStations: 'Насосные станции перекачки нефти, нефтепродуктов и воды',
   };
 
+  const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TProducts | null>(null);
+
+  useEffect(() => {
+    setTypeLayoutBackOpen(() => {
+      const queryParams = new URLSearchParams(window.location.search);
+      const typeFromQuery = queryParams.get('type');
+      return typeFromQuery ? (typeFromQuery as TProducts) : null;
+    });
+  }, []);
+
   const onBack = () => {
-    setOpenedProduct(null);
-    window.history.pushState({}, '', '/shop');
+    setTypeLayoutBackOpen(null);
+
+    const newUrl = `${window.location.origin}${window.location.pathname}`;
+    window.history.pushState({}, '', newUrl);
+  };
+
+  const onClickCard = (typeProduct: TProducts) => {
+    setTypeLayoutBackOpen(typeProduct);
+
+    const newUrl = `${window.location.origin}${window.location.pathname}?type=${typeProduct}`;
+    window.history.pushState({}, '', newUrl);
   };
 
   return (
     <>
-      {!openedProduct && (
-        <>
-          <Title text="Магазин" />
-
-          {/* ФИЛЬТРЫ */}
-          <div className={styles.filters}>
-            <div className={styles.categories}>
-              {categories.map(cat => {
-                const count =
-                  cat === 'Все'
-                    ? products.length
-                    : products.filter(p => p.category === cat).length;
-
-                return (
-                  <button
-                    key={cat}
-                    className={`${styles.filter} ${cat === selectedCategory ? styles['filter--active'] : ''
-                      }`}
-                    onClick={() => setSelectedCategory(cat)}
-                  >
-                    {cat} <sup>{count}</sup>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className={styles.search}>
-              <input
-                type="text"
-                placeholder="Поиск по названию"
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-              />
-            </div>
-          </div>
-
-          {/* КАРТОЧКИ */}
-          <div className={styles.products}>
-            {filteredProducts.map(product => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onClick={() => openProduct(product)}
-              />
-            ))}
-          </div>
-        </>
+      {typeLayoutBackOpen === null && (
+        <Layout title="Магазин" 
+          description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области 
+            безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
+            Таможенного союза. ">
+          <>
+            <Card
+              imgSrc={product_1.src}
+              title={cardTitle.accountingSystem}
+              onClick={() => {
+                onClickCard('accountingSystem');
+              }}
+            />
+            <Card
+              imgSrc={product_2.src}
+              title={cardTitle.accessories}
+              onClick={() => {
+                onClickCard('accessories');
+              }}
+            />
+            <Card
+              imgSrc={product_3.src}
+              title={cardTitle.measuringSystem}
+              onClick={() => {
+                onClickCard('measuringSystem');
+              }}
+            />
+            <Card
+              imgSrc={product_4.src}
+              title={cardTitle.preparationSystems}
+              onClick={() => {
+                onClickCard('preparationSystems');
+              }}
+            />
+            <Card
+              imgSrc={product_5.src}
+              title={cardTitle.pumpingStations}
+              onClick={() => {
+                onClickCard('pumpingStations');
+              }}
+            />
+          </>
+        </Layout>
       )}
-
-      {openedProduct && (
-        <LayoutBack onBack={onBack} title={openedProduct.title}>
-          <ProductPage product={openedProduct} />
+      {typeLayoutBackOpen === 'accountingSystem' && (
+        <LayoutBack onBack={onBack} title={cardTitle.accountingSystem}>
+          <AccountingSystem />
+        </LayoutBack>
+      )}
+      {typeLayoutBackOpen === 'accessories' && (
+        <LayoutBack onBack={onBack} title={cardTitle.accessories}>
+          <Accessories />
+        </LayoutBack>
+      )}
+      {typeLayoutBackOpen === 'measuringSystem' && (
+        <LayoutBack onBack={onBack} title={cardTitle.measuringSystem}>
+          <MeasuringSystem />
+        </LayoutBack>
+      )}
+      {typeLayoutBackOpen === 'preparationSystems' && (
+        <LayoutBack onBack={onBack} title={cardTitle.preparationSystems}>
+          <PreparationSystems />
+        </LayoutBack>
+      )}
+      {typeLayoutBackOpen === 'pumpingStations' && (
+        <LayoutBack onBack={onBack} title={cardTitle.pumpingStations}>
+          <PumpingStations />
         </LayoutBack>
       )}
     </>

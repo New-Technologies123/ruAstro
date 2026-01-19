@@ -58,12 +58,9 @@ export const Basket = () => {
                     <h4>{totalPrice} ₽</h4>
                 </div>
 
-                <button className={Styles.order}>
-                    <p>Оформить заказ</p>
-                </button>
                 <a href="/order" className={Styles.order}>
-                Оформить заказ
-            </a>
+                    Оформить заказ
+                </a>
             </div>
         </>
     );

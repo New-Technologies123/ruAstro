@@ -26,8 +26,14 @@
   cursor: pointer;
   border-radius: 6px;
 
+  text-decoration: none; // ← ВАЖНО
+  display: inline-flex;  // чтобы выглядело как кнопка
+  align-items: center;
+  gap: 6px;
+
   &:hover {
     opacity: 0.9;
+    text-decoration: none; // на hover тоже
   }
 }
 

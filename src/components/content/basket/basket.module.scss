@@ -127,6 +127,8 @@
     border-radius: 8px;
     cursor: pointer;
     transition: background 0.3s ease;
+    text-decoration: none; // ← ВАЖНО
+    display: inline-flex;  // чтобы выглядело как кнопка
 
     &:hover {
         background: #0056b3;

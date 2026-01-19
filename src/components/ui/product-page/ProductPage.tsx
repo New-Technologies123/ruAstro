@@ -29,12 +29,12 @@ export const ProductPage = ({ product }: Props) => {
     <>
       {/* ВЕРХНЯЯ ПАНЕЛЬ */}
       <div className={styles.topBar}>
-        <button className={styles.cartButton}>
+        <a href="/basket" className={styles.cartButton}>
           🛒 Корзина
           {cartCount > 0 && (
             <span className={styles.badge}> {cartCount}</span>
           )}
-        </button>
+        </a>
       </div>
 
       <div className={styles.page}>
