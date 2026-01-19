@@ -15,7 +15,7 @@ type TProps = {
   title: string;
 };
 
-export const PumpingStations = () => {
+export const PumpingStations = ({ onBackProducts, title }: TProps) => {
   const cardTitle: Record<TPumping, string> = {
     pumpingStations_1: 'Блочная насосная станция внутренней и внешней перекачки нефти',
     pumpingStations_2: 'Блочная мультифазная насосная станция',

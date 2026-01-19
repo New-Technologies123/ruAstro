@@ -4,12 +4,16 @@ import { Header } from "../components/base/Header";
 import { Footer } from "../components/base/Footer";
 import { Content } from "../components/base/Content";
 import { Products as ProductsContent } from "../components/content/products/Products";
+
+const title = "Продукция | ИПП «Новые технологии»";
+const description =
+  "Продукция ИПП «Новые технологии»: оборудование для нефтяных скважин, системы учета массы и расхода для предприятий ТЭК.";
 ---
 
-<Layout>
+<Layout title={title} description={description}>
   <Header pageType="products" client:load />
-  <Content>
-    <ProductsContent client:load />
-  </Content>
+    <Content>
+      <ProductsContent client:load />
+    </Content>
   <Footer client:load/>
 </Layout>
