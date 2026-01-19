@@ -4,10 +4,15 @@ import { Title } from '../../ui/title/Title';
 import { installations } from './installationsData';
 import { InstallationCard } from './InstallationCard';
 import { exportToPDF } from '../calculator/exportToPDF';
-import { maxGasSepRules  } from './maxGasSepRules';
+import { maxGasSepRules } from './maxGasSepRules';
 import { maxGasNonSepPriceRules } from './maxGasNonSepPriceRules';
+import { LayoutBack } from '../../layout/LayoutBack';
 
-export const Calculator = () => {
+type TProps = {
+  onBackAccountingSystem: VoidFunction;
+};
+
+export const Calculator = ({ onBackAccountingSystem }: TProps) => {
   const [loaded, setLoaded] = useState(false);
   const [selections, setSelections] = useState<any>({});
   const [selectedInstallations, setSelectedInstallations] = useState<any[]>([]);
@@ -105,31 +110,31 @@ export const Calculator = () => {
     //   });
     // });
 
-     fields.forEach(({ field, options }) => {
-        (selection[field] || []).forEach((value: any) => {
-          total += options.find(o => o.label === value)?.price || 0;
-        });
+    fields.forEach(({ field, options }) => {
+      (selection[field] || []).forEach((value: any) => {
+        total += options.find(o => o.label === value)?.price || 0;
       });
+    });
 
-      // max_gas — сепарационный способ (групповая цена)
-      (selection.max_gas || []).forEach((gasLabel: string) => {
-        const dynamicPrice = getSepGasPrice(selection, gasLabel);
+    // max_gas — сепарационный способ (групповая цена)
+    (selection.max_gas || []).forEach((gasLabel: string) => {
+      const dynamicPrice = getSepGasPrice(selection, gasLabel);
 
-        total +=
-          dynamicPrice ??
-          inst.max_gasOptions.find(o => o.label === gasLabel)?.price ??
-          0;
-      });
+      total +=
+        dynamicPrice ??
+        inst.max_gasOptions.find(o => o.label === gasLabel)?.price ??
+        0;
+    });
 
-      // max_gas_1 — бессепарационный способ (групповая цена)
-      (selection.max_gas_1 || []).forEach((gasLabel: string) => {
-        const dynamicPrice = getNonSepGasPrice(selection, gasLabel);
+    // max_gas_1 — бессепарационный способ (групповая цена)
+    (selection.max_gas_1 || []).forEach((gasLabel: string) => {
+      const dynamicPrice = getNonSepGasPrice(selection, gasLabel);
 
-        total +=
-          dynamicPrice ??
-          inst.max_gas_1Options.find(o => o.label === gasLabel)?.price ??
-          0;
-      });
+      total +=
+        dynamicPrice ??
+        inst.max_gas_1Options.find(o => o.label === gasLabel)?.price ??
+        0;
+    });
 
     return total;
   };
@@ -187,8 +192,7 @@ export const Calculator = () => {
   };
 
   return (
-    <>
-      <Title text="Калькулятор установок" />
+    <LayoutBack onBack={onBackAccountingSystem} title="Калькулятор установок">
 
       <div className={`${Styles.wrapper} ${loaded ? Styles.loaded : ''}`}>
         <div className={Styles.cardsContainer}>
@@ -239,7 +243,7 @@ export const Calculator = () => {
                       <p>Количество скважин: {item.quantity}</p>
                       <p>Максимальное рабочее давление: {item.heating?.join(', ')}</p>
                       <p>Максимальная производительность по жидкости: {item.volume?.join(', ')}</p>
-                      <p>Исполнение по входным трубопроводам: {item.density?.join(', ')}</p>                      
+                      <p>Исполнение по входным трубопроводам: {item.density?.join(', ')}</p>
                       <p>Максимальная производительность по газу для сепарационного способа измерения: {item.max_gas?.join(', ')}</p>
                       <p>Максимальная производительность по газу для бессепарационного способа измерения: {item.max_gas_1?.join(', ')}</p>
                       {/* <p>Габариты блока технологии: {item.pressure?.join(', ')}</p>
@@ -277,6 +281,6 @@ export const Calculator = () => {
         </p>
 
       </div>
-    </>
+    </LayoutBack>
   );
 };

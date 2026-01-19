@@ -5,18 +5,21 @@ import product_3 from '../../../../images/products/product_3_2.webp'
 
 import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
-import { Title } from '../../../ui/title/Title';
+import { LayoutBack } from '../../../layout/LayoutBack';
+
+type TProps = {
+  onBackPreparation: VoidFunction;
+  title: string;
+};
 
 
-export const PreparationSystems_4 = () => {
+export const PreparationSystems_4 = ({ onBackPreparation, title }: TProps) => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
   return (
-    <div className={Styles.container}>
-      <Title text="Установка дозирования химического реагента (БДР)"></Title>
-        
-
-        {/* ===== CONTENT ===== */}
+    <LayoutBack onBack={onBackPreparation} title={title}>
+      <div className={Styles.container}>
+          {/* ===== CONTENT ===== */}
           <section className={Styles.content}>
 
             <div className={Styles.card}>
@@ -50,12 +53,13 @@ export const PreparationSystems_4 = () => {
             </div>
           </section>
 
-      <BackToTop />
+        <BackToTop />
 
-      {bigPhoto && (
-        <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-      )}
-    </div>
+        {bigPhoto && (
+          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
+        )}
+      </div>
+    </LayoutBack>
   )
 }
 

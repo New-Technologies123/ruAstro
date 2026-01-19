@@ -53,7 +53,7 @@ export const Products = () => {
   return (
     <>
       {typeLayoutBackOpen === null && (
-        <Layout title="Продукция" 
+        <Layout title="Продукция"
           description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области 
             безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
             Таможенного союза. На предприятии разработана, внедрена и успешно работает Интегрированная система 
@@ -98,31 +98,11 @@ export const Products = () => {
           </>
         </Layout>
       )}
-      {typeLayoutBackOpen === 'accountingSystem' && (
-        <LayoutBack onBack={onBack} title={cardTitle.accountingSystem}>
-          <AccountingSystem />
-        </LayoutBack>
-      )}
-      {typeLayoutBackOpen === 'accessories' && (
-        <LayoutBack onBack={onBack} title={cardTitle.accessories}>
-          <Accessories />
-        </LayoutBack>
-      )}
-      {typeLayoutBackOpen === 'measuringSystem' && (
-        <LayoutBack onBack={onBack} title={cardTitle.measuringSystem}>
-          <MeasuringSystem />
-        </LayoutBack>
-      )}
-      {typeLayoutBackOpen === 'preparationSystems' && (
-        <LayoutBack onBack={onBack} title={cardTitle.preparationSystems}>
-          <PreparationSystems />
-        </LayoutBack>
-      )}
-      {typeLayoutBackOpen === 'pumpingStations' && (
-        <LayoutBack onBack={onBack} title={cardTitle.pumpingStations}>
-          <PumpingStations />
-        </LayoutBack>
-      )}
+      {typeLayoutBackOpen === 'accountingSystem' && <AccountingSystem onBackProducts={onBack} title={cardTitle.accountingSystem} />}
+      {typeLayoutBackOpen === 'accessories' && <Accessories onBackProducts={onBack} title={cardTitle.accessories} />}
+      {typeLayoutBackOpen === 'measuringSystem' && <MeasuringSystem onBackProducts={onBack} title={cardTitle.accessories} />}
+      {typeLayoutBackOpen === 'preparationSystems' && <PreparationSystems onBackProducts={onBack} title={cardTitle.accessories} />}
+      {typeLayoutBackOpen === 'pumpingStations' && <PumpingStations onBackProducts={onBack} title={cardTitle.accessories} />}
     </>
   );
 };

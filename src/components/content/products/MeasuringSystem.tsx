@@ -4,6 +4,7 @@ import { MeasuringSystem_1 } from './MeasuringSystem/MeasuringSystem_1';
 import { MeasuringSystem_2 } from './MeasuringSystem/MeasuringSystem_2';
 import { MeasuringSystem_3 } from './MeasuringSystem/MeasuringSystem_3';
 import Styles from './products.module.scss'
+import { LayoutBack } from '../../layout/LayoutBack';
 
 import product_3_1 from '../../../images/products/product_3.webp';
 import product_3_2 from '../../../images/products/product_3_1.webp';
@@ -11,7 +12,12 @@ import product_3_3 from '../../../images/products/product_3_2.webp';
 
 type TMeasuring = 'measuringSystem_1' | 'measuringSystem_2' | 'measuringSystem_3';
 
-export const MeasuringSystem = () => {
+type TProps = {
+  onBackProducts: VoidFunction;
+  title: string;
+};
+
+export const MeasuringSystem = ({ onBackProducts, title }: TProps) => {
   const cardTitle: Record<TMeasuring, string> = {
     measuringSystem_1: 'Система измерения количества и показателей качества нефти (СИКН)',
     measuringSystem_2: 'Система измерения количества газа (СИКГ)',
@@ -34,7 +40,7 @@ export const MeasuringSystem = () => {
     window.history.pushState({}, '', url.toString());
   };
 
-  const onBack = () => {
+  const onBackMeasuring = () => {
     setSelectedItem(null);
 
     const url = new URL(window.location.href);
@@ -44,19 +50,19 @@ export const MeasuringSystem = () => {
 
   // 👇 ВАЖНО: НИКАКИХ Layout / LayoutBack
   if (selectedItem === 'measuringSystem_1') {
-    return <MeasuringSystem_1 />;
+    return <MeasuringSystem_1 onBackMeasuring={onBackMeasuring} title={cardTitle.measuringSystem_1}/>;
   }
 
   if (selectedItem === 'measuringSystem_2') {
-    return <MeasuringSystem_2/>;
+    return <MeasuringSystem_2 onBackMeasuring={onBackMeasuring} title={cardTitle.measuringSystem_2}/>;
   }
 
   if (selectedItem === 'measuringSystem_3') {
-    return <MeasuringSystem_3/>;
+    return <MeasuringSystem_3 onBackMeasuring={onBackMeasuring} title={cardTitle.measuringSystem_3}/>;
   }
 
   return (
-    <>
+    <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_3_1.src}
@@ -74,6 +80,6 @@ export const MeasuringSystem = () => {
           onClick={() => handleClickCard('measuringSystem_3')}
         />
       </div>      
-    </>
+    </LayoutBack>
   );
 };

@@ -3,11 +3,17 @@ import { Card } from '../../ui/card/Card';
 import { PumpingStations_1 } from './PumpingStations/PumpingStations_1';
 import { PumpingStations_2 } from './PumpingStations/PumpingStations_2';
 import Styles from './products.module.scss'
+import { LayoutBack } from '../../layout/LayoutBack';
 
 import product_5_1 from '../../../images/products/product_5.webp';
 import product_5_2 from '../../../images/products/product_5_1.webp';
 
 type TPumping = 'pumpingStations_1' | 'pumpingStations_2' ;
+
+type TProps = {
+  onBackProducts: VoidFunction;
+  title: string;
+};
 
 export const PumpingStations = () => {
   const cardTitle: Record<TPumping, string> = {
@@ -31,7 +37,7 @@ export const PumpingStations = () => {
     window.history.pushState({}, '', url.toString());
   };
 
-  const onBack = () => {
+  const onBackPumping = () => {
     setSelectedItem(null);
 
     const url = new URL(window.location.href);
@@ -41,15 +47,15 @@ export const PumpingStations = () => {
 
   // 👇 ВАЖНО: НИКАКИХ Layout / LayoutBack
   if (selectedItem === 'pumpingStations_1') {
-    return <PumpingStations_1 />;
+    return <PumpingStations_1 onBackPumping={onBackPumping} title={cardTitle.pumpingStations_1}/>;
   }
 
   if (selectedItem === 'pumpingStations_2') {
-    return <PumpingStations_2/>;
+    return <PumpingStations_2 onBackPumping={onBackPumping} title={cardTitle.pumpingStations_2}/>;
   }
 
   return (
-    <>
+    <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_5_1.src}
@@ -62,6 +68,6 @@ export const PumpingStations = () => {
           onClick={() => handleClickCard('pumpingStations_2')}
         />
       </div>      
-    </>
+    </LayoutBack>
   );
 };
