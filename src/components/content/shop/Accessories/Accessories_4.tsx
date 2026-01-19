@@ -1,12 +1,16 @@
-
-import Styles from '../shop.module.scss';
-import { Title } from '../../../ui/title/Title';
-import { Cards } from '../Cards';
+import Styles from '../shop.module.scss'
+import { BackToTop } from '../../../ui/back-to-top/BackToTop'
+import { LayoutBack } from '../../../layout/LayoutBack';
 import { useEffect } from 'react';
+import { Cards } from '../Cards';
 import { useState} from 'react';
 
+type TProps = {
+  onBackAccessories: VoidFunction;
+  title: string;
+};
 
-export const Accessories_4 = () => {
+export const Accessories_4 = ({ onBackAccessories, title }: TProps) => {
 
   type TTitleOptions = 'accountingSystem' | 'accessories'  | 'measuringSystem' | 'preparationSystems';
 
@@ -43,37 +47,38 @@ export const Accessories_4 = () => {
   
 
   return (
-    <div className={Styles.container}>
-      <Title text="Магниторегулируемый клапан (КМР)"></Title>
-        
+    <LayoutBack onBack={onBackAccessories} title={title}>
+      <div className={Styles.container}>
+        {/* ===== CONTENT ===== */}
         <div className={Styles.team}>
-            <Cards
-              title={cardTitle.accountingSystem}
-              onClick={() => {
-                onClickCard('accountingSystem');
-              }}
-            />
-            <Cards
-              title={cardTitle.accessories}
-              onClick={() => {
-                onClickCard('accessories');
-              }}
-            />
-            <Cards
-              title={cardTitle.measuringSystem}
-              onClick={() => {
-                onClickCard('measuringSystem');
-              }}
-            />
-            <Cards
-              title={cardTitle.preparationSystems}
-              onClick={() => {
-                onClickCard('preparationSystems');
-              }}
-            />
-          </div>
-        
-    </div>
+          <Cards
+            title={cardTitle.accountingSystem}
+            onClick={() => {
+              onClickCard('accountingSystem');
+            }}
+          />
+          <Cards
+            title={cardTitle.accessories}
+            onClick={() => {
+              onClickCard('accessories');
+            }}
+          />
+          <Cards
+            title={cardTitle.measuringSystem}
+            onClick={() => {
+              onClickCard('measuringSystem');
+            }}
+          />
+          <Cards
+            title={cardTitle.preparationSystems}
+            onClick={() => {
+              onClickCard('preparationSystems');
+            }}
+          />
+        </div>
+        <BackToTop />
+      </div>
+    </LayoutBack>
   )
 }
 

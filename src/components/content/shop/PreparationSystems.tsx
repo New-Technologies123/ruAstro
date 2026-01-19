@@ -5,6 +5,7 @@ import { PreparationSystems_2 } from './PreparationSystems/PreparationSystems_2'
 import { PreparationSystems_3 } from './PreparationSystems/PreparationSystems_3';
 import { PreparationSystems_4 } from './PreparationSystems/PreparationSystems_4';
 import Styles from './products.module.scss'
+import { LayoutBack } from '../../layout/LayoutBack';
 
 import product_4_1 from '../../../images/products/product_4.webp';
 import product_4_2 from '../../../images/products/product_4_2.webp';
@@ -13,7 +14,12 @@ import product_4_4 from '../../../images/products/product_4_4.webp';
 
 type TPreparation = 'preparationSystems_1' | 'preparationSystems_2' | 'preparationSystems_3' | 'preparationSystems_4';
 
-export const PreparationSystems = () => {
+type TProps = {
+  onBackProducts: VoidFunction;
+  title: string;
+};
+
+export const PreparationSystems = ({ onBackProducts, title }: TProps) => {
   const cardTitle: Record<TPreparation, string> = {
     preparationSystems_1: 'Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП',
     preparationSystems_2: 'Блок гребенки (БГ)',
@@ -37,7 +43,7 @@ export const PreparationSystems = () => {
     window.history.pushState({}, '', url.toString());
   };
 
-  const onBack = () => {
+  const onBackPreparation = () => {
     setSelectedItem(null);
 
     const url = new URL(window.location.href);
@@ -47,23 +53,23 @@ export const PreparationSystems = () => {
 
   // 👇 ВАЖНО: НИКАКИХ Layout / LayoutBack
   if (selectedItem === 'preparationSystems_1') {
-    return <PreparationSystems_1 />;
+    return <PreparationSystems_1 onBackPreparation={onBackPreparation} title={cardTitle.preparationSystems_1}/>;
   }
 
   if (selectedItem === 'preparationSystems_2') {
-    return <PreparationSystems_2/>;
+    return <PreparationSystems_2 onBackPreparation={onBackPreparation} title={cardTitle.preparationSystems_2}/>;
   }
 
   if (selectedItem === 'preparationSystems_3') {
-    return <PreparationSystems_3/>;
+    return <PreparationSystems_3 onBackPreparation={onBackPreparation} title={cardTitle.preparationSystems_3}/>;
   }
 
   if (selectedItem === 'preparationSystems_4') {
-    return <PreparationSystems_4/>;
+    return <PreparationSystems_4 onBackPreparation={onBackPreparation} title={cardTitle.preparationSystems_4}/>;
   }
 
   return (
-    <>
+    <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_4_1.src}
@@ -86,6 +92,6 @@ export const PreparationSystems = () => {
           onClick={() => handleClickCard('preparationSystems_4')}
         />
       </div>      
-    </>
+    </LayoutBack>
   );
 };

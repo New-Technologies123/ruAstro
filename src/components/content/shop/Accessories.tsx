@@ -6,16 +6,23 @@ import { Accessories_3 } from './Accessories/Accessories_3';
 import { Accessories_4 } from './Accessories/Accessories_4';
 import { Accessories_5 } from './Accessories/Accessories_5';
 import Styles from './products.module.scss'
+import { LayoutBack } from '../../layout/LayoutBack';
 
 import product_2_1 from '../../../images/products/product_2.webp';
 import product_2_2 from '../../../images/products/product_2_1.webp';
 import product_2_3 from '../../../images/products/product_2_2.webp';
 import product_2_4 from '../../../images/products/product_2_3.webp';
 import product_2_5 from '../../../images/products/product_2_4.webp';
+import product_2_6 from '../../../images/products/product_2_5.webp';
 
 type TAccessories = 'accessories_1' | 'accessories_2' | 'accessories_3' | 'accessories_4' | 'accessories_5';
 
-export const Accessories = () => {
+type TProps = {
+  onBackProducts: VoidFunction;
+  title: string;
+};
+
+export const Accessories = ({ onBackProducts, title }: TProps) => {
   const cardTitle: Record<TAccessories, string> = {
     accessories_1: 'Вихревой расходомер ЭРВИП',
     accessories_2: 'Устройство регулирования перепада давления (УРПД)',
@@ -40,7 +47,7 @@ export const Accessories = () => {
     window.history.pushState({}, '', url.toString());
   };
 
-  const onBack = () => {
+  const onBackAccessories = () => {
     setSelectedItem(null);
 
     const url = new URL(window.location.href);
@@ -50,27 +57,27 @@ export const Accessories = () => {
 
   // 👇 ВАЖНО: НИКАКИХ Layout / LayoutBack
   if (selectedItem === 'accessories_1') {
-    return <Accessories_1 />;
+    return <Accessories_1 onBackAccessories={onBackAccessories} title={cardTitle.accessories_1} />;
   }
 
   if (selectedItem === 'accessories_2') {
-    return <Accessories_2/>;
+    return <Accessories_2 onBackAccessories={onBackAccessories} title={cardTitle.accessories_2} />;
   }
 
   if (selectedItem === 'accessories_3') {
-    return <Accessories_3/>;
+    return <Accessories_3 onBackAccessories={onBackAccessories} title={cardTitle.accessories_3} />;
   }
 
   if (selectedItem === 'accessories_4') {
-    return <Accessories_4/>;
+    return <Accessories_4 onBackAccessories={onBackAccessories} title={cardTitle.accessories_4} />;
   }
 
   if (selectedItem === 'accessories_5') {
-    return <Accessories_5/>;
+    return <Accessories_5 onBackAccessories={onBackAccessories} title={cardTitle.accessories_5} />;
   }
 
   return (
-    <>
+    <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_2_1.src}
@@ -97,7 +104,7 @@ export const Accessories = () => {
           title={cardTitle.accessories_5}
           onClick={() => handleClickCard('accessories_5')}
         />
-      </div>      
-    </>
+      </div>
+    </LayoutBack>
   );
 };
