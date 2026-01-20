@@ -260,7 +260,7 @@ export const Calculator = ({ onBackAccountingSystem }: TProps) => {
               );
             })}
             <div className={Styles.totalPriceText}>
-              <h3>Итого {totalPrice.toLocaleString('ru-RU')} руб.</h3>
+              <h3>Итого {totalPrice.toLocaleString('ru-RU')} руб. без НДС</h3>
 
               <button
                 className={Styles.pdfButton}

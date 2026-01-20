@@ -35,29 +35,72 @@ export const InstallationCard = ({
         return inst.vagometer1Options;
     };
 
+    // useEffect(() => {
+    //     const hasNonSepGas =
+    //         sel.max_gas_1?.length &&
+    //         !sel.max_gas_1.includes('Не требуется');
+
+    //     if (hasNonSepGas) {
+    //         // 1. Автовыбор Многофазного расходомера
+    //         if (sel.vagometer1?.[0] !== 'Многофазный расходомер') {
+    //             onChange('vagometer1', ['Многофазный расходомер']);
+    //         }
+
+    //         // 2. Сброс других параметров на "Не требуется"
+    //         if (sel.vagometer?.[0] !== 'Не требуется') {
+    //             onChange('vagometer', ['Не требуется']);
+    //         }
+    //         if (sel.vagometer2?.[0] !== 'Не требуется') {
+    //             onChange('vagometer2', ['Не требуется']);
+    //         }
+    //         if (sel.max_gas?.[0] !== 'Не требуется') {
+    //             onChange('max_gas', ['Не требуется']);
+    //         }
+    //     }
+    // }, [sel.max_gas_1]);
+
     useEffect(() => {
-        const hasNonSepGas =
-            sel.max_gas_1?.length &&
-            !sel.max_gas_1.includes('Не требуется');
+    const values = sel.max_gas_1 || [];
 
-        if (hasNonSepGas) {
-            // 1. Автовыбор Многофазного расходомера
-            if (sel.vagometer1?.[0] !== 'Многофазный расходомер') {
-                onChange('vagometer1', ['Многофазный расходомер']);
-            }
+    const isEmpty = values.length === 0;
+    const isNotRequired =
+        values.length === 1 && values[0] === 'Не требуется';
+    const hasRealValue =
+        values.length > 0 && !values.includes('Не требуется');
 
-            // 2. Сброс других параметров на "Не требуется"
-            if (sel.vagometer?.[0] !== 'Не требуется') {
-                onChange('vagometer', ['Не требуется']);
-            }
-            if (sel.vagometer2?.[0] !== 'Не требуется') {
-                onChange('vagometer2', ['Не требуется']);
-            }
-            if (sel.max_gas?.[0] !== 'Не требуется') {
-                onChange('max_gas', ['Не требуется']);
-            }
+    // 1️⃣ Есть реальное значение (НЕ "Не требуется")
+    if (hasRealValue) {
+        // max_gas → "Не требуется"
+        if (sel.max_gas?.[0] !== 'Не требуется') {
+            onChange('max_gas', ['Не требуется']);
         }
-    }, [sel.max_gas_1]);
+
+        // Расходомер на линии газа → "Не требуется"
+        if (sel.vagometer?.[0] !== 'Не требуется') {
+            onChange('vagometer', ['Не требуется']);
+        }
+
+        // Дублирующий расходомер → "Не требуется"
+        if (sel.vagometer2?.[0] !== 'Не требуется') {
+            onChange('vagometer2', ['Не требуется']);
+        }
+
+        // Автовыбор многофазного расходомера
+        if (sel.vagometer1?.[0] !== 'Многофазный расходомер') {
+            onChange('vagometer1', ['Многофазный расходомер']);
+        }
+    }
+
+    // 2️⃣ max_gas_1 пустой → очищаем зависимые параметры
+    if (isEmpty) {
+        if (sel.max_gas?.length) onChange('max_gas', []);
+        if (sel.vagometer?.length) onChange('vagometer', []);
+        if (sel.vagometer2?.length) onChange('vagometer2', []);
+        if (sel.vagometer1?.length) onChange('vagometer1', []);
+    }
+
+    // 3️⃣ Если выбрано "Не требуется" → НИЧЕГО НЕ ДЕЛАЕМ
+}, [sel.max_gas_1]);
 
     const getQuantityOptions = () => {
         if (sel.density?.[0] === 'Одностороннее') {
