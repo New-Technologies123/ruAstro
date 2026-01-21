@@ -1,9 +1,11 @@
-import Styles from '../shop.module.scss'
-import { BackToTop } from '../../../ui/back-to-top/BackToTop'
+import Styles from '../shop.module.scss';
+import { BackToTop } from '../../../ui/back-to-top/BackToTop';
 import { LayoutBack } from '../../../layout/LayoutBack';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Cards } from '../Cards';
-import { useState} from 'react';
+import { Shop_1 } from './Accessories_4/Shop_1';
+
+type TTitleOptions = 'shop_1' | 'shop_2' | 'shop_3' | 'shop_4';
 
 type TProps = {
   onBackAccessories: VoidFunction;
@@ -11,78 +13,53 @@ type TProps = {
 };
 
 export const Accessories_4 = ({ onBackAccessories, title }: TProps) => {
-
-  type TTitleOptions = 'accountingSystem' | 'accessories'  | 'measuringSystem' | 'preparationSystems';
-
-   const cardTitle: Record<TTitleOptions, string> = {
-    accountingSystem: 'Клапан магниторегулируемый КМР-2 Ж НТ.200.000.000.0',
-    accessories: 'Клапан магниторегулируемый КМР-2 М НТ.201.000.000.0',
-    measuringSystem: 'Клапан магниторегулируемый КМР-3.1 Ех НТ.302.000.000.1',
-    preparationSystems: 'Клапан магниторегулируемый КМР-2 Г НТ.250.000.000.0',
+  const cardTitle: Record<TTitleOptions, string> = {
+    shop_1: 'Клапан магниторегулируемый КМР-2 Ж НТ.200.000.000.0',
+    shop_2: 'Клапан магниторегулируемый КМР-2 М НТ.201.000.000.0',
+    shop_3: 'Клапан магниторегулируемый КМР-3.1 Ех НТ.302.000.000.1',
+    shop_4: 'Клапан магниторегулируемый КМР-2 Г НТ.250.000.000.0',
   };
 
+  const [selectedItem, setSelectedItem] = useState<TTitleOptions | null>(null);
+
+  // читаем ?tem=shop_1 при обновлении страницы
   useEffect(() => {
-        setTypeLayoutBackOpen(() => {
-          const queryParams = new URLSearchParams(window.location.search);
-          const typeFromQuery = queryParams.get('type');
-          return typeFromQuery ? (typeFromQuery as TTitleOptions) : null;
-        });
-      }, []);
-    
-      const onBack = () => {
-        setTypeLayoutBackOpen(null);
-    
-        const newUrl = `${window.location.origin}${window.location.pathname}`;
-        window.history.pushState({}, '', newUrl);
-      };
-    
-      const onClickCard = (typeDocuments: TTitleOptions) => {
-        setTypeLayoutBackOpen(typeDocuments);
-    
-        const newUrl = `${window.location.origin}${window.location.pathname}?type=${typeDocuments}`;
-        window.history.pushState({}, '', newUrl);
-      };
-  
-    const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TTitleOptions | null>(null);
-  
+    const params = new URLSearchParams(window.location.search);
+    const tem = params.get('tem') as TTitleOptions | null;
+    setSelectedItem(tem);
+  }, []);
+
+  const handleClickCard = (tem: TTitleOptions) => {
+    setSelectedItem(tem);
+
+    const url = new URL(window.location.href);
+    url.searchParams.set('tem', tem);
+    window.history.pushState({}, '', url.toString());
+  };
+
+  const onBackShop = () => {
+    setSelectedItem(null);
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete('tem');
+    window.history.pushState({}, '', url.toString());
+  };
+
+  if (selectedItem === 'shop_1') {
+    return <Shop_1 onBackShop={onBackShop} title={cardTitle.shop_1} />;
+  }
 
   return (
     <LayoutBack onBack={onBackAccessories} title={title}>
       <div className={Styles.container}>
-        {/* ===== CONTENT ===== */}
         <div className={Styles.team}>
-          <Cards
-            title={cardTitle.accountingSystem}
-            onClick={() => {
-              onClickCard('accountingSystem');
-            }}
-          />
-          <Cards
-            title={cardTitle.accessories}
-            onClick={() => {
-              onClickCard('accessories');
-            }}
-          />
-          <Cards
-            title={cardTitle.measuringSystem}
-            onClick={() => {
-              onClickCard('measuringSystem');
-            }}
-          />
-          <Cards
-            title={cardTitle.preparationSystems}
-            onClick={() => {
-              onClickCard('preparationSystems');
-            }}
-          />
+          <Cards title={cardTitle.shop_1} onClick={() => handleClickCard('shop_1')} />
+          <Cards title={cardTitle.shop_2} onClick={() => handleClickCard('shop_2')} />
+          <Cards title={cardTitle.shop_3} onClick={() => handleClickCard('shop_3')} />
+          <Cards title={cardTitle.shop_4} onClick={() => handleClickCard('shop_4')} />
         </div>
         <BackToTop />
       </div>
     </LayoutBack>
-  )
-}
-
-
-
-
-
+  );
+};

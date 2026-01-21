@@ -1,0 +1,117 @@
+.team {
+  display: flex;
+  justify-content: center;
+  gap: 20px; /* Увеличиваем расстояние между карточками */
+  padding: 50px;
+  background-color: #e6f7ff;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+/* ===== ФИЛЬТРЫ ===== */
+.filters {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  // margin: 24px 0 32px;
+  flex-wrap: wrap;
+  padding: 20px;
+}
+
+.categories {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:hover {
+    background: #a9caff;
+    color: #000000;
+  }
+
+  &--active {
+    background: #2f3c8f;
+    color: #fff;
+    border: 2px solid #2f3c8f;
+    // border-color: #2f3c8f;
+  }
+
+  sup {
+    margin-left: 4px;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+}
+
+.search {
+  input {
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    min-width: 240px;
+    font-size: 14px;
+
+    &:focus {
+      outline: none;
+      border-color: #2f3c8f;
+    }
+  }
+}
+
+/* ===== Кнопка корзины ===== */
+.topBar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-bottom: 1px solid #eee;
+}
+
+.cartButton {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 6px;
+
+  text-decoration: none; // ← ВАЖНО
+  display: inline-flex;  // чтобы выглядело как кнопка
+  align-items: center;
+  gap: 6px;
+
+  &:hover {
+    opacity: 0.9;
+    text-decoration: none; // на hover тоже
+  }
+}
+
+/* ===== СЕТКА ТОВАРОВ ===== */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  margin: 20px 50px;
+}
+
+/* ===== АДАПТИВ ===== */
+@media (max-width: 768px) {
+  .filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search input {
+    width: 100%;
+  }
+}
