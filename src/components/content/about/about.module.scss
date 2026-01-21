@@ -1,19 +1,30 @@
+.bloc{
+  display: block;
+  justify-items: center;
+}
+
+.layout{
+    width: 1100px;
+    text-align: center;    
+    margin: 0px 20px;
+    margin-top: 15px;
+    padding: 0 20px;
+    padding-bottom: 20px;
+    background-color: #f1f1f1;
+    border-radius: 17px;
+    P{
+        margin-top: 20px;
+        font-size: 20px;
+        animation: softFocus 1.2s ease-in-out both;
+    }
+}
+
 .numberAbout{
     display: flex;
     justify-content: center;
     gap: 80px;
     padding: 20px;
     flex-wrap: wrap;
-}
-
-.layout{
-    text-align: center;    
-    margin: 0px 20px;
-    P{
-        margin-top: 20px;
-        font-size: 20px;
-        animation: softFocus 1.2s ease-in-out both;
-    }
 }
 
 @keyframes softFocus {
@@ -33,7 +44,9 @@
         padding: 15px;
     }
     .layout{
+        width: 700px;
         margin: 0 15px;
+        margin-top: 10px;
         p{
             font-size: 18px;
         }
@@ -50,6 +63,18 @@
             margin-top: 15px;
             font-size: 16px;
         }
+    }
+}
+
+@media (max-width: 800px){
+    .layout{
+        width: 400px;
+    }
+}
+
+@media (max-width: 500px){
+    .layout{
+        width: 300px;
     }
 }
 
