@@ -4,6 +4,9 @@ import { LayoutBack } from '../../../layout/LayoutBack';
 import { useEffect, useState } from 'react';
 import { Cards } from '../Cards';
 import { Shop_1 } from './Accessories_4/Shop_1';
+import { Shop_2 } from './Accessories_4/Shop_2';
+import { Shop_3 } from './Accessories_4/Shop_3';
+import { Shop_4 } from './Accessories_4/Shop_4';
 
 type TTitleOptions = 'shop_1' | 'shop_2' | 'shop_3' | 'shop_4';
 
@@ -47,6 +50,15 @@ export const Accessories_4 = ({ onBackAccessories, title }: TProps) => {
 
   if (selectedItem === 'shop_1') {
     return <Shop_1 onBackShop={onBackShop} title={cardTitle.shop_1} />;
+  }
+  if (selectedItem === 'shop_2') {
+    return <Shop_2 onBackShop={onBackShop} title={cardTitle.shop_2} />;
+  }
+  if (selectedItem === 'shop_3') {
+    return <Shop_3 onBackShop={onBackShop} title={cardTitle.shop_3} />;
+  }
+  if (selectedItem === 'shop_4') {
+    return <Shop_4 onBackShop={onBackShop} title={cardTitle.shop_4} />;
   }
 
   return (
