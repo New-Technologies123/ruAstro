@@ -1,23 +1,25 @@
 import { Layout } from '../../layout/Layout';
 import { LayoutBack } from '../../layout/LayoutBack';
 import { Card } from '../../ui/card/Card';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AccountingSystem } from './AccountingSystem';
 import { Accessories } from './Accessories';
 import { MeasuringSystem } from './MeasuringSystem';
 import { PreparationSystems } from './PreparationSystems';
 import { PumpingStations } from './PumpingStations';
+import { CartButton } from '../../ui/cart-button/CartButton';
+import { Basket } from '../../content/basket/Basket'; // компонент корзины
+
 import product_1 from '../../../images/products/product_1.webp';
 import product_2 from '../../../images/products/product_2.0.webp';
 import product_3 from '../../../images/products/product_3.webp';
 import product_4 from '../../../images/products/product_4.webp';
 import product_5 from '../../../images/products/product_5.webp';
-import { useEffect } from 'react';
 
 type TProducts = 'accountingSystem' | 'accessories' | 'measuringSystem' | 'preparationSystems' | 'pumpingStations';
+type Page = 'shop' | 'basket' | TProducts;
 
 export const Shop = () => {
-
   const cardTitle: Record<TProducts, string> = {
     accountingSystem: 'Автоматизированная замерная установка (АГЗУ)',
     accessories: 'Комплектующие для автоматизированной групповой замерной установки',
@@ -26,81 +28,108 @@ export const Shop = () => {
     pumpingStations: 'Насосные станции перекачки нефти, нефтепродуктов и воды',
   };
 
-  const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TProducts | null>(null);
+  const [currentPage, setCurrentPage] = useState<Page>('shop');
 
+  // Определяем начальную страницу по URL
   useEffect(() => {
-    setTypeLayoutBackOpen(() => {
-      const queryParams = new URLSearchParams(window.location.search);
-      const typeFromQuery = queryParams.get('type');
-      return typeFromQuery ? (typeFromQuery as TProducts) : null;
-    });
+    const path = window.location.pathname;
+    const query = new URLSearchParams(window.location.search);
+    const type = query.get('type') as TProducts | null;
+
+    if (path === '/basket') setCurrentPage('basket');
+    else if (type) setCurrentPage(type);
+    else setCurrentPage('shop');
+  }, []);
+
+  // Обработка кнопок "назад/вперед" в браузере
+  useEffect(() => {
+    const onPopState = () => {
+      const path = window.location.pathname;
+      const query = new URLSearchParams(window.location.search);
+      const type = query.get('type') as TProducts | null;
+
+      if (path === '/basket') setCurrentPage('basket');
+      else if (type) setCurrentPage(type ?? 'shop');
+      else setCurrentPage('shop');
+    };
+
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
   }, []);
 
   const onBack = () => {
-    setTypeLayoutBackOpen(null);
-
-    const newUrl = `${window.location.origin}${window.location.pathname}`;
-    window.history.pushState({}, '', newUrl);
+    setCurrentPage('shop');
+    window.history.pushState({}, '', '/shop');
   };
 
   const onClickCard = (typeProduct: TProducts) => {
-    setTypeLayoutBackOpen(typeProduct);
+    setCurrentPage(typeProduct);
+    window.history.pushState({}, '', `/shop?type=${typeProduct}`);
+  };
 
-    const newUrl = `${window.location.origin}${window.location.pathname}?type=${typeProduct}`;
-    window.history.pushState({}, '', newUrl);
+  const goToBasket = () => {
+    setCurrentPage('basket');
+    window.history.pushState({}, '', '/basket');
   };
 
   return (
     <>
-      {typeLayoutBackOpen === null && (
-        <Layout title="Магазин" 
+      {currentPage !== 'basket' && <CartButton goToBasket={goToBasket} />}
+
+      {currentPage === 'shop' && (
+        <Layout
+          title="Магазин"
           description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области 
-            безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
-            Таможенного союза. ">
+          безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
+          Таможенного союза."
+        >
           <>
             <Card
               imgSrc={product_1.src}
               title={cardTitle.accountingSystem}
-              onClick={() => {
-                onClickCard('accountingSystem');
-              }}
+              onClick={() => onClickCard('accountingSystem')}
             />
             <Card
               imgSrc={product_2.src}
               title={cardTitle.accessories}
-              onClick={() => {
-                onClickCard('accessories');
-              }}
+              onClick={() => onClickCard('accessories')}
             />
             <Card
               imgSrc={product_3.src}
               title={cardTitle.measuringSystem}
-              onClick={() => {
-                onClickCard('measuringSystem');
-              }}
+              onClick={() => onClickCard('measuringSystem')}
             />
             <Card
               imgSrc={product_4.src}
               title={cardTitle.preparationSystems}
-              onClick={() => {
-                onClickCard('preparationSystems');
-              }}
+              onClick={() => onClickCard('preparationSystems')}
             />
             <Card
               imgSrc={product_5.src}
               title={cardTitle.pumpingStations}
-              onClick={() => {
-                onClickCard('pumpingStations');
-              }}
+              onClick={() => onClickCard('pumpingStations')}
             />
           </>
         </Layout>
       )}
-      {typeLayoutBackOpen === 'accountingSystem' && <AccountingSystem onBackProducts={onBack} title={cardTitle.accountingSystem} />}
-      {typeLayoutBackOpen === 'accessories' && <Accessories onBackProducts={onBack} title={cardTitle.accessories} />}
-      {typeLayoutBackOpen === 'measuringSystem' && <MeasuringSystem onBackProducts={onBack} title={cardTitle.accessories} />}
-      {typeLayoutBackOpen === 'preparationSystems' && <PreparationSystems onBackProducts={onBack} title={cardTitle.accessories} />}
-      {typeLayoutBackOpen === 'pumpingStations' && <PumpingStations onBackProducts={onBack} title={cardTitle.accessories} />}
+
+      {currentPage === 'basket' && <Basket onBack={onBack} />}
+
+      {currentPage === 'accountingSystem' && (
+        <AccountingSystem onBackProducts={onBack} title={cardTitle.accountingSystem} />
+      )}
+      {currentPage === 'accessories' && (
+        <Accessories onBackProducts={onBack} title={cardTitle.accessories} />
+      )}
+      {currentPage === 'measuringSystem' && (
+        <MeasuringSystem onBackProducts={onBack} title={cardTitle.measuringSystem} />
+      )}
+      {currentPage === 'preparationSystems' && (
+        <PreparationSystems onBackProducts={onBack} title={cardTitle.preparationSystems} />
+      )}
+      {currentPage === 'pumpingStations' && (
+        <PumpingStations onBackProducts={onBack} title={cardTitle.pumpingStations} />
+      )}
     </>
   );
 };

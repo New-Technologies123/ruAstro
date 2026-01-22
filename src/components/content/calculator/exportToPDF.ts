@@ -47,7 +47,7 @@ export const exportToPDF = (selectedInstallations: any[], totalPrice: number) =>
   });
 
   content.push({
-    text: `Итого: ${totalPrice.toLocaleString('ru-RU')} руб.`,
+    text: `Итого: ${totalPrice.toLocaleString('ru-RU')} руб. без НДС`,
     fontSize: 16,
     bold: true,
     margin: [0, 15, 0, 0]

@@ -14,24 +14,16 @@ type TProps = {
 export const Shop_4 = ({ onBackShop, title }: TProps) => {
   const [openedProduct, setOpenedProduct] = useState<Product | null>(null);
 
-  // синхронизация состояния с URL (оставляем, если нужна)
   useEffect(() => {
-    const syncFromUrl = () => {
-      const params = new URLSearchParams(window.location.search);
-      const productId = params.get('product');
+    const params = new URLSearchParams(window.location.search);
+    const productId = params.get('product');
 
-      if (productId) {
-        const product = products.find(p => p.id === Number(productId));
-        setOpenedProduct(product ?? null);
-      } else {
-        setOpenedProduct(null);
-      }
-    };
-
-    syncFromUrl();
-    window.addEventListener('popstate', syncFromUrl);
-
-    return () => window.removeEventListener('popstate', syncFromUrl);
+    if (productId) {
+      const product = products.find((p) => p.id === Number(productId));
+      setOpenedProduct(product ?? null);
+    } else {
+      setOpenedProduct(null);
+    }
   }, []);
 
   const onBackProduct = () => {
@@ -42,24 +34,21 @@ export const Shop_4 = ({ onBackShop, title }: TProps) => {
     window.history.pushState({}, '', url.toString());
   };
 
-  return (
-    <LayoutBack onBack={onBackShop} title={title}>
-      {!openedProduct && (
+  if (!openedProduct) {
+    return (
+      <LayoutBack onBack={onBackShop} title={title}>
         <div className={styles.products}>
-          {products.map(product => (
-            <ProductCard
-              key={product.id}
-              product={product}
-            />
+          {products.map((product) => (
+            <ProductCard key={product.id} product={product} onClick={() => setOpenedProduct(product)} />
           ))}
         </div>
-      )}
+      </LayoutBack>
+    );
+  }
 
-      {/* {openedProduct && (
-        <LayoutBack onBack={onBackProduct} title={openedProduct.title}>
-          <ProductPage product={openedProduct} />
-        </LayoutBack>
-      )} */}
+  return (
+    <LayoutBack onBack={onBackProduct} title={openedProduct.title}>
+      <ProductPage product={openedProduct} />
     </LayoutBack>
   );
 };

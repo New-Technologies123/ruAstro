@@ -1,0 +1,107 @@
+// /* ===== Кнопка корзины ===== */
+// .topBar {
+//   display: flex;
+//   justify-content: flex-end;
+//   margin-right: 24px;
+//   margin-top: 15px;
+//   border-bottom: 1px solid #eee;
+// }
+
+// .cartButton {
+//   background: #000;
+//   color: #fff;
+//   border: none;
+//   padding: 10px 16px;
+//   font-size: 14px;
+//   cursor: pointer;
+//   border-radius: 6px;
+
+//   text-decoration: none; // ← ВАЖНО
+//   display: inline-flex;  // чтобы выглядело как кнопка
+//   align-items: center;
+//   gap: 6px;
+
+//   &:hover {
+//     opacity: 0.9;
+//     text-decoration: none; // на hover тоже
+//   }
+// }
+.cartWrapper {
+  position: fixed;   // фиксируем кнопку
+  top: 210px;         // отступ сверху
+  right: 20px;       // отступ справа
+  z-index: 1000;     // поверх всего
+}
+
+.cartButton {
+  position: relative;
+  font-size: 28px;
+  background: #6db4ff;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px 5px;
+}
+
+.dropdown {
+  position: absolute;
+  top: 60px;        // чуть ниже кнопки
+  right: 0;
+  width: 400px;
+  max-height: 400px;
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 10px;
+  z-index: 1000;
+  border-radius: 6px;
+}
+
+.empty {
+  text-align: center;
+  color: #888;
+}
+
+.items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+// .viewBasket {
+//   margin-top: 10px;
+//   width: 100%;
+//   padding: 6px;
+//   background: #007bff;
+//   color: white;
+//   border: none;
+//   cursor: pointer;
+//   border-radius: 4px;
+// }
+

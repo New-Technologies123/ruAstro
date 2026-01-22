@@ -3,16 +3,16 @@ import Layout from "../../../layouts/Layout.astro";
 import { Header } from "../../../components/base/Header";
 import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
-import { Accessories } from "../../../components/content/products/Accessories";
+import { PreparationSystems } from "../../../components/content/products/PreparationSystems";
 
-const title = "Комплектующие — ИПП «Новые технологии»";
+const title = "Комплектующие »";
 const description = "Подробная информация о комплектующих для АГЗУ";
 ---
 
 <Layout title={title} description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <Accessories client:load />
+      <PreparationSystems client:load />
     </Content>
   <Footer client:load/>
 </Layout>

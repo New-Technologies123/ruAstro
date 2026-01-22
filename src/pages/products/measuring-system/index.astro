@@ -3,7 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import { Header } from "../../../components/base/Header";
 import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
-import { Accessories } from "../../../components/content/products/Accessories";
+import { MeasuringSystem } from "../../../components/content/products/MeasuringSystem";
 
 const title = "Комплектующие — ИПП «Новые технологии»";
 const description = "Подробная информация о комплектующих для АГЗУ";
@@ -12,7 +12,7 @@ const description = "Подробная информация о комплект
 <Layout title={title} description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <Accessories client:load />
+      <MeasuringSystem client:load />
     </Content>
   <Footer client:load/>
 </Layout>

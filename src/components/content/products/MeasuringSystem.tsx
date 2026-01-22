@@ -1,23 +1,40 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '../../ui/card/Card';
+import { LayoutBack } from '../../layout/LayoutBack';
+import Styles from './products.module.scss';
+
 import { MeasuringSystem_1 } from './MeasuringSystem/MeasuringSystem_1';
 import { MeasuringSystem_2 } from './MeasuringSystem/MeasuringSystem_2';
 import { MeasuringSystem_3 } from './MeasuringSystem/MeasuringSystem_3';
-import Styles from './products.module.scss'
-import { LayoutBack } from '../../layout/LayoutBack';
 
 import product_3_1 from '../../../images/products/product_3.webp';
 import product_3_2 from '../../../images/products/product_3_1.webp';
 import product_3_3 from '../../../images/products/product_3_2.webp';
 
-type TMeasuring = 'measuringSystem_1' | 'measuringSystem_2' | 'measuringSystem_3';
+type TMeasuring =
+  | 'measuringSystem_1'
+  | 'measuringSystem_2'
+  | 'measuringSystem_3';
 
-type TProps = {
-  onBackProducts: VoidFunction;
-  title: string;
+/* ---------------- helpers ---------------- */
+const getItemFromPath = (): TMeasuring | null => {
+  const parts = window.location.pathname.split('/').filter(Boolean);
+
+  if (
+    parts.length === 3 &&
+    parts[0] === 'products' &&
+    parts[1] === 'measuring-system'
+  ) {
+    return parts[2] as TMeasuring;
+  }
+
+  return null;
 };
 
-export const MeasuringSystem = ({ onBackProducts, title }: TProps) => {
+/* ---------------- component ---------------- */
+export const MeasuringSystem = () => {
+  const title = 'Измерительные системы';
+
   const cardTitle: Record<TMeasuring, string> = {
     measuringSystem_1: 'Система измерения количества и показателей качества нефти (СИКН)',
     measuringSystem_2: 'Система измерения количества газа (СИКГ)',
@@ -26,60 +43,80 @@ export const MeasuringSystem = ({ onBackProducts, title }: TProps) => {
 
   const [selectedItem, setSelectedItem] = useState<TMeasuring | null>(null);
 
+  /* синхронизация с URL */
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const itemFromQuery = params.get('item') as TMeasuring | null;
-    setSelectedItem(itemFromQuery);
+    const sync = () => setSelectedItem(getItemFromPath());
+    sync(); // при монтировании
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
   }, []);
 
-  const handleClickCard = (item: TMeasuring) => {
+  /* открыть карточку */
+  const openItem = (item: TMeasuring) => {
+    window.history.pushState({}, '', `/products/measuring-system/${item}`);
     setSelectedItem(item);
-
-    const url = new URL(window.location.href);
-    url.searchParams.set('item', item);
-    window.history.pushState({}, '', url.toString());
   };
 
+  /* назад к списку измерительных систем */
   const onBackMeasuring = () => {
+    window.history.pushState({}, '', '/products/measuring-system');
     setSelectedItem(null);
-
-    const url = new URL(window.location.href);
-    url.searchParams.delete('item');
-    window.history.pushState({}, '', url.toString());
   };
 
-  // 👇 ВАЖНО: НИКАКИХ Layout / LayoutBack
+  /* назад к продуктам */
+  const onBackProducts = () => {
+    window.history.pushState({}, '', '/products');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+
+  /* ---------------- детальные страницы ---------------- */
   if (selectedItem === 'measuringSystem_1') {
-    return <MeasuringSystem_1 onBackMeasuring={onBackMeasuring} title={cardTitle.measuringSystem_1}/>;
+    return (
+      <MeasuringSystem_1
+        title={cardTitle.measuringSystem_1}
+        onBackMeasuring={onBackMeasuring}
+      />
+    );
   }
 
   if (selectedItem === 'measuringSystem_2') {
-    return <MeasuringSystem_2 onBackMeasuring={onBackMeasuring} title={cardTitle.measuringSystem_2}/>;
+    return (
+      <MeasuringSystem_2
+        title={cardTitle.measuringSystem_2}
+        onBackMeasuring={onBackMeasuring}
+      />
+    );
   }
 
   if (selectedItem === 'measuringSystem_3') {
-    return <MeasuringSystem_3 onBackMeasuring={onBackMeasuring} title={cardTitle.measuringSystem_3}/>;
+    return (
+      <MeasuringSystem_3
+        title={cardTitle.measuringSystem_3}
+        onBackMeasuring={onBackMeasuring}
+      />
+    );
   }
 
+  /* ---------------- список ---------------- */
   return (
     <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_3_1.src}
           title={cardTitle.measuringSystem_1}
-          onClick={() => handleClickCard('measuringSystem_1')}
+          onClick={() => openItem('measuringSystem_1')}
         />
         <Card
           imgSrc={product_3_2.src}
           title={cardTitle.measuringSystem_2}
-          onClick={() => handleClickCard('measuringSystem_2')}
+          onClick={() => openItem('measuringSystem_2')}
         />
         <Card
           imgSrc={product_3_3.src}
           title={cardTitle.measuringSystem_3}
-          onClick={() => handleClickCard('measuringSystem_3')}
+          onClick={() => openItem('measuringSystem_3')}
         />
-      </div>      
+      </div>
     </LayoutBack>
   );
 };

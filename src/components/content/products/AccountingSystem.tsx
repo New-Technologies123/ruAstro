@@ -1,94 +1,118 @@
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Card } from '../../ui/card/Card';
+import { LayoutBack } from '../../layout/LayoutBack';
+import Styles from './products.module.scss';
+
 import { AccountingSystem_1 } from './AccountingSystem/AccountingSystem_1';
 import { AccountingSystem_2 } from './AccountingSystem/AccountingSystem_2';
-import Styles from './products.module.scss'
-import { LayoutBack } from '../../layout/LayoutBack';
 import { Calculator } from '../calculator/Calculator';
-import { useClickToScroll } from '../../../hooks/useClickToScroll';
 
 import product_1_1 from '../../../images/products/product_1.webp';
 import product_1_2 from '../../../images/products/product_1_2.webp';
 
-type TAccountingSystem = 'accountingSystem_1' | 'accountingSystem_2' | 'calculator';
+type TAccounting =
+  | 'accountingSystem_1'
+  | 'accountingSystem_2'
+  | 'calculator';
 
-type TProps = {
-  onBackProducts: VoidFunction;
-  title: string;
+/* ---------------- helpers ---------------- */
+const getItemFromPath = (): TAccounting | null => {
+  const parts = window.location.pathname.split('/').filter(Boolean);
+
+  if (
+    parts.length === 3 &&
+    parts[0] === 'products' &&
+    parts[1] === 'accounting-system'
+  ) {
+    return parts[2] as TAccounting;
+  }
+
+  return null;
 };
 
-export const AccountingSystem = ({ onBackProducts, title }: TProps) => {
-  const cardTitle: Record<TAccountingSystem, string> = {
+/* ---------------- component ---------------- */
+export const AccountingSystem = () => {
+  const title = 'Автоматизированная замерная установка (АГЗУ)';
+
+  const cardTitle: Record<TAccounting, string> = {
     accountingSystem_1: 'АГЗУ «Спутник — массомер НТ.1» (стационарный)',
     accountingSystem_2: 'АГЗУ «Спутник — массомер НТ.1» (мобильный)',
     calculator: 'Калькулятор',
   };
 
-  const [selectedItem, setSelectedItem] = useState<TAccountingSystem | null>(null);
+  const [selectedItem, setSelectedItem] = useState<TAccounting | null>(null);
 
+  /* синхронизация с URL (как в Accessories) */
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const itemFromQuery = params.get('item') as TAccountingSystem | null;
-    setSelectedItem(itemFromQuery);
+    const sync = () => setSelectedItem(getItemFromPath());
+    sync(); // при монтировании
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
   }, []);
 
-  const sectionsRef = useRef<(HTMLElement | null)[]>([]);
-  const handleClick = useClickToScroll();
-
-  const onClickCalc = () => {
-    setSelectedItem('calculator');
-
-    const url = new URL(window.location.href);
-    url.searchParams.set('item', 'calculator');
-    window.history.pushState({}, '', url.toString());
-  };
-
-  const onBackAccountingSystem = () => {
-    setSelectedItem(null);
-
-    const url = new URL(window.location.href);
-    url.searchParams.delete('item');
-    window.history.pushState({}, '', url.toString());
-  };
-
-  const handleClickCard = (item: TAccountingSystem) => {
+  /* открыть карточку */
+  const openItem = (item: TAccounting) => {
+    window.history.pushState({}, '', `/products/accounting-system/${item}`);
     setSelectedItem(item);
-
-    const url = new URL(window.location.href);
-    url.searchParams.set('item', item);
-    window.history.pushState({}, '', url.toString());
   };
 
-  // 👇 ВАЖНО: НИКАКИХ Layout / LayoutBack
+  /* назад к списку АГЗУ */
+  const onBackAccountingSystem = () => {
+    window.history.pushState({}, '', '/products/accounting-system');
+    setSelectedItem(null);
+  };
+
+  /* назад к продуктам */
+  const onBackProducts = () => {
+    window.history.pushState({}, '', '/products');
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  };
+
+  /* ---------------- детальные страницы ---------------- */
   if (selectedItem === 'accountingSystem_1') {
-    return <AccountingSystem_1 onBackAccountingSystem={onBackAccountingSystem} title={cardTitle.accountingSystem_1} />;
+    return (
+      <AccountingSystem_1
+        title={cardTitle.accountingSystem_1}
+        onBackAccountingSystem={onBackAccountingSystem}
+      />
+    );
   }
 
   if (selectedItem === 'accountingSystem_2') {
-    return <AccountingSystem_2 onBackAccountingSystem={onBackAccountingSystem} title={cardTitle.accountingSystem_2} />;
+    return (
+      <AccountingSystem_2
+        title={cardTitle.accountingSystem_2}
+        onBackAccountingSystem={onBackAccountingSystem}
+      />
+    );
   }
+
   if (selectedItem === 'calculator') {
     return <Calculator onBackAccountingSystem={onBackAccountingSystem} />;
   }
 
+  /* ---------------- список ---------------- */
   return (
     <LayoutBack onBack={onBackProducts} title={title}>
-      {/* ===== КНОПКА ЦЕН ===== */}
       <div className={Styles.price}>
-        <a className={Styles.buttonPrice} onClick={onClickCalc}>
+        <button
+          className={Styles.buttonPrice}
+          onClick={() => openItem('calculator')}
+        >
           Калькулятор для расчета цен
-        </a>
+        </button>
       </div>
+
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_1_1.src}
           title={cardTitle.accountingSystem_1}
-          onClick={() => handleClickCard('accountingSystem_1')}
+          onClick={() => openItem('accountingSystem_1')}
         />
         <Card
           imgSrc={product_1_2.src}
           title={cardTitle.accountingSystem_2}
-          onClick={() => handleClickCard('accountingSystem_2')}
+          onClick={() => openItem('accountingSystem_2')}
         />
       </div>
     </LayoutBack>

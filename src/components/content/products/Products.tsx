@@ -1,108 +1,110 @@
 import { Layout } from '../../layout/Layout';
-import { LayoutBack } from '../../layout/LayoutBack';
 import { Card } from '../../ui/card/Card';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AccountingSystem } from './AccountingSystem';
 import { Accessories } from './Accessories';
 import { MeasuringSystem } from './MeasuringSystem';
 import { PreparationSystems } from './PreparationSystems';
 import { PumpingStations } from './PumpingStations';
+
 import product_1 from '../../../images/products/product_1.webp';
 import product_2 from '../../../images/products/product_2.0.webp';
 import product_3 from '../../../images/products/product_3.webp';
 import product_4 from '../../../images/products/product_4.webp';
 import product_5 from '../../../images/products/product_5.webp';
-import { useEffect } from 'react';
 
-type TProducts = 'accountingSystem' | 'accessories' | 'measuringSystem' | 'preparationSystems' | 'pumpingStations';
+type TProducts =
+  | 'accounting-system'
+  | 'accessories'
+  | 'measuring-system'
+  | 'preparation-systems'
+  | 'pumping-stations';
+
+const pathnameToProduct = (pathname: string): TProducts | null => {
+  const parts = pathname.split('/').filter(Boolean);
+
+  if (parts.length === 2 && parts[0] === 'products') {
+    return parts[1] as TProducts;
+  }
+
+  return null;
+};
 
 export const Products = () => {
+  const [currentPage, setCurrentPage] = useState<TProducts | null>(null);
 
-  const cardTitle: Record<TProducts, string> = {
-    accountingSystem: 'Автоматизированная замерная установка (АГЗУ)',
-    accessories: 'Комплектующие для автоматизированной групповой замерной установки',
-    measuringSystem: 'Система учёта углеводородов и пластовой жидкости',
-    preparationSystems: 'Системы подготовки нефти, газа и воды',
-    pumpingStations: 'Насосные станции перекачки нефти, нефтепродуктов и воды',
-  };
+  const goTo = (path: string) => {
+  window.history.pushState({}, '', path);
+  setCurrentPage(pathnameToProduct(path));
+};
 
-  const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TProducts | null>(null);
+const goBack = () => {
+  window.history.pushState({}, '', '/products');
+  setCurrentPage(null);
+};
 
   useEffect(() => {
-    setTypeLayoutBackOpen(() => {
-      const queryParams = new URLSearchParams(window.location.search);
-      const typeFromQuery = queryParams.get('type');
-      return typeFromQuery ? (typeFromQuery as TProducts) : null;
-    });
+    const sync = () => setCurrentPage(pathnameToProduct(window.location.pathname));
+    sync(); // синхронизируем при монтировании
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
   }, []);
 
-  const onBack = () => {
-    setTypeLayoutBackOpen(null);
 
-    const newUrl = `${window.location.origin}${window.location.pathname}`;
-    window.history.pushState({}, '', newUrl);
-  };
+  if (currentPage === 'accounting-system') {
+    return <AccountingSystem/>;
+  }
 
-  const onClickCard = (typeProduct: TProducts) => {
-    setTypeLayoutBackOpen(typeProduct);
+  if (currentPage === 'accessories') {
+    return <Accessories/>;
+  }
 
-    const newUrl = `${window.location.origin}${window.location.pathname}?type=${typeProduct}`;
-    window.history.pushState({}, '', newUrl);
-  };
+  if (currentPage === 'measuring-system') {
+    return <MeasuringSystem/>;
+  }
+
+  if (currentPage === 'preparation-systems') {
+    return <PreparationSystems/>;
+  }
+
+  if (currentPage === 'pumping-stations') {
+    return <PumpingStations/>;
+  }
 
   return (
-    <>
-      {typeLayoutBackOpen === null && (
-        <Layout title="Продукция"
-          description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области 
-            безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
-            Таможенного союза. На предприятии разработана, внедрена и успешно работает Интегрированная система 
-            менеджмента качества, сертифицированная на соответствие с требованиями ГОСТ ISO 9001-2015 (ISO 9001:2015), 
-            ГОСТ Р ИСО 14001-2016 (ISO 14001:2016), ГОСТ Р 45001-2020 (ISO 45001-2018), ГОСТ Р ИСО 29001-2023 (ISO 29001:2020).">
-          <>
-            <Card
-              imgSrc={product_1.src}
-              title={cardTitle.accountingSystem}
-              onClick={() => {
-                onClickCard('accountingSystem');
-              }}
-            />
-            <Card
-              imgSrc={product_2.src}
-              title={cardTitle.accessories}
-              onClick={() => {
-                onClickCard('accessories');
-              }}
-            />
-            <Card
-              imgSrc={product_3.src}
-              title={cardTitle.measuringSystem}
-              onClick={() => {
-                onClickCard('measuringSystem');
-              }}
-            />
-            <Card
-              imgSrc={product_4.src}
-              title={cardTitle.preparationSystems}
-              onClick={() => {
-                onClickCard('preparationSystems');
-              }}
-            />
-            <Card
-              imgSrc={product_5.src}
-              title={cardTitle.pumpingStations}
-              onClick={() => {
-                onClickCard('pumpingStations');
-              }}
-            />
-          </>
-        </Layout>
-      )}
-      {typeLayoutBackOpen === 'accountingSystem' && <AccountingSystem onBackProducts={onBack} title={cardTitle.accountingSystem} />}
-      {typeLayoutBackOpen === 'accessories' && <Accessories onBackProducts={onBack} title={cardTitle.accessories} />}
-      {typeLayoutBackOpen === 'measuringSystem' && <MeasuringSystem onBackProducts={onBack} title={cardTitle.accessories} />}
-      {typeLayoutBackOpen === 'preparationSystems' && <PreparationSystems onBackProducts={onBack} title={cardTitle.accessories} />}
-      {typeLayoutBackOpen === 'pumpingStations' && <PumpingStations onBackProducts={onBack} title={cardTitle.accessories} />}
-    </>
+    <Layout title="Продукция" 
+      description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области 
+      безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
+      Таможенного союза. На предприятии разработана, внедрена и успешно работает Интегрированная система 
+      менеджмента качества, сертифицированная на соответствие с требованиями ГОСТ ISO 9001-2015 (ISO 9001:2015), 
+      ГОСТ Р ИСО 14001-2016 (ISO 14001:2016), ГОСТ Р 45001-2020 (ISO 45001-2018), ГОСТ Р ИСО 29001-2023 (ISO 29001:2020).">
+      <>
+        <Card
+          imgSrc={product_1.src} 
+          title="Автоматизированная замерная установка (АГЗУ)"
+          onClick={() => goTo('/products/accounting-system')}
+        />
+        <Card
+        imgSrc={product_2.src} 
+          title="Комплектующие для автоматизированной групповой замерной установки"
+          onClick={() => goTo('/products/accessories')}
+        />
+        <Card
+        imgSrc={product_3.src} 
+          title="Система учёта углеводородов и пластовой жидкости"
+          onClick={() => goTo('/products/measuring-system')}
+        />
+        <Card
+        imgSrc={product_4.src} 
+          title="Системы подготовки нефти, газа и воды"
+          onClick={() => goTo('/products/preparation-systems')}
+        />
+        <Card
+        imgSrc={product_5.src} 
+          title="Насосные станции перекачки нефти, нефтепродуктов и воды"
+          onClick={() => goTo('/products/pumping-stations')}
+        />
+      </>
+    </Layout>
   );
 };
