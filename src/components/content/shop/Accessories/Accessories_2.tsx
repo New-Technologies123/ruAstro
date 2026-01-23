@@ -1,11 +1,12 @@
-import Styles from '../products.module.scss'
-import { useState, useRef } from 'react'
-
-import product_2 from '../../../../images/products/product_2_1.webp'
-
-import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
+import Styles from '../shop.module.scss';
+import { useEffect, useState } from 'react';
+import { Cards } from '../Cards';
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
+import { Shop_1 } from './Accessories_2/Shop_1';
+import { Shop_2 } from './Accessories_2/Shop_2';
+
+type TTitleOptions = 'shop_1' | 'shop_2';
 
 type TProps = {
   onBackAccessories: VoidFunction;
@@ -13,48 +14,51 @@ type TProps = {
 };
 
 export const Accessories_2 = ({ onBackAccessories, title }: TProps) => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null)
+  const cardTitle: Record<TTitleOptions, string> = {
+    shop_1: 'Устройство для регулирования перепада давления УРПД-1.1 НТ.511.000.000.0',
+    shop_2: 'Устройство для регулирования перепада давления УРПД-3.1 НТ.531.000.000.0 ',
+  };
+
+  const [selectedItem, setSelectedItem] = useState<TTitleOptions | null>(null);
+  
+    // читаем ?tem=shop_1 при обновлении страницы
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const tem = params.get('tem') as TTitleOptions | null;
+      setSelectedItem(tem);
+    }, []);
+  
+    const handleClickCard = (tem: TTitleOptions) => {
+      setSelectedItem(tem);
+  
+      const url = new URL(window.location.href);
+      url.searchParams.set('tem', tem);
+      window.history.pushState({}, '', url.toString());
+    };
+  
+    const onBackShop = () => {
+      setSelectedItem(null);
+  
+      const url = new URL(window.location.href);
+      url.searchParams.delete('tem');
+      window.history.pushState({}, '', url.toString());
+    };
+  
+    if (selectedItem === 'shop_1') {
+      return <Shop_1 onBackShop={onBackShop} title={cardTitle.shop_1} />;
+    }
+    if (selectedItem === 'shop_2') {
+      return <Shop_2 onBackShop={onBackShop} title={cardTitle.shop_2} />;
+    }
 
   return (
     <LayoutBack onBack={onBackAccessories} title={title}>
       <div className={Styles.container}>
-        {/* ===== CONTENT ===== */}
-        <section className={Styles.content}>
-
-          <div className={Styles.card}>
-            {/* Фото */}
-            <div className={Styles.cardImage}>
-              <div className={Styles.imageCard} onClick={() => setBigPhoto(product_2.src)}>
-                <img src={product_2.src} alt="" className={Styles.mainImage} />
-                <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>
-                    Нажмите для увеличения
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Текст (НЕСКОЛЬКО БЛОКОВ) */}
-            <div className={Styles.cardContent}>
-              <div className={Styles.features}>
-                <h3>Назначение:</h3>
-                <ul className={Styles.featuresList}>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Работа в системе регулирования уровня и перепада давления в АГЗУ типа «Спутник».</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </section>
-
+        <div className={Styles.team}>
+          <Cards title={cardTitle.shop_1} onClick={() => handleClickCard('shop_1')} />
+          <Cards title={cardTitle.shop_2} onClick={() => handleClickCard('shop_2')} />
+        </div>
         <BackToTop />
-
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
       </div>
     </LayoutBack>
   )
