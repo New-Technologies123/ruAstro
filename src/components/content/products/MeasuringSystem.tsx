@@ -33,7 +33,7 @@ const getItemFromPath = (): TMeasuring | null => {
 
 /* ---------------- component ---------------- */
 export const MeasuringSystem = () => {
-  const title = 'Измерительные системы';
+  const title = 'Система учёта углеводородов и пластовой жидкости';
 
   const cardTitle: Record<TMeasuring, string> = {
     measuringSystem_1: 'Система измерения количества и показателей качества нефти (СИКН)',

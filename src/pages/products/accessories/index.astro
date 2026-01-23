@@ -5,11 +5,10 @@ import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
 import { Accessories } from "../../../components/content/products/Accessories";
 
-const title = "Комплектующие — ИПП «Новые технологии»";
-const description = "Подробная информация о комплектующих для АГЗУ";
+const description = "Подробная информация о комплектующих для автоматизированной групповой замерной установки, комплектующих для АГЗУ, ";
 ---
 
-<Layout title={title} description={description}>
+<Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
       <Accessories client:load />

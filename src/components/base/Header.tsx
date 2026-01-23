@@ -127,7 +127,7 @@ export const Header = ({ pageType }) => {
           </li>
           <li>
             <a href={`/shop/`} className={pageType === 'shop' ? Styles.active : ''}>
-              Магазин
+              Онлайн магазин
             </a>
           </li>
           <li>

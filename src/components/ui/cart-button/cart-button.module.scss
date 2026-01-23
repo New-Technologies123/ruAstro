@@ -1,36 +1,12 @@
-// /* ===== Кнопка корзины ===== */
-// .topBar {
-//   display: flex;
-//   justify-content: flex-end;
-//   margin-right: 24px;
-//   margin-top: 15px;
-//   border-bottom: 1px solid #eee;
-// }
-
-// .cartButton {
-//   background: #000;
-//   color: #fff;
-//   border: none;
-//   padding: 10px 16px;
-//   font-size: 14px;
-//   cursor: pointer;
-//   border-radius: 6px;
-
-//   text-decoration: none; // ← ВАЖНО
-//   display: inline-flex;  // чтобы выглядело как кнопка
-//   align-items: center;
-//   gap: 6px;
-
-//   &:hover {
-//     opacity: 0.9;
-//     text-decoration: none; // на hover тоже
-//   }
-// }
+/* ===== Кнопка корзины ===== */
 .cartWrapper {
   position: fixed;   // фиксируем кнопку
-  top: 210px;         // отступ сверху
+  top: 80px;         // отступ сверху
   right: 20px;       // отступ справа
   z-index: 1000;     // поверх всего
+  margin-top: 20px;
+  margin-left: 15px;
+  // position: sticky;
 }
 
 .cartButton {

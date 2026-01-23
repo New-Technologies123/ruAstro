@@ -5,11 +5,10 @@ import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
 import { PreparationSystems } from "../../../components/content/products/PreparationSystems";
 
-const title = "Комплектующие »";
-const description = "Подробная информация о комплектующих для АГЗУ";
+const description = "Подробная информация о системе подготовки нефти, газа и воды; устройстве запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП; блок гребенки (БГ); устройство очистки колонны УОК-НКТ; установка дозирования химического реагента (БДР)";
 ---
 
-<Layout title={title} description={description}>
+<Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
       <PreparationSystems client:load />

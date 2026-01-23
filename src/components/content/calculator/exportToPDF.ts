@@ -36,7 +36,7 @@ export const exportToPDF = (selectedInstallations: any[], totalPrice: number) =>
             ['Запорная арматура', item.fittings?.join(', ') ?? '-'],
             [
               { text: 'Цена', bold: true },
-              { text: `${item.price.toLocaleString('ru-RU')} ₽`, bold: true }
+              { text: `${item.price.toLocaleString('ru-RU')} ₽ без НДС`, bold: true }
             ]
           ]
         },

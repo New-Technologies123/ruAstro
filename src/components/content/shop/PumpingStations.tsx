@@ -8,7 +8,7 @@ import { LayoutBack } from '../../layout/LayoutBack';
 import product_5_1 from '../../../images/products/product_5.webp';
 import product_5_2 from '../../../images/products/product_5_1.webp';
 
-type TPumping = 'pumpingStations_1' | 'pumpingStations_2' ;
+type TPumping = 'pumpingStations_1' | 'pumpingStations_2';
 
 type TProps = {
   onBackProducts: VoidFunction;

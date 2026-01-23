@@ -37,7 +37,7 @@ export const Footer = () => {
                 <a href={`/services/`}>Сервисные услуги</a>
               </li>
               <li>
-                <a href={`/shop/`}>Магазин</a>
+                <a href={`/shop/`}>Онлайн магазин</a>
               </li>
             </ul>
 

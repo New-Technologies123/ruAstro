@@ -73,7 +73,7 @@ export const installations = [
         { label: 'Расходомер на линию жидкости ЭМИС-МАСС', price: 296000 },
         { label: 'Счетчик расходомер ЭРВИП ', price: 120000 },
         { label: 'Расходомер на линию жидкости Micro Motion ', price: 2000000 },
-        { label: 'Многофазный расходомер', price: 15000000 }
+        { label: 'Многофазный расходомер', price: 20000000 }
       ],
       vagometerOptions: [
         { label: 'Не требуется', price: 0 },

@@ -225,7 +225,7 @@ export const Calculator = ({ onBackAccountingSystem }: TProps) => {
                   <div className={Styles.selectedHeader}>
                     <span className={Styles.selectedName}>{item.summary}</span>
                     <span className={Styles.selectedPrice}>
-                      {item.price.toLocaleString('ru-RU')} ₽
+                      {item.price.toLocaleString('ru-RU')} ₽ без НДС
                     </span>
                     <button
                       className={Styles.deleteButtonInline}

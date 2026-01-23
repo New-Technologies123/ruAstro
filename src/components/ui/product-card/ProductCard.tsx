@@ -3,6 +3,7 @@ import type { Product } from '../../content/shop/products';
 
 interface ProductCardProps {
   product: Product;
+  onClick: VoidFunction;
 }
 
 // placeholder SVG
@@ -18,23 +19,19 @@ const placeholderSVG = () => {
   return `data:image/svg+xml;utf8,${svg}`;
 };
 
-export const ProductCard = ({ product }: ProductCardProps) => {
+export const ProductCard = ({ product, onClick }: ProductCardProps) => {
   const handleClick = () => {
     const url = new URL(window.location.href);
     url.searchParams.set('product', String(product.id));
     window.history.pushState({}, '', url.toString());
 
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    onClick();
   };
 
   return (
     <article className={styles.card} onClick={handleClick}>
       <div className={styles.cardMedia}>
-        <img
-          src={product.image || placeholderSVG()}
-          alt={product.title}
-          loading="lazy"
-        />
+        <img src={product.image || placeholderSVG()} alt={product.title} loading="lazy" />
       </div>
 
       <div className={styles.cardBody}>

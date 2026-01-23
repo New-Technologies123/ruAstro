@@ -30,7 +30,7 @@ const getItemFromPath = (): TPumping | null => {
 
 /* ---------------- component ---------------- */
 export const PumpingStations = () => {
-  const title = 'Насосные станции';
+  const title = 'Насосные станции перекачки нефти, нефтепродуктов и воды';
 
   const cardTitle: Record<TPumping, string> = {
     pumpingStations_1: 'Блочная насосная станция внутренней и внешней перекачки нефти',

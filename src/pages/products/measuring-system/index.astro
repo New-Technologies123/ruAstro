@@ -5,11 +5,10 @@ import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
 import { MeasuringSystem } from "../../../components/content/products/MeasuringSystem";
 
-const title = "Комплектующие — ИПП «Новые технологии»";
-const description = "Подробная информация о комплектующих для АГЗУ";
+const description = "Подробная информация о системе учёта углеводородов и пластовой жидкости, системе измерения количества и показателей качества нефти (СИКН), Система измерения количества газа (СИКГ), Система измерения количества воды (СИКВ)";
 ---
 
-<Layout title={title} description={description}>
+<Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
       <MeasuringSystem client:load />

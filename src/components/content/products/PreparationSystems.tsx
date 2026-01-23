@@ -36,7 +36,7 @@ const getItemFromPath = (): TPreparation | null => {
 
 /* ---------------- component ---------------- */
 export const PreparationSystems = () => {
-  const title = 'Системы подготовки продукции';
+  const title = 'Системы подготовки нефти, газа и воды';
 
   const cardTitle: Record<TPreparation, string> = {
     preparationSystems_1:

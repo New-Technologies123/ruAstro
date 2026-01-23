@@ -1,7 +1,7 @@
 import Styles from '../products.module.scss'
 import { useState, useRef } from 'react'
 
-import product_2 from '../../../../images/products/product_2_5.webp'
+import product_2 from '../../../../images/products/product_2_5.png'
 
 import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'

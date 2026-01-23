@@ -44,7 +44,7 @@ export const Order = () => {
           {cart.map(item => (
             <div key={item.id} className={Styles.product}>
               <div className={Styles.title}>{item.title}</div>
-              <div className={Styles.count}>× {item.count}</div>
+              <div className={Styles.count}>{item.count} ×</div>
               <div className={Styles.price}>
                 {parsePrice(item.price) * item.count} ₽
               </div>
@@ -53,7 +53,7 @@ export const Order = () => {
 
           <div className={Styles.total}>
             <span>Итого:</span>
-            <strong>{totalPrice} ₽</strong>
+            <strong>{totalPrice} ₽ без НДС</strong>
           </div>
         </div>
       </div>

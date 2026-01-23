@@ -36,7 +36,7 @@ export const ProductCard = ({ product, onClick }: ProductCardProps) => {
 
       <div className={styles.cardBody}>
         <h3 className={styles.title}>{product.title}</h3>
-        <div className={styles.price}>{product.price}</div>
+        <div className={styles.price}>{product.price} ₽</div>
       </div>
     </article>
   );
