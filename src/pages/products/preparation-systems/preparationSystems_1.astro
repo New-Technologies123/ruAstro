@@ -1,0 +1,20 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { PreparationSystems_1 } from "../../../components/content/products/PreparationSystems/PreparationSystems_1";
+
+const description = "Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <PreparationSystems_1
+        title="Системы подготовки нефти, газа и воды"
+        onBackPreparation={() => history.back()}
+      />
+    </Content>
+  <Footer client:load/>
+</Layout>

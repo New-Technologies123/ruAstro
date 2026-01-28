@@ -1,0 +1,20 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { PreparationSystems_4 } from "../../../components/content/products/PreparationSystems/PreparationSystems_4";
+
+const description = "Установка дозирования химического реагента (БДР)";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <PreparationSystems_4
+        title="Системы подготовки нефти, газа и воды"
+        onBackPreparation={() => history.back()}
+      />
+    </Content>
+  <Footer client:load/>
+</Layout>

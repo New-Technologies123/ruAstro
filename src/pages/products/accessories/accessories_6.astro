@@ -1,0 +1,20 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { Accessories_5 } from "../../../components/content/products/Accessories/Accessories_5";
+
+const description = "Подробная информация о комплектующих для автоматизированной групповой замерной установки, комплектующих для АГЗУ, ";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <Accessories_5
+        title="Комплектующие для АГЗУ"
+        onBackAccessories={() => history.back()}
+      />
+    </Content>
+  <Footer client:load/>
+</Layout>

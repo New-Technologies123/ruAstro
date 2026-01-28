@@ -1,0 +1,20 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { AccountingSystem_1 } from "../../../components/content/products/AccountingSystem/AccountingSystem_1";
+
+const description = "Автоматизированная замерная установка, АГЗУ «Спутник — массомер НТ.1» (стационарный)";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <AccountingSystem_1
+        title="АГЗУ"
+        onBackAccountingSystem={() => history.back()}
+      />
+    </Content>
+  <Footer client:load/>
+</Layout>

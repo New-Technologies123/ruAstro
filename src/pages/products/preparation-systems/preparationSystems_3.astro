@@ -3,15 +3,18 @@ import Layout from "../../../layouts/Layout.astro";
 import { Header } from "../../../components/base/Header";
 import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
-import { PreparationSystems } from "../../../components/content/products/PreparationSystems";
+import { PreparationSystems_3 } from "../../../components/content/products/PreparationSystems/PreparationSystems_3";
 
-const description = "Системы подготовки нефти, газа и воды";
+const description = "Устройство очистки колонны УОК-НКТ";
 ---
 
 <Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <PreparationSystems client:load />
+      <PreparationSystems_3
+        title="Системы подготовки нефти, газа и воды"
+        onBackPreparation={() => history.back()}
+      />
     </Content>
   <Footer client:load/>
 </Layout>

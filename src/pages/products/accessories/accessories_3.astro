@@ -3,15 +3,18 @@ import Layout from "../../../layouts/Layout.astro";
 import { Header } from "../../../components/base/Header";
 import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
-import { PreparationSystems } from "../../../components/content/products/PreparationSystems";
+import { Accessories_3 } from "../../../components/content/products/Accessories/Accessories_3";
 
-const description = "Системы подготовки нефти, газа и воды";
+const description = "Переключатель скважин многоходовой (ПСМ)";
 ---
 
 <Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <PreparationSystems client:load />
+      <Accessories_3
+        title="Комплектующие для АГЗУ"
+        onBackAccessories={() => history.back()}
+      />
     </Content>
   <Footer client:load/>
 </Layout>

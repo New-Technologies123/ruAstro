@@ -1,0 +1,20 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { PumpingStations_2 } from "../../../components/content/products/PumpingStations/PumpingStations_2";
+
+const description = "Блочная мультифазная насосная станция";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <PumpingStations_2
+        title="Насосные станции перекачки нефти, нефтепродуктов и воды"
+        onBackPumping={() => history.back()}
+      />
+    </Content>
+  <Footer client:load/>
+</Layout>
