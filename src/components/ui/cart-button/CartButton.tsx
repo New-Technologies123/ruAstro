@@ -13,17 +13,22 @@ export const CartButton = ({ goToBasket }: CartButtonProps) => {
 
   useEffect(() => {
     setCart(getCart());
-    const onStorage = () => setCart(getCart());
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
+
+    const onCartUpdated = () => setCart(getCart());
+    window.addEventListener('cartUpdated', onCartUpdated);
+
+    return () => window.removeEventListener('cartUpdated', onCartUpdated);
   }, []);
 
-  const parsePrice = (price: string): number =>
-    Number(price.replace(/\s/g, ''));
-  // Считаем итоговую сумму
-  const totalPrice = cart.reduce((sum, item) => {
-    return sum + parsePrice(item.price) * item.count;
-  }, 0);
+  const parsePrice = (price: string) => Number(price.replace(/\s/g, ''));
+
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + parsePrice(item.price) * item.count,
+    0
+  );
+
+  // ✅ суммарное количество всех товаров
+  const totalItems = cart.reduce((sum, item) => sum + item.count, 0);
 
   return (
     <div
@@ -33,7 +38,7 @@ export const CartButton = ({ goToBasket }: CartButtonProps) => {
     >
       <button type="button" className={Styles.cartButton} onClick={goToBasket}>
         🛒
-        {cart.length > 0 && <span className={Styles.badge}>{cart.length}</span>}
+        {totalItems > 0 && <span className={Styles.badge}>{totalItems}</span>}
       </button>
 
       {isOpen && (
@@ -46,7 +51,9 @@ export const CartButton = ({ goToBasket }: CartButtonProps) => {
                 {cart.map(item => (
                   <li key={item.id} className={Styles.item}>
                     <span>{item.title}</span>
-                    <span>{item.count} × {item.price} ₽</span>
+                    <span>
+                      {item.count} × {item.price} ₽
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -55,9 +62,6 @@ export const CartButton = ({ goToBasket }: CartButtonProps) => {
               </div>
             </>
           )}
-          {/* <button className={Styles.viewBasket} onClick={goToBasket}>
-            Перейти в корзину
-          </button> */}
         </div>
       )}
     </div>

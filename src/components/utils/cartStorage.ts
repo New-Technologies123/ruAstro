@@ -5,29 +5,33 @@ const CART_KEY = 'cart';
 export type CartItem = Product & { count: number };
 
 export const getCart = (): CartItem[] => {
-    const data = localStorage.getItem(CART_KEY);
-    return data ? JSON.parse(data) : [];
+  const data = localStorage.getItem(CART_KEY);
+  return data ? JSON.parse(data) : [];
 };
 
 export const addToCart = (product: Product) => {
-    const cart = getCart();
+  const cart = getCart();
+  const existing = cart.find(item => item.id === product.id);
 
-    const existing = cart.find(item => item.id === product.id);
+  if (existing) {
+    existing.count += 1;
+  } else {
+    cart.push({ ...product, count: 1 });
+  }
 
-    if (existing) {
-        existing.count += 1;
-    } else {
-        cart.push({ ...product, count: 1 });
-    }
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
 
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  // ⚡ уведомляем подписчиков, что корзина обновилась
+  window.dispatchEvent(new Event('cartUpdated'));
 };
 
 export const removeFromCart = (id: number) => {
-    const cart = getCart().filter(item => item.id !== id);
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  const cart = getCart().filter(item => item.id !== id);
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  window.dispatchEvent(new Event('cartUpdated'));
 };
 
 export const clearCart = () => {
-    localStorage.removeItem(CART_KEY);
+  localStorage.removeItem(CART_KEY);
+  window.dispatchEvent(new Event('cartUpdated'));
 };

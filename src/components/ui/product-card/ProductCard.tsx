@@ -1,12 +1,12 @@
 import styles from './product-card.module.scss';
 import type { Product } from '../../content/shop/products';
+import { addToCart } from '../../utils/cartStorage';
 
 interface ProductCardProps {
   product: Product;
-  onClick: VoidFunction;
+  onClick: VoidFunction; // открытие карточки
 }
 
-// placeholder SVG
 const placeholderSVG = () => {
   const svg = encodeURIComponent(`
     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'>
@@ -24,19 +24,34 @@ export const ProductCard = ({ product, onClick }: ProductCardProps) => {
     const url = new URL(window.location.href);
     url.searchParams.set('product', String(product.id));
     window.history.pushState({}, '', url.toString());
-
     onClick();
   };
 
   return (
     <article className={styles.card} onClick={handleClick}>
       <div className={styles.cardMedia}>
-        <img src={product.image || placeholderSVG()} alt={product.title} loading="lazy" />
+        <img
+          src={product.image || placeholderSVG()}
+          alt={product.title}
+          loading="lazy"
+        />
       </div>
 
       <div className={styles.cardBody}>
         <h3 className={styles.title}>{product.title}</h3>
-        <div className={styles.price}>{product.price}</div>
+        <div className={styles.price}>{product.price} ₽</div>
+
+        <div className={styles.cardActions}>
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation(); // чтобы не открывалась карточка
+              addToCart(product);   // просто передаём Product, count добавится внутри addToCart
+            }}
+          >
+            В корзину
+          </button>
+        </div>
       </div>
     </article>
   );

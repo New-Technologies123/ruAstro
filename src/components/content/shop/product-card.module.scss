@@ -1,60 +1,107 @@
 .card {
+  display: flex;
+  flex-direction: column;
+  background: #b1e6ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 20px;
+  width: 230px;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .cardMedia {
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  }
+
+  .cardBody {
+    padding: 1rem;
     display: flex;
     flex-direction: column;
-    background: #b1e6ff;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-    padding: 20px;
-    width: 230px;
-    // min-height: 350px;
+    gap: 0.5rem;
+    flex-grow: 1;
 
-    &:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    .tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 6px;
+      display: inline-block;
     }
 
-    .cardMedia {
-        width: 100%;
-        height: 140px;
-        overflow: hidden;
-        border-top-left-radius: 12px;
-        border-top-right-radius: 12px;
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
+    .title {
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.2;
+      margin: 0;
     }
 
-    .cardBody {
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-
-        .tag {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
-            display: inline-block;
-        }
-
-        .title {
-            font-size: 1rem;
-            font-weight: 600;
-            line-height: 1.2;
-            margin: 0;
-        }
-
-        .price {
-            font-size: 0.9rem;
-            font-weight: 700;
-            color: #111;
-        }
+    .price {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #111;
     }
+
+    .addToCartButton {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 12px 16px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.35s ease;
+      overflow: hidden;
+      position: relative;
+
+      svg {
+        width: 18px;
+        height: 18px;
+        fill: #fff;
+        transition: transform 0.35s ease;
+      }
+
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+        background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+
+        svg {
+          transform: translateX(4px) scale(1.1);
+        }
+      }
+
+      &:active {
+        transform: translateY(0);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+
+        svg {
+          transform: translateX(0) scale(1);
+        }
+      }
+    }
+  }
 }

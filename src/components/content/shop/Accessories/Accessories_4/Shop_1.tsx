@@ -13,6 +13,7 @@ type TProps = {
 
 export const Shop_1 = ({ onBackShop, title }: TProps) => {
   const [openedProduct, setOpenedProduct] = useState<Product | null>(null);
+  const [cart, setCart] = useState<Product[]>([]); // состояние корзины
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -34,12 +35,22 @@ export const Shop_1 = ({ onBackShop, title }: TProps) => {
     window.history.pushState({}, '', url.toString());
   };
 
+  // Функция добавления в корзину
+  const handleAddToCart = (product: Product) => {
+    setCart((prev) => [...prev, product]);
+    console.log('Добавили в корзину:', product.title);
+  };
+
   if (!openedProduct) {
     return (
       <LayoutBack onBack={onBackShop} title={title}>
         <div className={styles.products}>
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} onClick={() => setOpenedProduct(product)} />
+            <ProductCard
+              key={product.id}
+              product={product}
+              onClick={() => setOpenedProduct(product)}
+            />
           ))}
         </div>
       </LayoutBack>
@@ -52,3 +63,4 @@ export const Shop_1 = ({ onBackShop, title }: TProps) => {
     </LayoutBack>
   );
 };
+

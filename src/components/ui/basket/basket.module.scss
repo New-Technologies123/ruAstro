@@ -1,61 +1,77 @@
-.cart {
+.headerRow {
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  align-items: center; // по вертикали центрируем
+  gap: 15px; // расстояние между кнопкой и заголовком
 }
 
 .back {
-  display: inline-block;
-  margin: 16px 0 8px 20px;
-  text-decoration: none;
+  width: 40px;
+  height: 40px;
+  background: #f0f4ff;
   color: #007bff;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 20px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-left: 30px;
 
   &:hover {
-    text-decoration: underline;
+    background: #007bff;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+
+  &::before {
+    content: '←';
   }
 }
 
 .items {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-height: 400px;
-  overflow-y: auto;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
+  gap: 15px;
+  padding: 0;
+  margin: 20px 0;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-between; // заголовок слева, цена+кнопка справа
+  width: 700px; // ширина карточки
   padding: 12px 16px;
   border-radius: 12px;
   background: #9cceff;
-  font-size: 14px;
-  margin: 0 25px;
+  gap: 16px;
 }
 
 .title {
-    font-size: 20px;
-  flex: 1;
-  margin-right: 16px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  font-weight: 700;
-  color: #333;
+  flex: 1; // занимает все свободное место слева
+}
+
+.rightSide {
+  display: flex;
+  align-items: center;
+  gap: 12px; // расстояние между ценой и кнопкой
 }
 
 .countPrice {
-    font-size: 18px;
-    font-weight: 600;
-    color: rgb(255, 31, 31);
-    text-align: right;
-    min-width: 80px;
+  font-size: 18px;
+  font-weight: 600;
+  color: rgb(255, 31, 31);
+  text-align: right;
+  min-width: 80px;
 }
 
 .delete {
@@ -66,7 +82,6 @@
   font-size: 14px;
   cursor: pointer;
   padding: 6px 10px;
-  margin-left: 12px;
 
   &:hover {
     background: #444;

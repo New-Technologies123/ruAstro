@@ -1,14 +1,15 @@
+import { useEffect, useState } from 'react';
 import { Layout } from '../../layout/Layout';
-import { LayoutBack } from '../../layout/LayoutBack';
 import { Card } from '../../ui/card/Card';
-import { useState, useEffect } from 'react';
+
 import { AccountingSystem } from './AccountingSystem';
 import { Accessories } from './Accessories';
 import { MeasuringSystem } from './MeasuringSystem';
 import { PreparationSystems } from './PreparationSystems';
 import { PumpingStations } from './PumpingStations';
+
 import { CartButton } from '../../ui/cart-button/CartButton';
-import { Basket } from '../../content/basket/Basket'; // компонент корзины
+import { Basket } from '../../ui/basket/Basket';
 
 import product_1 from '../../../images/products/product_1.webp';
 import product_2 from '../../../images/products/product_2.0.webp';
@@ -16,8 +17,9 @@ import product_3 from '../../../images/products/product_3.webp';
 import product_4 from '../../../images/products/product_4.webp';
 import product_5 from '../../../images/products/product_5.webp';
 
-type TProducts = 'accountingSystem' | 'accessories' | 'measuringSystem' | 'preparationSystems' | 'pumpingStations';
-type Page = 'shop' | 'basket' | TProducts;
+type TProducts = | 'accountingSystem' | 'accessories' | 'measuringSystem' | 'preparationSystems' | 'pumpingStations';
+
+type Page = 'shop' | TProducts | 'basket';
 
 export const Shop = () => {
   const cardTitle: Record<TProducts, string> = {
@@ -30,105 +32,136 @@ export const Shop = () => {
 
   const [currentPage, setCurrentPage] = useState<Page>('shop');
 
-  // Определяем начальную страницу по URL
-  useEffect(() => {
-    const path = window.location.pathname;
-    const query = new URLSearchParams(window.location.search);
-    const type = query.get('type') as TProducts | null;
+  // 🔁 синхронизация состояния со строкой браузера
+  const syncFromUrl = () => {
+    const params = new URLSearchParams(window.location.search);
 
-    if (path === '/basket') setCurrentPage('basket');
-    else if (type) setCurrentPage(type);
-    else setCurrentPage('shop');
+    const view = params.get('view');
+    const type = params.get('type') as TProducts | null;
+
+    if (view === 'basket') {
+      setCurrentPage('basket');
+      return;
+    }
+
+    setCurrentPage(type ?? 'shop');
+  };
+
+  useEffect(() => {
+    syncFromUrl();
+    window.addEventListener('popstate', syncFromUrl);
+    return () => window.removeEventListener('popstate', syncFromUrl);
   }, []);
 
-  // Обработка кнопок "назад/вперед" в браузере
-  useEffect(() => {
-    const onPopState = () => {
-      const path = window.location.pathname;
-      const query = new URLSearchParams(window.location.search);
-      const type = query.get('type') as TProducts | null;
+  // 🔹 навигация по каталогу
+  const openCategory = (type: TProducts) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('type', type);
+    window.history.pushState({}, '', url.toString());
+    setCurrentPage(type);
+  };
 
-      if (path === '/basket') setCurrentPage('basket');
-      else if (type) setCurrentPage(type ?? 'shop');
-      else setCurrentPage('shop');
-    };
-
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, []);
-
-  const onBack = () => {
+  const backToShop = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete('type');
+    window.history.pushState({}, '', url.toString());
     setCurrentPage('shop');
-    window.history.pushState({}, '', '/shop');
   };
 
-  const onClickCard = (typeProduct: TProducts) => {
-    setCurrentPage(typeProduct);
-    window.history.pushState({}, '', `/shop?type=${typeProduct}`);
-  };
+  // 🛒 корзина
+  const openBasket = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('view', 'basket');
 
-  const goToBasket = () => {
+    // ❗ ВАЖНО: pushState, а не replace
+    window.history.pushState({}, '', url.toString());
     setCurrentPage('basket');
-    window.history.pushState({}, '', '/basket');
+  };
+
+  const closeBasket = () => {
+    // ❗ возвращаемся туда, откуда пришли
+    window.history.back();
   };
 
   return (
     <>
-      {currentPage !== 'basket' && <CartButton goToBasket={goToBasket} />}
+      <CartButton goToBasket={openBasket} />
 
+      {/* SHOP */}
       {currentPage === 'shop' && (
         <Layout
           title="Магазин"
-          description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области 
-          безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
-          Таможенного союза."
+          description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области безопасности и качества."
         >
           <>
             <Card
               imgSrc={product_1.src}
               title={cardTitle.accountingSystem}
-              onClick={() => onClickCard('accountingSystem')}
+              onClick={() => openCategory('accountingSystem')}
             />
             <Card
               imgSrc={product_2.src}
               title={cardTitle.accessories}
-              onClick={() => onClickCard('accessories')}
+              onClick={() => openCategory('accessories')}
             />
             <Card
               imgSrc={product_3.src}
               title={cardTitle.measuringSystem}
-              onClick={() => onClickCard('measuringSystem')}
+              onClick={() => openCategory('measuringSystem')}
             />
             <Card
               imgSrc={product_4.src}
               title={cardTitle.preparationSystems}
-              onClick={() => onClickCard('preparationSystems')}
+              onClick={() => openCategory('preparationSystems')}
             />
             <Card
               imgSrc={product_5.src}
               title={cardTitle.pumpingStations}
-              onClick={() => onClickCard('pumpingStations')}
+              onClick={() => openCategory('pumpingStations')}
             />
           </>
         </Layout>
       )}
 
-      {currentPage === 'basket' && <Basket onBack={onBack} />}
-
+      {/* PRODUCTS */}
       {currentPage === 'accountingSystem' && (
-        <AccountingSystem onBackProducts={onBack} title={cardTitle.accountingSystem} />
+        <AccountingSystem
+          title={cardTitle.accountingSystem}
+          onBackProducts={backToShop}
+        />
       )}
+
       {currentPage === 'accessories' && (
-        <Accessories onBackProducts={onBack} title={cardTitle.accessories} />
+        <Accessories
+          title={cardTitle.accessories}
+          onBackProducts={backToShop}
+        />
       )}
+
       {currentPage === 'measuringSystem' && (
-        <MeasuringSystem onBackProducts={onBack} title={cardTitle.measuringSystem} />
+        <MeasuringSystem
+          title={cardTitle.measuringSystem}
+          onBackProducts={backToShop}
+        />
       )}
+
       {currentPage === 'preparationSystems' && (
-        <PreparationSystems onBackProducts={onBack} title={cardTitle.preparationSystems} />
+        <PreparationSystems
+          title={cardTitle.preparationSystems}
+          onBackProducts={backToShop}
+        />
       )}
+
       {currentPage === 'pumpingStations' && (
-        <PumpingStations onBackProducts={onBack} title={cardTitle.pumpingStations} />
+        <PumpingStations
+          title={cardTitle.pumpingStations}
+          onBackProducts={backToShop}
+        />
+      )}
+
+      {/* BASKET — ОТДЕЛЬНАЯ СТРАНИЦА */}
+      {currentPage === 'basket' && (
+        <Basket onBack={closeBasket} />
       )}
     </>
   );

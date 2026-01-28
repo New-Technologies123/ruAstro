@@ -36,27 +36,33 @@ export const Basket = ({ onBack }: BasketProps) => {
 
   return (
     <>
-      <Title text="Корзина" />
+      <div className={Styles.headerRow}>
+        <button className={Styles.back} onClick={onBack}></button>
+        <Title text="Корзина"/>
+      </div>
+      {/* <Title text="Корзина" />
       <button className={Styles.back} onClick={onBack}>
-        ← Назад в магазин
-      </button>
+        
+      </button> */}
 
       <ul className={Styles.items}>
         {cart.map(item => (
           <li key={item.id} className={Styles.item}>
             <span className={Styles.title}>{item.title}</span>
-            <span className={Styles.countPrice}>
-              {item.count} × {item.price} ₽
-            </span>
-            <button
-              className={Styles.delete}
-              onClick={() => {
-                removeFromCart(item.id);
-                setCart(getCart());
-              }}
-            >
-              Удалить
-            </button>
+            <div className={Styles.rightSide}>
+              <span className={Styles.countPrice}>
+                {item.count} × {item.price} ₽
+              </span>
+              <button
+                className={Styles.delete}
+                onClick={() => {
+                  removeFromCart(item.id);
+                  setCart(getCart());
+                }}
+              >
+                Удалить
+              </button>
+            </div>
           </li>
         ))}
       </ul>
