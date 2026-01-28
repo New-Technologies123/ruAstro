@@ -4,7 +4,6 @@ import { AccountingSystem_1 } from './AccountingSystem/AccountingSystem_1';
 import { AccountingSystem_2 } from './AccountingSystem/AccountingSystem_2';
 import Styles from './products.module.scss'
 import { LayoutBack } from '../../layout/LayoutBack';
-import { Calculator } from '../calculator/Calculator';
 import { useClickToScroll } from '../../../hooks/useClickToScroll';
 
 import product_1_1 from '../../../images/products/product_1.webp';
