@@ -35,30 +35,6 @@ export const InstallationCard = ({
         return inst.vagometer1Options;
     };
 
-    // useEffect(() => {
-    //     const hasNonSepGas =
-    //         sel.max_gas_1?.length &&
-    //         !sel.max_gas_1.includes('Не требуется');
-
-    //     if (hasNonSepGas) {
-    //         // 1. Автовыбор Многофазного расходомера
-    //         if (sel.vagometer1?.[0] !== 'Многофазный расходомер') {
-    //             onChange('vagometer1', ['Многофазный расходомер']);
-    //         }
-
-    //         // 2. Сброс других параметров на "Не требуется"
-    //         if (sel.vagometer?.[0] !== 'Не требуется') {
-    //             onChange('vagometer', ['Не требуется']);
-    //         }
-    //         if (sel.vagometer2?.[0] !== 'Не требуется') {
-    //             onChange('vagometer2', ['Не требуется']);
-    //         }
-    //         if (sel.max_gas?.[0] !== 'Не требуется') {
-    //             onChange('max_gas', ['Не требуется']);
-    //         }
-    //     }
-    // }, [sel.max_gas_1]);
-
     useEffect(() => {
     const values = sel.max_gas_1 || [];
 
@@ -199,7 +175,7 @@ export const InstallationCard = ({
                         {renderCheckboxes('heating', inst.heatingOptions)}
                     </ParamCard>
 
-                    <ParamCard title="Максимальная производительность по жидкости, т/сут" error={errors.volume}>
+                    <ParamCard title="Максимальная производительность по жидкости до, т/сут" error={errors.volume}>
                         {renderCheckboxes('volume', inst.volumeOptions)}
                     </ParamCard>
 

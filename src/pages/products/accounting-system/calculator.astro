@@ -1,0 +1,15 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { Calculator as CalculatorContent } from "../../../components/content/calculator/Calculator";
+---
+
+<Layout>
+  <Header pageType="products" client:load />
+  <Content>
+    <CalculatorContent onBackAccountingSystem={() => history.back()}/>
+  </Content>
+  <Footer client:load/>
+</Layout>

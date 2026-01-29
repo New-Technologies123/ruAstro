@@ -174,7 +174,8 @@ export const Calculator = ({ onBackAccountingSystem }: TProps) => {
     const selection = selections[instId];
     if (!validateSelection(instId, selection)) return;
     const price = calculatePrice(inst, selection);
-    const summary = `${inst.name} / ${selection.quantity} скв.`;
+    // const summary = `${inst.name} / ${selection.quantity} скв.`;
+    const summary = `${inst.name} - ${selection.quantity} - ${selection.heating?.join(', ') || '-'} - ${selection.volume?.join(', ') || '-'}`;
 
     setSelectedInstallations(prev => [
       ...prev,

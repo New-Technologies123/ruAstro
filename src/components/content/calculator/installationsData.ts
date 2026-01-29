@@ -16,9 +16,9 @@ export const installations = [
         { label: '63', price: 500000 }
       ],
       volumeOptions: [
-        { label: 'До 400', price: 561324 },
-        { label: 'До 800', price: 1100000 },
-        { label: 'До 1500', price: 1300000 }
+        { label: '400', price: 561324 },
+        { label: '800', price: 1100000 },
+        { label: '1500', price: 1300000 }
       ],
       densityOptions: [
         { label: 'Одностороннее', price: 0 },

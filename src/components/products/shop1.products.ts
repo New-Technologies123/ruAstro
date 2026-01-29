@@ -99,7 +99,7 @@ export const shop1Products: Product[] = [
     inStock: true,
     shipmentTime: '10–14 рабочих дней',
     deliveryTime: '60–90 день',
-    image: '',
+    image: '/src/images/shop/9.png',
   },
   {
     id: 10,
@@ -169,7 +169,7 @@ export const shop1Products: Product[] = [
   },
   {
     id: 16,
-    title: 'КольцПружина №467 НТ.200.000.029.0',
+    title: 'Пружина №467 НТ.200.000.029.0',
     description: '',
     price: '3 150',
     nds: 'без НДС',
@@ -198,7 +198,7 @@ export const shop1Products: Product[] = [
     inStock: true,
     shipmentTime: '10–14 рабочих дней',
     deliveryTime: '60–90 день',
-    image: '',
+    image: '/src/images/shop/18.png',
   },
   {
     id: 19,
@@ -220,7 +220,7 @@ export const shop1Products: Product[] = [
     inStock: true,
     shipmentTime: '10–14 рабочих дней',
     deliveryTime: '60–90 день',
-    image: '',
+    image: '/src/images/shop/20.png',
   },
   {
     id: 21,
@@ -231,7 +231,7 @@ export const shop1Products: Product[] = [
     inStock: true,
     shipmentTime: '10–14 рабочих дней',
     deliveryTime: '60–90 день',
-    image: '',
+    image: '/src/images/shop/21.png',
   },
   {
     id: 22,
@@ -253,7 +253,7 @@ export const shop1Products: Product[] = [
     inStock: true,
     shipmentTime: '10–14 рабочих дней',
     deliveryTime: '60–90 день',
-    image: '',
+    image: '/src/images/shop/23.png',
   },
   {
     id: 24,
@@ -279,7 +279,7 @@ export const shop1Products: Product[] = [
   },
   {
     id: 26,
-    title: 'Клапан НТ.202.003.001.0',
+    title: 'Диск опорный НТ.200.005.000.0',
     description: '',
     price: '2 000',
     nds: 'без НДС',
