@@ -156,7 +156,6 @@ export const InstallationCard = ({
 
     return (
         <div className={Styles.card}>
-            <h3 className={Styles.cardHeader}>{inst.name}</h3>
 
             {showMessage && (
                 <div className={Styles.errorMessage}>

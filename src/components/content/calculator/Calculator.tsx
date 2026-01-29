@@ -174,8 +174,22 @@ export const Calculator = ({ onBackAccountingSystem }: TProps) => {
     const selection = selections[instId];
     if (!validateSelection(instId, selection)) return;
     const price = calculatePrice(inst, selection);
-    // const summary = `${inst.name} / ${selection.quantity} скв.`;
-    const summary = `${inst.name} - ${selection.quantity} - ${selection.heating?.join(', ') || '-'} - ${selection.volume?.join(', ') || '-'}`;
+    // Заголовок вывода
+    const hasNonSepGas =
+      Array.isArray(selection.max_gas_1) &&
+      selection.max_gas_1.length > 0 &&
+      !selection.max_gas_1.includes('Не требуется');
+
+    const pressure = selection.heating?.join(',') || '-';
+    const quantity = selection.quantity || '-';
+    const volume = selection.volume?.join(',') || '-';
+
+    // порядок: давление → скважины → жидкость
+    const base = `${inst.name} ${pressure}-${quantity}`;
+
+    const summary = hasNonSepGas
+      ? base
+      : `${base}-${volume}`;
 
     setSelectedInstallations(prev => [
       ...prev,
@@ -193,7 +207,7 @@ export const Calculator = ({ onBackAccountingSystem }: TProps) => {
   };
 
   return (
-    <LayoutBack onBack={onBackAccountingSystem} title="Калькулятор установок">
+    <LayoutBack onBack={onBackAccountingSystem} title="Калькулятор измерительной установки">
 
       <div className={`${Styles.wrapper} ${loaded ? Styles.loaded : ''}`}>
         <div className={Styles.cardsContainer}>

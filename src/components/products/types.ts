@@ -4,8 +4,7 @@ export interface Product {
   description: string;
   price: string;
   nds: string;
-  inStock: boolean;
-  shipmentTime: string;
+  
   deliveryTime: string;
   image: string;
 }

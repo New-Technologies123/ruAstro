@@ -2,32 +2,32 @@ import { useEffect, useState } from 'react';
 import { Layout } from '../../layout/Layout';
 import { Card } from '../../ui/card/Card';
 
-import { AccountingSystem } from './AccountingSystem';
-import { Accessories } from './Accessories';
-import { MeasuringSystem } from './MeasuringSystem';
-import { PreparationSystems } from './PreparationSystems';
-import { PumpingStations } from './PumpingStations';
+import { Shop_1 } from './Shop_1';
+import { Shop_2 } from './Shop_2';
+import { Shop_3 } from './Shop_3';
+import { Shop_4 } from './Shop_4';
+import { Shop_5 } from './Shop_5';
 
 import { CartButton } from '../../ui/cart-button/CartButton';
 import { Basket } from '../../ui/basket/Basket';
 
-import product_1 from '../../../images/products/product_1.webp';
-import product_2 from '../../../images/products/product_2.0.webp';
-import product_3 from '../../../images/products/product_3.webp';
-import product_4 from '../../../images/products/product_4.webp';
-import product_5 from '../../../images/products/product_5.webp';
+import product_1 from '../../../images/products/product_2.webp';
+import product_2 from '../../../images/products/product_2_1.webp';
+import product_3 from '../../../images/products/product_2_2.png';
+import product_4 from '../../../images/products/product_2_3.png';
+import product_5 from '../../../images/products/product_2_4.png';
 
-type TProducts = | 'accountingSystem' | 'accessories' | 'measuringSystem' | 'preparationSystems' | 'pumpingStations';
+type TProducts = | 'shop_1' | 'shop_2' | 'shop_3' | 'shop_4' | 'shop_5';
 
 type Page = 'shop' | TProducts | 'basket';
 
 export const Shop = () => {
   const cardTitle: Record<TProducts, string> = {
-    accountingSystem: 'Автоматизированная замерная установка (АГЗУ)',
-    accessories: 'Комплектующие для автоматизированной групповой замерной установки',
-    measuringSystem: 'Система учёта углеводородов и пластовой жидкости',
-    preparationSystems: 'Системы подготовки нефти, газа и воды',
-    pumpingStations: 'Насосные станции перекачки нефти, нефтепродуктов и воды',
+    shop_1: 'Вихревой расходомер ЭРВИП',
+    shop_2: 'Устройство регулирования перепада давления (УРПД)',
+    shop_3: 'Переключатель скважин многоходовой (ПСМ)',
+    shop_4: 'Магниторегулируемый клапан (КМР)',
+    shop_5: 'Гидропривод (ГП)',
   };
 
   const [currentPage, setCurrentPage] = useState<Page>('shop');
@@ -96,65 +96,65 @@ export const Shop = () => {
           <>
             <Card
               imgSrc={product_1.src}
-              title={cardTitle.accountingSystem}
-              onClick={() => openCategory('accountingSystem')}
+              title={cardTitle.shop_1}
+              onClick={() => openCategory('shop_1')}
             />
             <Card
               imgSrc={product_2.src}
-              title={cardTitle.accessories}
-              onClick={() => openCategory('accessories')}
+              title={cardTitle.shop_2}
+              onClick={() => openCategory('shop_2')}
             />
             <Card
               imgSrc={product_3.src}
-              title={cardTitle.measuringSystem}
-              onClick={() => openCategory('measuringSystem')}
+              title={cardTitle.shop_3}
+              onClick={() => openCategory('shop_3')}
             />
             <Card
               imgSrc={product_4.src}
-              title={cardTitle.preparationSystems}
-              onClick={() => openCategory('preparationSystems')}
+              title={cardTitle.shop_4}
+              onClick={() => openCategory('shop_4')}
             />
             <Card
               imgSrc={product_5.src}
-              title={cardTitle.pumpingStations}
-              onClick={() => openCategory('pumpingStations')}
+              title={cardTitle.shop_5}
+              onClick={() => openCategory('shop_5')}
             />
           </>
         </Layout>
       )}
 
       {/* PRODUCTS */}
-      {currentPage === 'accountingSystem' && (
-        <AccountingSystem
-          title={cardTitle.accountingSystem}
+      {currentPage === 'shop_1' && (
+        <Shop_1
+          title={cardTitle.shop_1}
           onBackProducts={backToShop}
         />
       )}
 
-      {currentPage === 'accessories' && (
-        <Accessories
-          title={cardTitle.accessories}
+      {currentPage === 'shop_2' && (
+        <Shop_2
+          title={cardTitle.shop_2}
           onBackProducts={backToShop}
         />
       )}
 
-      {currentPage === 'measuringSystem' && (
-        <MeasuringSystem
-          title={cardTitle.measuringSystem}
+      {currentPage === 'shop_3' && (
+        <Shop_3
+          title={cardTitle.shop_3}
           onBackProducts={backToShop}
         />
       )}
 
-      {currentPage === 'preparationSystems' && (
-        <PreparationSystems
-          title={cardTitle.preparationSystems}
+      {currentPage === 'shop_4' && (
+        <Shop_4
+          title={cardTitle.shop_4}
           onBackProducts={backToShop}
         />
       )}
 
-      {currentPage === 'pumpingStations' && (
-        <PumpingStations
-          title={cardTitle.pumpingStations}
+      {currentPage === 'shop_5' && (
+        <Shop_5
+          title={cardTitle.shop_5}
           onBackProducts={backToShop}
         />
       )}

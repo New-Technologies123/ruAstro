@@ -17,7 +17,7 @@ export const exportToPDF = (selectedInstallations: any[], totalPrice: number) =>
       fontSize: 18,
       bold: true,
       alignment: "center",
-      margin: [0, 0, 0, 15]
+      margin: [0, 0, 0, -15]
     }
   ];
 
