@@ -3,10 +3,13 @@ import { BackToTop } from '../../ui/back-to-top/BackToTop';
 import { LayoutBack } from '../../layout/LayoutBack';
 import { useEffect, useState } from 'react';
 import { Cards } from './Cards';
-import { Goods_1 } from './Shop_4/Goods_1';
-import { Goods_2 } from './Shop_4/Goods_2';
+import { Urpd_1 } from './Shop_2/Urpd_1';
+import { Urpd_2 } from './Shop_2/Urpd_2';
 
-type TTitleOptions = 'goods_1' | 'goods_2';
+import type { Product } from '../../products/types';
+import { addToCart } from '../../utils/cartStorage';
+
+type TKey = 'urpd_1' | 'urpd_2';
 
 type TProps = {
   onBackProducts: VoidFunction;
@@ -14,28 +17,48 @@ type TProps = {
 };
 
 export const Shop_2 = ({ onBackProducts, title }: TProps) => {
-  const cardTitle: Record<TTitleOptions, string> = {
-    goods_1: 'Устройство для регулирования перепада давления УРПД-1.1 НТ.511.000.000.0',
-    goods_2: 'Устройство для регулирования перепада давления УРПД-3.1 НТ.531.000.000.0',
+
+  // ✅ ЕДИНЫЙ источник товаров (Product!)
+  const PRODUCTS: Record<TKey, Product> = {
+    urpd_1: {
+      id: 101,
+      title: 'Устройство для регулирования перепада давления УРПД-1.1 НТ.511.000.000.0',
+      description: '',
+      price: '19 500',
+      nds: 'без НДС',
+      deliveryTime: 'по запросу',
+      image: ''
+    },
+    urpd_2: {
+      id: 102,
+      title: 'Устройство для регулирования перепада давления УРПД-3.1 НТ.531.000.000.0',
+      description: '',
+      price: '34 500',
+      nds: 'без НДС',
+      deliveryTime: 'по запросу',
+      image: ''
+    }
   };
 
-  const [selectedItem, setSelectedItem] = useState<TTitleOptions | null>(null);
+  const [selectedItem, setSelectedItem] = useState<TKey | null>(null);
 
-  // читаем ?tem=shop_1 при обновлении страницы
+  // читать ?tem=
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const tem = params.get('tem') as TTitleOptions | null;
-    setSelectedItem(tem);
+    const tem = params.get('tem') as TKey | null;
+    if (tem && PRODUCTS[tem]) setSelectedItem(tem);
   }, []);
 
-  const handleClickCard = (tem: TTitleOptions) => {
-    setSelectedItem(tem);
+  // открыть карточку товара
+  const handleClickCard = (key: TKey) => {
+    setSelectedItem(key);
 
     const url = new URL(window.location.href);
-    url.searchParams.set('tem', tem);
+    url.searchParams.set('tem', key);
     window.history.pushState({}, '', url.toString());
   };
 
+  // назад из карточки
   const onBackShop = () => {
     setSelectedItem(null);
 
@@ -44,20 +67,54 @@ export const Shop_2 = ({ onBackProducts, title }: TProps) => {
     window.history.pushState({}, '', url.toString());
   };
 
-  if (selectedItem === 'goods_1') {
-    return <Goods_1 onBackShop={onBackShop} title={cardTitle.goods_1} />;
+  // ✅ ПРАВИЛЬНОЕ добавление в корзину
+  const handleAddToCart = (key: TKey, quantity: number) => {
+    addToCart(PRODUCTS[key], quantity);
+  };
+
+  // ---------- страницы товаров ----------
+
+  if (selectedItem === 'urpd_1') {
+    return (
+      <Urpd_1
+        onBackShop={onBackShop}
+        title={PRODUCTS.urpd_1.title}
+      />
+    );
   }
-  if (selectedItem === 'goods_2') {
-    return <Goods_2 onBackShop={onBackShop} title={cardTitle.goods_2} />;
+
+  if (selectedItem === 'urpd_2') {
+    return (
+      <Urpd_2
+        onBackShop={onBackShop}
+        title={PRODUCTS.urpd_2.title}
+      />
+    );
   }
+
+  // ---------- список ----------
 
   return (
     <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.container}>
         <div className={Styles.team}>
-          <Cards title={cardTitle.goods_1} onClick={() => handleClickCard('goods_1')} />
-          <Cards title={cardTitle.goods_2} onClick={() => handleClickCard('goods_2')} />
+
+          {(Object.keys(PRODUCTS) as TKey[]).map(key => {
+            const product = PRODUCTS[key];
+
+            return (
+              <Cards
+                key={product.id}
+                title={product.title}
+                price={Number(product.price.replace(/\s/g, ''))}
+                onClick={() => handleClickCard(key)}
+                onAddToCart={(qty) => handleAddToCart(key, qty)}
+              />
+            );
+          })}
+
         </div>
+
         <BackToTop />
       </div>
     </LayoutBack>

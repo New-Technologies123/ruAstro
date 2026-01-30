@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Layout } from '../../layout/Layout';
 import { Card } from '../../ui/card/Card';
+import { Order } from '../../content/order/Order';
 
 import { Shop_1 } from './Shop_1';
 import { Shop_2 } from './Shop_2';
@@ -19,7 +20,7 @@ import product_5 from '../../../images/products/product_2_4.png';
 
 type TProducts = | 'shop_1' | 'shop_2' | 'shop_3' | 'shop_4' | 'shop_5';
 
-type Page = 'shop' | TProducts | 'basket';
+type Page = 'shop' | TProducts | 'basket' | 'order';
 
 export const Shop = () => {
   const cardTitle: Record<TProducts, string> = {
@@ -41,6 +42,11 @@ export const Shop = () => {
 
     if (view === 'basket') {
       setCurrentPage('basket');
+      return;
+    }
+
+    if (view === 'order') {
+      setCurrentPage('order');
       return;
     }
 
@@ -83,14 +89,23 @@ export const Shop = () => {
     window.history.back();
   };
 
+  const openOrder = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set('view', 'basket');
+    url.searchParams.set('ord', 'order');
+    window.history.pushState({}, '', url.toString());
+    setCurrentPage('order');
+  };
+
   return (
     <>
       <CartButton goToBasket={openBasket} />
+      {currentPage === 'order' && <Order onBack={closeBasket} />}
 
       {/* SHOP */}
       {currentPage === 'shop' && (
         <Layout
-          title="Магазин"
+          title="Онлайн магазин"
           description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области безопасности и качества."
         >
           <>
@@ -161,7 +176,7 @@ export const Shop = () => {
 
       {/* BASKET — ОТДЕЛЬНАЯ СТРАНИЦА */}
       {currentPage === 'basket' && (
-        <Basket onBack={closeBasket} />
+        <Basket onBack={closeBasket} goToOrder={openOrder}/>
       )}
     </>
   );

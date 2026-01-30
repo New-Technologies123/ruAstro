@@ -8,6 +8,45 @@
   }
 }
 
+.header {
+  display: flex;
+  justify-content: space-between; /* Заголовок слева, кнопка справа */
+  align-items: center;
+  margin-bottom: 24px; /* Отступ под заголовком */
+}
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #18aaff, #4e5aff); // яркий градиент
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(78, 90, 255, 0.4);
+  img{
+    width: 35px;
+    height: 35px;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    filter: brightness(0) invert(1);
+  }
+  &:hover {
+    background: linear-gradient(135deg, #4e5aff, #18aaff);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(78, 81, 255, 0.5);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(78, 105, 255, 0.4);
+  }
+}
+
 .content {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -1,35 +1,14 @@
+import type { Product } from './types';
 
-/* ===== ТИПЫ ===== */
-export interface ProductParam {
-  label: string;
-  value: string;
-}
-
-export interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: string;
-  nds: string;
-  inStock: boolean;
-  shipmentTime: string;
-  deliveryTime: string;
-  image: string;
-}
-
-/* ===== ДАННЫЕ ===== */
-export const products: Product[] = [
+export const shop1Products: Product[] = [
   {
     id: 1,
     title: 'Корпус верхний НТ.202.000.002.0',
     description: '',
     price: '12 500',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '3–5 рабочих дней',
-    deliveryTime: '60–90 дней',
-    image: '/src/images/shop/1.png',
-
+    deliveryTime: '60–90 календарных дней',
+    image: '/images/shop/1.png',
   },
   {
     id: 2,
@@ -37,10 +16,8 @@ export const products: Product[] = [
     description: '',
     price: '7 120',
     nds: 'без НДС',
-    inStock: false,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '/src/images/shop/2.png',
+    deliveryTime: '60–90 календарных день',
+    image: '/images/shop/2.png',
   },
   {
     id: 3,
@@ -48,10 +25,8 @@ export const products: Product[] = [
     description: '',
     price: '2 600',
     nds: 'без НДС',
-    inStock: false,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '/src/images/shop/3.png',
+    deliveryTime: '60–90 календарных дней',
+    image: '/images/shop/3.png',
   },
   {
     id: 4,
@@ -59,10 +34,8 @@ export const products: Product[] = [
     description: '',
     price: '16 730',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '/src/images/shop/4.png',
+    deliveryTime: '60–90 календарных дней',
+    image: '/images/shop/4.png',
   },
   {
     id: 5,
@@ -70,10 +43,8 @@ export const products: Product[] = [
     description: '',
     price: '2 580',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '/src/images/shop/5.png',
+    deliveryTime: '60–90 календарных дней',
+    image: '',
   },
   {
     id: 6,
@@ -81,9 +52,7 @@ export const products: Product[] = [
     description: '',
     price: '120',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -92,9 +61,7 @@ export const products: Product[] = [
     description: '',
     price: '4 000',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -103,9 +70,7 @@ export const products: Product[] = [
     description: '',
     price: '3 600',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -114,10 +79,8 @@ export const products: Product[] = [
     description: '',
     price: '2 600',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '',
+    deliveryTime: '60–90 календарных дней',
+    image: '/images/shop/9.png',
   },
   {
     id: 10,
@@ -125,9 +88,7 @@ export const products: Product[] = [
     description: '',
     price: '2 800',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -136,9 +97,7 @@ export const products: Product[] = [
     description: '',
     price: '120',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -147,9 +106,7 @@ export const products: Product[] = [
     description: '',
     price: '120',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -158,9 +115,7 @@ export const products: Product[] = [
     description: '',
     price: '290',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -169,9 +124,7 @@ export const products: Product[] = [
     description: '',
     price: '120',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -180,20 +133,16 @@ export const products: Product[] = [
     description: '',
     price: '410',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
     id: 16,
-    title: 'КольцПружина №467 НТ.200.000.029.0',
+    title: 'Пружина №467 НТ.200.000.029.0',
     description: '',
     price: '3 150',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -202,9 +151,7 @@ export const products: Product[] = [
     description: '',
     price: '1 080',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -213,10 +160,8 @@ export const products: Product[] = [
     description: '',
     price: '16 470',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '',
+    deliveryTime: '60–90 календарных дней',
+    image: '/images/shop/18.png',
   },
   {
     id: 19,
@@ -224,9 +169,7 @@ export const products: Product[] = [
     description: '',
     price: '7 900',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -235,10 +178,8 @@ export const products: Product[] = [
     description: '',
     price: '3 600',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '',
+    deliveryTime: '60–90 календарных дней',
+    image: '/images/shop/20.png',
   },
   {
     id: 21,
@@ -246,10 +187,8 @@ export const products: Product[] = [
     description: '',
     price: '3 563',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '',
+    deliveryTime: '60–90 календарных дней',
+    image: '/images/shop/21.png',
   },
   {
     id: 22,
@@ -257,9 +196,7 @@ export const products: Product[] = [
     description: '',
     price: '1 970',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -268,10 +205,8 @@ export const products: Product[] = [
     description: '',
     price: '3 900',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
-    image: '',
+    deliveryTime: '60–90 календарных дней',
+    image: '/images/shop/23.png',
   },
   {
     id: 24,
@@ -279,9 +214,7 @@ export const products: Product[] = [
     description: '',
     price: '3 375',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
@@ -290,20 +223,16 @@ export const products: Product[] = [
     description: '',
     price: '3 165',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
     id: 26,
-    title: 'Клапан НТ.202.003.001.0',
+    title: 'Диск опорный НТ.200.005.000.0',
     description: '',
     price: '2 000',
     nds: 'без НДС',
-    inStock: true,
-    shipmentTime: '10–14 рабочих дней',
-    deliveryTime: '60–90 день',
+    deliveryTime: '60–90 календарных дней',
     image: '',
   },
 ];

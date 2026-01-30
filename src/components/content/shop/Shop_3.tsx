@@ -65,10 +65,7 @@ export const Shop_3 = ({ onBackProducts, title }: TProps) => {
     <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.container}>
         <div className={Styles.team}>
-          <Cards title={cardTitle.goods_1} onClick={() => handleClickCard('goods_1')} />
-          <Cards title={cardTitle.goods_2} onClick={() => handleClickCard('goods_2')} />
-          <Cards title={cardTitle.goods_3} onClick={() => handleClickCard('goods_3')} />
-          <Cards title={cardTitle.goods_4} onClick={() => handleClickCard('goods_4')} />
+          
         </div>
         <BackToTop />
       </div>

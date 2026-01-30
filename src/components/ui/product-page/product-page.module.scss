@@ -69,6 +69,25 @@
   }
 }
 
+//увеличение или уменьшение товара
+.qty {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  button {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  span {
+    min-width: 28px;
+    text-align: center;
+    font-weight: 600;
+  }
+}
+
 /* ===== АДАПТИВ ===== */
 @media (max-width: 1100px) {
   .page {

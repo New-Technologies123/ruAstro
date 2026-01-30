@@ -1,4 +1,4 @@
-import type { Product } from '../content/shop/products';
+import type { Product } from '../products/types';
 
 const CART_KEY = 'cart';
 
@@ -9,26 +9,39 @@ export const getCart = (): CartItem[] => {
   return data ? JSON.parse(data) : [];
 };
 
-export const addToCart = (product: Product) => {
+const saveCart = (cart: CartItem[]) => {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  window.dispatchEvent(new Event('cartUpdated'));
+};
+
+export const addToCart = (product: Product, qty: number = 1) => {
   const cart = getCart();
   const existing = cart.find(item => item.id === product.id);
 
   if (existing) {
-    existing.count += 1;
+    existing.count += qty;
   } else {
-    cart.push({ ...product, count: 1 });
+    cart.push({ ...product, count: qty });
   }
 
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-
-  // ⚡ уведомляем подписчиков, что корзина обновилась
-  window.dispatchEvent(new Event('cartUpdated'));
+  saveCart(cart);
 };
 
 export const removeFromCart = (id: number) => {
   const cart = getCart().filter(item => item.id !== id);
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  window.dispatchEvent(new Event('cartUpdated'));
+  saveCart(cart);
+};
+
+export const changeItemCount = (id: number, delta: number) => {
+  const updated = getCart()
+    .map(item =>
+      item.id === id
+        ? { ...item, count: item.count + delta }
+        : item
+    )
+    .filter(item => item.count > 0);
+
+  saveCart(updated);
 };
 
 export const clearCart = () => {

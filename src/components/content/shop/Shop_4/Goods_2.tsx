@@ -1,5 +1,5 @@
 import { ShopBase } from '../../../ui/shop-base/ShopBase';
-import { shop2Products } from '../../../products/shop2.products';
+import { shop2Products } from '../../../products/kmr_2.products';
 
 export const Goods_2 = ({ onBackShop, title }: any) => (
   <ShopBase

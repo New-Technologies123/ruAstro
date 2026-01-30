@@ -1,5 +1,5 @@
 import styles from './product-card.module.scss';
-import type { Product } from '../../content/shop/products';
+import type { Product } from '../../products/types';
 import { addToCart } from '../../utils/cartStorage';
 
 interface ProductCardProps {
