@@ -28,15 +28,22 @@ type TAccessories =
 /* ---------------- helpers ---------------- */
 const getAccessoryFromPath = (): TAccessories | null => {
   const parts = window.location.pathname.split('/').filter(Boolean);
-  if (parts.length === 3 && parts[0] === 'products' && parts[1] === 'accessories') {
+
+  if (
+    parts.length === 3 &&
+    parts[0] === 'products' &&
+    parts[1] === 'accessories'
+  ) {
     return parts[2] as TAccessories;
   }
+
   return null;
 };
 
 /* ---------------- component ---------------- */
 export const Accessories = () => {
-  const title = 'Комплектующие для автоматизированной групповой замерной установки';
+  const title =
+    'Комплектующие для автоматизированной групповой замерной установки';
 
   const cardTitle: Record<TAccessories, string> = {
     accessories_1: 'Вихревой расходомер ЭРВИП',
@@ -49,53 +56,118 @@ export const Accessories = () => {
 
   const [selectedItem, setSelectedItem] = useState<TAccessories | null>(null);
 
-  /* синхронизация с URL (popstate) */
+  /* синхронизация с URL */
   useEffect(() => {
-    const sync = () => setSelectedItem(getAccessoryFromPath());
+    const sync = () => {
+      setSelectedItem(getAccessoryFromPath());
+    };
+
     sync(); // при монтировании
     window.addEventListener('popstate', sync);
+
     return () => window.removeEventListener('popstate', sync);
   }, []);
 
-  /* открыть детальную карточку */
+  /* открыть карточку */
   const goToAccessory = (item: TAccessories) => {
     window.history.pushState({}, '', `/products/accessories/${item}`);
     setSelectedItem(item);
   };
 
-  /* кнопка назад внутри детальной карточки */
+  /* назад к списку аксессуаров */
   const onBackAccessories = () => {
-    window.history.pushState({}, '', '/products/accessories'); // pushState, чтобы кнопка браузера тоже работала
+    window.history.pushState({}, '', '/products/accessories');
     setSelectedItem(null);
   };
 
-  /* кнопка назад к продуктам */
-  // const onBackProducts = () => {
-  //   window.history.pushState({}, '', '/products');
-  // };
+  /* назад к продуктам */
   const onBackProducts = () => {
-    window.history.pushState({}, '', '/products'); // добавляем запись в историю
-    window.dispatchEvent(new PopStateEvent('popstate')); // **триггерим popstate вручную**
+    window.location.href = '/products';
   };
 
   /* ---------------- детальные страницы ---------------- */
-  if (selectedItem === 'accessories_1') return <Accessories_1 onBackAccessories={onBackAccessories} title={cardTitle.accessories_1} />;
-  if (selectedItem === 'accessories_2') return <Accessories_2 onBackAccessories={onBackAccessories} title={cardTitle.accessories_2} />;
-  if (selectedItem === 'accessories_3') return <Accessories_3 onBackAccessories={onBackAccessories} title={cardTitle.accessories_3} />;
-  if (selectedItem === 'accessories_4') return <Accessories_4 onBackAccessories={onBackAccessories} title={cardTitle.accessories_4} />;
-  if (selectedItem === 'accessories_5') return <Accessories_5 onBackAccessories={onBackAccessories} title={cardTitle.accessories_5} />;
-  if (selectedItem === 'accessories_6') return <Accessories_6 onBackAccessories={onBackAccessories} title={cardTitle.accessories_6} />;
+  if (selectedItem === 'accessories_1')
+    return (
+      <Accessories_1
+        title={cardTitle.accessories_1}
+        onBackAccessories={onBackAccessories}
+      />
+    );
 
-  /* ---------------- список аксессуаров ---------------- */
+  if (selectedItem === 'accessories_2')
+    return (
+      <Accessories_2
+        title={cardTitle.accessories_2}
+        onBackAccessories={onBackAccessories}
+      />
+    );
+
+  if (selectedItem === 'accessories_3')
+    return (
+      <Accessories_3
+        title={cardTitle.accessories_3}
+        onBackAccessories={onBackAccessories}
+      />
+    );
+
+  if (selectedItem === 'accessories_4')
+    return (
+      <Accessories_4
+        title={cardTitle.accessories_4}
+        onBackAccessories={onBackAccessories}
+      />
+    );
+
+  if (selectedItem === 'accessories_5')
+    return (
+      <Accessories_5
+        title={cardTitle.accessories_5}
+        onBackAccessories={onBackAccessories}
+      />
+    );
+
+  if (selectedItem === 'accessories_6')
+    return (
+      <Accessories_6
+        title={cardTitle.accessories_6}
+        onBackAccessories={onBackAccessories}
+      />
+    );
+
+  /* ---------------- список ---------------- */
   return (
     <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.ramca}>
-        <Card imgSrc={product_2_1.src} title={cardTitle.accessories_1} onClick={() => goToAccessory('accessories_1')} />
-        <Card imgSrc={product_2_2.src} title={cardTitle.accessories_2} onClick={() => goToAccessory('accessories_2')} />
-        <Card imgSrc={product_2_3.src} title={cardTitle.accessories_3} onClick={() => goToAccessory('accessories_3')} />
-        <Card imgSrc={product_2_4.src} title={cardTitle.accessories_4} onClick={() => goToAccessory('accessories_4')} />
-        <Card imgSrc={product_2_5.src} title={cardTitle.accessories_5} onClick={() => goToAccessory('accessories_5')} />
-        <Card imgSrc={product_2_6.src} title={cardTitle.accessories_6} onClick={() => goToAccessory('accessories_6')} />
+        <Card
+          imgSrc={product_2_1.src}
+          title={cardTitle.accessories_1}
+          onClick={() => goToAccessory('accessories_1')}
+        />
+        <Card
+          imgSrc={product_2_2.src}
+          title={cardTitle.accessories_2}
+          onClick={() => goToAccessory('accessories_2')}
+        />
+        <Card
+          imgSrc={product_2_3.src}
+          title={cardTitle.accessories_3}
+          onClick={() => goToAccessory('accessories_3')}
+        />
+        <Card
+          imgSrc={product_2_4.src}
+          title={cardTitle.accessories_4}
+          onClick={() => goToAccessory('accessories_4')}
+        />
+        <Card
+          imgSrc={product_2_5.src}
+          title={cardTitle.accessories_5}
+          onClick={() => goToAccessory('accessories_5')}
+        />
+        <Card
+          imgSrc={product_2_6.src}
+          title={cardTitle.accessories_6}
+          onClick={() => goToAccessory('accessories_6')}
+        />
       </div>
     </LayoutBack>
   );

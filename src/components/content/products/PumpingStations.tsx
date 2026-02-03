@@ -30,26 +30,37 @@ const getItemFromPath = (): TPumping | null => {
 
 /* ---------------- component ---------------- */
 export const PumpingStations = () => {
-  const title = 'Насосные станции перекачки нефти, нефтепродуктов и воды';
+  const title =
+    'Насосные станции перекачки нефти, нефтепродуктов и воды';
 
   const cardTitle: Record<TPumping, string> = {
-    pumpingStations_1: 'Блочная насосная станция внутренней и внешней перекачки нефти',
-    pumpingStations_2: 'Блочная мультифазная насосная станция',
+    pumpingStations_1:
+      'Блочная насосная станция внутренней и внешней перекачки нефти',
+    pumpingStations_2:
+      'Блочная мультифазная насосная станция',
   };
 
   const [selectedItem, setSelectedItem] = useState<TPumping | null>(null);
 
   /* синхронизация с URL */
   useEffect(() => {
-    const sync = () => setSelectedItem(getItemFromPath());
+    const sync = () => {
+      setSelectedItem(getItemFromPath());
+    };
+
     sync(); // при монтировании
     window.addEventListener('popstate', sync);
+
     return () => window.removeEventListener('popstate', sync);
   }, []);
 
   /* открыть карточку */
   const openItem = (item: TPumping) => {
-    window.history.pushState({}, '', `/products/pumping-stations/${item}`);
+    window.history.pushState(
+      {},
+      '',
+      `/products/pumping-stations/${item}`
+    );
     setSelectedItem(item);
   };
 
@@ -61,8 +72,7 @@ export const PumpingStations = () => {
 
   /* назад к продуктам */
   const onBackProducts = () => {
-    window.history.pushState({}, '', '/products');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.location.href = '/products';
   };
 
   /* ---------------- детальные страницы ---------------- */
@@ -84,7 +94,6 @@ export const PumpingStations = () => {
     );
   }
 
-  /* ---------------- список ---------------- */
   return (
     <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.ramca}>

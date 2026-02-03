@@ -43,26 +43,35 @@ export const PreparationSystems = () => {
       'Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП',
     preparationSystems_2: 'Блок гребенки (БГ)',
     preparationSystems_3: 'Устройство очистки колонны УОК-НКТ',
-    preparationSystems_4: 'Установка дозирования химического реагента (БДР)',
+    preparationSystems_4:
+      'Установка дозирования химического реагента (БДР)',
   };
 
   const [selectedItem, setSelectedItem] = useState<TPreparation | null>(null);
 
   /* синхронизация с URL */
   useEffect(() => {
-    const sync = () => setSelectedItem(getItemFromPath());
+    const sync = () => {
+      setSelectedItem(getItemFromPath());
+    };
+
     sync(); // при монтировании
     window.addEventListener('popstate', sync);
+
     return () => window.removeEventListener('popstate', sync);
   }, []);
 
   /* открыть карточку */
   const openItem = (item: TPreparation) => {
-    window.history.pushState({}, '', `/products/preparation-systems/${item}`);
+    window.history.pushState(
+      {},
+      '',
+      `/products/preparation-systems/${item}`
+    );
     setSelectedItem(item);
   };
 
-  /* назад к списку */
+  /* назад к списку систем подготовки */
   const onBackPreparation = () => {
     window.history.pushState({}, '', '/products/preparation-systems');
     setSelectedItem(null);
@@ -70,8 +79,7 @@ export const PreparationSystems = () => {
 
   /* назад к продуктам */
   const onBackProducts = () => {
-    window.history.pushState({}, '', '/products');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.location.href = '/products';
   };
 
   /* ---------------- детальные страницы ---------------- */

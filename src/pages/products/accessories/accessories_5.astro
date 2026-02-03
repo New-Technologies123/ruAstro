@@ -3,7 +3,7 @@ import Layout from "../../../layouts/Layout.astro";
 import { Header } from "../../../components/base/Header";
 import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
-import { Accessories_6 } from "../../../components/content/products/Accessories/Accessories_6";
+import { Accessories_5 } from "../../../components/content/products/Accessories/Accessories_5";
 
 const description = "Гидропривод (ГП), гп";
 ---
@@ -11,8 +11,8 @@ const description = "Гидропривод (ГП), гп";
 <Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <Accessories_6
-        title="Комплектующие для АГЗУ"
+      <Accessories_5
+        title="Гидропривод (ГП)"
         onBackAccessories={() => history.back()}
       />
     </Content>

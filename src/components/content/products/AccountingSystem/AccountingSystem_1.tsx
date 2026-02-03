@@ -70,8 +70,3 @@ export const AccountingSystem_1 = ({ onBackAccountingSystem, title }: TProps) =>
     </LayoutBack>
   )
 }
-
-
-
-
-

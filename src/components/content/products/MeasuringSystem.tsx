@@ -36,7 +36,8 @@ export const MeasuringSystem = () => {
   const title = 'Система учёта углеводородов и пластовой жидкости';
 
   const cardTitle: Record<TMeasuring, string> = {
-    measuringSystem_1: 'Система измерения количества и показателей качества нефти (СИКН)',
+    measuringSystem_1:
+      'Система измерения количества и показателей качества нефти (СИКН)',
     measuringSystem_2: 'Система измерения количества газа (СИКГ)',
     measuringSystem_3: 'Система измерения количества воды (СИКВ)',
   };
@@ -45,9 +46,13 @@ export const MeasuringSystem = () => {
 
   /* синхронизация с URL */
   useEffect(() => {
-    const sync = () => setSelectedItem(getItemFromPath());
+    const sync = () => {
+      setSelectedItem(getItemFromPath());
+    };
+
     sync(); // при монтировании
     window.addEventListener('popstate', sync);
+
     return () => window.removeEventListener('popstate', sync);
   }, []);
 
@@ -65,8 +70,7 @@ export const MeasuringSystem = () => {
 
   /* назад к продуктам */
   const onBackProducts = () => {
-    window.history.pushState({}, '', '/products');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.location.href = '/products';
   };
 
   /* ---------------- детальные страницы ---------------- */

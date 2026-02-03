@@ -42,11 +42,16 @@ export const AccountingSystem = () => {
 
   const [selectedItem, setSelectedItem] = useState<TAccounting | null>(null);
 
-  /* синхронизация с URL (как в Accessories) */
+  /* синхронизация с URL */
   useEffect(() => {
-    const sync = () => setSelectedItem(getItemFromPath());
+    const sync = () => {
+      const item = getItemFromPath();
+      setSelectedItem(item);
+    };
+
     sync(); // при монтировании
     window.addEventListener('popstate', sync);
+
     return () => window.removeEventListener('popstate', sync);
   }, []);
 
@@ -58,14 +63,15 @@ export const AccountingSystem = () => {
 
   /* назад к списку АГЗУ */
   const onBackAccountingSystem = () => {
-    window.history.pushState({}, '', '/products/accounting-system');
-    setSelectedItem(null);
+    // window.history.pushState({}, '', '/products/accounting-system');
+    // setSelectedItem(null);
+    window.history.replaceState({}, '', '/products/accounting-system');
+  window.dispatchEvent(new PopStateEvent('popstate'));
   };
 
   /* назад к продуктам */
   const onBackProducts = () => {
-    window.history.pushState({}, '', '/products');
-    window.dispatchEvent(new PopStateEvent('popstate'));
+    window.location.href = '/products'; // переходим на страницу продуктов
   };
 
   /* ---------------- детальные страницы ---------------- */

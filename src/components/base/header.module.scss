@@ -101,7 +101,7 @@
 nav {
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: center;
   position: relative;
   width: 100%;
   box-shadow: var(--nav-shadow);
@@ -116,19 +116,19 @@ nav {
 }
 
 nav ul {
-  list-style: none;
-  display: flex;
+  list-style: none;  
   align-items: center;
   font-size: 19px;
-  overflow-y: hidden;
+  overflow: visible !important;
   transition: 1s cubic-bezier(0.68, -0.55, 0.27, 10.55);
   box-shadow: var(--nav-shadow);
   padding: 10px 0;
 }
 
-nav ul li {
-  margin: 0 15px;
-}
+// nav ul li {
+//   margin: 10px 5px;
+//   border-radius: 20px;
+// }
 
 nav ul li a {
   text-decoration: none;
@@ -192,6 +192,143 @@ nav ul li a.active {
   }
 }
 
+
+/* ====== ОБЩЕЕ ====== */
+// .navSticky {
+//   position: sticky;
+//   top: 0;
+//   z-index: 100;
+//   background: #0f1f2e;
+// }
+
+.navMenu {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  
+  margin: 0;
+  padding: 0 24px;
+}
+
+// .navMenu li {
+//   position: relative;
+// }
+
+// .navMenu a {
+//   display: block;
+//   padding: 16px 18px;
+//   color: #ffffff;
+//   text-decoration: none;
+//   font-size: 15px;
+//   font-weight: 500;
+//   white-space: nowrap;
+//   transition: background 0.2s ease, color 0.2s ease;
+// }
+
+// .navMenu a:hover {
+//   background: rgba(255, 255, 255, 0.08);
+// }
+
+// .active {
+//   color: #aacdf3;
+// }
+
+/* ====== BURGER ====== */
+// .menuToggle {
+//   display: none;
+//   padding: 14px 18px;
+//   cursor: pointer;
+// }
+
+// .menuToggle img {
+//   width: 26px;
+//   height: 26px;
+// }
+
+/* ====== ПУНКТ МЕНЮ ====== */
+.menuItem {
+  position: relative;
+}
+
+/* ====== SUBMENU ====== */
+.subMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 280px;
+  background: #eb0a0a;
+  list-style: none;
+  padding: 8px 0;
+  margin: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.2s ease;
+  z-index: 10;
+}
+
+.subMenu li {
+  position: relative;
+}
+
+.subMenu a {
+  color: #ffffff;
+  padding: 12px 18px;
+  font-size: 14px;
+}
+
+.subMenu a:hover {
+  background: #053d4e;
+}
+
+/* открытие submenu */
+.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* ====== ВЛОЖЕННЫЕ SUBMENU ====== */
+.subMenu .subMenu {
+  top: 0;
+  left: 100%;
+}
+
+.menuItem {
+  position: relative;
+}
+
+.menuRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.menuLink {
+  flex: 1;
+}
+
+/* ===== СТРЕЛКА ===== */
+.arrow {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.arrow:hover {
+  color: #20bbef;
+}
+
+.arrowOpen {
+  transform: rotate(90deg);
+}
+
 @media (max-width: 1400px) {
   .headerContainer {
     padding: 13px 32px;
@@ -248,72 +385,142 @@ nav ul li a.active {
 }
 
 @media (max-width: 1000px) {
-  .headerContainer {
-    padding: 8px 16px;
-    img{
-      width: 190px;
-    }
+  nav{
+    justify-content: right;
   }
-  .contactInfo {
-    padding-right: 30px;
-    p{
-      font-size: 15px;
-      img{
-        height: 16px;
-        width: 16px;
-        margin-right: 5px;
-      }
-    }
-  }
-  nav {
-    background-color: #444;
-    display: flex;
-    justify-content: end;
-    flex-direction: column;
+
+   .navSticky {
     position: relative;
+    z-index: 1000;
+    overflow: visible; // ❗️бургер не режем
   }
-  .navMenu {
-    --padding: 5px;
-    --font-size: 14px;
-    --max-height: 0px;
-    // padding-bottom: 5px;
 
-    flex-direction: column;
-    position: absolute;
-    width: 100%;
-    left: 0;
-    top: 46px;
-    max-height: var(--max-height);
-    transition: max-height 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    background: linear-gradient(#086ab3, #03000e);
-    z-index: 100;
-    overflow: hidden; /* Скрываем содержимое до начала анимации */
+  /* ---------- BURGER ---------- */
 
-    &.active {
-      --max-height: 500px;
-      transition: max-height 4.5s ease;
-    }
-  }
   .menuToggle {
     display: flex;
-    margin-left: auto;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+    margin: 10px;
+
+    cursor: pointer;
+    position: relative;
+    z-index: 1100; // выше меню
   }
-  nav ul {
-    display: flex;
-    list-style: none;
-    padding: 0;    
-    margin: 0;
-  }
-  nav ul li a {
-    padding: 4px 15px;
-    font-size: 16px;    
-    &.active {
-      font-size: 18px;
-    }
-  }
-  .menuIcon {
-    height: 22px;
+
+  .menuToggle img {
     width: 22px;
+    height: 22px;
+  }
+
+  /* ---------- MAIN MENU ---------- */
+
+  .navMenu {
+    position: absolute;
+    top: 46px;
+    left: 0;
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    background: linear-gradient(#086ab3, #03000e);
+
+    max-height: 0;
+    overflow: hidden;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    z-index: 1000;
+
+    transition:
+      max-height 0.4s ease,
+      opacity 0.25s ease;
+  }
+
+  .navMenu.active {
+    max-height: 1000px; // большой запас
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* ---------- LIST ---------- */
+
+  .navMenu li {
+    list-style: none;
+  }
+
+  .navMenu a {
+    display: block;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 16px;
+    text-decoration: none;
+  }
+
+  /* ---------- MENU ITEM ---------- */
+
+  .menuItem {
+    display: block;
+  }
+
+  .menuRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* ---------- ARROW ---------- */
+
+  .arrow {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+
+    transition: transform 0.3s ease;
+  }
+
+  .arrowOpen {
+    transform: rotate(90deg);
+  }
+
+  /* ---------- SUB MENU (ACCORDION) ---------- */
+
+  .subMenu {
+    position: static;   // ❗️КЛЮЧЕВОЕ
+    display: block;
+
+    max-height: 0;
+    overflow: hidden;
+
+    padding-left: 16px;
+    background: #13283d;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+      max-height 0.35s ease,
+      opacity 0.25s ease;
+  }
+
+  .subMenu.open {
+    max-height: 3000px;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .subMenu a {
+    font-size: 14px;
+    padding: 10px 16px;
   }
 }
 
@@ -462,3 +669,60 @@ nav ul li a.active {
     font-size: 13px;
   }
 }
+
+
+// /* ====== MOBILE ====== */
+// @media (max-width: 1024px) {
+//   .menuToggle {
+//     display: block;
+//   }
+
+//   .navMenu {
+//     position: fixed;
+//     top: 60px;
+//     left: 0;
+//     right: 0;
+//     flex-direction: column;
+//     background: #0f1f2e;
+//     padding: 16px 0;
+
+//     transform: translateY(-20px);
+//     opacity: 0;
+//     visibility: hidden;
+//     transition: all 0.25s ease;
+//   }
+
+//   .navMenu.active {
+//     transform: translateY(0);
+//     opacity: 1;
+//     visibility: visible;
+//   }
+
+//   .navMenu li {
+//     width: 100%;
+//   }
+
+//   .navMenu a {
+//     padding: 14px 24px;
+//     width: 100%;
+//   }
+
+//   .subMenu {
+//     position: static;
+//     box-shadow: none;
+//     background: #13283d;
+//     transform: none;
+//     opacity: 1;
+//     visibility: visible;
+//     padding-left: 12px;
+//   }
+
+//   .subMenu a {
+//     color: #ffffff;
+//     font-size: 14px;
+//   }
+
+//   .subMenu .subMenu {
+//     padding-left: 16px;
+//   }
+// }
