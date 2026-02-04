@@ -157,3 +157,33 @@
     text-align: center;
   }
 }
+
+@media (max-width: 1400px){
+  .title{
+    font-size: 18px;
+  }
+  .total{
+    h4{
+      font-size: 24px;
+    }    
+  }
+}
+
+@media (max-width: 850px){
+  .item{
+    display: grid;
+    width: 450px;
+    justify-content: flex-end;
+  }
+  .rightSide{
+    justify-content: flex-end;
+  }
+  .title{
+    font-size: 17px;
+  }
+  .total{
+    h4{
+      font-size: 22px;
+    }    
+  }
+}

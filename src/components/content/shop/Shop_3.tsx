@@ -3,12 +3,13 @@ import { BackToTop } from '../../ui/back-to-top/BackToTop';
 import { LayoutBack } from '../../layout/LayoutBack';
 import { useEffect, useState } from 'react';
 import { Cards } from './Cards';
-import { Goods_1 } from './Shop_4/Goods_1';
-import { Goods_2 } from './Shop_4/Goods_2';
-import { Goods_3 } from './Shop_4/Goods_3';
-import { Goods_4 } from './Shop_4/Goods_4';
+import { Psm_1 } from './Shop_3/Psm_1';
+import { Psm_2 } from './Shop_3/Psm_2';
 
-type TTitleOptions = 'goods_1' | 'goods_2' | 'goods_3' | 'goods_4';
+import type { Product } from '../../products/types';
+import { addToCart } from '../../utils/cartStorage';
+
+type TTitleOptions = 'psm_1' | 'psm_2';
 
 type TProps = {
   onBackProducts: VoidFunction;
@@ -16,12 +17,27 @@ type TProps = {
 };
 
 export const Shop_3 = ({ onBackProducts, title }: TProps) => {
-  const cardTitle: Record<TTitleOptions, string> = {
-    goods_1: 'Клапан магниторегулируемый КМР-2 Ж НТ.200.000.000.0',
-    goods_2: 'Клапан магниторегулируемый КМР-2 М НТ.201.000.000.0',
-    goods_3: 'Клапан магниторегулируемый КМР-3.1 Ех НТ.302.000.000.1',
-    goods_4: 'Клапан магниторегулируемый КМР-2 Г НТ.250.000.000.0',
-  };
+  // ✅ ЕДИНЫЙ источник товаров (Product!)
+    const PRODUCTS: Record<TTitleOptions, Product> = {
+      psm_1: {
+        id: 101,
+        title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000-02 (8скв) с наплавкой',
+        description: '',
+        price: '950 000',
+        nds: 'без НДС',
+        deliveryTime: 'по запросу',
+        image: ''
+      },
+      psm_2: {
+        id: 102,
+        title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000-02 (8скв) без наплавки',
+        description: '',
+        price: '900 000',
+        nds: 'без НДС',
+        deliveryTime: 'по запросу',
+        image: ''
+      }
+    };
 
   const [selectedItem, setSelectedItem] = useState<TTitleOptions | null>(null);
 
@@ -48,25 +64,39 @@ export const Shop_3 = ({ onBackProducts, title }: TProps) => {
     window.history.pushState({}, '', url.toString());
   };
 
-  if (selectedItem === 'goods_1') {
-    return <Goods_1 onBackShop={onBackShop} title={cardTitle.goods_1} />;
+  // ✅ ПРАВИЛЬНОЕ добавление в корзину
+    const handleAddToCart = (key: TTitleOptions, quantity: number) => {
+      addToCart(PRODUCTS[key], quantity);
+    };
+
+  if (selectedItem === 'psm_1') {
+    return <Psm_1 onBackShop={onBackShop} title={PRODUCTS.psm_1.title} />;
   }
-  if (selectedItem === 'goods_2') {
-    return <Goods_2 onBackShop={onBackShop} title={cardTitle.goods_2} />;
-  }
-  if (selectedItem === 'goods_3') {
-    return <Goods_3 onBackShop={onBackShop} title={cardTitle.goods_3} />;
-  }
-  if (selectedItem === 'goods_4') {
-    return <Goods_4 onBackShop={onBackShop} title={cardTitle.goods_4} />;
+  if (selectedItem === 'psm_2') {
+    return <Psm_2 onBackShop={onBackShop} title={PRODUCTS.psm_2.title} />;
   }
 
   return (
     <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.container}>
         <div className={Styles.team}>
-          
+
+          {(Object.keys(PRODUCTS) as TTitleOptions[]).map(key => {
+            const product = PRODUCTS[key];
+
+            return (
+              <Cards
+                key={product.id}
+                title={product.title}
+                price={Number(product.price.replace(/\s/g, ''))}
+                onClick={() => handleClickCard(key)}
+                onAddToCart={(qty) => handleAddToCart(key, qty)}
+              />
+            );
+          })}
+
         </div>
+
         <BackToTop />
       </div>
     </LayoutBack>

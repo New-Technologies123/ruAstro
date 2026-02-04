@@ -27,7 +27,7 @@ export const yrpd1Products: Product[] = [
     price: '5 115',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/urpd/3.png',
+    image: '/images/shop/urpd/2-3.png',
   },
   {
     id: 4,
@@ -63,7 +63,7 @@ export const yrpd1Products: Product[] = [
     price: '1 590',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/urpd/2-6.png',
   },
   {
     id: 8,
@@ -81,6 +81,6 @@ export const yrpd1Products: Product[] = [
     price: '1 215',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/urpd/2-8.png',
   },
 ];

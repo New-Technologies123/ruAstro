@@ -194,12 +194,12 @@ nav ul li a.active {
 
 
 /* ====== ОБЩЕЕ ====== */
-// .navSticky {
-//   position: sticky;
-//   top: 0;
-//   z-index: 100;
-//   background: #0f1f2e;
-// }
+.navSticky {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #0f1f2e;
+}
 
 .navMenu {
   display: flex;

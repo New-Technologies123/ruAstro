@@ -3,12 +3,12 @@ import { BackToTop } from '../../ui/back-to-top/BackToTop';
 import { LayoutBack } from '../../layout/LayoutBack';
 import { useEffect, useState } from 'react';
 import { Cards } from './Cards';
-import { Goods_1 } from './Shop_4/Goods_1';
-import { Goods_2 } from './Shop_4/Goods_2';
-import { Goods_3 } from './Shop_4/Goods_3';
-import { Goods_4 } from './Shop_4/Goods_4';
+import { Gudro_1 } from './Shop_5/Gudro_1';
 
-type TTitleOptions = 'goods_1' | 'goods_2' | 'goods_3' | 'goods_4';
+import type { Product } from '../../products/types';
+import { addToCart } from '../../utils/cartStorage';
+
+type TKey = 'gudro_1';
 
 type TProps = {
   onBackProducts: VoidFunction;
@@ -16,23 +16,31 @@ type TProps = {
 };
 
 export const Shop_5 = ({ onBackProducts, title }: TProps) => {
-  const cardTitle: Record<TTitleOptions, string> = {
-    goods_1: 'Клапан магниторегулируемый КМР-2 Ж НТ.200.000.000.0',
-    goods_2: 'Клапан магниторегулируемый КМР-2 М НТ.201.000.000.0',
-    goods_3: 'Клапан магниторегулируемый КМР-3.1 Ех НТ.302.000.000.1',
-    goods_4: 'Клапан магниторегулируемый КМР-2 Г НТ.250.000.000.0',
-  };
+  
+  // ✅ ЕДИНЫЙ источник товаров (Product!)
+    const PRODUCTS: Record<TKey, Product> = {
+      gudro_1: {
+        id: 101,
+        title: 'Гидропривод ГП-НТ НТ.3.00.00.00.000',
+        description: '',
+        price: '88 500',
+        nds: 'без НДС',
+        deliveryTime: 'по запросу',
+        image: ''
+      },
+    };
+  
 
-  const [selectedItem, setSelectedItem] = useState<TTitleOptions | null>(null);
+  const [selectedItem, setSelectedItem] = useState<TKey | null>(null);
 
   // читаем ?tem=shop_1 при обновлении страницы
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const tem = params.get('tem') as TTitleOptions | null;
+    const tem = params.get('tem') as TKey | null;
     setSelectedItem(tem);
   }, []);
 
-  const handleClickCard = (tem: TTitleOptions) => {
+  const handleClickCard = (tem: TKey) => {
     setSelectedItem(tem);
 
     const url = new URL(window.location.href);
@@ -48,25 +56,36 @@ export const Shop_5 = ({ onBackProducts, title }: TProps) => {
     window.history.pushState({}, '', url.toString());
   };
 
-  if (selectedItem === 'goods_1') {
-    return <Goods_1 onBackShop={onBackShop} title={cardTitle.goods_1} />;
-  }
-  if (selectedItem === 'goods_2') {
-    return <Goods_2 onBackShop={onBackShop} title={cardTitle.goods_2} />;
-  }
-  if (selectedItem === 'goods_3') {
-    return <Goods_3 onBackShop={onBackShop} title={cardTitle.goods_3} />;
-  }
-  if (selectedItem === 'goods_4') {
-    return <Goods_4 onBackShop={onBackShop} title={cardTitle.goods_4} />;
+  // ✅ ПРАВИЛЬНОЕ добавление в корзину
+    const handleAddToCart = (key: TKey, quantity: number) => {
+      addToCart(PRODUCTS[key], quantity);
+    };
+
+  if (selectedItem === 'gudro_1') {
+    return <Gudro_1 onBackShop={onBackShop} title={PRODUCTS.gudro_1.title} />;
   }
 
   return (
     <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.container}>
         <div className={Styles.team}>
-          
+
+          {(Object.keys(PRODUCTS) as TKey[]).map(key => {
+            const product = PRODUCTS[key];
+
+            return (
+              <Cards
+                key={product.id}
+                title={product.title}
+                price={Number(product.price.replace(/\s/g, ''))}
+                onClick={() => handleClickCard(key)}
+                onAddToCart={(qty) => handleAddToCart(key, qty)}
+              />
+            );
+          })}
+
         </div>
+
         <BackToTop />
       </div>
     </LayoutBack>

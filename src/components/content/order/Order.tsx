@@ -63,6 +63,26 @@ export const Order = ({ onBack }: OrderProps) => {
       </div>
 
       <div className={Styles.content}>
+        {/* Сводка заказа */}
+        <div className={Styles.summary}>
+          <h2>Ваш заказ</h2>
+
+          {cart.map(item => (
+            <div key={item.id} className={Styles.product}>
+              <div className={Styles.title}>{item.title}</div>
+              <div className={Styles.count}>{item.count} ×</div>
+              <div className={Styles.price}>
+                {parsePrice(item.price) * item.count} ₽ без НДС
+              </div>
+            </div>
+          ))}
+
+          <div className={Styles.total}>
+            <span>Итого:</span>
+            <strong>{totalPrice} ₽ без НДС</strong>
+          </div>
+        </div>
+
         {/* Форма */}
         <form className={Styles.form} onSubmit={handleSubmit}>
           <h2>Контактные данные</h2>
@@ -106,27 +126,7 @@ export const Order = ({ onBack }: OrderProps) => {
           />
 
           <button type="submit">Отправить заказ</button>
-        </form>
-
-        {/* Сводка заказа */}
-        <div className={Styles.summary}>
-          <h2>Ваш заказ</h2>
-
-          {cart.map(item => (
-            <div key={item.id} className={Styles.product}>
-              <div className={Styles.title}>{item.title}</div>
-              <div className={Styles.count}>{item.count} ×</div>
-              <div className={Styles.price}>
-                {parsePrice(item.price) * item.count} ₽ без НДС
-              </div>
-            </div>
-          ))}
-
-          <div className={Styles.total}>
-            <span>Итого:</span>
-            <strong>{totalPrice} ₽ без НДС</strong>
-          </div>
-        </div>
+        </form>        
       </div>
     </div>
   );

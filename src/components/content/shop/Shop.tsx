@@ -108,12 +108,7 @@ export const Shop = () => {
           title="Онлайн магазин"
           description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области безопасности и качества."
         >
-          <>
-            <Card
-              imgSrc={product_1.src}
-              title={cardTitle.shop_1}
-              onClick={() => openCategory('shop_1')}
-            />
+          <>            
             <Card
               imgSrc={product_2.src}
               title={cardTitle.shop_2}
@@ -133,6 +128,11 @@ export const Shop = () => {
               imgSrc={product_5.src}
               title={cardTitle.shop_5}
               onClick={() => openCategory('shop_5')}
+            />
+            <Card
+              imgSrc={product_1.src}
+              title={cardTitle.shop_1}
+              onClick={() => openCategory('shop_1')}
             />
           </>
         </Layout>

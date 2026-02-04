@@ -53,51 +53,10 @@
   gap: 32px;
 }
 
-/* ФОРМА */
-.form {
-  background: #f5f7fa;
-  padding: 24px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-
-  h2 {
-    margin-bottom: 12px;
-  }
-
-  input,
-  textarea {
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-  }
-
-  textarea {
-    resize: vertical;
-  }
-
-  button {
-    margin-top: 12px;
-    background: #007bff;
-    color: #fff;
-    border: none;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-
-    &:hover {
-      background: #0056b3;
-    }
-  }
-}
-
 /* ЗАКАЗ */
 .summary {
   background: #ffffff;
-  padding: 24px;
+  padding: 0 24px;
   border-radius: 12px;
   border: 1px solid #eee;
 
@@ -139,7 +98,51 @@
   font-weight: 700;
 }
 
+/* ФОРМА */
+.form {
+  background: #f5f7fa;
+  padding: 0 24px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  h2 {
+    margin-bottom: 12px;
+  }
+
+  input,
+  textarea {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  button {
+    margin-top: 12px;
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+
+    &:hover {
+      background: #0056b3;
+    }
+  }
+}
+
 @media (max-width: 768px) {
+  .header{
+    margin-bottom: 0;
+  }
   .content {
     grid-template-columns: 1fr;
   }
