@@ -4,47 +4,40 @@ import up from "../../../images/arrow.svg";
 
 export const BackToTop = () => {
   const btnRef = useRef(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  const currentBottom = useRef(32); // текущее значение
-  const animationFrame = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const rafRef = useRef(null);
 
   useEffect(() => {
     const footer = document.querySelector("footer");
-    if (!footer) return;
+    if (!footer || !btnRef.current) return;
 
-    const update = () => {
+    const updatePosition = () => {
       const footerRect = footer.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
+      const vh = window.innerHeight;
 
-      // targetBottom = всегда >= 32
-      let targetBottom = 32;
-      if (footerRect.top < viewportHeight) {
-        targetBottom = viewportHeight - footerRect.top + 32;
+      const baseOffset = parseFloat(
+        getComputedStyle(btnRef.current).getPropertyValue("--offset")
+      );
+
+      let bottom = baseOffset;
+
+      if (footerRect.top < vh) {
+        bottom = vh - footerRect.top + baseOffset;
       }
 
-      // плавная интерполяция
-      currentBottom.current += (targetBottom - currentBottom.current) * 0.95;
-
-      if (btnRef.current) {
-        btnRef.current.style.bottom = currentBottom.current.toFixed(1) + "px";
-      }
-
-      animationFrame.current = requestAnimationFrame(update);
+      btnRef.current.style.bottom = `${bottom}px`;
+      rafRef.current = requestAnimationFrame(updatePosition);
     };
 
-    animationFrame.current = requestAnimationFrame(update);
-
-    // видимость кнопки
-    const checkVisible = () => {
-      setIsVisible(window.pageYOffset > 100);
-      requestAnimationFrame(checkVisible);
+    const checkVisibility = () => {
+      setVisible(window.scrollY > 160);
+      requestAnimationFrame(checkVisibility);
     };
-    requestAnimationFrame(checkVisible);
 
-    return () => {
-      cancelAnimationFrame(animationFrame.current);
-    };
+    rafRef.current = requestAnimationFrame(updatePosition);
+    requestAnimationFrame(checkVisibility);
+
+    return () => cancelAnimationFrame(rafRef.current);
   }, []);
 
   const scrollToTop = () => {
@@ -55,10 +48,10 @@ export const BackToTop = () => {
     <button
       ref={btnRef}
       onClick={scrollToTop}
-      className={`${Styles.backToTop} ${isVisible ? Styles.visible : ""}`}
+      className={`${Styles.backToTop} ${visible ? Styles.visible : ""}`}
       aria-label="Наверх"
     >
-      <img src={up.src} alt="" className={Styles.upIcon} />
+      <img src={up.src} alt="" className={Styles.icon} />
     </button>
   );
 };

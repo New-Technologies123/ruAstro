@@ -44,13 +44,13 @@
   flex-wrap: wrap;
 }
 
+/* ===== Информация о продукции ===== */
 .container {
   display: block;
   justify-items: center;
   margin: 40px 30px;
 }
 
-/* ===== Информация о продукции ===== */
 .content {
   width: 1000px;
   background: rgba(186, 229, 253, 0.534);
@@ -58,27 +58,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
   padding: 10px 15px;
-  margin-top: 25px;
 }
-
-// .sectionHeader {
-//   margin-bottom: 15px;
-
-//   h2 {
-//     font-size: 32px;
-//     color: #14213d;
-//     padding-top: 0;
-
-//     span {
-//       color: #4361ee;
-//     }
-//   }
-
-//   p {
-//     color: #58728b;
-//     font-size: 20px;
-//   }
-// }
 
 .imageCard {
   position: relative;
@@ -97,18 +77,12 @@
   }
 }
 
-
 .image,
 .mainImage {
   width: 100%;
   height: auto;
   display: block;
 }
-
-// .mainImage {
-//   max-height: 500px;
-//   object-fit: cover;
-// }
 
 .imageOverlay {
   @include flex-center;
@@ -121,6 +95,7 @@
   background: rgba(#4361ee, 0.7);
   opacity: 0;
   transition: opacity 0.3s ease;
+  margin-top: 10px;
 }
 
 .zoomText {
@@ -136,9 +111,6 @@
 .features {
   margin-top: 10px;
   margin-bottom: 15px;
-
-  // display: grid;
-  // gap: 15px;
   h3 {
     font-size: 24px;
     margin-bottom: 24px;
@@ -184,7 +156,6 @@
     margin-bottom: 8px;
     color: #14213d;
   }
-
   p {
     font-size: 18px;
     line-height: 1.4;
@@ -219,7 +190,6 @@
   display: flex;
   gap: 32px;
   align-items: flex-start;
-  margin-top: 20px;
 }
 
 .reverse {
@@ -240,17 +210,6 @@
   .navItem {
     padding: 12px 17px;
     gap: 15px;
-  }
-
-  .sectionHeader {
-    h2 {
-      margin: 0 0 10px;
-      font-size: 28px;
-    }
-
-    p {
-      font-size: 18px;
-    }
   }
 
   .features {
@@ -276,6 +235,19 @@
 }
 
 @media (max-width: 1200px) {
+  .buttonPrice{
+    padding: 12px 20px;
+    font-size: 17px;
+  }
+  .container{
+    margin: 35px 25px;
+  }
+  .content{
+    width: 750px;
+  }
+  .feature{
+    padding: 18px;
+  }
   .navItem {
     P {
       font-size: 15px;
@@ -284,16 +256,6 @@
 
   .zoomText {
     font-size: 15px;
-  }
-
-  .sectionHeader {
-    h2 {
-      font-size: 26px;
-    }
-
-    p {
-      font-size: 16px;
-    }
   }
 
   .features {
@@ -311,31 +273,23 @@
       font-size: 16px;
     }
   }
-
-
 }
 
 @media (max-width: 1024px) {
+  .price{
+    margin-right: 25px;
+  }
   .container {
     margin: 20px 18px;
   }
-
+  .feature{
+    padding: 15px;
+  }
   .mainContent {
     gap: 20px;
   }
-
   .sidebar {
     flex: 0 0 210px;
-  }
-
-  .sectionHeader {
-    h2 {
-      font-size: 24px;
-    }
-
-    p {
-      font-size: 15px;
-    }
   }
 
   .features {
@@ -343,8 +297,6 @@
       font-size: 18px;
     }
   }
-
-
   .featureText {
     h4 {
       font-size: 16px;
@@ -358,10 +310,20 @@
 }
 
 @media (max-width: 800px) {
+  .buttonPrice{
+    padding: 8px 16px;
+    font-size: 16px;
+  }
   .container {
     margin: 0 15px;
   }
-
+  .content{
+    width: 500px;
+  }
+  .card{
+    display: grid;
+    gap: 10px;
+  }
   .mainContent {
     display: grid;
   }
@@ -378,22 +340,18 @@
       font-size: 14px;
     }
   }
-
   .navIcon {
     font-size: 18px;
   }
-
   .features {
     h3 {
       font-size: 20px;
     }
   }
-
   .feature {
     padding: 18px;
     gap: 20px;
   }
-
   .featureText {
     h4 {
       margin-bottom: 5px;
@@ -402,18 +360,14 @@
 }
 
 @media (max-width: 600px) {
-  .sectionHeader {
-    h2 {
-      font-size: 20px;
-    }
-  }
-
   .features {
     h3 {
       font-size: 17px;
     }
   }
-
+  .content{
+    width: 350px;
+  }
   .featureText {
     h4 {
       font-size: 15px;
@@ -423,10 +377,16 @@
       font-size: 14px;
     }
   }
-
 }
 
 @media (max-width: 500px) {
+  .price{
+    margin-right: 20px;
+  }
+  .buttonPrice{
+    font-size: 15px;
+    padding: 5px 13px;
+  }
   .navMenu {
     padding: 3px;
     gap: 3px;

@@ -129,11 +129,11 @@ export const Shop = () => {
               title={cardTitle.shop_5}
               onClick={() => openCategory('shop_5')}
             />
-            <Card
+            {/* <Card
               imgSrc={product_1.src}
               title={cardTitle.shop_1}
               onClick={() => openCategory('shop_1')}
-            />
+            /> */}
           </>
         </Layout>
       )}

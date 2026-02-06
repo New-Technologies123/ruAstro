@@ -1,9 +1,9 @@
 import type { Product } from './types';
 
-export const psm_2Products: Product[] = [
+export const psm_4Products: Product[] = [
   {
     id: 1,
-    title: 'Диск НТ.103.000.002-01 (8скв)',
+    title: 'Диск НТ.103.000.002 (10скв)',
     description: '',
     price: '1 500',
     nds: 'без НДС',
@@ -48,18 +48,18 @@ export const psm_2Products: Product[] = [
   },
   {
     id: 6,
-    title: 'Корпус ПСМНТ.001.018.000-02 8 скв(без наплавки)',
+    title: 'Корпус ПСМНТ.001.018.000-01 (10 скв) — без наплавкой',
     description: '',
-    price: '180 000',
+    price: '280 000',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
     image: '',
   },
   {
     id: 7,
-    title: 'Датчик положения ПСМ.11.00.00.00(8 скважин)',
+    title: 'Датчик положения ПСМ.11.00.00.00-01(10 скважин)',
     description: '',
-    price: '21 000',
+    price: '26 000',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
     image: '',
@@ -183,7 +183,7 @@ export const psm_2Products: Product[] = [
   },
   {
     id: 21,
-    title: 'Храповик ПСМНТ.001.000.011-02 (8 скв)',
+    title: 'Храповик ПСМНТ.001.000.011-01 (10 скв)',
     description: '',
     price: '14 500',
     nds: 'без НДС',
@@ -201,7 +201,7 @@ export const psm_2Products: Product[] = [
   },
   {
     id: 23,
-    title: 'Колесо зубчатое ПСМНТ.001.000.014-02 (8 скв)',
+    title: 'Колесо зубчатое ПСМНТ.001.000.014-01 (10 скв)',
     description: '',
     price: '15 000',
     nds: 'без НДС',
