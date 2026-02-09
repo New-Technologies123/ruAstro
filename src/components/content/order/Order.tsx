@@ -58,14 +58,15 @@ export const Order = ({ onBack }: OrderProps) => {
       <div className={Styles.header}>
         <button className={Styles.backButton} onClick={onBack}>
           <img src={back.src} alt=""/>
-          </button>
-        <Title text="Оформление заказа" />        
+        </button>
+        {/* <Title text="Оформление заказа" /> */}
+        <Title text="Ваш заказ" />
       </div>
 
       <div className={Styles.content}>
         {/* Сводка заказа */}
         <div className={Styles.summary}>
-          <h2>Ваш заказ</h2>
+          {/* <h2>Ваш заказ</h2> */}
 
           {cart.map(item => (
             <div key={item.id} className={Styles.product}>
@@ -85,7 +86,7 @@ export const Order = ({ onBack }: OrderProps) => {
 
         {/* Форма */}
         <form className={Styles.form} onSubmit={handleSubmit}>
-          <h2>Контактные данные</h2>
+          {/* <h2>Контактные данные</h2> */}
 
           <input
             type="text"

@@ -1,7 +1,6 @@
 .orderPage {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 32px;
+  
+  padding: 0 32px;
 
   h1 {
     margin-bottom: 32px;
@@ -10,18 +9,17 @@
 
 .header {
   display: flex;
-  justify-content: space-between; /* Заголовок слева, кнопка справа */
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px; /* Отступ под заголовком */
 }
 
 .backButton {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
   padding: 10px 20px;
   font-size: 16px;
   font-weight: 600;
+  margin-top: 5px;
   color: #fff;
   background: linear-gradient(135deg, #18aaff, #4e5aff); // яркий градиент
   border: none;
@@ -37,20 +35,21 @@
   }
   &:hover {
     background: linear-gradient(135deg, #4e5aff, #18aaff);
-    transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(78, 81, 255, 0.5);
   }
 
   &:active {
-    transform: translateY(0);
     box-shadow: 0 4px 12px rgba(78, 105, 255, 0.4);
   }
 }
 
 .content {
+  max-width: 1100px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 32px;
+  padding-top: 15px;
 }
 
 /* ЗАКАЗ */
@@ -93,6 +92,7 @@
 .total {
   margin-top: 20px;
   display: flex;
+  align-items: center;
   justify-content: space-between;
   font-size: 20px;
   font-weight: 700;
@@ -139,11 +139,34 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1400px){
+  .backButton{
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  .backButton{
+    img{
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+@media (max-width: 950px) {
   .header{
     margin-bottom: 0;
   }
   .content {
     grid-template-columns: 1fr;
+  }
+  .summary{
+    padding: 0;
+  }
+  .backButton{
+    font-size: 12px;
+    img{
+      width: 25px;
+      height: 25px;
+    }
   }
 }

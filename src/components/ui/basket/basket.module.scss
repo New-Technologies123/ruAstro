@@ -174,9 +174,11 @@
     display: grid;
     width: 450px;
     justify-content: flex-end;
+    gap: 12px;
   }
   .rightSide{
     justify-content: flex-end;
+    gap: 17px;
   }
   .title{
     font-size: 17px;
@@ -185,5 +187,34 @@
     h4{
       font-size: 22px;
     }    
+  }
+}
+
+@media (max-width: 600px){
+  .item{
+    width: 350px;
+    gap: 8px;
+  }
+  .counter{
+    button{
+      font-size: 16px;
+    }    
+  }
+  .right{
+    margin-top: 10px;
+    padding: 0 15px;
+    gap: 30px;
+  }
+  .total{
+    h4{
+      font-size: 18px;
+    }
+    p{
+      font-size: 16px;
+    }
+  }
+  .order{
+    font-size: 14px;
+    padding: 8px 12px;
   }
 }
