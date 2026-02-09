@@ -7,11 +7,13 @@ import { Psm_1 } from './Shop_3/Psm_1';
 import { Psm_2 } from './Shop_3/Psm_2';
 import { Psm_3 } from './Shop_3/Psm_3';
 import { Psm_4 } from './Shop_3/Psm_4';
+import { Psm_5 } from './Shop_3/Psm_5';
+import { Psm_6 } from './Shop_3/Psm_6';
 
 import type { Product } from '../../products/types';
 import { addToCart } from '../../utils/cartStorage';
 
-type TTitleOptions = 'psm_1' | 'psm_2' | 'psm_3' | 'psm_4';
+type TTitleOptions = 'psm_1' | 'psm_2' | 'psm_3' | 'psm_4' | 'psm_5' | 'psm_6';
 
 type TProps = {
   onBackProducts: VoidFunction;
@@ -53,6 +55,24 @@ export const Shop_3 = ({ onBackProducts, title }: TProps) => {
         title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000-01 (на 10 скв) без наплавки',
         description: '',
         price: '1 000 000',
+        nds: 'без НДС',
+        deliveryTime: 'по запросу',
+        image: ''
+      },
+      psm_5: {
+        id: 104,
+        title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000 (на 14 скв) с наплавкой',
+        description: '',
+        price: '1 150 000',
+        nds: 'без НДС',
+        deliveryTime: 'по запросу',
+        image: ''
+      },
+      psm_6: {
+        id: 104,
+        title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000 (на 14 скв) без наплавки',
+        description: '',
+        price: '1 100 000',
         nds: 'без НДС',
         deliveryTime: 'по запросу',
         image: ''
@@ -100,6 +120,12 @@ export const Shop_3 = ({ onBackProducts, title }: TProps) => {
   }
   if (selectedItem === 'psm_4') {
     return <Psm_4 onBackShop={onBackShop} title={PRODUCTS.psm_4.title} />;
+  }
+  if (selectedItem === 'psm_5') {
+    return <Psm_5 onBackShop={onBackShop} title={PRODUCTS.psm_5.title} />;
+  }
+  if (selectedItem === 'psm_6') {
+    return <Psm_6 onBackShop={onBackShop} title={PRODUCTS.psm_6.title} />;
   }
 
   return (

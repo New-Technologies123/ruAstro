@@ -11,7 +11,7 @@ export const PumpingStations_1 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)  
 
   const onBackPumping = () => {
-    window.location.href = '/products/preparation-systems';
+    window.location.href = '/products/pumping-stations';
   };
 
   return (

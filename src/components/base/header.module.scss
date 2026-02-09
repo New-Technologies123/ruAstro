@@ -223,48 +223,86 @@ nav ul li a.active {
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 280px;
-  background: #01438f;
+  min-width: 300px;
+  margin-top: 20px;
+  padding: 12px 0;
   list-style: none;
-  padding: 8px 0;
-  margin: 0;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+
+  background: #001f75;
+  border-radius: 12px;
+
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
 
   opacity: 0;
   visibility: hidden;
-  transform: translateY(10px);
-  transition: all 0.2s ease;
-  z-index: 10;
+  transform: translateY(12px);
+  transition: all 0.3s ease;
+
+  z-index: 20;
 }
 
-.subMenu li {
-  position: relative;
-}
-
-.subMenu a {
-  color: #ffffff;
-  padding: 12px 18px;
-  font-size: 14px;
-}
-
-.subMenu a:hover {
-  background: #000000;
-}
-
-/* открытие submenu */
-.open {
-  top: 50px;
+.subMenu.open {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
 }
 
-/* ====== ВЛОЖЕННЫЕ SUBMENU ====== */
-.subMenu .subMenu {
-  top: -1px;
-  left: 100%;
+.subMenu::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 32px;
+
+  width: 22px;
+  height: 22px;
+
+  background: #001f75;
+  border-radius: 6px 6px 0 0;
+
+  transform: rotate(45deg);
 }
 
+/* ====== ПУНКТЫ ====== */
+.subMenu li {
+  position: relative;
+}
+
+.subMenu a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 14px 18px;
+  font-size: 14px;
+  color: #ffffff;
+  text-decoration: none;
+
+  transition: background 0.25s ease, padding-left 0.25s ease;
+}
+
+.subMenu a:hover {
+  background: #163eaa;
+  padding-left: 26px;
+}
+
+
+/* ====== ВЛОЖЕННЫЕ SUBMENU ====== */
+.subMenu .subMenu {
+  top: 0;
+  left: calc(100% + 10px);
+  margin-top: 0;
+}
+
+.subMenu .subMenu::before {
+  display: none;
+}
+
+
+.subMenu .subMenu.open {
+  transform: translateX(0) scale(1);
+}
+
+/* ====== СТРОКА СТРЕЛКИ ====== */
 .menuItem {
   position: relative;
 }
@@ -275,24 +313,33 @@ nav ul li a.active {
   justify-content: space-between;
 }
 
+/* ====== ССЫЛКА ====== */
 .menuLink {
   flex: 1;
 }
 
-/* ===== СТРЕЛКА ===== */
+/* ====== СТРЕЛКА ====== */
 .arrow {
   background: none;
   border: none;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
   padding: 6px 10px;
   cursor: pointer;
-  transition: transform 0.25s ease, color 0.25s ease;
+
+  transition:
+    transform 0.25s ease,
+    color 0.25s ease;
+}
+
+.arrow:hover {
+  color: #ffffff;
 }
 
 .arrowOpen {
   transform: rotate(90deg);
 }
+
 
 @media (max-width: 1450px) {
   .headerContainer {
@@ -458,46 +505,29 @@ nav ul li a.active {
     display: block;
   }
 
-  // .menuRow {
-  //   display: flex;
-  //   align-items: center;
-  //   justify-content: space-between;
-  // }
-
   .menuRow {
-  display: flex;
-  align-items: center;
-  justify-content: center; /* текст по центру */
-  position: relative;
-}
+    display: flex;
+    align-items: center;
+    justify-content: center; /* текст по центру */
+    position: relative;
+  }
 
-/* Стрелка справа */
-.menuRow .arrow {
-  position: absolute;
-  right: 16px;       /* отступ от правого края */
-  top: 50%;
-  transform: translateY(-50%);
-}
+  /* Стрелка справа */
+  .menuRow .arrow {
+    position: absolute;
+    right: 16px;       /* отступ от правого края */
+    top: 50%;
+    transform: translateY(-50%);
+  }
 
-/* Ссылка меню всегда центр */
-.menuLink {
-  // text-align: center;
-  width: 40px;
-  display: block;
-}
+  /* Ссылка меню всегда центр */
+  .menuLink {
+    // text-align: center;
+    width: 40px;
+    display: block;
+  }
 
   /* ---------- ARROW ---------- */
-
-  // .arrow {
-  //   background: none;
-  //   border: none;
-  //   color: #fff;
-  //   font-size: 18px;
-  //   cursor: pointer;
-
-  //   transition: transform 0.3s ease;
-  // }
-
   .arrowOpen {
     transform: rotate(90deg);
   }
@@ -505,7 +535,7 @@ nav ul li a.active {
   /* ---------- SUB MENU (ACCORDION) ---------- */
 
   .subMenu {
-    position: static; // ❗️КЛЮЧЕВОЕ
+    position: static;
     display: block;
 
     max-height: 0;

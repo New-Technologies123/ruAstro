@@ -4,9 +4,11 @@ import { Header } from "../../../components/base/Header";
 import { Footer } from "../../../components/base/Footer";
 import { Content } from "../../../components/base/Content";
 import { Calculator as CalculatorContent } from "../../../components/content/calculator/Calculator";
+
+const description = 'Калькулятор для расчета цен, калькулятор измерительной установки, калькулятор расчета цен АГЗУ, расчетать цену агзу';
 ---
 
-<Layout>
+<Layout description={description}>
   <Header pageType="products" client:load />
   <Content>
     <CalculatorContent client:load/>
