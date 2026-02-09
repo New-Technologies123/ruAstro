@@ -1,20 +1,17 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { Accessories_4 } from "../../../components/content/products/Accessories/Accessories_4";
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Accessories_4 } from '../../../components/content/products/Accessories/Accessories_4';
 
-const description = "Магниторегулируемый клапан (КМР), магнитнорегулируемый клапан, регулятор расхода, кмр";
+const description = 'Магниторегулируемый клапан (КМР), магнитнорегулируемый клапан, регулятор расхода, кмр';
 ---
 
 <Layout description={description}>
   <Header pageType="products" client:load />
-    <Content>
-      <Accessories_4
-        title="Магниторегулируемый клапан (КМР)"
-        onBackAccessories={() => history.back()}
-      />
-    </Content>
-  <Footer client:load/>
+  <Content>
+    <Accessories_4 client:load />
+  </Content>
+  <Footer client:load />
 </Layout>

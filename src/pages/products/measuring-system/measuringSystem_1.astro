@@ -1,20 +1,17 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { MeasuringSystem_1 } from "../../../components/content/products/MeasuringSystem/MeasuringSystem_1";
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { MeasuringSystem_1 } from '../../../components/content/products/MeasuringSystem/MeasuringSystem_1';
 
-const description = "Система измерения количества и показателей качества нефти (СИКН)";
+const description = 'Система измерения количества и показателей качества нефти (СИКН)';
 ---
 
 <Layout description={description}>
   <Header pageType="products" client:load />
-    <Content>
-      <MeasuringSystem_1
-        title="Система измерения количества и показателей качества нефти (СИКН)"
-        onBackMeasuring={() => history.back()}
-      />
-    </Content>
-  <Footer client:load/>
+  <Content>
+    <MeasuringSystem_1 client:load />
+  </Content>
+  <Footer client:load />
 </Layout>

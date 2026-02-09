@@ -1,20 +1,17 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { Accessories_3 } from "../../../components/content/products/Accessories/Accessories_3";
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Accessories_3 } from '../../../components/content/products/Accessories/Accessories_3';
 
-const description = "Переключатель скважин многоходовой (ПСМ), псм";
+const description = 'Переключатель скважин многоходовой (ПСМ), псм';
 ---
 
 <Layout description={description}>
   <Header pageType="products" client:load />
-    <Content>
-      <Accessories_3
-        title="Переключатель скважин многоходовой (ПСМ)"
-        onBackAccessories={() => history.back()}
-      />
-    </Content>
-  <Footer client:load/>
+  <Content>
+    <Accessories_3 client:load />
+  </Content>
+  <Footer client:load />
 </Layout>

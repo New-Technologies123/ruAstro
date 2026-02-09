@@ -1,35 +1,31 @@
-import Styles from '../products.module.scss'
-import { useState, useRef } from 'react'
+import Styles from '../products.module.scss';
+import { useState } from 'react';
 
-import product_2 from '../../../../images/products/product_2.webp'
+import product_2 from '../../../../images/products/product_2.webp';
 
-import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
-import { BackToTop } from '../../../ui/back-to-top/BackToTop'
+import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
+import { BackToTop } from '../../../ui/back-to-top/BackToTop';
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-type TProps = {
-  onBackAccessories: VoidFunction;
-  title: string;
-};
+export const Accessories_1 = () => {
+  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
 
-export const Accessories_1 = ({ onBackAccessories, title }: TProps) => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null)
+  const onBackAccessories = () => {
+    window.location.href = '/products/accessories';
+  };
 
   return (
-    <LayoutBack onBack={onBackAccessories} title={title}>
+    <LayoutBack onBack={onBackAccessories} title="Вихревой расходомер ЭРВИП">
       <div className={Styles.container}>
         {/* ===== CONTENT ===== */}
         <section className={Styles.content}>
-
           <div className={Styles.card}>
             {/* Фото */}
             <div className={Styles.cardImage}>
               <div className={Styles.imageCard} onClick={() => setBigPhoto(product_2.src)}>
                 <img src={product_2.src} alt="" className={Styles.mainImage} />
                 <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>
-                    Нажмите для увеличения
-                  </span>
+                  <span className={Styles.zoomText}>Нажмите для увеличения</span>
                 </div>
               </div>
             </div>
@@ -51,7 +47,10 @@ export const Accessories_1 = ({ onBackAccessories, title }: TProps) => {
                 <ul className={Styles.featuresList}>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Метод измерения основан на формировании вихрей Кармана за телом обтекания. Частота вихрей пропорциональна скорости потока.</p>
+                      <p>
+                        Метод измерения основан на формировании вихрей Кармана за телом обтекания. Частота вихрей пропорциональна скорости
+                        потока.
+                      </p>
                     </div>
                   </li>
                 </ul>
@@ -62,9 +61,7 @@ export const Accessories_1 = ({ onBackAccessories, title }: TProps) => {
 
         <BackToTop />
 
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
+        {bigPhoto && <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />}
       </div>
     </LayoutBack>
   );

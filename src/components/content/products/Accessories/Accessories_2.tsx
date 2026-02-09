@@ -7,16 +7,15 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-type TProps = {
-  onBackAccessories: VoidFunction;
-  title: string;
-};
-
-export const Accessories_2 = ({ onBackAccessories, title }: TProps) => {
+export const Accessories_2 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
+  const onBackAccessories = () => {
+    window.location.href = '/products/accessories';
+  };
+
   return (
-    <LayoutBack onBack={onBackAccessories} title={title}>
+    <LayoutBack onBack={onBackAccessories} title="Устройство регулирования перепада давления (УРПД)">
       <div className={Styles.container}>
         {/* ===== CONTENT ===== */}
         <section className={Styles.content}>
@@ -52,9 +51,7 @@ export const Accessories_2 = ({ onBackAccessories, title }: TProps) => {
 
         <BackToTop />
 
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
+        {bigPhoto && <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />}
       </div>
     </LayoutBack>
   )

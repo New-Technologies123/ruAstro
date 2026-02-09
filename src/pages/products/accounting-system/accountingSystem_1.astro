@@ -11,10 +11,7 @@ const description = "Автоматизированная замерная ус�
 <Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <AccountingSystem_1
-        title="АГЗУ «Спутник — массомер НТ.1» (стационарный)"
-        onBackAccountingSystem={() => history.back()}
-      />
+      <AccountingSystem_1 client:load/>
     </Content>
   <Footer client:load/>
 </Layout>

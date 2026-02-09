@@ -7,17 +7,15 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-type TProps = {
-  onBackPreparation: VoidFunction;
-  title: string;
-};
-
-
-export const PreparationSystems_4 = ({ onBackPreparation, title }: TProps) => {
+export const PreparationSystems_4 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
+  const onBackPreparation = () => {
+    window.location.href = '/products/preparation-systems';
+  };
+
   return (
-    <LayoutBack onBack={onBackPreparation} title={title}>
+    <LayoutBack onBack={onBackPreparation} title="Установка дозирования химического реагента (БДР)">
       <div className={Styles.container}>
           {/* ===== CONTENT ===== */}
           <section className={Styles.content}>

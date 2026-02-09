@@ -7,16 +7,15 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-type TProps = {
-  onBackAccessories: VoidFunction;
-  title: string;
-};
-
-export const Accessories_3 = ({ onBackAccessories, title }: TProps) => {
+export const Accessories_3 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
+  const onBackAccessories = () => {
+    window.location.href = '/products/accessories';
+  };
+
   return (
-    <LayoutBack onBack={onBackAccessories} title={title}>
+    <LayoutBack onBack={onBackAccessories} title="Переключатель скважин многоходовой (ПСМ)">
       <div className={Styles.container}>
         {/* ===== CONTENT ===== */}
         <section className={Styles.content}>

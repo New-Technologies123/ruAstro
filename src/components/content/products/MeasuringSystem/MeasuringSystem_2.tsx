@@ -7,16 +7,15 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-type TProps = {
-  onBackMeasuring: VoidFunction;
-  title: string;
-};
-
-export const MeasuringSystem_2 = ({ onBackMeasuring, title }: TProps) => {
+export const MeasuringSystem_2 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
+  const onBackMeasuring = () => {
+    window.location.href = '/products/measuring-system';
+  };
+
   return (
-    <LayoutBack onBack={onBackMeasuring} title={title}>
+    <LayoutBack onBack={onBackMeasuring} title="Система измерения количества газа (СИКГ)">
       <div className={Styles.container}>
         {/* ==== = CONTENT ===== */}
         <section className={Styles.content}>
@@ -25,7 +24,7 @@ export const MeasuringSystem_2 = ({ onBackMeasuring, title }: TProps) => {
             {/* Фото */}
             <div className={Styles.cardImage}>
               <div className={Styles.imageCard} onClick={() => setBigPhoto(product_3.src)}>
-                <img src={product_3.src} alt="" className={Styles.mainImage}/>
+                <img src={product_3.src} alt="" className={Styles.mainImage} />
                 <div className={Styles.imageOverlay}>
                   <span className={Styles.zoomText}>
                     Нажмите для увеличения

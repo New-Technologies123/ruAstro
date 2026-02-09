@@ -11,10 +11,7 @@ const description = "Блочная мультифазная насосная с
 <Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <PumpingStations_2
-        title="Блочная мультифазная насосная станция"
-        onBackPumping={() => history.back()}
-      />
+      <PumpingStations_2 client:load />
     </Content>
   <Footer client:load/>
 </Layout>

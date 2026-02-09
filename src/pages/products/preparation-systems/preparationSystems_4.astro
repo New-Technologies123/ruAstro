@@ -11,10 +11,7 @@ const description = "Установка дозирования химическ�
 <Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <PreparationSystems_4
-        title="Установка дозирования химического реагента (БДР)"
-        onBackPreparation={() => history.back()}
-      />
+      <PreparationSystems_4 client:load />
     </Content>
   <Footer client:load/>
 </Layout>

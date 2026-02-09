@@ -7,16 +7,15 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-type TProps = {
-  onBackPumping: VoidFunction;
-  title: string;
-};
-
-export const PumpingStations_1 = ({ onBackPumping, title }: TProps) => {
+export const PumpingStations_1 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)  
 
+  const onBackPumping = () => {
+    window.location.href = '/products/preparation-systems';
+  };
+
   return (
-    <LayoutBack onBack={onBackPumping} title={title}>
+    <LayoutBack onBack={onBackPumping} title="Блочная насосная станция внутренней и внешней перекачки нефти">
       <div className={Styles.container}>
         {/* ===== CONTENT ===== */}
         <section className={Styles.content}>

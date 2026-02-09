@@ -9,7 +9,7 @@ import { Calculator as CalculatorContent } from "../../../components/content/cal
 <Layout>
   <Header pageType="products" client:load />
   <Content>
-    <CalculatorContent onBackAccountingSystem={() => history.back()}/>
+    <CalculatorContent client:load/>
   </Content>
   <Footer client:load/>
 </Layout>

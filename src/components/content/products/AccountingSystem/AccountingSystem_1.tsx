@@ -7,16 +7,15 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-type TProps = {
-  onBackAccountingSystem: VoidFunction;
-  title: string;
-};
-
-export const AccountingSystem_1 = ({ onBackAccountingSystem, title }: TProps) => {
+export const AccountingSystem_1 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
+  const onBackAccounting = () => {
+    window.location.href = '/products/accounting-system';
+  };
+
   return (
-    <LayoutBack onBack={onBackAccountingSystem} title={title}>
+    <LayoutBack onBack={onBackAccounting} title="АГЗУ «Спутник — массомер НТ.1» (стационарный)">
       <div className={Styles.container}>
         {/* ===== CONTENT ===== */}
         <section className={Styles.content}>

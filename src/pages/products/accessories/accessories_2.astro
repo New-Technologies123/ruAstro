@@ -1,20 +1,17 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { Accessories_2 } from "../../../components/content/products/Accessories/Accessories_2";
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Accessories_2 } from '../../../components/content/products/Accessories/Accessories_2';
 
-const description = "Устройство регулирования перепада давления (УРПД), заслонка газовая УРПД, урпд 3.1";
+const description = 'Устройство регулирования перепада давления (УРПД), заслонка газовая УРПД, урпд 3.1';
 ---
 
 <Layout description={description}>
   <Header pageType="products" client:load />
-    <Content>
-      <Accessories_2
-        title="Устройство регулирования перепада давления (УРПД)"
-        onBackAccessories={() => history.back()}
-      />
-    </Content>
-  <Footer client:load/>
+  <Content>
+    <Accessories_2 client:load />
+  </Content>
+  <Footer client:load />
 </Layout>

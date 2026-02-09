@@ -7,16 +7,15 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-type TProps = {
-  onBackMeasuring: VoidFunction;
-  title: string;
-};
-
-export const MeasuringSystem_1 = ({ onBackMeasuring, title }: TProps) => {
+export const MeasuringSystem_1 = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
+  const onBackMeasuring = () => {
+    window.location.href = '/products/measuring-system';
+  };
+
   return (
-    <LayoutBack onBack={onBackMeasuring} title={title}>
+    <LayoutBack onBack={onBackMeasuring} title="Система измерения количества и показателей качества нефти (СИКН)">
       <div className={Styles.container}>
         {/* ===== CONTENT ===== */}
         <section className={Styles.content}>
@@ -25,7 +24,7 @@ export const MeasuringSystem_1 = ({ onBackMeasuring, title }: TProps) => {
             {/* Фото */}
             <div className={Styles.cardImage}>
               <div className={Styles.imageCard} onClick={() => setBigPhoto(product_3.src)}>
-                <img src={product_3.src} alt="" className={Styles.mainImage}/>
+                <img src={product_3.src} alt="" className={Styles.mainImage} />
                 <div className={Styles.imageOverlay}>
                   <span className={Styles.zoomText}>
                     Нажмите для увеличения
@@ -35,37 +34,37 @@ export const MeasuringSystem_1 = ({ onBackMeasuring, title }: TProps) => {
             </div>
 
             <div className={Styles.cardContent}>
-                <div className={Styles.features}>
-                  <h3>Назначение:</h3>
-                  <ul className={Styles.featuresList}>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Автоматизированное измерение количества нефти;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Определение плотности, вязкости, влагосодержания;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Отбор объединённой пробы по ГОСТ 2517;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Архивирование и передача данных на АРМ оператора;</p>
-                      </div>
-                    </li>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Может изготавливаться на базе различных типов расходомеров.</p>
-                      </div>
-                    </li>
-                  </ul>                    
-                </div>
-                
+              <div className={Styles.features}>
+                <h3>Назначение:</h3>
+                <ul className={Styles.featuresList}>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Автоматизированное измерение количества нефти;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Определение плотности, вязкости, влагосодержания;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Отбор объединённой пробы по ГОСТ 2517;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Архивирование и передача данных на АРМ оператора;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Может изготавливаться на базе различных типов расходомеров.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
             </div>
           </div>
         </section>

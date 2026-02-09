@@ -8,11 +8,7 @@ import { maxGasSepRules } from './maxGasSepRules';
 import { maxGasNonSepPriceRules } from './maxGasNonSepPriceRules';
 import { LayoutBack } from '../../layout/LayoutBack';
 
-type TProps = {
-  onBackAccountingSystem: VoidFunction;
-};
-
-export const Calculator = ({ onBackAccountingSystem }: TProps) => {
+export const Calculator = () => {
   const [loaded, setLoaded] = useState(false);
   const [selections, setSelections] = useState<any>({});
   const [selectedInstallations, setSelectedInstallations] = useState<any[]>([]);
@@ -20,6 +16,10 @@ export const Calculator = ({ onBackAccountingSystem }: TProps) => {
   const [fieldErrors, setFieldErrors] = useState<any>({});
   const [openSelected, setOpenSelected] = useState<Record<number, boolean>>({});
   const [errorMessages, setErrorMessages] = useState<Record<number, boolean>>({});
+
+  const onBackAccountingSystem = () => {
+    window.location.href = '/products/accounting-system';
+  };
 
   const gasGroupMap: Record<string, 'LOW' | 'MID' | 'HIGH'> = {
     'До 40 000': 'LOW',

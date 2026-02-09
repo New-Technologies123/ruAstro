@@ -1,9 +1,9 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { PumpingStations } from "../../../components/content/products/PumpingStations";
+import Layout from "../../layouts/Layout.astro";
+import { Header } from "../../components/base/Header";
+import { Footer } from "../../components/base/Footer";
+import { Content } from "../../components/base/Content";
+import { PumpingStations as PumpingContent} from "../../components/content/products/PumpingStations";
 
 const description = "Подробная информация о насосных станциях перекачки нефти, нефтепродуктов и воды; блочная насосная станция внутренней и внешней перекачки нефти; блочная мультифазная насосная станция";
 ---
@@ -11,7 +11,7 @@ const description = "Подробная информация о насосных
 <Layout description={description}>
   <Header pageType="products" client:load />
     <Content>
-      <PumpingStations client:load />
+      <PumpingContent client:load />
     </Content>
   <Footer client:load/>
 </Layout>

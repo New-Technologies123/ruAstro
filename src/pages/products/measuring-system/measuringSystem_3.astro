@@ -1,20 +1,17 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { MeasuringSystem_3 } from "../../../components/content/products/MeasuringSystem/MeasuringSystem_3";
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { MeasuringSystem_3 } from '../../../components/content/products/MeasuringSystem/MeasuringSystem_3';
 
-const description = "Система измерения количества воды (СИКВ)";
+const description = 'Система измерения количества воды (СИКВ)';
 ---
 
 <Layout description={description}>
   <Header pageType="products" client:load />
-    <Content>
-      <MeasuringSystem_3
-        title="Система измерения количества воды (СИКВ)"
-        onBackMeasuring={() => history.back()}
-      />
-    </Content>
-  <Footer client:load/>
+  <Content>
+    <MeasuringSystem_3 client:load />
+  </Content>
+  <Footer client:load />
 </Layout>
