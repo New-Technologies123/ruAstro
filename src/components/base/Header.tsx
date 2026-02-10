@@ -18,6 +18,7 @@ const MenuItem = ({ item, pageType }) => {
   const hasChildren = item.children && item.children.length > 0;
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 1000);
     };
