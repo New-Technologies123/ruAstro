@@ -11,7 +11,7 @@ import { menuData } from './menuData';
 import { useState, useEffect } from 'react';
 
 /* ===== РЕКУРСИВНЫЙ ПУНКТ МЕНЮ ===== */
-const MenuItem = ({ item }) => {
+const MenuItem = ({ item, pageType }) => {
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -27,6 +27,11 @@ const MenuItem = ({ item }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // 🔹 активен ли пункт
+  const isActive =
+    item.pageType === pageType ||
+    item.children?.some(child => child.pageType === pageType);
+
   return (
     <li
       className={Styles.menuItem}
@@ -34,12 +39,13 @@ const MenuItem = ({ item }) => {
       onMouseLeave={!isMobile && hasChildren ? () => setOpen(false) : undefined}
     >
       <div className={Styles.menuRow}>
-        {/* ТЕКСТ → ПЕРЕХОД */}
-        <a href={item.url} className={Styles.menuLink}>
+        <a
+          href={item.url}
+          className={`${Styles.menuLink} ${isActive ? Styles.active : ''}`}
+        >
           {item.title}
         </a>
 
-        {/* СТРЕЛКА → ОТКРЫТИЕ */}
         {hasChildren && (
           <button
             type="button"
@@ -58,13 +64,18 @@ const MenuItem = ({ item }) => {
       {hasChildren && (
         <ul className={`${Styles.subMenu} ${open ? Styles.open : ''}`}>
           {item.children.map((child, index) => (
-            <MenuItem key={index} item={child} />
+            <MenuItem
+              key={index}
+              item={child}
+              pageType={pageType}
+            />
           ))}
         </ul>
       )}
     </li>
   );
 };
+
 
 export default MenuItem;
 
@@ -164,7 +175,7 @@ export const Header = ({ pageType }) => {
           </li>
 
           {menuData.map((item, index) => (
-            <MenuItem key={index} item={item} />
+            <MenuItem key={index} item={item} pageType={pageType}/>
           ))}
 
           <li>

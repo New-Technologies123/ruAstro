@@ -523,7 +523,7 @@ nav ul li a.active {
   /* Ссылка меню всегда центр */
   .menuLink {
     // text-align: center;
-    width: 40px;
+    width: auto;
     display: block;
   }
 
@@ -535,14 +535,17 @@ nav ul li a.active {
   /* ---------- SUB MENU (ACCORDION) ---------- */
 
   .subMenu {
+    margin: 0 !important;      // ❗️
+    padding: 0 !important; 
     position: static;
     display: block;
 
     max-height: 0;
     overflow: hidden;
 
-    padding-left: 16px;
+    padding-left: 0px;
     background: #13283d;
+    // padding: 0px;
 
     opacity: 0;
     visibility: hidden;
@@ -554,6 +557,7 @@ nav ul li a.active {
 
   .subMenu.open {
     max-height: 3000px;
+    padding-left: 16px;
     opacity: 1;
     visibility: visible;
   }
@@ -737,60 +741,3 @@ nav ul li a.active {
     font-size: 13px;
   }
 }
-
-
-// /* ====== MOBILE ====== */
-// @media (max-width: 1024px) {
-//   .menuToggle {
-//     display: block;
-//   }
-
-//   .navMenu {
-//     position: fixed;
-//     top: 60px;
-//     left: 0;
-//     right: 0;
-//     flex-direction: column;
-//     background: #0f1f2e;
-//     padding: 16px 0;
-
-//     transform: translateY(-20px);
-//     opacity: 0;
-//     visibility: hidden;
-//     transition: all 0.25s ease;
-//   }
-
-//   .navMenu.active {
-//     transform: translateY(0);
-//     opacity: 1;
-//     visibility: visible;
-//   }
-
-//   .navMenu li {
-//     width: 100%;
-//   }
-
-//   .navMenu a {
-//     padding: 14px 24px;
-//     width: 100%;
-//   }
-
-//   .subMenu {
-//     position: static;
-//     box-shadow: none;
-//     background: #13283d;
-//     transform: none;
-//     opacity: 1;
-//     visibility: visible;
-//     padding-left: 12px;
-//   }
-
-//   .subMenu a {
-//     color: #ffffff;
-//     font-size: 14px;
-//   }
-
-//   .subMenu .subMenu {
-//     padding-left: 16px;
-//   }
-// }

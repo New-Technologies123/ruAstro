@@ -3,31 +3,32 @@ export const menuData = [
     {
         title: 'Продукция',
         url: '/products/',
+        pageType: 'products',
         children: [
             {
                 title: 'Автоматизированная замерная установка (АГЗУ)',
                 url: '/products/accounting-system/',
                 children: [
-                {
-                    title: 'АГЗУ «Спутник — массомер НТ.1» (стационарный)',
-                    url: '/products/accounting-system/accountingSystem_1/',
-                },
-                {
-                    title: 'АГЗУ «Спутник — массомер НТ.1» (мобильный)',
-                    url: '/products/accounting-system/accountingSystem_2/',
-                },
+                    {
+                        title: 'АГЗУ «Спутник — массомер НТ.1» (стационарный)',
+                        url: '/products/accounting-system/accountingSystem_1/',
+                    },
+                    {
+                        title: 'АГЗУ «Спутник — массомер НТ.1» (мобильный)',
+                        url: '/products/accounting-system/accountingSystem_2/',
+                    },
                 ],
             },
             {
                 title: 'Комплектующие для автоматизированной групповой замерной установки',
                 url: '/products/accessories/',
                 children: [
-                    { title: 'Вихревой расходомер ЭРВИП', url: '/products/accessories/accessories_1/' },
-                    { title: 'Устройство регулирования перепада давления (УРПД)', url: '/products/accessories/accessories_2/' },
-                    { title: 'Переключатель скважин многоходовой (ПСМ)', url: '/products/accessories/accessories_3/' },
-                    { title: 'Магниторегулируемый клапан (КМР)', url: '/products/accessories/accessories_4/' },
-                    { title: 'Гидропривод (ГП)', url: '/products/accessories/accessories_5/' },
-                    { title: 'Сепарационная ёмкость', url: '/products/accessories/accessories_6/' },
+                    { title: 'Вихревой расходомер ЭРВИП', url: '/products/accessories/accessories_1/'},
+                    { title: 'Устройство регулирования перепада давления (УРПД)', url: '/products/accessories/accessories_2/'},
+                    { title: 'Переключатель скважин многоходовой (ПСМ)', url: '/products/accessories/accessories_3/'},
+                    { title: 'Магниторегулируемый клапан (КМР)', url: '/products/accessories/accessories_4/'},
+                    { title: 'Гидропривод (ГП)', url: '/products/accessories/accessories_5/'},
+                    { title: 'Сепарационная ёмкость', url: '/products/accessories/accessories_6/'},
                 ],
             },
             {
@@ -89,8 +90,9 @@ export const menuData = [
     {
         title: 'Сервисные услуги',
         url: '/services/',
+        pageType: 'services',
         children: [
-            { title: 'Обслуживание, капитальный ремонт и модернизация АГЗУ', url: '/services/?type=repair' },
+            { title: 'Обслуживание, капитальный ремонт и модернизация АГЗУ', url: '/services/?type=repair', },
             { title: 'Замер дебита нефтяных скважин с помощью мобильной замерной установки', url: '/services/?type=metering' },
             { title: 'Обслуживание устройства очистки колонны УОК-НКТ', url: '/services/?type=service' },
             { title: 'Услуги депарафинизации нефтяных скважин', url: '/services/?type=dewaxing' },
