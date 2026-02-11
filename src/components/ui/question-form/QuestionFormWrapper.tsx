@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Styles from './question-form.module.scss';
 import { QuestionForm } from './QuestionForm';
 
 export const QuestionFormWrapper: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(true); // чат открывается сразу
+  const [isOpen, setIsOpen] = useState(true);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
 
@@ -20,13 +20,28 @@ export const QuestionFormWrapper: React.FC = () => {
     setTimeout(() => setSubmitted(false), 3000);
   };
 
+  // 👇 Авто-открытие через 10 секунд после закрытия
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (!isOpen) {
+      timer = setTimeout(() => {
+        setIsOpen(true);
+      }, 10000); // через 10 секунд снова откроется
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isOpen]);
+
   return (
     <>
       <button
-        className={`${Styles.chatButton} ${Styles.attention}`} // ✅ всегда пульсирует
+        className={`${Styles.chatButton} ${Styles.attention}`}
         onClick={() => setIsOpen(prev => !prev)}
       >
-        <span className={Styles.shake}>💬</span> {/* трясётся всегда */}
+        <span className={Styles.shake}>💬</span>
       </button>
 
       {isOpen && (
@@ -36,10 +51,14 @@ export const QuestionFormWrapper: React.FC = () => {
             <button onClick={() => setIsOpen(false)}>✕</button>
           </div>
 
-          <QuestionForm formData={formData} onChange={handleChange} onSubmit={handleSubmit} />
+          <QuestionForm
+            formData={formData}
+            onChange={handleChange}
+            onSubmit={handleSubmit}
+          />
 
           {submitted && (
-            <div className={`${Styles.successMessage} ${submitted ? '' : Styles['fade-out']}`}>
+            <div className={Styles.successMessage}>
               ✅ Запрос принят!
             </div>
           )}

@@ -10,5 +10,5 @@ export const Psm_1 = ({ onBackShop, title }: any) => (
       onBackShop={onBackShop}
     />
     <BackToTop/>
-  </>  
+  </>
 );

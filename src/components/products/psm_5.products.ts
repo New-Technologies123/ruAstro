@@ -8,7 +8,7 @@ export const psm_5Products: Product[] = [
     price: '1 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/1.png',
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const psm_5Products: Product[] = [
     price: '150 000',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных день',
-    image: '',
+    image: '/images/shop/psm/крышка_1.png',
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ export const psm_5Products: Product[] = [
     price: '83 100',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/вал.jpg',
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ export const psm_5Products: Product[] = [
     price: '3 600',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/колодка.jpg',
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ export const psm_5Products: Product[] = [
     price: '5 100',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/крышка_2.png',
   },
   {
     id: 6,
@@ -53,7 +53,7 @@ export const psm_5Products: Product[] = [
     price: '410 000',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/корпус_1.png',
   },
   {
     id: 7,
@@ -80,7 +80,7 @@ export const psm_5Products: Product[] = [
     price: '36 700',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/каретка.jpg',
   },
   {
     id: 10,
@@ -89,7 +89,7 @@ export const psm_5Products: Product[] = [
     price: '31 200',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/угольник.jpg',
   },
   {
     id: 11,
@@ -116,7 +116,7 @@ export const psm_5Products: Product[] = [
     price: '90 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/корпус_2.png',
   },
   {
     id: 14,
@@ -125,7 +125,7 @@ export const psm_5Products: Product[] = [
     price: '50 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/корпус_3.png',
   },
   {
     id: 15,
@@ -134,7 +134,7 @@ export const psm_5Products: Product[] = [
     price: '3 000',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/крышка_3.png',
   },
   {
     id: 16,
@@ -152,7 +152,7 @@ export const psm_5Products: Product[] = [
     price: '3 000',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/кольцо.png',
   },
   {
     id: 18,
@@ -161,7 +161,7 @@ export const psm_5Products: Product[] = [
     price: '2 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/кольцо уплотнения.png',
   },
   {
     id: 19,
@@ -188,7 +188,7 @@ export const psm_5Products: Product[] = [
     price: '14 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/храповик.jpg',
   },
   {
     id: 22,
@@ -197,7 +197,7 @@ export const psm_5Products: Product[] = [
     price: '4 200',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/пружина.jpg',
   },
   {
     id: 23,
@@ -215,7 +215,7 @@ export const psm_5Products: Product[] = [
     price: '800',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/пробка.png',
   },
   {
     id: 25,
@@ -242,7 +242,7 @@ export const psm_5Products: Product[] = [
     price: '900',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/винт.png',
   },
   {
     id: 28,
@@ -260,7 +260,7 @@ export const psm_5Products: Product[] = [
     price: '1 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/ролик.jpg',
   },
   {
     id: 30,
@@ -278,6 +278,6 @@ export const psm_5Products: Product[] = [
     price: '300',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/psm/втулка.png',
   },
 ];

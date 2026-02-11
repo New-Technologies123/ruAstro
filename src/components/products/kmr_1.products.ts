@@ -215,7 +215,7 @@ export const shop1Products: Product[] = [
     price: '3 375',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '',
+    image: '/images/shop/24.jpg',
   },
   {
     id: 25,

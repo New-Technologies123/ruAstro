@@ -8,6 +8,13 @@
   flex-wrap: wrap;
 }
 
+.row {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
 /* ===== ФИЛЬТРЫ ===== */
 .filters {
   display: flex;
