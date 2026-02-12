@@ -20,14 +20,14 @@ export const QuestionFormWrapper: React.FC = () => {
     setTimeout(() => setSubmitted(false), 3000);
   };
 
-  // 👇 Авто-открытие через 10 секунд после закрытия
+  // 👇 Авто-открытие через 30 секунд после закрытия
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     if (!isOpen) {
       timer = setTimeout(() => {
         setIsOpen(true);
-      }, 10000); // через 10 секунд снова откроется
+      }, 30000); // через 30 секунд снова откроется
     }
 
     return () => {
