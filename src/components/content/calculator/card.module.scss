@@ -17,16 +17,13 @@
 /* Контент карточки */
 .cardContent {
   display: flex;
-  // gap: 150px;
   padding: 20px 45px;
 }
 
 /* Сетка параметров */
 .paramsGrid {
   display: grid;
-  // grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  grid-template-columns: repeat(4, 1fr);
-  /* ровно 4 колонки */
+  grid-template-columns: repeat(4, 1fr); /* ровно 4 колонки */
   gap: 60px;
   flex: 2;
 }
@@ -115,13 +112,26 @@
   font-weight: 600;
 }
 
+@media (max-width: 1410px){
+  .paramsGrid{
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1200px){
+  .paramsGrid{
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
 
 /* Адаптив */
-@media (max-width: 768px) {
+@media (max-width: 700px) {
   .cardContent {
     flex-direction: column;
   }
-
+  .paramsGrid{
+    grid-template-columns: repeat(1, 1fr);
+  }
   .rightBlock {
     justify-content: flex-start;
     margin-top: 10px;

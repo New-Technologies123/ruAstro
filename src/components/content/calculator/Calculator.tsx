@@ -239,18 +239,19 @@ export const Calculator = () => {
                 >
                   <div className={Styles.selectedHeader}>
                     <span className={Styles.selectedName}>{item.summary}</span>
-                    <span className={Styles.selectedPrice}>
-                      {item.price.toLocaleString('ru-RU')} ₽ без НДС
-                    </span>
-                    <button
-                      className={Styles.deleteButtonInline}
-                      onClick={e => {
-                        e.stopPropagation();
-                        removeInstallation(index);
-                      }}
-                    >
-                      Удалить
-                    </button>
+                    <div className={Styles.priceDelete}>
+                      <span className={Styles.selectedPrice}>
+                        {item.price.toLocaleString('ru-RU')} ₽ без НДС
+                      </span>
+                      <button className={Styles.deleteButtonInline}
+                        onClick={e => {
+                          e.stopPropagation();
+                          removeInstallation(index);
+                        }}
+                      >
+                        Удалить
+                      </button>
+                    </div>                    
                   </div>
 
                   {isOpen && (
