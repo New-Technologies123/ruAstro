@@ -41,7 +41,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 750px;
+  width: 100%;
+  max-width: 750px;
   padding: 12px 16px;
   border-radius: 12px;
   background: #9cceff;
@@ -55,7 +56,8 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  flex: 1; // занимает все свободное место слева
+  min-width: 0;
+  flex: 1;
 }
 
 .rightSide {
@@ -92,12 +94,14 @@
 
 //Итог и кнопка оформить заказ
 .right {
-  margin-top: 32px;
-  border-top: 1px solid #eee;
+  margin-top: 20px;
+  margin: 0 20px;
+  border-top: 1px solid #0c5ca752;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0 20px;
+  padding-top: 10px;
   gap: 80px;
 }
 
@@ -171,17 +175,22 @@
 
 @media (max-width: 850px){
   .item{
-    display: grid;
-    width: 450px;
-    justify-content: flex-end;
+    flex-direction: column;   // вместо display: grid
+    align-items: flex-start;  // заголовок слева
+    max-width: 450px;
     gap: 12px;
   }
   .rightSide{
+    width: 100%;
     justify-content: flex-end;
     gap: 17px;
   }
   .title{
     font-size: 17px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
   }
   .total{
     h4{
@@ -195,6 +204,9 @@
     width: 350px;
     gap: 8px;
   }
+  .back{
+    margin-left: 15px;
+  }
   .counter{
     button{
       font-size: 16px;
@@ -203,6 +215,7 @@
   .right{
     margin-top: 10px;
     padding: 0 15px;
+    padding-top: 10px;
     gap: 30px;
   }
   .total{
@@ -216,5 +229,12 @@
   .order{
     font-size: 14px;
     padding: 8px 12px;
+  }
+}
+
+@media (max-width: 440px){
+  .right{
+    display: grid;
+    gap: 15px;
   }
 }

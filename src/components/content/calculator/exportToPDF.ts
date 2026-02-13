@@ -96,5 +96,5 @@ export const exportToPDF = (selectedInstallations: any[], totalPrice: number) =>
     }
   };
 
-  (pdfMake as any).createPdf(docDefinition).open();
+  (pdfMake as any).createPdf(docDefinition).download("Коммерческое_предложение.pdf");
 };

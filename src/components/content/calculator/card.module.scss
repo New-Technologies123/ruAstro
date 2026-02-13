@@ -47,8 +47,9 @@
   flex: 1;
   display: flex;
   align-items: flex-start;
-  justify-content: flex-end;
+  justify-content: start;
   padding: 10px;
+  margin-bottom: 5px;
 }
 
 .addButton {

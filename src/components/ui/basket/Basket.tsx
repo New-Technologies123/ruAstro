@@ -34,15 +34,17 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
   );
 
   if (!cart.length) {
-    return (
-      <>
-        <Title text="Корзина пуста" />
+  return (
+    <>
+      <div className={Styles.headerRow}>
         <button className={Styles.back} onClick={onBack}>
           ←
         </button>
-      </>
-    );
-  }
+        <Title text="Корзина пуста" />
+      </div>
+    </>
+  );
+}
 
   return (
     <>    

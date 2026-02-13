@@ -63,6 +63,7 @@ export const Shop = () => {
   const openCategory = (type: TProducts) => {
     const url = new URL(window.location.href);
     url.searchParams.set('type', type);
+    url.searchParams.delete('view');
     window.history.pushState({}, '', url.toString());
     setCurrentPage(type);
   };
@@ -70,6 +71,7 @@ export const Shop = () => {
   const backToShop = () => {
     const url = new URL(window.location.href);
     url.searchParams.delete('type');
+    url.searchParams.delete('view');
     window.history.pushState({}, '', url.toString());
     setCurrentPage('shop');
   };
@@ -78,29 +80,31 @@ export const Shop = () => {
   const openBasket = () => {
     const url = new URL(window.location.href);
     url.searchParams.set('view', 'basket');
-
-    // ❗ ВАЖНО: pushState, а не replace
+    url.searchParams.delete('type');
     window.history.pushState({}, '', url.toString());
     setCurrentPage('basket');
   };
 
   const closeBasket = () => {
-    // ❗ возвращаемся туда, откуда пришли
     window.history.back();
   };
 
   const openOrder = () => {
     const url = new URL(window.location.href);
-    url.searchParams.set('view', 'basket');
-    url.searchParams.set('ord', 'order');
+    url.searchParams.set('view', 'order');
+    url.searchParams.delete('type');
     window.history.pushState({}, '', url.toString());
     setCurrentPage('order');
   };
 
+  const isBasketOrOrder =
+    currentPage === 'basket' || currentPage === 'order';
+
   return (
     <>
-      <CartButton goToBasket={openBasket} />
-      {currentPage === 'order' && <Order onBack={closeBasket} />}
+      {/* 🛒 Кнопка корзины скрыта на страницах basket и order */}
+      {!isBasketOrOrder && ( <CartButton goToBasket={openBasket} /> )}
+      {currentPage === 'order' && ( <Order onBack={closeBasket} /> )}
 
       {/* SHOP */}
       {currentPage === 'shop' && (
@@ -133,7 +137,7 @@ export const Shop = () => {
               imgSrc={product_5.src}
               title={cardTitle.shop_5}
               onClick={() => openCategory('shop_5')}
-            />            
+            />
           </>
         </Layout>
       )}
@@ -174,9 +178,9 @@ export const Shop = () => {
         />
       )}
 
-      {/* BASKET — ОТДЕЛЬНАЯ СТРАНИЦА */}
+      {/* BASKET — отдельная страница */}
       {currentPage === 'basket' && (
-        <Basket onBack={closeBasket} goToOrder={openOrder}/>
+        <Basket onBack={closeBasket} goToOrder={openOrder} />
       )}
     </>
   );

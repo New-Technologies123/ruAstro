@@ -55,13 +55,9 @@
 /* ЗАКАЗ */
 .summary {
   background: #ffffff;
-  padding: 0 24px;
+  padding: 17px 24px;
   border-radius: 12px;
-  border: 1px solid #eee;
-
-  h2 {
-    margin-bottom: 16px;
-  }
+  border: 1px solid #00186869;
 }
 
 .product {
@@ -69,7 +65,7 @@
   grid-template-columns: 1fr auto auto;
   gap: 12px;
   padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #61a2f894;
 
   &:last-child {
     border-bottom: none;
@@ -100,23 +96,19 @@
 
 /* ФОРМА */
 .form {
-  background: #f5f7fa;
-  padding: 0 24px;
+  background: #aeceff3b;
+  padding: 17px 24px;
   border-radius: 12px;
   display: flex;
   flex-direction: column;
   gap: 14px;
-
-  h2 {
-    margin-bottom: 12px;
-  }
 
   input,
   textarea {
     padding: 12px;
     font-size: 16px;
     border-radius: 8px;
-    border: 1px solid #ccc;
+    border: 1px solid #4772ff;
   }
 
   textarea {
@@ -153,20 +145,67 @@
 }
 
 @media (max-width: 950px) {
+  .orderPage{
+    padding: 0 25px;
+  }
   .header{
     margin-bottom: 0;
   }
   .content {
     grid-template-columns: 1fr;
-  }
-  .summary{
-    padding: 0;
-  }
+  }  
   .backButton{
     font-size: 12px;
     img{
       width: 25px;
       height: 25px;
+    }
+  }
+  .summary{
+    padding: 12px 19px;
+  }
+  .product{
+    gap: 8px;
+  }
+  .total{
+    font-size: 18px;
+    margin-top: 16px;
+  }
+  .form{
+    padding: 12px 19px;
+  }
+}
+
+@media (max-width: 600px){
+  .orderPage{
+    padding: 0 17px;
+  }
+  .content{
+    gap: 20px;
+  }
+  .backButton{
+    img{
+      width: 20px;
+      height: 20px;
+    }
+  }
+  .summary{
+    padding: 8px 15px;
+  }
+  .product{
+    gap: 5px;
+  }
+  .title{
+    font-size: 13px;
+  }
+  .total{
+    font-size: 16px;
+    margin-top: 14px;
+  }
+  .form{
+    padding: 8px 15px;
+    input, textarea{
+      font-size: 14px;
     }
   }
 }
