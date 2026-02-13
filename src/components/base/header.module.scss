@@ -426,7 +426,7 @@ nav ul li a.active {
 
   .navSticky {
     position: relative;
-    z-index: 1000;
+    z-index: 5;
     overflow: visible; // ❗️бургер не режем
   }
 
@@ -684,6 +684,7 @@ nav ul li a.active {
     gap: 0px;
     margin: 0px;
     padding-bottom: 0px;
+    padding-top: 10px;
   }
 
   .contactInfo {

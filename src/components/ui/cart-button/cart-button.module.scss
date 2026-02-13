@@ -1,38 +1,43 @@
 /* ===== Кнопка корзины ===== */
 .cartWrapper {
-  position: fixed;   // фиксируем кнопку
-  top: 80px;         // отступ сверху
-  right: 20px;       // отступ справа
-  z-index: 1000;     // поверх всего
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 1000;
   margin-top: 20px;
   margin-left: 15px;
-  // position: sticky;
 }
 
 .cartButton {
   position: relative;
-  font-size: 28px;
-  background: #6db4ff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  font-size: 22px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: #4bb3f0;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.08);
+
+  transition: box-shadow 0.3s ease;
+}
+
+.cartButton:hover {
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.15);
 }
 
 .badge {
   position: absolute;
-  top: -5px;
-  right: -5px;
-  background: red;
-  color: white;
+  top: -6px;
+  right: -6px;
+  background: #00195f;
+  color: #fff;
   font-size: 12px;
+  font-weight: 700;
   border-radius: 50%;
-  padding: 2px 5px;
+  padding: 4px 7px;
 }
 
 .dropdown {
@@ -64,9 +69,23 @@
 
 .item {
   display: grid;
-  grid-template-columns: 1fr auto; // левый столбец = название, правый = цена
+  grid-template-columns: 1fr auto;
   gap: 8px;
   padding: 5px 0;
   border-bottom: 1px solid #eee;
   font-size: 14px;
+}
+
+@media (max-width:1070px){
+  .cartWrapper{
+    margin-right: 45px;
+  }
+}
+
+@media (max-width: 660px){
+  .cartWrapper{
+    top: 5px;
+    margin-top: 12px;
+    margin-right: 0;
+  }
 }

@@ -113,11 +113,11 @@ export const Shop = () => {
           description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области безопасности и качества."
         >
           <>
-            <Card
+            {/* <Card
               imgSrc={product_1.src}
               title={cardTitle.shop_1}
               onClick={() => openCategory('shop_1')}
-            />
+            /> */}
             <Card
               imgSrc={product_2.src}
               title={cardTitle.shop_2}

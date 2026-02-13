@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Styles from './basket.module.scss';
 import { Title } from '../../ui/title/Title';
 
@@ -19,7 +20,6 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
 
   useEffect(() => {
     const update = () => setCart(getCart());
-
     update();
     window.addEventListener('cartUpdated', update);
     return () => window.removeEventListener('cartUpdated', update);
@@ -34,20 +34,18 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
   );
 
   if (!cart.length) {
-  return (
-    <>
+    return (
       <div className={Styles.headerRow}>
         <button className={Styles.back} onClick={onBack}>
           ←
         </button>
         <Title text="Корзина пуста" />
       </div>
-    </>
-  );
-}
+    );
+  }
 
   return (
-    <>    
+    <>
       <div className={Styles.headerRow}>
         <button className={Styles.back} onClick={onBack}>
           ←
@@ -56,45 +54,62 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
       </div>
 
       <ul className={Styles.items}>
-        {cart.map(item => (
-          <li key={item.id} className={Styles.item}>
-            <span className={Styles.title}>{item.title}</span>
+        <AnimatePresence>
+          {cart.map((item, index) => (
+            <motion.li
+              key={item.id}
+              className={Styles.item}
+              layout
+              initial={{
+                opacity: 0,
+                y: 60,
+                rotateX: -15,
+                scale: 0.96
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                rotateX: 0,
+                scale: 1
+              }}
+              exit={{
+                opacity: 0,
+                y: -30,
+                rotateX: 10,
+                scale: 0.95
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 140,
+                damping: 16,
+                delay: index * 0.06
+              }}
+              style={{ transformPerspective: 1000 }}
+            >
+              <span className={Styles.title}>{item.title}</span>
 
-            <div className={Styles.rightSide}>
+              <div className={Styles.rightSide}>
+                <div className={Styles.counter}>
+                  <button onClick={() => changeItemCount(item.id, -1)}>−</button>
+                  <span>{item.count}</span>
+                  <button onClick={() => changeItemCount(item.id, 1)}>+</button>
+                </div>
 
-              {/* счетчик */}
-              <div className={Styles.counter}>
+                <span className={Styles.countPrice}>
+                  {item.price} ₽
+                  <p>без НДС</p>
+                </span>
+
                 <button
-                  onClick={() => changeItemCount(item.id, -1)}
-                  // disabled={item.count <= 1}
+                  className={Styles.delete}
+                  onClick={() => removeFromCart(item.id)}
                 >
-                  −
-                </button>
-
-                <span>{item.count}</span>
-
-                <button
-                  onClick={() => changeItemCount(item.id, 1)}
-                >
-                  +
+                  Удалить
                 </button>
               </div>
-
-              <span className={Styles.countPrice}>
-                {item.price} ₽
-                <p>без НДС</p>
-              </span>
-
-              <button
-                className={Styles.delete}
-                onClick={() => removeFromCart(item.id)}
-              >
-                Удалить
-              </button>
-
-            </div>
-          </li>
-        ))}
+            </motion.li>
+          ))}
+        </AnimatePresence>
       </ul>
 
       <div className={Styles.right}>
