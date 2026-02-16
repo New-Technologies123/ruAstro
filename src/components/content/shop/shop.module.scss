@@ -10,69 +10,10 @@
 
 .row {
   display: flex;
+  justify-content: center;
   gap: 30px;
   margin-bottom: 50px;
   flex-wrap: wrap;
-}
-
-/* ===== ФИЛЬТРЫ ===== */
-.filters {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  gap: 24px;
-  // margin: 24px 0 32px;
-  flex-wrap: wrap;
-  padding: 20px;
-}
-
-.categories {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.filter {
-  background: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  padding: 8px 14px;
-  border-radius: 20px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-
-  &:hover {
-    background: #a9caff;
-    color: #000000;
-  }
-
-  &--active {
-    background: #2f3c8f;
-    color: #fff;
-    border: 2px solid #2f3c8f;
-    // border-color: #2f3c8f;
-  }
-
-  sup {
-    margin-left: 4px;
-    font-size: 11px;
-    opacity: 0.7;
-  }
-}
-
-.search {
-  input {
-    padding: 10px 14px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    min-width: 240px;
-    font-size: 14px;
-
-    &:focus {
-      outline: none;
-      border-color: #2f3c8f;
-    }
-  }
 }
 
 /* ===== Кнопка корзины ===== */
@@ -113,11 +54,6 @@
 
 /* ===== АДАПТИВ ===== */
 @media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .search input {
     width: 100%;
   }

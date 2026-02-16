@@ -16,7 +16,7 @@ export const BackToTop = () => {
       const vh = window.innerHeight;
 
       const baseOffset = parseFloat(
-        getComputedStyle(btnRef.current).getPropertyValue("--offset")
+        getComputedStyle(btnRef.current).getPropertyValue("offset")
       );
 
       let bottom = baseOffset;

@@ -5,6 +5,7 @@ import Styles from './products.module.scss';
 
 import product_1_1 from '../../../images/products/product_1.webp';
 import product_1_2 from '../../../images/products/product_1_2.webp';
+import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
 type TAccounting = | 'accountingSystem_1' | 'accountingSystem_2' | 'calculator';
 
@@ -52,6 +53,7 @@ export const AccountingSystem = () => {
           onClick={() => goToAccounting('accountingSystem_2')}
         />
       </div>
+      <BackToTop />
     </LayoutBack>
   );
 };

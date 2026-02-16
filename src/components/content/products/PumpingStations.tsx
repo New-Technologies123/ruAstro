@@ -5,6 +5,7 @@ import Styles from './products.module.scss';
 
 import product_5_1 from '../../../images/products/product_5.webp';
 import product_5_2 from '../../../images/products/product_5_1.webp';
+import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
 type TPumping = | 'pumpingStations_1' | 'pumpingStations_2';
 
@@ -41,6 +42,7 @@ export const PumpingStations = () => {
           onClick={() => goToPumping('pumpingStations_2')}
         />
       </div>
+      <BackToTop />
     </LayoutBack>
   );
 };

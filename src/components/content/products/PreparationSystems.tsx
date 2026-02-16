@@ -7,6 +7,7 @@ import product_4_1 from '../../../images/products/product_4.webp';
 import product_4_2 from '../../../images/products/product_4_2.webp';
 import product_4_3 from '../../../images/products/product_4_3.webp';
 import product_4_4 from '../../../images/products/product_4_4.webp';
+import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
 type TPreparation = | 'preparationSystems_1' | 'preparationSystems_2' | 'preparationSystems_3' | 'preparationSystems_4';
 
@@ -56,6 +57,7 @@ export const PreparationSystems = () => {
           onClick={() => goToPreparation('preparationSystems_4')}
         />
       </div>
+      <BackToTop />
     </LayoutBack>
   );
 };

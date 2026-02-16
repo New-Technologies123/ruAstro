@@ -8,6 +8,7 @@ import product_2_3 from '../../../images/products/product_2_2.png';
 import product_2_4 from '../../../images/products/product_2_3.png';
 import product_2_5 from '../../../images/products/product_2_4.png';
 import product_2_6 from '../../../images/products/product_2_5.png';
+import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
 type TAccessories = 'accessories_1' | 'accessories_2' | 'accessories_3' | 'accessories_4' | 'accessories_5' | 'accessories_6';
 
@@ -45,6 +46,7 @@ export const Accessories = () => {
         <Card imgSrc={product_2_5.src} title={cardTitle.accessories_5} onClick={() => goToAccessory('accessories_5')} />
         <Card imgSrc={product_2_6.src} title={cardTitle.accessories_6} onClick={() => goToAccessory('accessories_6')} />
       </div>
+      <BackToTop />
     </LayoutBack>
   );
 };

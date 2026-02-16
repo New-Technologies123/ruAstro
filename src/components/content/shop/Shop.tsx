@@ -11,6 +11,7 @@ import { Shop_5 } from './Shop_5';
 
 import { CartButton } from '../../ui/cart-button/CartButton';
 import { Basket } from '../../ui/basket/Basket';
+import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
 import product_1 from '../../../images/products/product_2.webp';
 import product_2 from '../../../images/products/product_2_1.webp';
@@ -139,6 +140,7 @@ export const Shop = () => {
               onClick={() => openCategory('shop_5')}
             />
           </>
+          <BackToTop />
         </Layout>
       )}
 
@@ -182,6 +184,7 @@ export const Shop = () => {
       {currentPage === 'basket' && (
         <Basket onBack={closeBasket} goToOrder={openOrder} />
       )}
+      
     </>
   );
 };

@@ -55,7 +55,101 @@ export const AccountingSystem_1 = () => {
                   </li>
                 </ul>
               </div>
-
+              <div className={Styles.features}>
+                <h3>Состав блока технологического:</h3>
+                <ul className={Styles.featuresList}>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Для измерения массы и массового расхода скважинной жидкости в составе нефтегазовой смеси.</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Сепарационная емкость с гидроциклоном;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Переключатель скважин многоходовой (ПСМ);</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Запорная арматура (задвижки, шаровые краны, вентиля);</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Регулятор расхода;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Газовая заслонка;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Датчики;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Клапана регулирующие;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Клапан предохранительный;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Линия дренажа;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Линия коллектора;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Линия байпасная;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Термометры (термопреобразователи);</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Термометры (термопреобразователи);</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Расходомеры типа «ЭМИС-МАСС 260» или аналог;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Счетчик жидкостной турбинный с электромагнитным датчиком «ТОР-1» или аналог;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Влагомер ВСН-2 или аналог;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Манометры.</p>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>

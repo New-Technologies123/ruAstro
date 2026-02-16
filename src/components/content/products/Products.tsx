@@ -12,13 +12,9 @@ import product_2 from '../../../images/products/product_2.0.webp';
 import product_3 from '../../../images/products/product_3.webp';
 import product_4 from '../../../images/products/product_4.webp';
 import product_5 from '../../../images/products/product_5.webp';
+import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
-type TProducts =
-  | 'accounting-system'
-  | 'accessories'
-  | 'measuring-system'
-  | 'preparation-systems'
-  | 'pumping-stations';
+type TProducts = | 'accounting-system' | 'accessories' | 'measuring-system' | 'preparation-systems' | 'pumping-stations';
 
 const pathnameToProduct = (pathname: string): TProducts | null => {
   const parts = pathname.split('/').filter(Boolean);
@@ -105,6 +101,7 @@ const goBack = () => {
           onClick={() => goTo('/products/pumping-stations')}
         />
       </>
+      <BackToTop />
     </Layout>
   );
 };

@@ -5,6 +5,7 @@ import Styles from './products.module.scss';
 import product_3_1 from '../../../images/products/product_3.webp';
 import product_3_2 from '../../../images/products/product_3_1.webp';
 import product_3_3 from '../../../images/products/product_3_2.webp';
+import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
 type TMeasuring = | 'measuringSystem_1' | 'measuringSystem_2' | 'measuringSystem_3';
 
@@ -48,6 +49,7 @@ export const MeasuringSystem = () => {
           onClick={() => goToMeasuring('measuringSystem_3')}
         />
       </div>
+      <BackToTop />
     </LayoutBack>
   );
 };
