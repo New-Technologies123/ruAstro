@@ -7,6 +7,7 @@ import { exportToPDF } from '../calculator/exportToPDF';
 import { maxGasSepRules } from './maxGasSepRules';
 import { maxGasNonSepPriceRules } from './maxGasNonSepPriceRules';
 import { LayoutBack } from '../../layout/LayoutBack';
+import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 export const Calculator = () => {
   const [loaded, setLoaded] = useState(false);
@@ -297,6 +298,7 @@ export const Calculator = () => {
         </p>
 
       </div>
+      <BackToTop/>
     </LayoutBack>
   );
 };

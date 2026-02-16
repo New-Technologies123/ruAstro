@@ -18,6 +18,8 @@
 .cardContent {
   display: flex;
   padding: 20px 45px;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Сетка параметров */
@@ -116,12 +118,14 @@
 @media (max-width: 1410px){
   .paramsGrid{
     grid-template-columns: repeat(3, 1fr);
+    gap: 45px;
   }
 }
 
 @media (max-width: 1200px){
   .paramsGrid{
     grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
   }
 }
 
@@ -132,6 +136,7 @@
   }
   .paramsGrid{
     grid-template-columns: repeat(1, 1fr);
+    gap: 20px;
   }
   .rightBlock {
     justify-content: flex-start;
