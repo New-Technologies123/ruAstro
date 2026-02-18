@@ -30,8 +30,15 @@
   }
 }
 
+.Img{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+}
+
 .homeImg {
-  width: 100%;
+  width: 80%;
 }
 
 /* Слайдер на главной странице */
@@ -144,6 +151,9 @@
       font-size: 20px;
     }
   }
+  .homeImg{
+    width: 90%;
+  }
 }
 
 @media (max-width: 1030px){
@@ -178,6 +188,9 @@
     p{
       font-size: 18px;
     }
+  }
+  .homeImg{
+    width: 95%;
   }
 }
 

@@ -8,7 +8,7 @@ export const shop4Products: Product[] = [
     price: '12 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/1.png',
+    image: '/images/shop/1.png',
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const shop4Products: Product[] = [
     price: '7 125',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '/images/shop/2.png',
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ export const shop4Products: Product[] = [
     price: '2 595',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '/images/shop/3.png',
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ export const shop4Products: Product[] = [
     price: '16 730',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '/images/shop/4.png',
   },
   {
     id: 5,
@@ -44,7 +44,7 @@ export const shop4Products: Product[] = [
     price: '2 590',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 6,
@@ -53,7 +53,7 @@ export const shop4Products: Product[] = [
     price: '120',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 7,
@@ -62,7 +62,7 @@ export const shop4Products: Product[] = [
     price: '3 375',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '/images/shop/20.png',
   },
   {
     id: 8,
@@ -71,7 +71,7 @@ export const shop4Products: Product[] = [
     price: '2 085',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '/images/shop/9.png',
   },
   {
     id: 9,
@@ -80,7 +80,7 @@ export const shop4Products: Product[] = [
     price: '6 450',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 10,
@@ -89,7 +89,7 @@ export const shop4Products: Product[] = [
     price: '2 520',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 11,
@@ -98,7 +98,7 @@ export const shop4Products: Product[] = [
     price: '150',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 12,
@@ -107,7 +107,7 @@ export const shop4Products: Product[] = [
     price: '4 840',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 13,
@@ -116,7 +116,7 @@ export const shop4Products: Product[] = [
     price: '5 310',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '/images/shop/3.png',
   },
   {
     id: 14,
@@ -125,7 +125,7 @@ export const shop4Products: Product[] = [
     price: '1 200',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 15,
@@ -134,7 +134,7 @@ export const shop4Products: Product[] = [
     price: '6 240',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 16,
@@ -143,7 +143,7 @@ export const shop4Products: Product[] = [
     price: '9 480',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '/images/shop/1.png',
   },
   {
     id: 17,
@@ -152,7 +152,7 @@ export const shop4Products: Product[] = [
     price: '3 150',
     nds: 'без НДС',
      deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 18,
@@ -161,7 +161,7 @@ export const shop4Products: Product[] = [
     price: '3 075',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 19,
@@ -170,7 +170,7 @@ export const shop4Products: Product[] = [
     price: '12 250',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 20,
@@ -179,7 +179,7 @@ export const shop4Products: Product[] = [
     price: '2 190',
     nds: 'без НДС',
       deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 21,
@@ -188,7 +188,7 @@ export const shop4Products: Product[] = [
     price: '3 480',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 22,
@@ -197,7 +197,7 @@ export const shop4Products: Product[] = [
     price: '3 150,00',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 23,
@@ -206,7 +206,7 @@ export const shop4Products: Product[] = [
     price: '2 175',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 24,
@@ -215,7 +215,7 @@ export const shop4Products: Product[] = [
     price: '100',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 25,
@@ -224,7 +224,7 @@ export const shop4Products: Product[] = [
     price: '120',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 26,
@@ -233,7 +233,7 @@ export const shop4Products: Product[] = [
     price: '120',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
   {
     id: 27,
@@ -242,6 +242,6 @@ export const shop4Products: Product[] = [
     price: '410',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
 ];
