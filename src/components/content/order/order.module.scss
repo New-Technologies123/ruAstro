@@ -131,13 +131,22 @@
   }
 }
 
-.errorInput {
-  border: 1px solid red;
+.form input.errorInput,
+.form textarea.errorInput {
+  border: 1px solid #ff0004 !important;
+  background-color: #ffccc9;
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.errorText {
+  color: #ff0004;
+  font-size: 13px;
+  margin-top: 4px;
+  font-weight: 500;
 }
 
 

@@ -2,10 +2,18 @@ import { useEffect, useState } from 'react';
 import Styles from './order.module.scss';
 import { getCart, clearCart, type CartItem } from '../../utils/cartStorage';
 import { Title } from '../../ui/title/Title';
-import back from '../../../images/back.svg'
+import back from '../../../images/back.svg';
 
 type OrderProps = {
   onBack: () => void;
+};
+
+type Errors = {
+  name?: string;
+  position?: string;
+  company?: string;
+  email?: string;
+  phone?: string;
 };
 
 export const Order = ({ onBack }: OrderProps) => {
@@ -18,18 +26,18 @@ export const Order = ({ onBack }: OrderProps) => {
   const [phone, setPhone] = useState('');
   const [comment, setComment] = useState('');
 
-  const [successMessage, setSuccessMessage] = useState(''); // сообщение об успешном заказе
+  const [errors, setErrors] = useState<Errors>({});
+  const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
     setCart(getCart());
   }, []);
 
-  // Автоматическое скрытие сообщения через 10 секунд
   useEffect(() => {
     if (successMessage) {
       const timer = setTimeout(() => {
         setSuccessMessage('');
-      }, 10000); // 10 секунд
+      }, 10000);
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
@@ -50,6 +58,18 @@ export const Order = ({ onBack }: OrderProps) => {
       return;
     }
 
+    const newErrors: Errors = {};
+
+    if (!name.trim()) newErrors.name = 'Обязательно для заполнения';
+    if (!position.trim()) newErrors.position = 'Обязательно для заполнения';
+    if (!company.trim()) newErrors.company = 'Обязательно для заполнения';
+    if (!email.trim()) newErrors.email = 'Обязательно для заполнения';
+    if (!phone.trim()) newErrors.phone = 'Обязательно для заполнения';
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
     const orderData = {
       name,
       position,
@@ -57,7 +77,7 @@ export const Order = ({ onBack }: OrderProps) => {
       email,
       phone,
       comment,
-      cart
+      cart,
     };
 
     try {
@@ -71,18 +91,16 @@ export const Order = ({ onBack }: OrderProps) => {
 
       if (result.success) {
         setSuccessMessage('Спасибо за заказ!');
-
-        // Очистка корзины
         setCart([]);
         clearCart();
 
-        // Очистка формы
         setName('');
         setPosition('');
         setCompany('');
         setEmail('');
         setPhone('');
         setComment('');
+        setErrors({});
       } else {
         alert('Ошибка при отправке: ' + (result.error || 'Неизвестная ошибка'));
       }
@@ -95,7 +113,7 @@ export const Order = ({ onBack }: OrderProps) => {
     <div className={Styles.orderPage}>
       <div className={Styles.header}>
         <button className={Styles.backButton} onClick={onBack}>
-          <img src={back.src} alt=""/>
+          <img src={back.src} alt="" />
         </button>
         <Title text="Ваш заказ" />
       </div>
@@ -125,44 +143,83 @@ export const Order = ({ onBack }: OrderProps) => {
             </div>
 
             <form className={Styles.form} onSubmit={handleSubmit}>
-              <input
-                type="text"
-                placeholder="ФИО"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                required
-              />
+              
+              {/* ФИО */}
+              <div className={Styles.field}>
+                <input
+                  type="text"
+                  placeholder="ФИО"
+                  value={name}
+                  onChange={e => {
+                    setName(e.target.value);
+                    setErrors(prev => ({ ...prev, name: undefined }));
+                  }}
+                  className={errors.name ? Styles.errorInput : ''}
+                />
+                {errors.name && <span className={Styles.errorText}>{errors.name}</span>}
+              </div>
 
-              <input
-                type="text"
-                placeholder="Должность"
-                value={position}
-                onChange={e => setPosition(e.target.value)}
-              />
+              {/* Должность */}
+              <div className={Styles.field}>
+                <input
+                  type="text"
+                  placeholder="Должность"
+                  value={position}
+                  onChange={e => {
+                    setPosition(e.target.value);
+                    setErrors(prev => ({ ...prev, position: undefined }));
+                  }}
+                  className={errors.position ? Styles.errorInput : ''}
+                />
+                {errors.position && <span className={Styles.errorText}>{errors.position}</span>}
+              </div>
 
-              <input
-                type="text"
-                placeholder="Название компании"
-                value={company}
-                onChange={e => setCompany(e.target.value)}
-              />
+              {/* Компания */}
+              <div className={Styles.field}>
+                <input
+                  type="text"
+                  placeholder="Название компании"
+                  value={company}
+                  onChange={e => {
+                    setCompany(e.target.value);
+                    setErrors(prev => ({ ...prev, company: undefined }));
+                  }}
+                  className={errors.company ? Styles.errorInput : ''}
+                />
+                {errors.company && <span className={Styles.errorText}>{errors.company}</span>}
+              </div>
 
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                required
-              />
+              {/* Email */}
+              <div className={Styles.field}>
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={e => {
+                    setEmail(e.target.value);
+                    setErrors(prev => ({ ...prev, email: undefined }));
+                  }}
+                  className={errors.email ? Styles.errorInput : ''}
+                />
+                {errors.email && <span className={Styles.errorText}>{errors.email}</span>}
+              </div>
 
-              <input
-                type="tel"
-                placeholder="Телефон"
-                value={phone}
-                onChange={e => setPhone(e.target.value)}
-                required
-              />
+              {/* Телефон */}
+              <div className={Styles.field}>
+                <input
+                  type="tel"
+                  placeholder="Телефон"
+                  value={phone}
+                  onChange={e => {
+                    setPhone(e.target.value);
+                    setErrors(prev => ({ ...prev, phone: undefined }));
+                  }}
+                  className={errors.phone ? Styles.errorInput : ''}
+                />
+                {errors.phone && <span className={Styles.errorText}>{errors.phone}</span>}
+              </div>
 
+              {/* Комментарий (необязательный) */}
               <textarea
                 placeholder="Текст обращения / комментарий"
                 rows={4}
@@ -171,7 +228,7 @@ export const Order = ({ onBack }: OrderProps) => {
               />
 
               <button type="submit">Отправить заказ</button>
-            </form>  
+            </form>
           </>
         )}
       </div>
