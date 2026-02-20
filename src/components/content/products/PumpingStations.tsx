@@ -7,15 +7,15 @@ import product_5_1 from '../../../images/products/product_5.webp';
 import product_5_2 from '../../../images/products/product_5_1.webp';
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
-type TPumping = | 'pumpingStations_1' | 'pumpingStations_2';
+type TPumping = | 'internal' | 'multiphase';
 
 /* ---------------- component ---------------- */
 export const PumpingStations = () => {
   const title = 'Насосные станции перекачки нефти, нефтепродуктов и воды';
 
   const cardTitle: Record<TPumping, string> = {
-    pumpingStations_1: 'Блочная насосная станция внутренней и внешней перекачки нефти',
-    pumpingStations_2: 'Блочная мультифазная насосная станция',
+    internal: 'Блочная насосная станция внутренней и внешней перекачки нефти',
+    multiphase: 'Блочная мультифазная насосная станция',
   };
 
   /* открыть карточку */
@@ -33,13 +33,13 @@ export const PumpingStations = () => {
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_5_1.src}
-          title={cardTitle.pumpingStations_1}
-          onClick={() => goToPumping('pumpingStations_1')}
+          title={cardTitle.internal}
+          onClick={() => goToPumping('internal')}
         />
         <Card
           imgSrc={product_5_2.src}
-          title={cardTitle.pumpingStations_2}
-          onClick={() => goToPumping('pumpingStations_2')}
+          title={cardTitle.multiphase}
+          onClick={() => goToPumping('multiphase')}
         />
       </div>
       <BackToTop />

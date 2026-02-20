@@ -1,13 +1,13 @@
 import Styles from '../products.module.scss'
 import { useState } from 'react'
 
-import product_3 from '../../../../images/products/product_3_2.webp'
+import product_3 from '../../../../images/products/product_3_1.webp'
 
 import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-export const MeasuringSystem_3 = () => {
+export const Gas = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
   const onBackMeasuring = () => {
@@ -15,9 +15,9 @@ export const MeasuringSystem_3 = () => {
   };
 
   return (
-    <LayoutBack onBack={onBackMeasuring} title="Система измерения количества воды (СИКВ)">
+    <LayoutBack onBack={onBackMeasuring} title="Система измерения количества газа (СИКГ)">
       <div className={Styles.container}>
-        {/* ===== CONTENT ===== */}
+        {/* ==== = CONTENT ===== */}
         <section className={Styles.content}>
 
           <div className={Styles.card}>
@@ -39,7 +39,12 @@ export const MeasuringSystem_3 = () => {
                 <ul className={Styles.featuresList}>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Измерение расхода, давления и температуры воды.</p>
+                      <p>Коммерческий и технологический учёт газа;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Применяется на УКПГ и узлах передачи газа.</p>
                     </div>
                   </li>
                 </ul>
@@ -49,22 +54,38 @@ export const MeasuringSystem_3 = () => {
                 <ul className={Styles.featuresList}>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Блок измерительных линий;</p>
+                      <p>Преобразователь расхода;</p>
                     </div>
                   </li>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Система обработки информации;</p>
+                      <p>Вычислитель расхода;</p>
                     </div>
                   </li>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Трубопроводы и арматура.</p>
+                      <p>Хроматограф, анализаторы, датчики;</p>
+                    </div>
+                  </li>
+                  <li className={Styles.feature}>
+                    <div className={Styles.featureText}>
+                      <p>Система пробоотбора.</p>
                     </div>
                   </li>
                 </ul>
               </div>
             </div>
+          </div>
+          <div className={Styles.related}>
+            <h3>Смотрите также:</h3>
+            <ul className={Styles.relatedList}>
+              <li>
+                <a href="/products/measuring-system/oil">СИКН</a>
+              </li>
+              <li>
+                <a href="/products/measuring-system/water">СИКВ</a>
+              </li>
+            </ul>
           </div>
         </section>
 

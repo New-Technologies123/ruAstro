@@ -9,17 +9,17 @@ import product_4_3 from '../../../images/products/product_4_3.webp';
 import product_4_4 from '../../../images/products/product_4_4.webp';
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
-type TPreparation = | 'preparationSystems_1' | 'preparationSystems_2' | 'preparationSystems_3' | 'preparationSystems_4';
+type TPreparation = | 'launch' | 'block' | 'cleaning' | 'dosing';
 
 /* ---------------- component ---------------- */
 export const PreparationSystems = () => {
   const title = 'Системы подготовки нефти, газа и воды';
 
   const cardTitle: Record<TPreparation, string> = {
-    preparationSystems_1: 'Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП',
-    preparationSystems_2: 'Блок гребенки (БГ)',
-    preparationSystems_3: 'Устройство очистки колонны УОК-НКТ',
-    preparationSystems_4: 'Установка дозирования химического реагента (БДР)',
+    launch: 'Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП',
+    block: 'Блок гребенки (БГ)',
+    cleaning: 'Устройство очистки колонны УОК-НКТ',
+    dosing: 'Установка дозирования химического реагента (БДР)',
   };
 
   /* открыть карточку */
@@ -38,23 +38,23 @@ export const PreparationSystems = () => {
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_4_1.src}
-          title={cardTitle.preparationSystems_1}
-          onClick={() => goToPreparation('preparationSystems_1')}
+          title={cardTitle.launch}
+          onClick={() => goToPreparation('launch')}
         />
         <Card
           imgSrc={product_4_2.src}
-          title={cardTitle.preparationSystems_2}
-          onClick={() => goToPreparation('preparationSystems_2')}
+          title={cardTitle.block}
+          onClick={() => goToPreparation('block')}
         />
         <Card
           imgSrc={product_4_3.src}
-          title={cardTitle.preparationSystems_3}
-          onClick={() => goToPreparation('preparationSystems_3')}
+          title={cardTitle.cleaning}
+          onClick={() => goToPreparation('cleaning')}
         />
         <Card
           imgSrc={product_4_4.src}
-          title={cardTitle.preparationSystems_4}
-          onClick={() => goToPreparation('preparationSystems_4')}
+          title={cardTitle.dosing}
+          onClick={() => goToPreparation('dosing')}
         />
       </div>
       <BackToTop />

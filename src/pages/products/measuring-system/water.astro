@@ -1,0 +1,17 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Water as WaterContent} from '../../../components/content/products/MeasuringSystem/Water';
+
+const description = 'Система измерения количества воды (СИКВ), сикв';
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+  <Content>
+    <WaterContent client:load />
+  </Content>
+  <Footer client:load />
+</Layout>

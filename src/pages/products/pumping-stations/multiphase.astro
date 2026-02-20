@@ -1,0 +1,17 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { Multiphase as MultiphaseContent} from "../../../components/content/products/PumpingStations/Multiphase";
+
+const description = "Блочная мультифазная насосная станция, мультифазная насосная станция, мультифазный насос, блочная насосная станция";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <MultiphaseContent client:load />
+    </Content>
+  <Footer client:load/>
+</Layout>

@@ -1,17 +1,6 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { PumpingStations_1 } from "../../../components/content/products/PumpingStations/PumpingStations_1";
-
-const description = "Блочная насосная станция внутренней и внешней перекачки нефти, блочная станция переачки нефти, станция насосная нефтяная";
+Astro.redirect('/products/pumping-stations/internal/');
 ---
 
-<Layout description={description}>
-  <Header pageType="products" client:load />
-    <Content>
-      <PumpingStations_1  client:load/>
-    </Content>
-  <Footer client:load/>
-</Layout>
+<!-- Резервный контент (если JavaScript отключен) -->
+<meta http-equiv="refresh" content="0; url=/products/pumping-stations/internal/">

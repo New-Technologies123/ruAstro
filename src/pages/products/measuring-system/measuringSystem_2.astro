@@ -1,17 +1,6 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import { Header } from '../../../components/base/Header';
-import { Footer } from '../../../components/base/Footer';
-import { Content } from '../../../components/base/Content';
-import { MeasuringSystem_2 } from '../../../components/content/products/MeasuringSystem/MeasuringSystem_2';
-
-const description = 'Система измерения количества газа (СИКГ), сикг';
+Astro.redirect('/products/measuring-system/gas/');
 ---
 
-<Layout description={description}>
-  <Header pageType="products" client:load />
-  <Content>
-    <MeasuringSystem_2 client:load />
-  </Content>
-  <Footer client:load />
-</Layout>
+<!-- Резервный контент (если JavaScript отключен) -->
+<meta http-equiv="refresh" content="0; url=/products/measuring-system/gas/">

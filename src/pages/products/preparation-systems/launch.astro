@@ -1,0 +1,17 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { Launch as LaunchContent} from "../../../components/content/products/PreparationSystems/Launch";
+
+const description = "Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <LaunchContent client:load />
+    </Content>
+  <Footer client:load/>
+</Layout>

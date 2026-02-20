@@ -7,7 +7,7 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-export const MeasuringSystem_1 = () => {
+export const Oil = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
   const onBackMeasuring = () => {
@@ -64,8 +64,18 @@ export const MeasuringSystem_1 = () => {
                   </li>
                 </ul>
               </div>
-
             </div>
+          </div>
+          <div className={Styles.related}>
+            <h3>Смотрите также:</h3>
+            <ul className={Styles.relatedList}>
+              <li>
+                <a href="/products/measuring-system/gas">СИКГ</a>
+              </li>
+              <li>
+                <a href="/products/measuring-system/water">СИКВ</a>
+              </li>
+            </ul>
           </div>
         </section>
 

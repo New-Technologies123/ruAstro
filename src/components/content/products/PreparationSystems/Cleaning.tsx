@@ -7,7 +7,7 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-export const PreparationSystems_3 = () => {
+export const Cleaning = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
   const onBackPreparation = () => {
@@ -77,6 +77,20 @@ export const PreparationSystems_3 = () => {
                   </ul>                    
                 </div>
             </div>
+          </div>
+          <div className={Styles.related}>
+            <h3>Смотрите также:</h3>
+            <ul className={Styles.relatedList}>
+              <li>
+                <a href="/products/preparation-systems/launch">УЗПЗ, УЗПП</a>
+              </li>
+              <li>
+                <a href="/products/preparation-systems/block">БГ</a>
+              </li>
+              <li>
+                <a href="/products/preparation-systems/dosing">БДР</a>
+              </li>
+            </ul>
           </div>
         </section>
 

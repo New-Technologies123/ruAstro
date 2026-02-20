@@ -1,17 +1,6 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { PreparationSystems_1 } from "../../../components/content/products/PreparationSystems/PreparationSystems_1";
-
-const description = "Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП";
+Astro.redirect('/products/preparation-systems/launch/');
 ---
 
-<Layout description={description}>
-  <Header pageType="products" client:load />
-    <Content>
-      <PreparationSystems_1 client:load />
-    </Content>
-  <Footer client:load/>
-</Layout>
+<!-- Резервный контент (если JavaScript отключен) -->
+<meta http-equiv="refresh" content="0; url=/products/preparation-systems/launch/">

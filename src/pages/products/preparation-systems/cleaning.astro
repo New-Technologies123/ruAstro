@@ -1,0 +1,17 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { Cleaning as CleaningContent } from "../../../components/content/products/PreparationSystems/Cleaning";
+
+const description = "Устройство очистки колонны УОК-НКТ";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <CleaningContent client:load />
+    </Content>
+  <Footer client:load/>
+</Layout>

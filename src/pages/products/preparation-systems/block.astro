@@ -1,0 +1,17 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { Block as BlockContent} from "../../../components/content/products/PreparationSystems/Block";
+
+const description = "Блок гребенки (БГ)";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <BlockContent client:load />
+    </Content>
+  <Footer client:load/>
+</Layout>

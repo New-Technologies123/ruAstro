@@ -1,17 +1,6 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { PreparationSystems_4 } from "../../../components/content/products/PreparationSystems/PreparationSystems_4";
-
-const description = "Установка дозирования химического реагента (БДР)";
+Astro.redirect('/products/preparation-systems/dosing/');
 ---
 
-<Layout description={description}>
-  <Header pageType="products" client:load />
-    <Content>
-      <PreparationSystems_4 client:load />
-    </Content>
-  <Footer client:load/>
-</Layout>
+<!-- Резервный контент (если JavaScript отключен) -->
+<meta http-equiv="refresh" content="0; url=/products/preparation-systems/dosing/">

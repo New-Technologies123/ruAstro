@@ -1,17 +1,6 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { PumpingStations_2 } from "../../../components/content/products/PumpingStations/PumpingStations_2";
-
-const description = "Блочная мультифазная насосная станция, мультифазная насосная станция, мультифазный насос, блочная насосная станция";
+Astro.redirect('/products/pumping-stations/multiphase/');
 ---
 
-<Layout description={description}>
-  <Header pageType="products" client:load />
-    <Content>
-      <PumpingStations_2 client:load />
-    </Content>
-  <Footer client:load/>
-</Layout>
+<!-- Резервный контент (если JavaScript отключен) -->
+<meta http-equiv="refresh" content="0; url=/products/pumping-stations/multiphase/">

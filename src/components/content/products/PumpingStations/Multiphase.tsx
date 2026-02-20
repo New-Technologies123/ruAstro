@@ -7,7 +7,7 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-export const PumpingStations_2 = () => {
+export const Multiphase = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
   const onBackPumping = () => {
@@ -105,6 +105,14 @@ export const PumpingStations_2 = () => {
                 </ul>
               </div>                  
             </div>
+          </div>
+          <div className={Styles.related}>
+            <h3>Смотрите также:</h3>
+            <ul className={Styles.relatedList}>
+              <li>
+                <a href="/products/pumping-stations/internal">Блочная насосная станция внутренней и внешней перекачки нефти</a>
+              </li>
+            </ul>
           </div>
         </section>
 

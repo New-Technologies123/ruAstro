@@ -1,0 +1,17 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Oil as OilContent} from '../../../components/content/products/MeasuringSystem/Oil';
+
+const description = 'Система измерения количества и показателей качества нефти (СИКН), сикн, система измерения количества нефти, система измерения нефти, система измерения показателей качества нефти';
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+  <Content>
+    <OilContent client:load />
+  </Content>
+  <Footer client:load />
+</Layout>

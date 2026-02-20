@@ -7,16 +7,16 @@ import product_3_2 from '../../../images/products/product_3_1.webp';
 import product_3_3 from '../../../images/products/product_3_2.webp';
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
-type TMeasuring = | 'measuringSystem_1' | 'measuringSystem_2' | 'measuringSystem_3';
+type TMeasuring = | 'oil' | 'gas' | 'water';
 
 /* ---------------- component ---------------- */
 export const MeasuringSystem = () => {
   const title = 'Система учёта углеводородов и пластовой жидкости';
 
   const cardTitle: Record<TMeasuring, string> = {
-    measuringSystem_1: 'Система измерения количества и показателей качества нефти (СИКН)',
-    measuringSystem_2: 'Система измерения количества газа (СИКГ)',
-    measuringSystem_3: 'Система измерения количества воды (СИКВ)',
+    oil: 'Система измерения количества и показателей качества нефти (СИКН)',
+    gas: 'Система измерения количества газа (СИКГ)',
+    water: 'Система измерения количества воды (СИКВ)',
   };
 
   /* открыть карточку */
@@ -35,18 +35,18 @@ export const MeasuringSystem = () => {
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_3_1.src}
-          title={cardTitle.measuringSystem_1}
-          onClick={() => goToMeasuring('measuringSystem_1')}
+          title={cardTitle.oil}
+          onClick={() => goToMeasuring('oil')}
         />
         <Card
           imgSrc={product_3_2.src}
-          title={cardTitle.measuringSystem_2}
-          onClick={() => goToMeasuring('measuringSystem_2')}
+          title={cardTitle.gas}
+          onClick={() => goToMeasuring('gas')}
         />
         <Card
           imgSrc={product_3_3.src}
-          title={cardTitle.measuringSystem_3}
-          onClick={() => goToMeasuring('measuringSystem_3')}
+          title={cardTitle.water}
+          onClick={() => goToMeasuring('water')}
         />
       </div>
       <BackToTop />
