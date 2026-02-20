@@ -1,0 +1,17 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Separation as SeparationContent } from '../../../components/content/products/Accessories/Separation';
+
+const description = 'Сепарационная ёмкость, сепарационная емкость для агзу, сеперационная емкость агзу';
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+  <Content>
+    <SeparationContent client:load />
+  </Content>
+  <Footer client:load />
+</Layout>

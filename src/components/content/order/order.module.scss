@@ -131,6 +131,16 @@
   }
 }
 
+.errorInput {
+  border: 1px solid red;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
 @media (max-width: 1400px){
   .backButton{
     padding: 8px 16px;

@@ -1,17 +1,6 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import { Header } from '../../../components/base/Header';
-import { Footer } from '../../../components/base/Footer';
-import { Content } from '../../../components/base/Content';
-import { Accessories_2 } from '../../../components/content/products/Accessories/Accessories_2';
-
-const description = 'Устройство регулирования перепада давления (УРПД), заслонка газовая УРПД, урпд 3.1, урпд 1.1';
+Astro.redirect('/products/accessories/urpd/');
 ---
 
-<Layout description={description}>
-  <Header pageType="products" client:load />
-  <Content>
-    <Accessories_2 client:load />
-  </Content>
-  <Footer client:load />
-</Layout>
+<!-- Резервный контент (если JavaScript отключен) -->
+<meta http-equiv="refresh" content="0; url=/products/accessories/urpd/">

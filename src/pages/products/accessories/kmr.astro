@@ -1,0 +1,17 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Kmr as KmrContent} from '../../../components/content/products/Accessories/Kmr';
+
+const description = 'Магниторегулируемый клапан (КМР), магнитнорегулируемый клапан, регулятор расхода, кмр, клапан магниторегулируемый кмр-2, клапан, вакумные клапаны регулирующие, клапаны регулирующие для вакумных систем';
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+  <Content>
+    <KmrContent client:load />
+  </Content>
+  <Footer client:load />
+</Layout>

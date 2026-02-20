@@ -7,7 +7,7 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
 import { BackToTop } from '../../../ui/back-to-top/BackToTop';
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-export const Accessories_1 = () => {
+export const Ervip = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null);
 
   const onBackAccessories = () => {
@@ -54,8 +54,29 @@ export const Accessories_1 = () => {
                     </div>
                   </li>
                 </ul>
-              </div>
+              </div>              
             </div>
+          </div>
+          {/* ===== СМОТРИТЕ ТАКЖЕ ===== */}
+          <div className={Styles.related}>
+            <h3>Смотрите также:</h3>
+            <ul className={Styles.relatedList}>
+              <li>
+                <a href="/products/accessories/urpd">УРПД</a>
+              </li>
+              <li>
+                <a href="/products/accessories/psm">ПСМ</a>
+              </li>
+              <li>
+                <a href="/products/accessories/kmr">КМР</a>
+              </li>
+              <li>
+                <a href="/products/accessories/gidroprivod">Гидропривод</a>
+              </li>
+              <li>
+                <a href="/products/accessories/separation">Сепарационная емкость</a>
+              </li>
+            </ul>
           </div>
         </section>
 

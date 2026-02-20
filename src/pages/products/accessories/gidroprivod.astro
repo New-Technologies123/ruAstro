@@ -1,0 +1,17 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Gidroprivod as GidroprivodContent} from '../../../components/content/products/Accessories/Gidroprivod';
+
+const description = 'Гидропривод (ГП), гп, гидропривод для агзу, гидравлический привод, гидро';
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+  <Content>
+    <GidroprivodContent client:load />
+  </Content>
+  <Footer client:load />
+</Layout>

@@ -1,13 +1,13 @@
 import Styles from '../products.module.scss'
 import { useState, useRef } from 'react'
 
-import product_2 from '../../../../images/products/product_2_3.webp'
+import product_2 from '../../../../images/products/product_2_5.png'
 
 import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-export const Accessories_4 = () => {
+export const Separation = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
   const onBackAccessories = () => {
@@ -15,7 +15,7 @@ export const Accessories_4 = () => {
   };
 
   return (
-    <LayoutBack onBack={onBackAccessories} title="Магниторегулируемый клапан (КМР)">
+    <LayoutBack onBack={onBackAccessories} title="Сепарационная ёмкость">
       <div className={Styles.container}>
         {/* ===== CONTENT ===== */}
         <section className={Styles.content}>
@@ -40,12 +40,33 @@ export const Accessories_4 = () => {
                 <ul className={Styles.featuresList}>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Работа в системе регулирования уровня и перепада давления вместо регуляторов расхода.</p>
+                      <p>Разделение нефтегазовых смесей на жидкость и газ.</p>
                     </div>
                   </li>
                 </ul>
               </div>
             </div>
+          </div>
+          {/* ===== СМОТРИТЕ ТАКЖЕ ===== */}
+          <div className={Styles.related}>
+            <h3>Смотрите также:</h3>
+            <ul className={Styles.relatedList}>
+              <li>
+                <a href="/products/accessories/ervip">ЭРВИП</a>
+              </li>
+              <li>
+                <a href="/products/accessories/urpd">УРПД</a>
+              </li>
+              <li>
+                <a href="/products/accessories/psm">ПСМ</a>
+              </li>
+              <li>
+                <a href="/products/accessories/kmr">КМР</a>
+              </li>
+              <li>
+                <a href="/products/accessories/gidroprivod">Гидропривод</a>
+              </li>
+            </ul>
           </div>
         </section>
 

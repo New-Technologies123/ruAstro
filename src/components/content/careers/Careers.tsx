@@ -22,7 +22,7 @@ export const Careers = () => {
         vacancy8: "https://ufa.hh.ru/vacancy/130552730?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy9: "https://ufa.hh.ru/vacancy/130527291?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy10: "https://ufa.hh.ru/vacancy/130358499?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy11: "https://ufa.hh.ru/vacancy/130532283?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy11: "https://ufa.hh.ru/vacancy/130532248?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy12: "https://ufa.hh.ru/vacancy/128990277?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy13: "https://ufa.hh.ru/vacancy/129981588?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy14: "https://ufa.hh.ru/vacancy/130350879?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer", 
@@ -33,8 +33,8 @@ export const Careers = () => {
         vacancy19: "https://ufa.hh.ru/vacancy/130339209?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy20: "https://ufa.hh.ru/vacancy/130351150?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy21: "https://ufa.hh.ru/vacancy/129446854?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy22: "https://ufa.hh.ru/vacancy/130068870?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy23: "",
+        vacancy22: "https://ufa.hh.ru/vacancy/130602170?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy23: "https://ufa.hh.ru/vacancy/130602230?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy24: "",
         vacancy25: "",
     };
@@ -106,6 +106,13 @@ export const Careers = () => {
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy5, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Заместитель главного бухгалтера"
+                                    title="Опыт работы: 3–6 лет"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy23, "_blank")}
                                 />
                                 <Vacancy
                                     header="Куратор проекта"

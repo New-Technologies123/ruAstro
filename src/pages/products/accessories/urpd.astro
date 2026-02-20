@@ -1,0 +1,17 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { Header } from '../../../components/base/Header';
+import { Footer } from '../../../components/base/Footer';
+import { Content } from '../../../components/base/Content';
+import { Urpd as UrpdContent } from '../../../components/content/products/Accessories/Urpd';
+
+const description = 'Устройство регулирования перепада давлвения (УРПД), заслонка газовая УРПД, урпд 3.1, урпд 1.1, регулятор перепада давления, устроиство регулирования давления';
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+  <Content>
+    <UrpdContent client:load />
+  </Content>
+  <Footer client:load />
+</Layout>

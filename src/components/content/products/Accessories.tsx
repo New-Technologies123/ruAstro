@@ -10,19 +10,18 @@ import product_2_5 from '../../../images/products/product_2_4.png';
 import product_2_6 from '../../../images/products/product_2_5.png';
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
-type TAccessories = 'accessories_1' | 'accessories_2' | 'accessories_3' | 'accessories_4' | 'accessories_5' | 'accessories_6';
+type TAccessories = 'ervip' | 'urpd' | 'psm' | 'kmr' | 'gidroprivod' | 'separation';
 
 /* ---------------- component ---------------- */
 export const Accessories = () => {
-  const title = 'Комплектующие для автоматизированной групповой замерной установки';
 
   const cardTitle: Record<TAccessories, string> = {
-    accessories_1: 'Вихревой расходомер ЭРВИП',
-    accessories_2: 'Устройство регулирования перепада давления (УРПД)',
-    accessories_3: 'Переключатель скважин многоходовой (ПСМ)',
-    accessories_4: 'Магниторегулируемый клапан (КМР)',
-    accessories_5: 'Гидропривод (ГП)',
-    accessories_6: 'Сепарационная ёмкость',
+    ervip: 'Вихревой расходомер ЭРВИП',
+    urpd: 'Устройство регулирования перепада давления (УРПД)',
+    psm: 'Переключатель скважин многоходовой (ПСМ)',
+    kmr: 'Магниторегулируемый клапан (КМР)',
+    gidroprivod: 'Гидропривод (ГП)',
+    separation: 'Сепарационная ёмкость',
   };
 
   /* открыть карточку */
@@ -35,16 +34,15 @@ export const Accessories = () => {
     window.location.href = '/products';
   };
 
-  /* ---------------- список ---------------- */
   return (
-    <LayoutBack onBack={onBackProducts} title={title}>
+    <LayoutBack onBack={onBackProducts} title='Комплектующие для АГЗУ'>
       <div className={Styles.ramca}>
-        <Card imgSrc={product_2_1.src} title={cardTitle.accessories_1} onClick={() => goToAccessory('accessories_1')} />
-        <Card imgSrc={product_2_2.src} title={cardTitle.accessories_2} onClick={() => goToAccessory('accessories_2')} />
-        <Card imgSrc={product_2_3.src} title={cardTitle.accessories_3} onClick={() => goToAccessory('accessories_3')} />
-        <Card imgSrc={product_2_4.src} title={cardTitle.accessories_4} onClick={() => goToAccessory('accessories_4')} />
-        <Card imgSrc={product_2_5.src} title={cardTitle.accessories_5} onClick={() => goToAccessory('accessories_5')} />
-        <Card imgSrc={product_2_6.src} title={cardTitle.accessories_6} onClick={() => goToAccessory('accessories_6')} />
+        <Card imgSrc={product_2_1.src} title={cardTitle.ervip} onClick={() => goToAccessory('ervip')} />
+        <Card imgSrc={product_2_2.src} title={cardTitle.urpd} onClick={() => goToAccessory('urpd')} />
+        <Card imgSrc={product_2_3.src} title={cardTitle.psm} onClick={() => goToAccessory('psm')} />
+        <Card imgSrc={product_2_4.src} title={cardTitle.kmr} onClick={() => goToAccessory('kmr')} />
+        <Card imgSrc={product_2_5.src} title={cardTitle.gidroprivod} onClick={() => goToAccessory('gidroprivod')} />
+        <Card imgSrc={product_2_6.src} title={cardTitle.separation} onClick={() => goToAccessory('separation')} />
       </div>
       <BackToTop />
     </LayoutBack>
