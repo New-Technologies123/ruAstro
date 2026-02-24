@@ -4,30 +4,52 @@ import { QuestionForm } from './QuestionForm';
 
 export const QuestionFormWrapper: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: ''
+  });
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
-    setSubmitted(true);
-    setFormData({ name: '', email: '', message: '' });
 
-    setTimeout(() => setSubmitted(false), 3000);
+    try {
+      const response = await fetch('/send-question.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', message: '' });
+        setTimeout(() => setSubmitted(false), 3000);
+      } else {
+        alert('Ошибка отправки: ' + result.error);
+      }
+
+    } catch (error) {
+      alert('Ошибка соединения с сервером');
+    }
   };
 
-  // 👇 Авто-открытие через 30 секунд после закрытия
+  // Авто-открытие через 30 секунд после закрытия
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
     if (!isOpen) {
       timer = setTimeout(() => {
         setIsOpen(true);
-      }, 30000); // через 30 секунд снова откроется
+      }, 30000);
     }
 
     return () => {
