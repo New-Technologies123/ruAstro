@@ -23,12 +23,12 @@ export const menuData = [
                 title: 'Комплектующие для автоматизированной групповой замерной установки',
                 url: '/products/accessories/',
                 children: [
-                    { title: 'Вихревой расходомер ЭРВИП', url: '/products/accessories/accessories_1/'},
-                    { title: 'Устройство регулирования перепада давления (УРПД)', url: '/products/accessories/accessories_2/'},
-                    { title: 'Переключатель скважин многоходовой (ПСМ)', url: '/products/accessories/accessories_3/'},
-                    { title: 'Магниторегулируемый клапан (КМР)', url: '/products/accessories/accessories_4/'},
-                    { title: 'Гидропривод (ГП)', url: '/products/accessories/accessories_5/'},
-                    { title: 'Сепарационная ёмкость', url: '/products/accessories/accessories_6/'},
+                    { title: 'Вихревой расходомер ЭРВИП', url: '/products/accessories/ervip/'},
+                    { title: 'Устройство регулирования перепада давления (УРПД)', url: '/products/accessories/urpd/'},
+                    { title: 'Переключатель скважин многоходовой (ПСМ)', url: '/products/accessories/psm/'},
+                    { title: 'Магниторегулируемый клапан (КМР)', url: '/products/accessories/kmr/'},
+                    { title: 'Гидропривод (ГП)', url: '/products/accessories/gidroprivod/'},
+                    { title: 'Сепарационная ёмкость', url: '/products/accessories/separation/'},
                 ],
             },
             {
@@ -37,15 +37,15 @@ export const menuData = [
                 children: [
                     {
                         title: 'Система измерения количества и показателей качества нефти (СИКН)',
-                        url: '/products/measuring-system/measuringSystem_1/',
+                        url: '/products/measuring-system/oil/',
                     },
                     {
                         title: 'Система измерения количества газа (СИКГ)',
-                        url: '/products/measuring-system/measuringSystem_2/',
+                        url: '/products/measuring-system/gas/',
                     },
                     {
                         title: 'Система измерения количества воды (СИКВ)',
-                        url: '/products/measuring-system/measuringSystem_3/',
+                        url: '/products/measuring-system/water/',
                     },
                 ],
             },
@@ -55,19 +55,19 @@ export const menuData = [
                 children: [
                     {
                         title: 'Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП',
-                        url: '/products/preparation-systems/preparationSystems_1/',
+                        url: '/products/preparation-systems/launch/',
                     },
                     {
                         title: 'Блок гребенки (БГ)',
-                        url: '/products/preparation-systems/preparationSystems_2/',
+                        url: '/products/preparation-systems/block/',
                     },
                     {
                         title: 'Устройство очистки колонны УОК-НКТ',
-                        url: '/products/preparation-systems/preparationSystems_3/',
+                        url: '/products/preparation-systems/cleaning/',
                     },
                     {
                         title: 'Установка дозирования химического реагента (БДР)',
-                        url: '/products/preparation-systems/preparationSystems_4/',
+                        url: '/products/preparation-systems/dosing/',
                     },
                 ],
             },
@@ -77,11 +77,11 @@ export const menuData = [
                 children: [
                     {
                         title: 'Блочная насосная станция внутренней и внешней перекачки нефти',
-                        url: '/products/pumping-stations/pumpingStations_1/',
+                        url: '/products/pumping-stations/internal/',
                     },
                     {
                         title: 'Блочная мультифазная насосная станция',
-                        url: '/products/pumping-stations/pumpingStations_2/',
+                        url: '/products/pumping-stations/multiphase/',
                     },
                 ],
             },
