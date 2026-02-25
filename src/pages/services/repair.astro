@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Header } from "../../components/base/Header";
+import { Footer } from "../../components/base/Footer";
+import { Content } from "../../components/base/Content";
+import { Repair as RepairContent } from "../../components/content/services/Repair";
+
+const description = "Сервисные услиги для АГЗУ, обслуживание, капитальный ремонт и модернизация АГЗУ, капитальный ремонт АГЗУ «Спутник», капитальный ремонт «Спутник», обслуживание агзу, модернизация агзу";
+---
+
+<Layout description={description}>
+  <Header pageType="services" client:load />
+    <Content>
+      <RepairContent client:load />
+    </Content>
+  <Footer client:load/>
+</Layout>

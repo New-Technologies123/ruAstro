@@ -1,0 +1,17 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Header } from "../../components/base/Header";
+import { Footer } from "../../components/base/Footer";
+import { Content } from "../../components/base/Content";
+import { Dewaxing as ReDewaxingContent } from "../../components/content/services/Dewaxing";
+
+const description = "Сервисные услуги депарафинизации нефтяных скважин, депарафинизации нефтяных скважин, депарафинизация скважин";
+---
+
+<Layout description={description}>
+  <Header pageType="services" client:load />
+    <Content>
+      <ReDewaxingContent client:load />
+    </Content>
+  <Footer client:load/>
+</Layout>

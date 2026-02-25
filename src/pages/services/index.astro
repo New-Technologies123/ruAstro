@@ -1,0 +1,18 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { Header } from "../../components/base/Header";
+import { Footer } from "../../components/base/Footer";
+import { Content } from "../../components/base/Content";
+import { Services as ServicesContent } from "../../components/content/services/Services";
+
+const description =
+  "Сервисные услуги ИПП «Новые технологии»: имеет многолетний опыт оказания услуг по ремонту нефтепромыслового оборудования, а также по депарафинизации и замеру дебита скважин.";
+---
+
+<Layout description={description}>
+  <Header pageType="services" client:load />
+    <Content>
+      <ServicesContent client:load />
+    </Content>
+  <Footer client:load/>
+</Layout>

@@ -92,10 +92,10 @@ export const menuData = [
         url: '/services/',
         pageType: 'services',
         children: [
-            { title: 'Обслуживание, капитальный ремонт и модернизация АГЗУ', url: '/services/?type=repair', },
-            { title: 'Замер дебита нефтяных скважин с помощью мобильной замерной установки', url: '/services/?type=metering' },
-            { title: 'Обслуживание устройства очистки колонны УОК-НКТ', url: '/services/?type=service' },
-            { title: 'Услуги депарафинизации нефтяных скважин', url: '/services/?type=dewaxing' },
+            { title: 'Обслуживание, капитальный ремонт и модернизация АГЗУ', url: '/services/repair', },
+            { title: 'Замер дебита нефтяных скважин с помощью мобильной замерной установки', url: '/services/metering' },
+            { title: 'Обслуживание устройства очистки колонны УОК-НКТ', url: '/services/service' },
+            { title: 'Услуги депарафинизации нефтяных скважин', url: '/services/dewaxing' },
         ],
     },
 ];
