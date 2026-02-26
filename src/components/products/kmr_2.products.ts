@@ -8,7 +8,7 @@ export const shop2Products: Product[] = [
     price: '12 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop2/1.png',
+    image: '/images/shop/kmr/1.webp',
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const shop2Products: Product[] = [
     price: '7 120',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop2/2.png',
+    image: '/images/shop/kmr/2.webp',
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ export const shop2Products: Product[] = [
     price: '2 600',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop2/3.png',
+    image: '/images/shop/kmr/3.webp',
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ export const shop2Products: Product[] = [
     price: '16 730',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop2/4.png',
+    image: '/images/shop/kmr/4.webp',
   },
   {
     id: 5,
@@ -161,7 +161,7 @@ export const shop2Products: Product[] = [
     price: '16 470',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop2/18.png',
+    image: '/images/shop/kmr/18.webp',
   },
   {
     id: 19,
@@ -188,7 +188,7 @@ export const shop2Products: Product[] = [
     price: '3 900',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/23.png',
+    image: '/images/shop/kmr/23.webp',
   },
   {
     id: 22,
@@ -215,6 +215,6 @@ export const shop2Products: Product[] = [
     price: '2 000',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/src/images/shop2/2.png',
+    image: '',
   },
 ];

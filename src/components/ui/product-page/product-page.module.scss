@@ -6,6 +6,7 @@
   background: #c0ebffc7;
   border-radius: 12px;
   margin: 0 auto;
+  gap: 20px;
 }
 
 /* ===== IMAGE ===== */
@@ -19,7 +20,7 @@
 
 /* ===== ORDER ===== */
 .order {
-  margin-left: 30px;
+  margin-left: auto;
   width: 350px;
   background: #2f3c8f;
   color: #fff;
@@ -125,7 +126,7 @@
     padding: 10px;
   }
   .order{
-    margin-left: 15px;
     width: 300px;
+    margin-right: auto;
   }
 }

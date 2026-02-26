@@ -8,7 +8,7 @@ export const shop1Products: Product[] = [
     price: '12 500',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/1.png',
+    image: '/images/shop/kmr/1.webp',
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ export const shop1Products: Product[] = [
     price: '7 120',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных день',
-    image: '/images/shop/2.png',
+    image: '/images/shop/kmr/2.webp',
   },
   {
     id: 3,
@@ -26,7 +26,7 @@ export const shop1Products: Product[] = [
     price: '2 600',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/3.png',
+    image: '/images/shop/kmr/3.webp',
   },
   {
     id: 4,
@@ -35,7 +35,7 @@ export const shop1Products: Product[] = [
     price: '16 730',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/4.png',
+    image: '/images/shop/kmr/4.webp',
   },
   {
     id: 5,
@@ -80,7 +80,7 @@ export const shop1Products: Product[] = [
     price: '2 600',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/9.png',
+    image: '/images/shop/kmr/9.webp',
   },
   {
     id: 10,
@@ -161,7 +161,7 @@ export const shop1Products: Product[] = [
     price: '16 470',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/18.png',
+    image: '/images/shop/kmr/18.webp',
   },
   {
     id: 19,
@@ -179,7 +179,7 @@ export const shop1Products: Product[] = [
     price: '3 600',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/20.png',
+    image: '/images/shop/kmr/20.webp',
   },
   {
     id: 21,
@@ -188,7 +188,7 @@ export const shop1Products: Product[] = [
     price: '3 563',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/21.png',
+    image: '/images/shop/kmr/21.webp',
   },
   {
     id: 22,
@@ -206,7 +206,7 @@ export const shop1Products: Product[] = [
     price: '3 900',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/23.png',
+    image: '/images/shop/kmr/23.webp',
   },
   {
     id: 24,
@@ -215,7 +215,7 @@ export const shop1Products: Product[] = [
     price: '3 375',
     nds: 'без НДС',
     deliveryTime: '60–90 календарных дней',
-    image: '/images/shop/24.jpg',
+    image: '/images/shop/kmr/24.webp',
   },
   {
     id: 25,

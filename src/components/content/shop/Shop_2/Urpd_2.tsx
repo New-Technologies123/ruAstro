@@ -1,11 +1,11 @@
 import { ShopBase } from '../../../ui/shop-base/ShopBase';
-import { yrpd2Products } from '../../../products/yrpd_2.products';
+import { urpd2Products } from '../../../products/urpd_2.products';
 import { BackToTop } from '../../../ui/back-to-top/BackToTop';
 
 export const Urpd_2 = ({ onBackShop, title }: any) => (
   <>
       <ShopBase
-        products={yrpd2Products}
+        products={urpd2Products}
         title={title}
         onBackShop={onBackShop}
       />
