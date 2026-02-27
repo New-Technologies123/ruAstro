@@ -1,0 +1,17 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { Mobile as MobileContent} from "../../../components/content/products/AccountingSystem/Mobile";
+
+const description = "Мобильная автоматизированная замерная установка, агзу «Спутник — массомер НТ.1» (мобильный), ПЗУ передвижная замерная установка, агзу, псу, мобильная замерная установка";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <MobileContent client:load/>
+    </Content>
+  <Footer client:load/>
+</Layout>

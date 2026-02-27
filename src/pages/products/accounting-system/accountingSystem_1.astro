@@ -1,17 +1,6 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { AccountingSystem_1 } from "../../../components/content/products/AccountingSystem/AccountingSystem_1";
-
-const description = "Автоматизированная замерная установка, АГЗУ «Спутник — массомер НТ.1» (стационарный), установка автоматизированная измерительная, измерительная установка, замерная установка, ИС установка для замера дебата, МЕРА, «спутник-массомер» нт.1";
+Astro.redirect('/products/accounting-system/stationary/');
 ---
 
-<Layout description={description}>
-  <Header pageType="products" client:load />
-    <Content>
-      <AccountingSystem_1 client:load/>
-    </Content>
-  <Footer client:load/>
-</Layout>
+<!-- Резервный контент (если JavaScript отключен) -->
+<meta http-equiv="refresh" content="0; url=/products/accounting-system/stationary/">

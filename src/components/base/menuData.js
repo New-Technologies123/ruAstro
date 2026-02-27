@@ -11,11 +11,11 @@ export const menuData = [
                 children: [
                     {
                         title: 'АГЗУ «Спутник — массомер НТ.1» (стационарный)',
-                        url: '/products/accounting-system/accountingSystem_1/',
+                        url: '/products/accounting-system/stationary/',
                     },
                     {
                         title: 'АГЗУ «Спутник — массомер НТ.1» (мобильный)',
-                        url: '/products/accounting-system/accountingSystem_2/',
+                        url: '/products/accounting-system/mobile/',
                     },
                 ],
             },

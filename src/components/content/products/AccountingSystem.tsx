@@ -7,15 +7,15 @@ import product_1_1 from '../../../images/products/product_1.webp';
 import product_1_2 from '../../../images/products/product_1_2.webp';
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
-type TAccounting = | 'accountingSystem_1' | 'accountingSystem_2' | 'calculator';
+type TAccounting = | 'stationary' | 'mobile' | 'calculator';
 
 /* ---------------- component ---------------- */
 export const AccountingSystem = () => {
   const title = 'Автоматизированная замерная установка (АГЗУ)';
 
   const cardTitle: Record<TAccounting, string> = {
-    accountingSystem_1: 'АГЗУ «Спутник — массомер НТ.1» (стационарный)',
-    accountingSystem_2: 'АГЗУ «Спутник — массомер НТ.1» (мобильный)',
+    stationary: 'АГЗУ «Спутник — массомер НТ.1» (стационарный)',
+    mobile: 'АГЗУ «Спутник — массомер НТ.1» (мобильный)',
     calculator: 'Калькулятор',
   };
 
@@ -44,13 +44,13 @@ export const AccountingSystem = () => {
       <div className={Styles.ramca}>
         <Card
           imgSrc={product_1_1.src}
-          title={cardTitle.accountingSystem_1}
-          onClick={() => goToAccounting('accountingSystem_1')}
+          title={cardTitle.stationary}
+          onClick={() => goToAccounting('stationary')}
         />
         <Card
           imgSrc={product_1_2.src}
-          title={cardTitle.accountingSystem_2}
-          onClick={() => goToAccounting('accountingSystem_2')}
+          title={cardTitle.mobile}
+          onClick={() => goToAccounting('mobile')}
         />
       </div>
       <BackToTop />

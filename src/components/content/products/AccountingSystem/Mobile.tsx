@@ -7,7 +7,7 @@ import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../../ui/back-to-top/BackToTop'
 import { LayoutBack } from '../../../layout/LayoutBack';
 
-export const AccountingSystem_2 = () => {
+export const Mobile = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
   const onBackAccounting = () => {

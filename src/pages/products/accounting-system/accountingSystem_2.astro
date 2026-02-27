@@ -1,17 +1,6 @@
 ---
-import Layout from "../../../layouts/Layout.astro";
-import { Header } from "../../../components/base/Header";
-import { Footer } from "../../../components/base/Footer";
-import { Content } from "../../../components/base/Content";
-import { AccountingSystem_2 } from "../../../components/content/products/AccountingSystem/AccountingSystem_2";
-
-const description = "Автоматизированная замерная установка, АГЗУ «Спутник — массомер НТ.1» (мобильный), ПЗУ передвижная замерная установка, агзу, псу";
+Astro.redirect('/products/accounting-system/mobile/');
 ---
 
-<Layout description={description}>
-  <Header pageType="products" client:load />
-    <Content>
-      <AccountingSystem_2 client:load/>
-    </Content>
-  <Footer client:load/>
-</Layout>
+<!-- Резервный контент (если JavaScript отключен) -->
+<meta http-equiv="refresh" content="0; url=/products/accounting-system/mobile/">

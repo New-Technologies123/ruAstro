@@ -1,0 +1,17 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { Header } from "../../../components/base/Header";
+import { Footer } from "../../../components/base/Footer";
+import { Content } from "../../../components/base/Content";
+import { Stationary as StationaryContent} from "../../../components/content/products/AccountingSystem/Stationary";
+
+const description = "Стационарная автоматизированная замерная установка, АГЗУ «Спутник — массомер НТ.1» (стационарный), установка автоматизированная измерительная, измерительная установка, замерная установка, ИС установка для замера дебата, МЕРА, «спутник-массомер» нт.1, стационарная замерная установка";
+---
+
+<Layout description={description}>
+  <Header pageType="products" client:load />
+    <Content>
+      <StationaryContent client:load/>
+    </Content>
+  <Footer client:load/>
+</Layout>
