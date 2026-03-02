@@ -7,6 +7,7 @@ import location from '../../images/location.svg';
 import email from '../../images/email.svg';
 import phone from '../../images/phone.svg';
 import { menuData } from './menuData';
+import { CartButton } from '../ui/cart-button/CartButton';
 
 import { useState, useEffect } from 'react';
 
@@ -98,9 +99,17 @@ export const Header = ({ pageType }) => {
     });
   };
 
-  const redirectEngToTechNew = () => {
+ const [lang, setLang] = useState('ru');
+
+const changeLanguage = (newLang) => {
+  setLang(newLang);
+
+  if (newLang === 'en') {
     window.location.href = 'https://eng.tech-new.ru';
-  };
+  } else {
+    window.location.href = 'https://tech-new.ru';
+  }
+};
 
   /* Закрытие меню при клике вне */
   useEffect(() => {
@@ -146,9 +155,34 @@ export const Header = ({ pageType }) => {
             </div>
 
             <div className={Styles.languageSwitch}>
-              <button className={Styles.buttonMenu} onClick={redirectEngToTechNew}>
-                Рус / Eng
-              </button>
+              <div className={Styles.langToggle}>
+                
+                {/* sliding background */}
+                <div
+                  className={Styles.langSlider}
+                  style={{
+                    transform:
+                      lang === 'ru'
+                        ? 'translateX(0%)'
+                        : 'translateX(100%)'
+                  }}
+                />
+
+                <button
+                  onClick={() => changeLanguage('ru')}
+                  className={lang === 'ru' ? Styles.active : ''}
+                >
+                  RU
+                </button>
+
+                <button
+                  onClick={() => changeLanguage('en')}
+                  className={lang === 'en' ? Styles.active : ''}
+                >
+                  EN
+                </button>
+
+              </div>
             </div>
           </div>
         </div>
@@ -216,6 +250,7 @@ export const Header = ({ pageType }) => {
           </li>
         </ul>
       </nav>
+      <CartButton goToBasket={() => window.location.href = '/basket'} />
     </>
   );
 };

@@ -13,7 +13,7 @@
 
 .contactBloc {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   margin-left: auto;
 }
 
@@ -33,75 +33,59 @@
   }
 }
 
+//Кнопка переключения языка
 .languageSwitch {
-  font-size: 15px;
+  display: flex;
+  align-items: center;
 }
 
-.buttonMenu {
-  border: none;
-  outline: none;
-  color: #fff;
-  // background: #0051ff;
-  background: rgb(24, 147, 211);
-  cursor: pointer;
+/* контейнер */
+.langToggle {
   position: relative;
-  z-index: 0;
-  border-radius: 10px;
-  padding: 10px 15px;
-  border-top-right-radius: 90px;
-  border-bottom-left-radius: 80px;
+  display: flex;
+  background: rgba(100, 145, 248, 0.192);
+  border-radius: 999px;
+  padding: 4px;
+  border: 1px solid rgba(15, 23, 42, 0.37);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
 }
 
-.buttonMenu:hover {
-  background-color: rgb(8, 106, 179);
-}
-
-.buttonMenu:before {
-  content: '';
-  background: linear-gradient(45deg, #ff0000, #ff7300, #fffb00, #48ff00, #00ffd5, #002bff, #7a00ff, #ff00c8, #ff0000);
+/* sliding pill */
+.langSlider {
   position: absolute;
-  top: -2px;
-  left: -2px;
-  background-size: 400%;
-  z-index: -1;
-  filter: blur(5px);
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-  animation: glowing 20s linear infinite;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  border-radius: 10px;
+  top: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  height: calc(100% - 8px);
+  border-radius: 999px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 6px 18px rgba(59,130,246,.35);
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
 }
 
-.buttonMenu:active:after {
+/* кнопки */
+.langToggle button {
+  position: relative;
+  z-index: 2;
+  border: none;
   background: transparent;
+  padding: 7px 12px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #334155;
+  cursor: pointer;
+  transition: color .25s ease;
 }
 
-.buttonMenu:hover:before {
-  opacity: 1;
+/* активный текст */
+.langToggle button.active {
+  color: #ffffff;
 }
 
-.buttonMenu:after {
-  z-index: -1;
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  border-radius: 10px;
-}
-
-@keyframes glowing {
-  0% {
-    background-position: 0 0;
-  }
-
-  50% {
-    background-position: 400% 0;
-  }
-
-  100% {
-    background-position: 0 0;
-  }
+/* hover */
+.langToggle:hover {
+  box-shadow: 0 8px 22px rgba(0,0,0,.12);
 }
 
 nav {
