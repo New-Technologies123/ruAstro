@@ -1,6 +1,7 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
 import { QuestionEntry } from '../components/ui/question-form/QuestionEntry';
+import { GlobalCart } from '../components/ui/global-cart/GlobalCart';
 
 const {
   title = 'ООО ИПП «Новые Технологии»',
@@ -96,7 +97,7 @@ const {
       </iframe>
     </noscript>
     <!-- End Google Tag Manager (noscript) -->
-
+    <GlobalCart client:load />
     <slot />
 
     <!-- ПЛАВАЮЩАЯ КНОПКА -->

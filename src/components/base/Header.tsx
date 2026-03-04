@@ -250,7 +250,7 @@ const changeLanguage = (newLang) => {
           </li>
         </ul>
       </nav>
-      <CartButton goToBasket={() => window.location.href = '/basket'} />
+      <CartButton goToBasket={() => window.dispatchEvent(new Event('toggleGlobalCart'))} />
     </>
   );
 };

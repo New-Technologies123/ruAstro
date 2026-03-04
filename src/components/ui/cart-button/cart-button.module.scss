@@ -1,91 +1,188 @@
-/* ===== Кнопка корзины ===== */
 .cartWrapper {
   position: fixed;
-  top: 45px;
-  right: 20px;
-  z-index: 99990;
-  margin-top: 20px;
-  margin-left: 15px;
+  top: 63px;
+  right: 24px;
+  z-index: 9;
 }
+
+/* ================= BUTTON ================= */
 
 .cartButton {
   position: relative;
-  font-size: 22px;
+  font-size: 21px;
   cursor: pointer;
-  background: #4bb3f0;
-  border: none;
-  border-radius: 12px;
-  padding: 10px 14px;
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(25, 28, 197, 0.452);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25),
+    rgba(255, 255, 255, 0.08)
+  );
 
   box-shadow:
-    0 4px 14px rgba(0, 0, 0, 0.08);
+    0 8px 30px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
 
-  transition: box-shadow 0.3s ease;
+  transition: all 0.35s cubic-bezier(.22,1,.36,1);
 }
 
 .cartButton:hover {
+  transform: translateY(-4px) scale(1.04);
+
   box-shadow:
-    0 10px 24px rgba(0, 0, 0, 0.15);
+    0 18px 40px rgba(0, 0, 0, 0.18),
+    0 0 20px rgba(75, 179, 240, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
 }
+
+/* subtle glow pulse */
+.cartButton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(75, 179, 240, 0.4),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.cartButton:hover::after {
+  opacity: 1;
+}
+
+/* ================= BADGE ================= */
 
 .badge {
   position: absolute;
-  top: -6px;
-  right: -6px;
-  background: #00195f;
-  color: #fff;
+  top: -8px;
+  right: -8px;
+
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   font-size: 12px;
   font-weight: 700;
-  border-radius: 50%;
-  padding: 4px 7px;
+
+  border-radius: 999px;
+
+  background: linear-gradient(135deg, #00195f, #4bb3f0);
+  color: white;
+
+  box-shadow:
+    0 4px 14px rgba(0, 25, 95, 0.4),
+    0 0 10px rgba(75, 179, 240, 0.6);
+
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
+
+/* ================= DROPDOWN ================= */
 
 .dropdown {
   position: absolute;
-  top: 60px;        // чуть ниже кнопки
+  top: 70px;
   right: 0;
-  width: 400px;
-  // max-height: 400px;
-  background: white;
-  border: 1px solid #ddd;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  padding: 10px;
-  z-index: 1000;
-  border-radius: 6px;
+  width: 380px;
+  max-height: 420px;
+
+  border-radius: 20px;
+  padding: 18px;
+
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.18);
+
+  overflow: hidden;
 }
+
+/* ================= CONTENT ================= */
 
 .empty {
   text-align: center;
-  color: #888;
+  padding: 30px 0;
+  font-size: 15px;
+  color: rgba(0, 0, 0, 0.55);
 }
 
 .items {
   list-style: none;
   margin: 0;
   padding: 0;
-  max-height: 300px;
+
+  max-height: 260px;
   overflow-y: auto;
+}
+
+/* modern scrollbar */
+.items::-webkit-scrollbar {
+  width: 6px;
+}
+
+.items::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
 }
 
 .item {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 8px;
-  padding: 5px 0;
-  border-bottom: 1px solid #eee;
+  gap: 10px;
+
+  padding: 10px 0;
   font-size: 14px;
+
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+
+  transition: background 0.2s ease;
 }
 
-@media (max-width:1070px){
-  .cartWrapper{
-    margin-right: 45px;
+.item:hover {
+  background: rgba(75, 179, 240, 0.08);
+  border-radius: 8px;
+}
+
+.total {
+  margin-top: 14px;
+  padding-top: 12px;
+  font-size: 16px;
+  font-weight: 600;
+
+  display: flex;
+  justify-content: space-between;
+
+  color: #0b3bbe;
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 660px) {
+  .cartWrapper {
+    top: 12px;
+    right: 14px;
   }
-}
 
-@media (max-width: 660px){
-  .cartWrapper{
-    top: 5px;
-    margin-top: 12px;
-    margin-right: 0;
+  .dropdown {
+    width: 92vw;
+    right: -10px;
   }
 }
