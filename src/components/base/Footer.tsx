@@ -11,21 +11,21 @@ export const Footer = () => {
           <div className={Styles.infa}>
             <div className={Styles.logoContainer}>
               <img src={logoRu.src} alt="Новые Технологии" />
-              <p className={Styles.socialText}>Мы в соцсетях</p>
+              {/* <p className={Styles.socialText}>Мы в соцсетях</p>
               <div className={Styles.socialIcons}>
-                {/* <a href="https://vk.com" target="_blank" rel="noopener noreferrer">
+                <a href="https://vk.com" target="_blank" rel="noopener noreferrer">
                   <FaVk />
-                </a> */}
+                </a>
                 <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
                   <FaInstagram />
                 </a>
-                {/* <a href="https://t.me" target="_blank" rel="noopener noreferrer">
+                <a href="https://t.me" target="_blank" rel="noopener noreferrer">
                   <FaTelegram />
-                </a> */}
+                </a>
                 <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
                   <FaFacebookF />
                 </a>
-              </div>
+              </div> */}
             </div>
             {/* Контакты */}
             <div className={Styles.contactInfo}>
