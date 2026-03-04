@@ -77,7 +77,7 @@ const goBack = () => {
       <>
         <Card
           imgSrc={product_1.src} 
-          title="Автоматизированная замерная установка (АГЗУ)"
+          title="Автоматизированная групповая замерная установка (АГЗУ)"
           onClick={() => goTo('/products/accounting-system')}
         />
         <Card

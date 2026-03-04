@@ -6,7 +6,7 @@ export const menuData = [
         pageType: 'products',
         children: [
             {
-                title: 'Автоматизированная замерная установка (АГЗУ)',
+                title: 'Автоматизированная групповая замерная установка (АГЗУ)',
                 url: '/products/accounting-system/',
                 children: [
                     {
