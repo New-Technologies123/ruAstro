@@ -125,11 +125,6 @@ export const Stationary = () => {
                   </li>
                   <li className={Styles.feature}>
                     <div className={Styles.featureText}>
-                      <p>Термометры (термопреобразователи);</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
                       <p>Расходомеры типа «ЭМИС-МАСС 260» или аналог;</p>
                     </div>
                   </li>
