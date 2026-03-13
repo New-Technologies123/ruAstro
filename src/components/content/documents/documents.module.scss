@@ -1,28 +1,56 @@
+.wrapper {
+  padding: 48px 32px;
+  background: linear-gradient(180deg, #f7fbff 0%, #eef6fd 100%);
+  min-height: 100%;
+}
+
+/* Сетка карточек */
 .team {
+  padding-top: 26px;
+  margin: 0 50px;
+
   display: flex;
+  // grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 28px;
   justify-content: center;
-  gap: 20px; /* Увеличиваем расстояние между карточками */
-  padding: 50px;
-  background-color: #e6f7ff;
-  margin: 20px 0;
   flex-wrap: wrap;
 }
 
-@media (max-width: 1030px){
-  .team{
-    margin: 10px 0;
-    padding: 30px;
+/* Плавное появление всей секции */
+.team {
+  animation: fadePage .5s ease;
+}
+
+@keyframes fadePage {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 700px){
-  .team{
-    padding: 15px;
-  }
-}
+/* адаптивность */
 
-@media (max-width: 430px) {
+@media (max-width: 900px) {
+  .wrapper {
+    padding: 36px 24px;
+  }
+
   .team {
-    padding: 20px;
+    gap: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .wrapper {
+    padding: 28px 16px;
+  }
+  .team {
+    padding-top: 20px;
+    margin: 0 70px;
+    gap: 18px;
   }
 }

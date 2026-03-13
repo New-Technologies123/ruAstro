@@ -1,206 +1,135 @@
-.wrapper {
-    position: relative;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    margin-top: 15px;
-    
-    &.loaded {
-      opacity: 1;
-      transform: translateY(0);
-    }
-}
-  
-.content {
-    margin: 0 20px;
-    padding: 20px 25px;
-    border-radius: 16px;
-    background-color: #d3e4ff8f;
-    display: flex;
-    flex-direction: row;
-    gap: 40px;
-  }
-  
-.contacts {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 25px;
-}
-  
-.contactCard {
-    background: white;
-    border-radius: 16px;
-    padding: 20px 25px;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
-    opacity: 0;
-    transform: translateY(20px);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);    
-    .loaded & {
-      opacity: 1;
-      transform: translateY(0);
-    }
-}
-  
-.iconContainer {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #6ea8ff 0%, #0c0a92 100%);
-    flex-shrink: 0;    
-    svg {
-      width: 25px;
-      height: 25px;
-      fill: white;
-    }
-}
-  
-.textContainer {
-    h3 {
-      margin-bottom: 5px;
-      font-size: 20px;
-      font-weight: 600;
-      color: #2d3748;
-    }    
-    p, a {
-      font-size: 19px;
-      line-height: 1.25;
-      color: #4a5568;
-    }
-}
-  
-.phone {
-    color: #0f3bff;
-    text-decoration: none;
-    font-weight: 400;
-    transition: all 0.3s ease;    
-    &:hover {
-      color: #2245e0;
-      text-decoration: underline;
-    }
-}
-  
-.mapContainer {
-    flex: 1;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    position: relative;
-    min-height: 400px;
-    opacity: 0;
-    transform: scale(0.95);
-    transition: all 0.6s ease-out 0.3s;    
-    .loaded & {
-        opacity: 1;
-        transform: scale(1);
-    }
-    iframe{
-        width: 100%;
-        height: 100%;
-    }
-}
+// .container {
+//   padding: 30px;
+//   max-width: 800px;
+//   margin: 0 auto;
+//   font-family: 'Inter', sans-serif;
+// }
 
-@media (max-width: 1400px){
-    .contacts{
-        flex: 1;
-    }
-    .textContainer{
-        h3{
-            font-size: 19px;
-        }
-        p,a{
-            font-size: 18px;
-        }
-    }
-}
+// .procurementCard {
+//   border: 1px solid #e5e7eb;
+//   border-radius: 12px;
+//   padding: 20px;
+//   margin-bottom: 20px;
+//   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+//   background-color: white;
+// }
 
-@media (max-width: 1200px){
-    .textContainer{
-        h3{
-            font-size: 18px;
-        }
-        p,a{
-            font-size: 17px;
-        }
-    }
-}
+// .procurementName {
+//   margin-bottom: 10px;
+//   color: #1f2937;
+// }
 
-@media (max-width: 1000px){
-    .content{
-        flex-direction: column;
-    }
-    .contacts{
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .contactCard{
-        padding: 15px 20px;
-    }
-    .iconContainer{
-        width: 35px;
-        height: 35px;
-        svg{
-            width: 20px;
-            height: 20px;
-        }
-    }
-    .textContainer{
-        h3{
-            margin-bottom: 5px;
-            font-size: 17px;
-        }
-        p, a{
-            font-size: 16px;
-        }
-    }
-    .mapContainer{
-        iframe{
-            height: 450px;
-        }
-    }    
-}
+// .openFormButton {
+//   padding: 12px 20px;
+//   border-radius: 8px;
+//   border: none;
+//   background-color: #4f46e5;
+//   color: white;
+//   font-weight: 600;
+//   cursor: pointer;
+//   transition: 0.2s;
+// }
 
-@media (max-width: 790px){
-    .content{
-        padding: 15px;
-    }
-    .contacts{
-        grid-template-columns: 1fr;
-    }
-    .contactCard{
-        padding: 10px 15px;
-    }
-    .textContainer{
-        h3{
-            margin-bottom: 3px;
-            // font-size: 17px;
-        }
-        // p, a{
-        //     font-size: 15px;
-        // }
-    }
-}
+// .openFormButton:hover {
+//   background-color: #4338ca;
+// }
 
-@media (max-width: 500px){
-    .phone{
-        &:hover {
-            color: #0f3bff;
-            text-decoration: none;
-        }
-    }
-}
+// .modalBackdrop {
+//   position: fixed;
+//   top: 0;
+//   left: 0;
+//   right:0;
+//   bottom:0;
+//   background: rgba(0,0,0,0.5);
+//   display:flex;
+//   justify-content: center;
+//   align-items: center;
+//   z-index: 100;
+// }
 
-@media (max-width: 475px){
-    .textContainer{
-        h3{
-            font-size: 16px;
-        }
-        p,a{
-            font-size: 14px;
-        }
-    }
-}
+// .modal {
+//   background: white;
+//   padding: 30px;
+//   border-radius: 12px;
+//   width: 100%;
+//   max-width: 500px;
+// }
+
+// .form input {
+//   width: 100%;
+//   padding: 12px;
+//   margin-bottom: 15px;
+//   border-radius: 8px;
+//   border: 1px solid #d1d5db;
+//   font-size: 16px;
+// }
+
+// .addItemButton {
+//   margin-bottom: 15px;
+//   padding: 10px 15px;
+//   border-radius: 8px;
+//   border: none;
+//   background-color: #10b981;
+//   color: white;
+//   font-weight: 600;
+//   cursor: pointer;
+//   transition: 0.2s;
+// }
+
+// .addItemButton:hover {
+//   background-color: #059669;
+// }
+
+// .formButtons {
+//   display: flex;
+//   justify-content: flex-end;
+//   gap: 10px;
+// }
+
+// .formButtons button {
+//   padding: 12px 20px;
+//   border-radius: 8px;
+//   border: none;
+//   cursor: pointer;
+//   font-weight: 600;
+// }
+
+// .formButtons button[type="submit"] {
+//   background-color: #4f46e5;
+//   color: white;
+// }
+
+// .formButtons button[type="button"] {
+//   background-color: #e5e7eb;
+//   color: #374151;
+// }
+
+// .itemRow {
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+//   margin-bottom: 10px;
+// }
+
+// .itemRow input {
+//   padding: 8px;
+//   border-radius: 6px;
+//   border: 1px solid #d1d5db;
+//   font-size: 14px;
+// }
+
+// .addItemButton {
+//   margin-bottom: 15px;
+//   padding: 10px 15px;
+//   border-radius: 8px;
+//   border: none;
+//   background-color: #10b981;
+//   color: white;
+//   font-weight: 600;
+//   cursor: pointer;
+//   transition: 0.2s;
+// }
+
+// .addItemButton:hover {
+//   background-color: #059669;
+// }

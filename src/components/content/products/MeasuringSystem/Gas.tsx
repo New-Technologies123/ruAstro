@@ -1,91 +1,178 @@
-import Styles from '../products.module.scss'
-import { useState } from 'react'
-
-import product_3 from '../../../../images/products/product_3_1.webp'
-
-import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
-import { BackToTop } from '../../../ui/back-to-top/BackToTop'
-import { LayoutBack } from '../../../layout/LayoutBack';
+import { useEffect, useRef, useState } from "react";
+import Styles from "../Accessories/ervip.module.scss";
+import back from '../../../../images/back.svg'
+import product from "../../../../images/products/product_3_1.webp";
+import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
+import { BackToTop } from "../../../ui/back-to-top/BackToTop";
 
 export const Gas = () => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null)
+  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
+  const heroImageRef = useRef<HTMLDivElement>(null);
 
-  const onBackMeasuring = () => {
-    window.location.href = '/products/measuring-system';
+  const onBack = () => {
+    window.location.href = "/products/measuring-system";
   };
 
+  const onDoc = () => {
+    window.location.href = "/documents/?type=measuring-system";
+  };
+
+  /* ---------- 3D TILT EFFECT ---------- */
+  useEffect(() => {
+    const el = heroImageRef.current;
+    if (!el) return;
+
+    const move = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = -(y - centerY) / 20;
+      const rotateY = (x - centerX) / 20;
+
+      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    };
+
+    const leave = () => {
+      el.style.transform = "rotateX(0) rotateY(0)";
+    };
+
+    el.addEventListener("mousemove", move);
+    el.addEventListener("mouseleave", leave);
+
+    return () => {
+      el.removeEventListener("mousemove", move);
+      el.removeEventListener("mouseleave", leave);
+    };
+  }, []);
+
+  /* ---------- SCROLL REVEAL ---------- */
+  useEffect(() => {
+    const elements = document.querySelectorAll(`.${Styles.reveal}`);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(Styles.visible);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <LayoutBack onBack={onBackMeasuring} title="Система измерения количества газа (СИКГ)">
-      <div className={Styles.container}>
-        {/* ==== = CONTENT ===== */}
-        <section className={Styles.content}>
+    <>
+      <div className={Styles.page}>
+        <button className={Styles.backButton} onClick={onBack}>
+          <img src={back.src} alt=""/>
+        </button>
 
-          <div className={Styles.card}>
-            {/* Фото */}
-            <div className={Styles.cardImage}>
-              <div className={Styles.imageCard} onClick={() => setBigPhoto(product_3.src)}>
-                <img src={product_3.src} alt="" className={Styles.mainImage} />
-                <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>
-                    Нажмите для увеличения
-                  </span>
-                </div>
-              </div>
+        <section className={`${Styles.hero} ${Styles.reveal}`}>
+          <div className={Styles.heroText}>
+            <h1>
+              Система измерения количества газа<span> СИКГ</span>
+            </h1>
+
+            <p>
+              СИКГ предназначена для автоматизированного учета количества
+              природного и нефтяного газа, включая определение компонентного
+              состава при транспортировке, хранении и переработке.
+            </p>
+
+            <div className={Styles.heroButtons}>
+              <button
+                className={Styles.primaryBtn}
+                onClick={() => setBigPhoto(product.src)}
+              >
+                Смотреть фото
+              </button>
+
+              <button className={Styles.secondaryBtn} onClick={onDoc}>
+                Документация
+              </button>
             </div>
+          </div>
 
-            <div className={Styles.cardContent}>
-              <div className={Styles.features}>
-                <h3>Назначение:</h3>
-                <ul className={Styles.featuresList}>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Коммерческий и технологический учёт газа;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Применяется на УКПГ и узлах передачи газа.</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div className={Styles.features}>
-                <h3>Типовой состав:</h3>
-                <ul className={Styles.featuresList}>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Преобразователь расхода;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Вычислитель расхода;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Хроматограф, анализаторы, датчики;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Система пробоотбора.</p>
-                    </div>
-                  </li>
-                </ul>
+          <div className={Styles.heroImageWrap}>
+            <div
+              className={Styles.imageCard}
+              ref={heroImageRef}
+              onClick={() => setBigPhoto(product.src)}
+            >
+              <img src={product.src} alt="СИКГ" className={Styles.mainImage} />
+              
+              <div className={Styles.imageOverlay}>
+                <span className={Styles.zoomText}>
+                  Нажмите для увеличения
+                </span>
               </div>
             </div>
           </div>
-          <div className={Styles.related}>
-            <h3>Смотрите также:</h3>
-            <ul className={Styles.relatedList}>
-              <li>
+        </section>
+
+        {/* FEATURES */}
+        <section className={`${Styles.features} ${Styles.reveal}`}>
+          <h2>Назначение системы</h2>
+
+          <div className={Styles.featuresGrid}>
+            {[
+              [
+                "Учет газа",
+                "Автоматизированный учет количества природного и нефтяного газа.",
+              ],
+              [
+                "Коммерческий учет",
+                "Используется при проведении расчетных операций между предприятиями.",
+              ],
+              [
+                "Контроль состава",
+                "Определение компонентного состава газа.",
+              ],
+              [
+                "Применение",
+                "Используется на УКПГ и на границах газодобывающих и газотранспортных предприятий.",
+              ],
+            ].map(([title, text], i) => (
+              <div key={i} className={Styles.featureCard}>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* TECHNOLOGY */}
+        <section className={`${Styles.tech} ${Styles.reveal}`}>
+          <div className={Styles.techImage}>
+            <img src={product.src} alt="СИКГ оборудование" />
+          </div>
+
+          <div className={Styles.techText}>
+            <h2>Типовой состав системы</h2>
+
+            <p>
+              Система включает расходомеры газа, вычислители расхода,
+              регуляторы давления, анализаторы состава газа и
+              аппаратно-программные средства управления.
+            </p>
+
+            <section className={`${Styles.related} ${Styles.reveal}`}>
+              <h2>Смотрите также</h2>
+
+              <div className={Styles.relatedGrid}>
                 <a href="/products/measuring-system/oil">СИКН</a>
-              </li>
-              <li>
                 <a href="/products/measuring-system/water">СИКВ</a>
-              </li>
-            </ul>
+              </div>
+            </section>
           </div>
         </section>
 
@@ -95,11 +182,6 @@ export const Gas = () => {
           <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
         )}
       </div>
-    </LayoutBack>
-  )
-}
-
-
-
-
-
+    </>
+  );
+};

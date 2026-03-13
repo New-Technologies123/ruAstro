@@ -1,132 +1,181 @@
-import Styles from '../products.module.scss'
-import { useState, useRef } from 'react'
+import { useEffect, useRef, useState } from "react";
+import Styles from "../Accessories/ervip.module.scss";
+import back from '../../../../images/back.svg';
+import product from "../../../../images/products/product_5_1.webp";
 
-import product_5 from '../../../../images/products/product_5_1.webp'
-
-import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
-import { BackToTop } from '../../../ui/back-to-top/BackToTop'
-import { LayoutBack } from '../../../layout/LayoutBack';
+import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
+import { BackToTop } from "../../../ui/back-to-top/BackToTop";
 
 export const Multiphase = () => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null)
+  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
+  const heroImageRef = useRef<HTMLDivElement>(null);
 
-  const onBackPumping = () => {
-    window.location.href = '/products/pumping-stations';
+  const onBack = () => {
+    window.location.href = "/products/pumping-stations";
   };
 
+  const onDoc = () => {
+    window.location.href = "/documents/?type=pumpingStations";
+  };
+
+  /* ---------- 3D TILT EFFECT ---------- */
+  useEffect(() => {
+    const el = heroImageRef.current;
+    if (!el) return;
+
+    const move = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = -(y - centerY) / 20;
+      const rotateY = (x - centerX) / 20;
+      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    };
+
+    const leave = () => {
+      el.style.transform = "rotateX(0) rotateY(0)";
+    };
+
+    el.addEventListener("mousemove", move);
+    el.addEventListener("mouseleave", leave);
+
+    return () => {
+      el.removeEventListener("mousemove", move);
+      el.removeEventListener("mouseleave", leave);
+    };
+  }, []);
+
+  /* ---------- SCROLL REVEAL ---------- */
+  useEffect(() => {
+    const elements = document.querySelectorAll(`.${Styles.reveal}`);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(Styles.visible);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <LayoutBack onBack={onBackPumping} title="Блочная мультифазная насосная станция">
-      <div className={Styles.container}>
-        {/* ===== CONTENT ===== */}
-        <section className={Styles.content}>
+    <>
+      <div className={Styles.page}>
+        <button className={Styles.backButton} onClick={onBack}>
+          <img src={back.src} alt=""/>
+        </button>
 
-          <div className={Styles.card}>
-            {/* Фото */}
-            <div className={Styles.cardImage}>
-              <div className={Styles.imageCard} onClick={() => setBigPhoto(product_5.src)}>
-                <img src={product_5.src} alt="" className={Styles.mainImage}/>
-                <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>
-                    Нажмите для увеличения
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className={Styles.cardContent}>
-              <div className={Styles.features}>
-                <h3>Назначение:</h3>
-                <ul className={Styles.featuresList}>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Для перекачивания газожидкостной смеси из скважин без предварительной сепарации газа с содержанием газовой фазы до 100%.</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div className={Styles.features}>
-                <h3>Типовой состав:</h3>
-                <ul className={Styles.featuresList}>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Мультифазные насосные агрегаты;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Блок-бокс насосной станции;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Технологические трубопроводы;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Дренажные трубопроводы;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Комплект КИПиА;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Системы жизнеобеспечения блок-бокса насосной станции (отопление, вентиляция);</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Система управления мультифазными насосными агрегатами;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Система противоаварийной автоматической защиты ПАЗ;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Блок частотных преобразователей;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Система передачи информации на верхний уровень;</p>
-                    </div>
-                  </li>
-                  <li className={Styles.feature}>
-                    <div className={Styles.featureText}>
-                      <p>Система электроснабжения насосных агрегатов.</p>
-                    </div>
-                  </li>
-                </ul>
-              </div>                  
+        <section className={`${Styles.hero} ${Styles.reveal}`}>
+          <div className={Styles.heroText}>
+            <h1>Блочная 
+              <span> мультифазная</span> насосная станция</h1>
+            <p>
+              Для перекачивания газожидкостной смеси из скважин без
+              предварительной сепарации газа с содержанием газовой фазы до
+              100%.
+            </p>
+            <div className={Styles.heroButtons}>
+              <button
+                className={Styles.primaryBtn}
+                onClick={() => setBigPhoto(product.src)}
+              >
+                Смотреть фото
+              </button>
+              <button className={Styles.secondaryBtn} onClick={onDoc}>
+                Документация
+              </button>
             </div>
           </div>
-          <div className={Styles.related}>
-            <h3>Смотрите также:</h3>
-            <ul className={Styles.relatedList}>
-              <li>
-                <a href="/products/pumping-stations/internal">Блочная насосная станция внутренней и внешней перекачки нефти</a>
-              </li>
-            </ul>
+
+          <div className={Styles.heroImageWrap}>
+            <div
+              className={Styles.imageCard}
+              ref={heroImageRef}
+              onClick={() => setBigPhoto(product.src)}
+            >
+              <img src={product.src} alt="Мультифазная насосная станция" className={Styles.mainImage} />
+              
+              <div className={Styles.imageOverlay}>
+                <span className={Styles.zoomText}>
+                  Нажмите для увеличения
+                </span>
+              </div>
+            </div>
           </div>
         </section>
 
+        {/* ADVANTAGES */}
+        <section className={`${Styles.features} ${Styles.reveal}`}>
+          <h2>Преимущества оборудования</h2>
+          <div className={Styles.featuresGrid}>
+            {[
+              [
+                "Высокая точность",
+                "Стабильные показания и высокая точность измерения перекачиваемой смеси.",
+              ],
+              ["Надежность", "Простая эксплуатация и высокая надежность промышленного уровня."],
+              ["Долговечность", "Срок службы оборудования рассчитан на длительную эксплуатацию."],
+              ["Устойчивость", "Нечувствительность к перепадам давления и составу жидкости."],
+              ["Безопасность", "Система противоаварийной автоматической защиты ПАЗ."],
+            ].map(([title, text], i) => (
+              <div key={i} className={Styles.featureCard}>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* TYPICAL COMPOSITION */}
+        <section className={`${Styles.tech} ${Styles.reveal}`}>
+          <div className={Styles.techImage}>
+            <img src={product.src} alt="Типовой состав" />
+          </div>
+          <div className={Styles.techText}>
+            <h2>Типовой состав</h2>
+            <ul className={Styles.featuresList}>
+              {[
+                "Мультифазные насосные агрегаты",
+                "Блок-бокс насосной станции",
+                "Запорная арматура",
+                "Технологические трубопроводы",
+                "Дренажные трубопроводы",
+                "Комплект КИПиА",
+                "Системы жизнеобеспечения блок-бокса насосной станции (отопление, вентиляция)",
+                "Система управления мультифазными насосными агрегатами",
+                "Система противоаварийной автоматической защиты ПАЗ",
+                "Блок частотных преобразователей",
+                "Система передачи информации на верхний уровень",
+                "Система электроснабжения насосных агрегатов",
+              ].map((text, i) => (
+                <li key={i} className={Styles.feature}>
+                  <p>{text}</p>
+                </li>
+              ))}
+            </ul>
+            <section className={`${Styles.related} ${Styles.reveal}`}>
+              <h2>Смотрите также</h2>
+              <div className={Styles.relatedGrid}>
+                <a href="/products/pumping-stations/internal">
+                  Блочная насосная станция внутренней и внешней перекачки нефти
+                </a>
+              </div>
+            </section>
+          </div>          
+        </section>
         <BackToTop />
 
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
+        {bigPhoto && <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />}
       </div>
-    </LayoutBack>
-  )
-}
-
-
-
-
-
+    </>
+  );
+};

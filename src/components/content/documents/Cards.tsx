@@ -5,13 +5,12 @@ type TProps = {
   onClick?: () => void;
 };
 
-export const Cards = ({ title, onClick}: TProps) => {
-
+export const Cards = ({ title, onClick }: TProps) => {
   return (
     <div className={Styles.certificatesList}>
-      <div className={Styles.actionTitle} onClick={onClick}>
+      <button className={Styles.actionTitle} onClick={onClick}>
         <p>{title}</p>
-      </div>
-    </div>    
+      </button>
+    </div>
   );
 };

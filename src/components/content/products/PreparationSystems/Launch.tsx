@@ -1,89 +1,180 @@
-import Styles from '../products.module.scss'
-import { useState, useRef } from 'react'
+import { useEffect, useRef, useState } from "react";
+import Styles from "../Accessories/ervip.module.scss";
+import back from '../../../../images/back.svg'
+import product from "../../../../images/products/product_4.webp";
 
-import product_4 from '../../../../images/products/product_4.webp'
-
-import { BigPhoto } from '../../../ui/big-photo/BigPhoto'
-import { BackToTop } from '../../../ui/back-to-top/BackToTop'
-import { LayoutBack } from '../../../layout/LayoutBack';
+import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
+import { BackToTop } from "../../../ui/back-to-top/BackToTop";
 
 export const Launch = () => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null)
+  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
+  const heroImageRef = useRef<HTMLDivElement>(null);
 
-  const onBackPreparation = () => {
-    window.location.href = '/products/preparation-systems';
+  const onBack = () => {
+    window.location.href = "/products/preparation-systems";
   };
 
+  const onDoc = () => {
+    window.location.href = "/documents/?type=accessories";
+  };
+
+  /* ---------- 3D TILT EFFECT ---------- */
+  useEffect(() => {
+    const el = heroImageRef.current;
+    if (!el) return;
+
+    const move = (e: MouseEvent) => {
+      const rect = el.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = -(y - centerY) / 20;
+      const rotateY = (x - centerX) / 20;
+
+      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    };
+
+    const leave = () => {
+      el.style.transform = "rotateX(0) rotateY(0)";
+    };
+
+    el.addEventListener("mousemove", move);
+    el.addEventListener("mouseleave", leave);
+
+    return () => {
+      el.removeEventListener("mousemove", move);
+      el.removeEventListener("mouseleave", leave);
+    };
+  }, []);
+
+  /* ---------- SCROLL REVEAL ---------- */
+  useEffect(() => {
+    const elements = document.querySelectorAll(`.${Styles.reveal}`);
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add(Styles.visible);
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <LayoutBack onBack={onBackPreparation} title="Устройство запуска и приема внутритрубных средств очистки и диагностики УЗПЗ, УЗПП">
-      <div className={Styles.container}>
-        {/* ===== CONTENT ===== */}
-        <section className={Styles.content}>
+    <>
+      <div className={Styles.page}>
+        <button className={Styles.backButton} onClick={onBack}>
+          <img src={back.src} alt=""/>
+        </button>
 
-          <div className={Styles.card}>
-            {/* Фото */}
-            <div className={Styles.cardImage}>
-              <div className={Styles.imageCard} onClick={() => setBigPhoto(product_4.src)}>
-                <img src={product_4.src} alt="" className={Styles.mainImage}/>
-                <div className={Styles.imageOverlay}>
-                  <span className={Styles.zoomText}>
-                    Нажмите для увеличения
-                  </span>
-                </div>
-              </div>
-            </div>
+        {/* HERO */}
+        <section className={`${Styles.hero} ${Styles.reveal}`}>
+          <div className={Styles.heroText}>
+            <h1>
+              Устройство запуска и приема внутритрубных средств <span>УЗПЗ, УЗПП</span>
+            </h1>
 
-            <div className={Styles.cardContent}>
-                <div className={Styles.features}>
-                  <h3>Назначение:</h3>
-                  <ul className={Styles.featuresList}>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Для периодического запуска в трубопровод (с целью его очистки и диагностики) и приёма из него внутритрубных 
-                          снарядов — дефектоскопов, очистных скребков и других поточных средств.</p>
-                      </div>
-                    </li>                     
-                  </ul>                    
-                </div>
-                <div className={Styles.features}>
-                  <h3>Область применения:</h3>
-                  <ul className={Styles.featuresList}>
-                    <li className={Styles.feature}>
-                      <div className={Styles.featureText}>
-                        <p>Системы сбора и транспорта нефти и газа (нефтепроводы, газопроводы).</p>
-                      </div>
-                    </li>                     
-                  </ul>                    
-                </div>
+            <p>
+              Предназначено для периодического запуска внутритрубных снарядов
+              — дефектоскопов, очистных скребков и других поточных средств.
+            </p>
+
+            <p>
+              Обеспечивает безопасную и надежную работу систем очистки и диагностики трубопроводов.
+            </p>
+
+            <div className={Styles.heroButtons}>
+              <button
+                className={Styles.primaryBtn}
+                onClick={() => setBigPhoto(product.src)}
+              >
+                Смотреть фото
+              </button>
+
+              <button className={Styles.secondaryBtn} onClick={onDoc}>
+                Документация
+              </button>
             </div>
           </div>
-          <div className={Styles.related}>
-            <h3>Смотрите также:</h3>
-            <ul className={Styles.relatedList}>
-              <li>
+
+          <div className={Styles.heroImageWrap}>
+            <div
+              className={Styles.imageCard}
+              ref={heroImageRef}
+              onClick={() => setBigPhoto(product.src)}
+            >
+              <div className={Styles.frame}>
+                <img src={product.src} alt="ЭРВИП" className={Styles.mainImage} />
+              </div>
+              <div className={Styles.imageOverlay}>
+                <span className={Styles.zoomText}>
+                  Нажмите для увеличения
+                </span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FEATURES */}
+        <section className={`${Styles.features} ${Styles.reveal}`}>
+          <h2>Преимущества оборудования</h2>
+          <div className={Styles.featuresGrid}>
+            {[
+              ["Надежность", "Обеспечивает безопасный запуск и прием внутритрубных средств."],
+              ["Универсальность", "Подходит для нефтепроводов и газопроводов, разных диаметров и конфигураций."],
+              ["Автоматизация", "Минимизирует участие оператора, повышает эффективность и безопасность."],
+              ["Простота эксплуатации", "Легкая интеграция в существующие системы и минимальные требования к обслуживанию."],
+            ].map(([title, text], i) => (
+              <div key={i} className={Styles.featureCard}>
+                <h3>{title}</h3>
+                <p>{text}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* TECHNOLOGY */}
+        <section className={`${Styles.tech} ${Styles.reveal}`}>
+          <div className={Styles.techImage}>
+            <img src={product.src} alt="" />
+          </div>
+
+          <div className={Styles.techText}>
+            <h2>Принцип работы</h2>
+
+            <p>
+              Снаряды запускаются в трубопровод через устройство УЗПЗ, проходят очистку или диагностику,
+              после чего принимаются УЗПП.
+            </p>
+
+            <p>
+              Позволяет проводить проверку состояния трубопроводов, выявлять дефекты и удалять отложения.
+            </p>
+
+            <section className={`${Styles.related} ${Styles.reveal}`}>
+              <h2>Смотрите также</h2>
+              <div className={Styles.relatedGrid}>
                 <a href="/products/preparation-systems/block">БГ</a>
-              </li>
-              <li>
                 <a href="/products/preparation-systems/cleaning">УОК-НКТ</a>
-              </li>
-              <li>
                 <a href="/products/preparation-systems/dosing">БДР</a>
-              </li>
-            </ul>
+              </div>
+            </section>
           </div>
         </section>
 
         <BackToTop />
 
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
+        {bigPhoto && <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />}
       </div>
-    </LayoutBack>
-  )
-}
-
-
-
-
-
+    </>
+  );
+};
