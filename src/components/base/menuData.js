@@ -24,7 +24,7 @@ export const menuData = [
                 url: '/products/accessories/',
                 children: [
                     { title: 'Вихревой расходомер ЭРВИП', url: '/products/accessories/ervip/'},
-                    { title: 'Устройство регулирования перепада давления (УРПД)', url: '/products/accessories/urpd/'},
+                    { title: 'Устройство для регулирования перепада давления (УРПД)', url: '/products/accessories/urpd/'},
                     { title: 'Переключатель скважин многоходовой (ПСМ)', url: '/products/accessories/psm/'},
                     { title: 'Магниторегулируемый клапан (КМР)', url: '/products/accessories/kmr/'},
                     { title: 'Гидропривод (ГП)', url: '/products/accessories/gidroprivod/'},

@@ -1,135 +1,113 @@
-// .container {
-//   padding: 30px;
-//   max-width: 800px;
-//   margin: 0 auto;
-//   font-family: 'Inter', sans-serif;
-// }
+.container{
+  padding:0 80px;
+}
 
-// .procurementCard {
-//   border: 1px solid #e5e7eb;
-//   border-radius: 12px;
-//   padding: 20px;
-//   margin-bottom: 20px;
-//   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-//   background-color: white;
-// }
+.itemsGrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:20px;
+}
 
-// .procurementName {
-//   margin-bottom: 10px;
-//   color: #1f2937;
-// }
+.card{
+  position:relative;
+  background:white;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,0.08);
+}
 
-// .openFormButton {
-//   padding: 12px 20px;
-//   border-radius: 8px;
-//   border: none;
-//   background-color: #4f46e5;
-//   color: white;
-//   font-weight: 600;
-//   cursor: pointer;
-//   transition: 0.2s;
-// }
+.button{
+  margin-top:10px;
+  padding:8px 14px;
+  border:none;
+  border-radius:6px;
+  background:#1976d2;
+  color:white;
+  cursor:pointer;
+}
 
-// .openFormButton:hover {
-//   background-color: #4338ca;
-// }
+.button:hover{
+  background:#1259a7;
+}
 
-// .modalBackdrop {
-//   position: fixed;
-//   top: 0;
-//   left: 0;
-//   right:0;
-//   bottom:0;
-//   background: rgba(0,0,0,0.5);
-//   display:flex;
-//   justify-content: center;
-//   align-items: center;
-//   z-index: 100;
-// }
+.added{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:#4caf50;
+  color:white;
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:12px;
+}
 
-// .modal {
-//   background: white;
-//   padding: 30px;
-//   border-radius: 12px;
-//   width: 100%;
-//   max-width: 500px;
-// }
+.offersBlock{
+  margin-top:40px;
+  padding:20px;
+  background:#f7f7f7;
+  border-radius:10px;
+}
 
-// .form input {
-//   width: 100%;
-//   padding: 12px;
-//   margin-bottom: 15px;
-//   border-radius: 8px;
-//   border: 1px solid #d1d5db;
-//   font-size: 16px;
-// }
+.offerCard{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  background:white;
+  padding:12px;
+  border-radius:6px;
+  margin-top:10px;
+}
 
-// .addItemButton {
-//   margin-bottom: 15px;
-//   padding: 10px 15px;
-//   border-radius: 8px;
-//   border: none;
-//   background-color: #10b981;
-//   color: white;
-//   font-weight: 600;
-//   cursor: pointer;
-//   transition: 0.2s;
-// }
+.delete{
+  background:#e53935;
+  border:none;
+  color:white;
+  padding:6px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
 
-// .addItemButton:hover {
-//   background-color: #059669;
-// }
+.sendAll{
+  margin-top:20px;
+  padding:10px 16px;
+  border:none;
+  background:#2e7d32;
+  color:white;
+  border-radius:6px;
+  cursor:pointer;
+}
 
-// .formButtons {
-//   display: flex;
-//   justify-content: flex-end;
-//   gap: 10px;
-// }
+.modalBg{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.5);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-// .formButtons button {
-//   padding: 12px 20px;
-//   border-radius: 8px;
-//   border: none;
-//   cursor: pointer;
-//   font-weight: 600;
-// }
+.modal{
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  width:420px;
+}
 
-// .formButtons button[type="submit"] {
-//   background-color: #4f46e5;
-//   color: white;
-// }
+.form{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
 
-// .formButtons button[type="button"] {
-//   background-color: #e5e7eb;
-//   color: #374151;
-// }
+.form input,
+.form textarea{
+  padding:8px;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
 
-// .itemRow {
-//   display: flex;
-//   align-items: center;
-//   gap: 10px;
-//   margin-bottom: 10px;
-// }
-
-// .itemRow input {
-//   padding: 8px;
-//   border-radius: 6px;
-//   border: 1px solid #d1d5db;
-//   font-size: 14px;
-// }
-
-// .addItemButton {
-//   margin-bottom: 15px;
-//   padding: 10px 15px;
-//   border-radius: 8px;
-//   border: none;
-//   background-color: #10b981;
-//   color: white;
-//   font-weight: 600;
-//   cursor: pointer;
-//   transition: 0.2s;
-// }
-
-// .addItemButton:hover {
-//   background-color: #059669;
-// }
+.buttons{
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}

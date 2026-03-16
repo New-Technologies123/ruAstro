@@ -150,7 +150,7 @@ export const Stationary = () => {
             <section className={Styles.related}>
               <h1>Смотрите также:</h1>
               <div className={Styles.relatedGrid}>
-                <a href="/products/accounting-system/mobile/">Мобильное АГЗУ</a>
+                <a href="/products/accounting-system/mobile/">Мобильная АГЗУ</a>
               </div>
             </section>
           </div>

@@ -1,181 +1,354 @@
-import { useState } from 'react';
-import Styles from './procurement.module.scss';
-import { Title } from '../../ui/title/Title';
+import { useState, useEffect } from "react";
+import * as XLSX from "xlsx";
+import Styles from "./procurement.module.scss";
+import { Title } from "../../ui/title/Title";
+import { BackToTop } from "../../ui/back-to-top/BackToTop";
 
 export const Procurement = () => {
-  const procurements = [
-    {
-      id: 1,
-      name: 'Закупка офисной мебели',
-      items: [
-        { name: 'Стул офисный', quantity: 5 },
-        { name: 'Стол письменный', quantity: 10 },
-        { name: 'Шкаф для документов', quantity: 2 },
-      ],
-      address: 'г. Москва, ул. Ленина, 10',
-      notes: 'С доставкой до офиса к 1 апреля',
-    },
-    {
-      id: 2,
-      name: 'Закупка канцелярии',
-      items: [
-        { name: 'Блокнот А4', quantity: 50 },
-        { name: 'Ручка шариковая', quantity: 100 },
-        { name: 'Маркер', quantity: 30 },
-      ],
-      address: 'г. Санкт-Петербург, пр. Невский, 50',
-      notes: 'С упаковкой по 10 штук',
-    },
-  ];
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedProcurement, setSelectedProcurement] = useState(null);
-  const [formData, setFormData] = useState({
-    lastName: '',
-    company: '',
-    email: '',
-    proposedItems: [], // пользовательские предложения
+  const [items, setItems] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [itemModal, setItemModal] = useState(false);
+  const [supplierModal, setSupplierModal] = useState(false);
+
+  const [editIndex, setEditIndex] = useState(null);
+
+  const [offers, setOffers] = useState([]);
+
+  const [offerForm, setOfferForm] = useState({
+    proposedName: "",
+    quantity: "",
+    note: ""
   });
 
-  const openForm = (procurement) => {
-    setSelectedProcurement(procurement);
-    setFormData({
-      lastName: '',
-      company: '',
-      email: '',
-      proposedItems: [{ name: '', quantity: '' }],
-    });
-    setIsModalOpen(true);
+  const [supplierForm, setSupplierForm] = useState({
+    name: "",
+    company: "",
+    email: ""
+  });
+
+  useEffect(() => {
+    loadExcel();
+  }, []);
+
+  const loadExcel = async () => {
+
+    const response = await fetch("/procurement.xlsx");
+    const arrayBuffer = await response.arrayBuffer();
+
+    const workbook = XLSX.read(arrayBuffer);
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+
+    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+    const parsed = json
+      .slice(1)
+      .map((row, i) => ({
+        id: i + 1,
+        name: row[4],
+        quantity: row[6],
+        unit: row[7],
+        note: row[8]
+      }))
+      .filter(i => i.name);
+
+    setItems(parsed);
   };
 
-  const handleProposedItemChange = (index, field, value) => {
-    const newItems = [...formData.proposedItems];
-    newItems[index][field] = value;
-    setFormData(prev => ({ ...prev, proposedItems: newItems }));
+  const filteredItems = items.filter(item =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const openOfferForm = (item, index = null) => {
+
+    setSelectedItem(item);
+
+    if (index !== null) {
+      setOfferForm(offers[index].proposed);
+      setEditIndex(index);
+    } else {
+      setOfferForm({
+        proposedName: "",
+        quantity: "",
+        note: ""
+      });
+      setEditIndex(null);
+    }
+
+    setItemModal(true);
   };
 
-  const handleAddProposedItem = () => {
-    setFormData(prev => ({
-      ...prev,
-      proposedItems: [...prev.proposedItems, { name: '', quantity: '' }],
-    }));
-  };
+  const saveOffer = (e) => {
 
-  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('Предложение отправлено для закупки:', selectedProcurement.name, formData);
-    alert(`Ваше предложение для "${selectedProcurement.name}" успешно отправлено!`);
-    setFormData({ lastName: '', company: '', email: '', proposedItems: [{ name: '', quantity: '' }] });
-    setIsModalOpen(false);
-    setSelectedProcurement(null);
+
+    const offer = {
+      requested: selectedItem,
+      proposed: offerForm
+    };
+
+    if (editIndex !== null) {
+
+      const updated = [...offers];
+      updated[editIndex] = offer;
+      setOffers(updated);
+
+    } else {
+
+      setOffers(prev => [...prev, offer]);
+
+    }
+
+    setItemModal(false);
   };
+
+  const removeOffer = (index) => {
+    setOffers(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const sendAll = async (e) => {
+
+    e.preventDefault();
+
+    const data = {
+      supplier: supplierForm,
+      offers
+    };
+
+    const res = await fetch("/send-offers.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const result = await res.json();
+
+    if (result.success) {
+      alert("Предложения отправлены!");
+      setOffers([]);
+      setSupplierModal(false);
+    } else {
+      alert("Ошибка отправки");
+    }
+
+  };
+
+  const isAdded = (id) => offers.some(o => o.requested.id === id);
 
   return (
+
     <div className={Styles.container}>
+
       <Title text="Закупки" />
 
-      {/* {procurements.map(proc => (
-        <div key={proc.id} className={Styles.procurementCard}>
-          <h3 className={Styles.procurementName}>{proc.name}</h3>
-          <p><strong>Товары (количество, которое нужно):</strong></p>
-          <ul>
-            {proc.items.map((item, i) => (
-              <li key={i}>
-                {item.name} — {item.quantity} шт.
-              </li>
-            ))}
-          </ul>
-          <p><strong>Адрес доставки:</strong> {proc.address}</p>
-          <p><strong>Примечания:</strong> {proc.notes}</p>
-          <button
-            className={Styles.openFormButton}
-            onClick={() => openForm(proc)}
-          >
-            Отправить предложение
-          </button>
-        </div>
-      ))} */}
+      <input
+        className={Styles.search}
+        placeholder="Поиск товара..."
+        value={search}
+        onChange={(e)=>setSearch(e.target.value)}
+      />
 
-      {isModalOpen && selectedProcurement && (
-        <div className={Styles.modalBackdrop}>
+      <div className={Styles.itemsGrid}>
+
+        {filteredItems.map(item => (
+
+          <div key={item.id} className={Styles.card}>
+
+            {isAdded(item.id) && (
+              <div className={Styles.added}>✓ Добавлено</div>
+            )}
+
+            <h3>{item.name}</h3>
+
+            <p>
+              <b>Количество:</b> {item.quantity} {item.unit}
+            </p>
+
+            <button
+              className={Styles.button}
+              onClick={()=>openOfferForm(item)}
+            >
+              Добавить предложение
+            </button>
+
+          </div>
+
+        ))}
+
+      </div>
+
+
+      {offers.length > 0 && (
+
+        <div className={Styles.offersBlock}>
+
+          <h2>Ваши предложения</h2>
+
+          {offers.map((offer, index)=> (
+
+            <div key={index} className={Styles.offerCard}>
+
+              <div>
+
+                <b>{offer.requested.name}</b>
+
+                <p>Ваш товар: {offer.proposed.proposedName}</p>
+
+                <p>Количество: {offer.proposed.quantity}</p>
+
+                <p>{offer.proposed.note}</p>
+
+              </div>
+
+              <div className={Styles.actions}>
+
+                <button
+                  onClick={()=>openOfferForm(offer.requested,index)}
+                >
+                  Редактировать
+                </button>
+
+                <button
+                  className={Styles.delete}
+                  onClick={()=>removeOffer(index)}
+                >
+                  Удалить
+                </button>
+
+              </div>
+
+            </div>
+
+          ))}
+
+          <button
+            className={Styles.sendAll}
+            onClick={()=>setSupplierModal(true)}
+          >
+            Отправить все предложения
+          </button>
+
+        </div>
+
+      )}
+
+      {itemModal && (
+
+        <div className={Styles.modalBg}>
+
           <div className={Styles.modal}>
-            <h2>Отправьте своё предложение</h2>
-            <form onSubmit={handleSubmit} className={Styles.form}>
+
+            <h3>{selectedItem.name}</h3>
+
+            <form onSubmit={saveOffer} className={Styles.form}>
+
               <input
-                type="text"
-                name="procurementName"
-                value={selectedProcurement.name}
-                readOnly
-                placeholder="Наименование закупки"
-              />
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Фамилия"
-                value={formData.lastName}
-                onChange={e => setFormData(prev => ({ ...prev, lastName: e.target.value }))}
+                placeholder="Наименование предложенного товара"
+                value={offerForm.proposedName}
+                onChange={(e)=>setOfferForm(prev=>({
+                  ...prev,
+                  proposedName:e.target.value
+                }))}
                 required
               />
+
               <input
-                type="text"
-                name="company"
-                placeholder="Наименование компании"
-                value={formData.company}
-                onChange={e => setFormData(prev => ({ ...prev, company: e.target.value }))}
+                type="number"
+                placeholder="Количество"
+                value={offerForm.quantity}
+                onChange={(e)=>setOfferForm(prev=>({
+                  ...prev,
+                  quantity:e.target.value
+                }))}
                 required
               />
+
+              <textarea
+                placeholder="Примечание"
+                value={offerForm.note}
+                onChange={(e)=>setOfferForm(prev=>({
+                  ...prev,
+                  note:e.target.value
+                }))}
+              />
+
+              <div className={Styles.buttons}>
+
+                <button type="submit">
+                  {editIndex !== null ? "Сохранить" : "Добавить"}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={()=>setItemModal(false)}
+                >
+                  Отмена
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+      )}
+
+      {supplierModal && (
+
+        <div className={Styles.modalBg}>
+
+          <div className={Styles.modal}>
+
+            <h3>Контактные данные</h3>
+
+            <form onSubmit={sendAll} className={Styles.form}>
+
+              <input
+                placeholder="ФИО"
+                value={supplierForm.name}
+                onChange={(e)=>setSupplierForm(prev=>({
+                  ...prev,
+                  name:e.target.value
+                }))}
+                required
+              />
+
+              <input
+                placeholder="Компания"
+                value={supplierForm.company}
+                onChange={(e)=>setSupplierForm(prev=>({
+                  ...prev,
+                  company:e.target.value
+                }))}
+                required
+              />
+
               <input
                 type="email"
-                name="email"
                 placeholder="Email"
-                value={formData.email}
-                onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                value={supplierForm.email}
+                onChange={(e)=>setSupplierForm(prev=>({
+                  ...prev,
+                  email:e.target.value
+                }))}
                 required
               />
 
-              {/* Список нужных товаров */}
-              <p><strong>Нужные товары:</strong></p>
-              <ul className={Styles.requiredItems}>
-                {selectedProcurement.items.map((item, index) => (
-                  <li key={index}>
-                    {item.name} — {item.quantity} шт.
-                  </li>
-                ))}
-              </ul>
-
-              {/* Поля для предложения пользователя */}
-              <p><strong>Предложите свои товары и количество:</strong></p>
-              {formData.proposedItems.map((item, index) => (
-                <div key={index} className={Styles.itemRow}>
-                  <input
-                    type="text"
-                    placeholder="Название товара"
-                    value={item.name}
-                    onChange={e => handleProposedItemChange(index, 'name', e.target.value)}
-                    required
-                  />
-                  <input
-                    type="number"
-                    min="0"
-                    placeholder="Количество"
-                    value={item.quantity}
-                    onChange={e => handleProposedItemChange(index, 'quantity', e.target.value)}
-                    required
-                  />
-                </div>
-              ))}
-              <button type="button" className={Styles.addItemButton} onClick={handleAddProposedItem}>
-                Добавить ещё товар
+              <button type="submit">
+                Отправить предложения
               </button>
 
-              <div className={Styles.formButtons}>
-                <button type="submit">Отправить</button>
-                <button type="button" onClick={() => setIsModalOpen(false)}>Отмена</button>
-              </div>
             </form>
           </div>
         </div>
       )}
+      <BackToTop />
     </div>
   );
 };

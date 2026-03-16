@@ -160,7 +160,7 @@ export const Mobile = () => {
             <section className={Styles.related}>
               <h1>Смотрите также:</h1>
               <div className={Styles.relatedGrid}>
-                <a href="/products/accounting-system/stationary/">Стационарное АГЗУ</a>
+                <a href="/products/accounting-system/stationary/">Стационарная АГЗУ</a>
               </div>
             </section>
           </div>
