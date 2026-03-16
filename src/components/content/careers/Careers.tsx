@@ -16,30 +16,30 @@ export const Careers = () => {
         vacancy1: "https://ufa.hh.ru/vacancy/130706340?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy2: "https://ufa.hh.ru/vacancy/129985800?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy3: "https://ufa.hh.ru/vacancy/130527326?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy4: "https://ufa.hh.ru/vacancy/130285329?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
+        vacancy4: "https://ufa.hh.ru/vacancy/131034876?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy5: "https://ufa.hh.ru/vacancy/130791541?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy6: "https://ufa.hh.ru/vacancy/128807546?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy7: "https://ufa.hh.ru/vacancy/128808731?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy7: "https://ufa.hh.ru/vacancy/130829848?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy8: "https://ufa.hh.ru/vacancy/130552730?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy9: "https://ufa.hh.ru/vacancy/130527291?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy10: "https://ufa.hh.ru/vacancy/130677593?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy11: "https://ufa.hh.ru/vacancy/130532248?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy12: "https://ufa.hh.ru/vacancy/130602230?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy12: "https://ufa.hh.ru/vacancy/131234015?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy13: "https://ufa.hh.ru/vacancy/129981588?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
-        vacancy14: "https://ufa.hh.ru/vacancy/130350879?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer", 
+        vacancy14: "https://ufa.hh.ru/vacancy/131189593?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer", 
         vacancy15: "https://ufa.hh.ru/vacancy/130461562?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy16: "https://ufa.hh.ru/vacancy/130552696?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy17: "https://ufa.hh.ru/vacancy/130490534?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
+        vacancy16: "https://ufa.hh.ru/vacancy/130833120?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy17: "https://ufa.hh.ru/vacancy/130817296?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy18: "https://ufa.hh.ru/vacancy/129983204?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy19: "https://ufa.hh.ru/vacancy/130339209?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy20: "https://ufa.hh.ru/vacancy/130351150?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy21: "https://ufa.hh.ru/vacancy/129446854?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy19: "https://ufa.hh.ru/vacancy/130996614?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy20: "",
+        vacancy21: "",
         vacancy22: "https://ufa.hh.ru/vacancy/130602170?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy23: "https://ufa.hh.ru/vacancy/130775738?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy24: "https://ufa.hh.ru/vacancy/130775251?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy25: "https://ufa.hh.ru/vacancy/130775616?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy24: "",
+        vacancy25: "",
         vacancy26: "https://ufa.hh.ru/vacancy/130775224?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy27: "https://ufa.hh.ru/vacancy/130776814?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy27: "https://ufa.hh.ru/vacancy/130949016?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
     };
 
     const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TCareers | null>(null);
@@ -76,13 +76,6 @@ export const Careers = () => {
                             <p>Заки Валиди 32/2</p>
                             <div className={Styles.team}>
                                 <Vacancy
-                                    header="Главный бухгалтер"
-                                    title="Опыт работы: 3–6 лет"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy4, "_blank")}
-                                />
-                                <Vacancy
                                     header="Главный метролог"
                                     title="Опыт работы: более 6 лет"
                                     experience="Полная занятость"
@@ -97,27 +90,6 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy19, "_blank")}
                                 />                                
                                 <Vacancy
-                                    header="Программист 1С"
-                                    title="Опыт работы: не требуется"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy17, "_blank")}
-                                />
-                                <Vacancy
-                                    header="Заместитель главного бухгалтера"
-                                    title="Опыт работы: 3–6 лет"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy12, "_blank")}
-                                />
-                                <Vacancy
-                                    header="Менеджер по экспорту"
-                                    title="Опыт работы: 1–3 года"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy14, "_blank")}
-                                />
-                                <Vacancy
                                     header="Инженер-электронщик"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
@@ -130,6 +102,13 @@ export const Careers = () => {
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy1, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Заместитель главного бухгалтера"
+                                    title="Опыт работы: 3–6 лет"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy12, "_blank")}
                                 />
                             </div>
                         </div>
@@ -151,13 +130,6 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy5, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Фрезеровщик"
-                                    title="Опыт работы: 1-3 года"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy24, "_blank")}
-                                />
-                                <Vacancy
                                     header="Сверловщик"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
@@ -165,18 +137,25 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy27, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Токарь"
-                                    title="Опыт работы: 1-3 года"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy25, "_blank")}
-                                />
-                                <Vacancy
-                                    header="Инженер-электрик"
+                                    header="Электрик"
                                     title="Опыт работы: 1-3 года"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy8, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Водитель с категорией C,E"
+                                    title="Опыт работы: 1-3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy17, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Инженер-механик"
+                                    title="Опыт работы: 1-3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy4, "_blank")}
                                 />
                                 <Vacancy
                                     header="Работник на производство"
@@ -193,8 +172,8 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy7, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Юрист"
-                                    title="Опыт работы: 1-3 года"
+                                    header="Начальник конструкторского отдела"
+                                    title="Опыт работы: 3–6 лет"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy16, "_blank")}
@@ -240,13 +219,6 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy13, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Водитель категории С (Губкинский)"
-                                    title="Опыт работы: 1–3 года"
-                                    experience="Вахта на 30 или 45 смен"
-                                    employmentType="График: 6/1"
-                                    onClick={() => window.open(vacancyLinks.vacancy20, "_blank")}
-                                />
-                                <Vacancy
                                     header="Оператор замера скважин (Самара)"
                                     title="Опыт работы: 1–3 года"
                                     experience="Вахта на 45 смен"
@@ -254,12 +226,12 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy10, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Водитель (категория С) ХМАО"
-                                    title="Опыт работы: не требуется"
-                                    experience="Вахта на 30, 45 или 60 смен"
+                                    header="Водитель категории С (Губкинский)"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Вахта на 30 или 45 смен"
                                     employmentType=""
-                                    onClick={() => window.open(vacancyLinks.vacancy21, "_blank")}
-                                />                                
+                                    onClick={() => window.open(vacancyLinks.vacancy14, "_blank")}
+                                />
                                 <Vacancy
                                     header="Сварщик (Нижневартовск)"
                                     title="Опыт работы: 1–3 года"
