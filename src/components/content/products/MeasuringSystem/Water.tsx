@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Styles from "../Accessories/ervip.module.scss";
+import Styles from "../products.module.scss";
 import back from '../../../../images/back.svg'
 import product from "../../../../images/products/product_3_2.webp";
 
@@ -150,8 +150,7 @@ export const Water = () => {
             <p>Технологические и дренажные трубопроводы</p>
 
             <section className={`${Styles.related} ${Styles.reveal}`}>
-              <h2>Смотрите также</h2>
-
+              <h1>Смотрите также</h1>
               <div className={Styles.relatedGrid}>
                 <a href="/products/measuring-system/gas">СИКГ</a>
                 <a href="/products/measuring-system/oil">СИКН</a>

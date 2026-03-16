@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Styles from "../Accessories/ervip.module.scss";
+import Styles from "../products.module.scss";
 import back from '../../../../images/back.svg'
 import product from "../../../../images/products/product_5.webp";
 import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
@@ -80,7 +80,7 @@ export const Internal = () => {
         <section className={`${Styles.hero} ${Styles.reveal}`}>
           <div className={Styles.heroText}>
             <h1>
-              Блочная насосная станция <span>внутренней и внешней перекачки нефти</span>
+              Блочная насосная станция <span>внутренней и внешней </span> перекачки нефти
             </h1>
 
             <p>
@@ -208,7 +208,7 @@ export const Internal = () => {
             </ul>
 
             <section className={`${Styles.related} ${Styles.reveal}`}>
-              <h2>Смотрите также</h2>
+              <h1>Смотрите также</h1>
               <div className={Styles.relatedGrid}>
                 <a href="/products/pumping-stations/multiphase">Блочная мультифазная насосная станция</a>
               </div>

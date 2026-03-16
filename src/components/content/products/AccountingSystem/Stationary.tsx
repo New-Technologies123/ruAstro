@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Styles from "../Accessories/ervip.module.scss";
+import Styles from "../products.module.scss";
 import back from '../../../../images/back.svg'
 import product_1 from "../../../../images/products/product_1.webp";
 
@@ -140,7 +140,6 @@ export const Stationary = () => {
 
           <div className={Styles.techText}>
             <h2>Принцип работы</h2>
-
             <p>
               Работа установки основана на сепарации нефтегазовой смеси
               с последующим измерением массы и массового расхода жидкости,
@@ -150,7 +149,6 @@ export const Stationary = () => {
 
             <section className={Styles.related}>
               <h1>Смотрите также:</h1>
-
               <div className={Styles.relatedGrid}>
                 <a href="/products/accounting-system/mobile/">Мобильное АГЗУ</a>
               </div>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Styles from "../Accessories/ervip.module.scss";
+import Styles from "../products.module.scss";
 import back from '../../../../images/back.svg'
 import product from "../../../../images/products/product_4_2.webp";
 
@@ -80,7 +80,7 @@ export const Block = () => {
         <section className={`${Styles.hero} ${Styles.reveal}`}>
           <div className={Styles.heroText}>
             <h1>
-              Блок гребенки<span> БГ</span>
+              Блок<span> гребенки</span>
             </h1>
 
             <p>
@@ -174,8 +174,7 @@ export const Block = () => {
             </ul>
 
             <section className={`${Styles.related} ${Styles.reveal}`}>
-              <h2>Смотрите также</h2>
-
+              <h1>Смотрите также</h1>
               <div className={Styles.relatedGrid}>
                 <a href="/products/preparation-systems/launch">УЗПЗ, УЗПП</a>
                 <a href="/products/preparation-systems/cleaning">УОК-НКТ</a>

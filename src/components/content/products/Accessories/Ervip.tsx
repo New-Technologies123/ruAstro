@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Styles from "./ervip.module.scss";
+import Styles from "../products.module.scss";
 import back from '../../../../images/back.svg';
 import product from "../../../../images/products/product_2.webp";
 

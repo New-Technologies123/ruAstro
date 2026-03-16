@@ -413,6 +413,9 @@ nav ul li a.active {
     z-index: 5;
     overflow: visible; // ❗️бургер не режем
   }
+  .navMenu{
+    align-items: start;
+  }
 
   /* ---------- BURGER ---------- */
 

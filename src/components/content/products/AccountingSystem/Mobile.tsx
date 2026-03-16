@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Styles from "../Accessories/ervip.module.scss";
+import Styles from "../products.module.scss";
 import back from '../../../../images/back.svg'
 import product from "../../../../images/products/product_1_2.webp";
 
@@ -150,16 +150,15 @@ export const Mobile = () => {
 
           <div className={Styles.techText}>
             <h2>Принцип работы</h2>
-
             <p>
               Работа установки основана на сепарации нефтегазовой смеси с
               последующим измерением массы и массового расхода жидкости, а
               также объема свободного нефтяного газа. Полученные параметры
               используются для точного учета продукции скважин.
             </p>
+
             <section className={Styles.related}>
               <h1>Смотрите также:</h1>
-
               <div className={Styles.relatedGrid}>
                 <a href="/products/accounting-system/stationary/">Стационарное АГЗУ</a>
               </div>

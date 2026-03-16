@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import Styles from "./ervip.module.scss";
+import Styles from "../products.module.scss";
 import back from '../../../../images/back.svg'
 import product from "../../../../images/products/product_2_2.webp";
 
@@ -92,8 +92,8 @@ export const Psm = () => {
               >
                 Смотреть фото
               </button>
-              <button className={Styles.secondaryBtn}>
-                Скачать паспорт
+              <button className={Styles.secondaryBtn} onClick={onDoc}>
+                Документация
               </button>
             </div>
           </div>
@@ -147,7 +147,7 @@ export const Psm = () => {
               ПСМ позволяет точно и надежно устанавливать скважины на замер в АГЗУ «Спутник». Специальная обработка деталей повышает долговечность и устойчивость к нагрузкам.
             </p>
             <section className={`${Styles.related} ${Styles.reveal}`}>
-              <h2>Смотрите также</h2>
+              <h1>Смотрите также</h1>
               <div className={Styles.relatedGrid}>
                 <a href="/products/accessories/ervip">ЭРВИП</a>
                 <a href="/products/accessories/urpd">УРПД</a>
