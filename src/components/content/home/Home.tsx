@@ -41,12 +41,12 @@ export const Home = () => {
     <>
       <section className={Styles.hero}>
         <div className={Styles.heroOverlay}>
-          <h1>Добро пожаловать</h1>
+          <h1>Добро пожаловать!</h1>
           <p>Мы обеспечиваем качественные поставки</p>
         </div>
       </section>
 
-      {/* <Title text="География поставок"></Title> */}
+      <Title text="География поставок"></Title>
       <div className={Styles.Img}>
         <img src={homeItem.src} alt="Карта поставок" className={Styles.homeImg} />
       </div>      
