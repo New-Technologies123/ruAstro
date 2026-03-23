@@ -1,11 +1,27 @@
 import Styles from './services.module.scss'
 import { useState } from 'react'
-
+import { motion } from 'framer-motion'
+import back from '../../../images/back.svg'
 import serves_5 from '../../../images/services/serves_5.webp'
 
 import { BigPhoto } from '../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
-import { LayoutBack } from '../../layout/LayoutBack'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 }
+}
+
+const listItems = (items: string[]) =>
+  items.map((item) => (
+    <motion.li
+      key={item}
+      variants={fadeUp}
+      transition={{ duration: 0.4 }}
+    >
+      {item}
+    </motion.li>
+  ))
 
 export const Dewaxing = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
@@ -15,12 +31,23 @@ export const Dewaxing = () => {
   }
 
   return (
-    <LayoutBack
-      onBack={onBack}
-      title="Услуги депарафинизации нефтяных скважин"
-    >
-      <>
-        <div className={Styles.card}>
+    <>
+      <button className={Styles.backButton} onClick={onBack}>
+        <img src={back.src} alt=""/>
+      </button>
+      <div className={Styles.wrapper}>
+
+        {/* HERO */}
+        <motion.div className={Styles.hero} initial="hidden" animate="visible" variants={fadeUp}>
+          <div className={Styles.heroText}>
+            <h1>
+              Услуги <span>депарафинизации </span> нефтяных скважин
+            </h1>
+            <p>
+              Полное удаление асфальтосмолопарафиновых отложений и обеспечение прохода в скважинах с НКТ с помощью
+              специализированной техники и обученного персонала.
+            </p>
+          </div>
           <div
             className={Styles.imageWrapper}
             onClick={() => setBigPhoto(serves_5.src)}
@@ -33,22 +60,62 @@ export const Dewaxing = () => {
             <div className={Styles.imageOverlay}>
               <p>Увеличить</p>
             </div>
-          </div>
+          </div>          
+        </motion.div>
 
-          <div className={Styles.content}>
+        {/* CARDS */}
+        <div className={Styles.grid}>
+          <motion.div
+            className={Styles.card}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <h3>Скребкование и удаление АСПО</h3>
             <ul>
-              {[
-                'Услуги оказываются экипажами на базе высокопроходимой спецтехники.',
-                'Основной задачей является полное удаление асфальтосмолопарафиновых отложений (АСПО) и других отложений механическим способом (скребкованием) в лифте НКТ скважин, а также обеспечение прохода в скважинах с НКТ.',
-                'Скребкование проводится с помощью фрезерных и лезвийных скребков различного диаметра в фонтанных нефтяных скважинах и скважинах, оборудованных установкой электроцентробежного насоса (УЭЦН).',
-                'Глубина спуска скребка в скважину 2000–3000 м.',
-                'Для выявления и удаления отложений на НКТ с внутренним покрытием используются неметаллические скребки/фрезы и лома-утяжелители с покрытием для предотвращения повреждения НКТ. Также применяются скребки-пробойники и «парафинорезки» для удаления АСПО при закупоривании (для НКТ черной и НКТ с покрытием).',
-                'Работы выполняются обученным персоналом с применением сертифицированного оборудования собственного производства в соответствии с действующими правилами безопасности в нефтяной и газовой промышленности.'
-              ].map((item) => (
-                <li key={item}>{item}</li>
-              ))}
+              {listItems([
+                'Использование фрезерных и лезвийных скребков различного диаметра.',
+                'Применение неметаллических скребков для НКТ с покрытием.',
+                'Скребки-пробойники и парафинорезки при закупоривании.',
+                'Глубина спуска скребка: 2000–3000 м.'
+              ])}
             </ul>
-          </div>
+          </motion.div>
+
+          <motion.div
+            className={Styles.card}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <h3>Оборудование и техника</h3>
+            <ul>
+              {listItems([
+                'Высокопроходимая специализированная техника для работы на скважинах.',
+                'Установка электроцентробежного насоса (УЭЦН) для фонтанных скважин.',
+                'Лома-утяжелители с покрытием для предотвращения повреждений НКТ.'
+              ])}
+            </ul>
+          </motion.div>
+
+          <motion.div
+            className={Styles.card}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <h3>Персонал и безопасность</h3>
+            <ul>
+              {listItems([
+                'Обученный персонал с опытом работы на нефтяных скважинах.',
+                'Использование сертифицированного оборудования собственного производства.',
+                'Соблюдение всех правил безопасности в нефтяной и газовой промышленности.'
+              ])}
+            </ul>
+          </motion.div>
         </div>
 
         <BackToTop />
@@ -59,7 +126,7 @@ export const Dewaxing = () => {
             onClose={() => setBigPhoto(null)}
           />
         )}
-      </>
-    </LayoutBack>
+      </div>
+    </>
   )
 }

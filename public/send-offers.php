@@ -1,91 +1,74 @@
 <?php
-
 header("Content-Type: application/json");
 
-// Получаем данные
-$supplier = isset($_POST["supplier"]) ? json_decode($_POST["supplier"], true) : null;
-$offers = isset($_POST["offers"]) ? json_decode($_POST["offers"], true) : [];
+// Настройки
+$to = "dekslerid@tech-new.ru";
+$subject = "Новое предложение поставщика";
 
-if (!$supplier || !$offers) {
-    echo json_encode(["success" => false, "error" => "Нет данных"]);
+// Получаем данные формы
+$supplier = [
+    "name"    => $_POST["fullName"] ?? "",
+    "company" => $_POST["company"] ?? "",
+    "email"   => $_POST["email"] ?? "",
+    "inn"     => $_POST["inn"] ?? "",
+];
+
+// Проверка обязательных полей
+if (!$supplier["name"] || !$supplier["company"] || !$supplier["email"] || !$supplier["inn"]) {
+    echo json_encode(["success" => false, "error" => "Заполните все поля формы"]);
     exit;
 }
 
-$to = "your@email.com";
-$subject = "Новые предложения поставщика";
-
-// граница письма
+// Создаём boundary для multipart письма
 $boundary = md5(time());
 
-// заголовки
+// Заголовки
 $headers = "MIME-Version: 1.0\r\n";
 $headers .= "From: noreply@site.com\r\n";
 $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
 
-// ===== ТЕЛО ПИСЬМА =====
+// ===== Тело письма (HTML) =====
 $message = "--$boundary\r\n";
 $message .= "Content-Type: text/html; charset=UTF-8\r\n\r\n";
 
-// HTML часть
 $message .= "<html><body>";
 $message .= "<h2>Контактные данные</h2>";
 $message .= "<p>
 ФИО: {$supplier["name"]}<br>
 Компания: {$supplier["company"]}<br>
-Email: {$supplier["email"]}
+Email: {$supplier["email"]}<br>
+ИНН: {$supplier["inn"]}
 </p>";
 
-$message .= "<h2>Предложения</h2>";
-$message .= "<table border='1' cellpadding='5' cellspacing='0'>";
-$message .= "<tr>
-<th>Требуемый товар</th>
-<th>Предложенный</th>
-<th>Количество</th>
-<th>Примечание</th>
-</tr>";
-
-foreach ($offers as $offer) {
-    $message .= "<tr>
-        <td>{$offer["requested"]["name"]}</td>
-        <td>{$offer["proposed"]["proposedName"]}</td>
-        <td>{$offer["proposed"]["quantity"]}</td>
-        <td>{$offer["proposed"]["note"]}</td>
-    </tr>";
+$message .= "<h2>Прикреплённые файлы</h2>";
+$message .= "<ul>";
+foreach ($_FILES as $key => $file) {
+    if ($file["error"] === 0) {
+        $message .= "<li>{$file['name']} ({$file['size']} байт)</li>";
+    }
 }
-
-$message .= "</table>";
+$message .= "</ul>";
 $message .= "</body></html>\r\n";
 
-
-// ===== 📎 ФАЙЛЫ =====
+// ===== Добавляем файлы =====
 foreach ($_FILES as $file) {
-
-    if ($file["error"] === 0) {
-
+    if ($file["error"] === 0 && $file["size"] > 0) {
         $fileName = $file["name"];
-        $fileTmp = $file["tmp_name"];
-        $fileSize = $file["size"];
+        $fileContent = chunk_split(base64_encode(file_get_contents($file["tmp_name"])));
 
-        if ($fileSize > 0) {
-
-            $fileContent = chunk_split(base64_encode(file_get_contents($fileTmp)));
-
-            $message .= "--$boundary\r\n";
-            $message .= "Content-Type: application/octet-stream; name=\"$fileName\"\r\n";
-            $message .= "Content-Transfer-Encoding: base64\r\n";
-            $message .= "Content-Disposition: attachment; filename=\"$fileName\"\r\n\r\n";
-            $message .= $fileContent . "\r\n";
-        }
+        $message .= "--$boundary\r\n";
+        $message .= "Content-Type: application/octet-stream; name=\"$fileName\"\r\n";
+        $message .= "Content-Transfer-Encoding: base64\r\n";
+        $message .= "Content-Disposition: attachment; filename=\"$fileName\"\r\n\r\n";
+        $message .= $fileContent . "\r\n";
     }
 }
 
-// закрываем boundary
+// Закрываем boundary
 $message .= "--$boundary--";
 
-// ===== ОТПРАВКА =====
+// ===== Отправка письма =====
 $success = mail($to, $subject, $message, $headers);
 
-// ответ
-echo json_encode([
-    "success" => $success
-]);
+// Ответ клиенту
+echo json_encode(["success" => $success]);

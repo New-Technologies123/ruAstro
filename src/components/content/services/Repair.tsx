@@ -1,11 +1,27 @@
 import Styles from './services.module.scss'
 import { useState } from 'react'
-
+import { motion } from 'framer-motion'
+import back from '../../../images/back.svg'
 import serves_1 from '../../../images/services/serves_12.png'
 
 import { BigPhoto } from '../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
-import { LayoutBack } from '../../layout/LayoutBack'
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0 }
+}
+
+const listItems = (items: string[]) =>
+  items.map((item) => (
+    <motion.li
+      key={item}
+      variants={fadeUp}
+      transition={{ duration: 0.4 }}
+    >
+      {item}
+    </motion.li>
+  ))
 
 export const Repair = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
@@ -15,12 +31,24 @@ export const Repair = () => {
   }
 
   return (
-    <LayoutBack
-      onBack={onBack}
-      title="Обслуживание, капитальный ремонт и модернизация АГЗУ"
-    >
-      <>
-        <div className={Styles.card}>
+    <>
+      <button className={Styles.backButton} onClick={onBack}>
+        <img src={back.src} alt=""/>
+      </button>
+      <div className={Styles.wrapper}>
+
+        {/* HERO */}
+        <motion.div className={Styles.hero} initial="hidden" animate="visible" variants={fadeUp}>
+          <div className={Styles.heroText}>
+            <h1>
+              Обслуживание, капитальный ремонт и модернизация
+              <span> АГЗУ</span>
+            </h1>
+            <p>
+              Обеспечиваем бесперебойную работу АГЗУ: регулярное обслуживание, капитальный ремонт и модернизация
+              оборудования в соответствии с современными стандартами и ГОСТ.
+            </p>
+          </div>
           <div
             className={Styles.imageWrapper}
             onClick={() => setBigPhoto(serves_1.src)}
@@ -33,44 +61,68 @@ export const Repair = () => {
             <div className={Styles.imageOverlay}>
               <p>Увеличить</p>
             </div>
-          </div>
+          </div>          
+        </motion.div>
 
-          <div className={Styles.content}>
-            <h3>Капитальный ремонт АГЗУ «Спутник»</h3>
-            <ul>
-              {[
-                'Ремонт или замена сепарационной ёмкости, фланцев, предохранительного клапана;',
-                'Ремонт или замена переключателя скважин ПСМ;',
-                'Ремонт или замена счётчика ТОР 1-50;',
-                'Ремонт или замена задвижек;',
-                'Ремонт технологического помещения и реставрация днища;',
-                'Замена технологической линии (трубопровода), регулятора расхода;',
-                'Замена гидравлического привода ГП-1М, заслонки, клапана обратного;',
-                'Электромонтажные работы.'
-              ].map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
+        {/* CARDS */}
+        <div className={Styles.grid}>
 
-            <h3>Обслуживание АГЗУ</h3>
+          <motion.div
+            className={Styles.card}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <h3>Капитальный ремонт</h3>
             <ul>
-              {[
-                'Техническое обслуживание АГЗУ в соответствии с инструкцией по эксплуатации, замена уплотнительных элементов и иных расходных материалов при необходимости;',
-                'Проведение тестовых замеров дебитов скважин с выдачей заключения об исправности измерительной установки.'
-              ].map((item) => (
-                <li key={item}>{item}</li>
-              ))}
+              {listItems([
+                'Ремонт или замена сепарационной ёмкости, фланцев, клапанов',
+                'Ремонт или замена переключателя скважин ПСМ',
+                'Ремонт или замена счётчика ТОР 1-50',
+                'Замена задвижек и трубопроводов',
+                'Реставрация днища и корпуса',
+                'Замена гидропривода и комплектующих',
+                'Электромонтажные работы'
+              ])}
             </ul>
+          </motion.div>
 
-            <h3>Модернизация АГЗУ</h3>
+          <motion.div
+            className={Styles.card}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <h3>Обслуживание</h3>
             <ul>
-              {[
-                'Модернизация для приведения в соответствие с ГОСТ Р 8.1016-2022 выполняется посредством замены средств измерения, шкафов управления, внесения изменений в существующее оборудование и программное обеспечение.'
-              ].map((item) => (
-                <li key={item}>{item}</li>
-              ))}
+              {listItems([
+                'Регламентное обслуживание по инструкции',
+                'Замена расходных материалов',
+                'Диагностика и тестовые замеры',
+                'Выдача заключения об исправности'
+              ])}
             </ul>
-          </div>
+          </motion.div>
+
+          <motion.div
+            className={Styles.card}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeUp}
+          >
+            <h3>Модернизация</h3>
+            <ul>
+              {listItems([
+                'Приведение к ГОСТ Р 8.1016-2022',
+                'Замена средств измерения',
+                'Обновление шкафов управления',
+                'Модификация ПО и оборудования'
+              ])}
+            </ul>
+          </motion.div>
         </div>
 
         <BackToTop />
@@ -81,7 +133,7 @@ export const Repair = () => {
             onClose={() => setBigPhoto(null)}
           />
         )}
-      </>
-    </LayoutBack>
+      </div>
+    </>
   )
 }

@@ -8,7 +8,7 @@ import { Service } from './Service';
 import { Dewaxing } from './Dewaxing';
 
 import serves_12 from '../../../images/services/serves_12.png';
-import serves_3 from '../../../images/services/serves_3.png';
+import serves_3 from '../../../images/services/serves_3.webp';
 import serves_4 from '../../../images/services/serves_4.webp';
 import serves_5 from '../../../images/services/serves_5.webp';
 
@@ -32,20 +32,13 @@ export const Services = () => {
   const goTo = (path: string) => {
     window.history.pushState({}, '', path);
     setCurrentPage(pathnameToService(path));
-  };
-
-  const goBack = () => {
-    window.history.pushState({}, '', '/services');
-    setCurrentPage(null);
+    window.scrollTo({ top: 0, behavior: 'smooth', });
   };
 
   useEffect(() => {
-    const sync = () =>
-      setCurrentPage(pathnameToService(window.location.pathname));
-
-    sync(); // синхронизация при монтировании
+    const sync = () => setCurrentPage(pathnameToService(window.location.pathname));
+    sync(); // синхронизируем при монтировании
     window.addEventListener('popstate', sync);
-
     return () => window.removeEventListener('popstate', sync);
   }, []);
 

@@ -48,7 +48,14 @@ export const Home = () => {
 
       <Title text="География поставок"></Title>
       <div className={Styles.Img}>
-        <img src={homeItem.src} alt="Карта поставок" className={Styles.homeImg} />
+        {/* <img src={homeItem.src} alt="Карта поставок" className={Styles.homeImg} /> */}
+        <div className={Styles.map}>
+          <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A1b8f65f94a276e996aad834e0a7f72466019818dd5d59a5f194f1d391a7e68ac&amp;source=constructor" 
+            width="1131" height="609" 
+            frameBorder="0">
+          </iframe>
+        </div>
+        
       </div>      
       <Title text="Заказчики"></Title>      
 

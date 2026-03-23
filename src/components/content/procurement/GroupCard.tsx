@@ -41,7 +41,7 @@ export const GroupCard: React.FC<Props> = ({
           cursor: !isSearching && showMultiple ? "pointer" : "default"
         }}
       >
-        <h3>Примечание: {group.note}</h3>
+        <h3>Лот: {group.note}</h3>
         {showMultiple && !isSearching && (
           <span>{isExpanded ? "▲" : "▼"}</span>
         )}

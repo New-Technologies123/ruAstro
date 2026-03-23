@@ -30,14 +30,10 @@ export const Products = () => {
   const [currentPage, setCurrentPage] = useState<TProducts | null>(null);
 
   const goTo = (path: string) => {
-  window.history.pushState({}, '', path);
-  setCurrentPage(pathnameToProduct(path));
-};
-
-const goBack = () => {
-  window.history.pushState({}, '', '/products');
-  setCurrentPage(null);
-};
+    window.history.pushState({}, '', path);
+    setCurrentPage(pathnameToProduct(path));
+    window.scrollTo({ top: 0, behavior: 'smooth', });
+  };
 
   useEffect(() => {
     const sync = () => setCurrentPage(pathnameToProduct(window.location.pathname));
