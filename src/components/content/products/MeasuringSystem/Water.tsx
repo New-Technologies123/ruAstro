@@ -14,7 +14,7 @@ export const Water = () => {
     window.location.href = "/products/measuring-system";
   };
    const onDoc = () => {
-    window.location.href = "/documents/?type=measuring-system";
+    window.location.href = "/documents/?type=measuringSystem";
   };
 
   /* ---------- 3D TILT EFFECT ---------- */

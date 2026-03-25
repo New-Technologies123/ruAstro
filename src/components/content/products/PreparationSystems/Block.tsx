@@ -15,7 +15,7 @@ export const Block = () => {
   };
 
   const onDoc = () => {
-    window.location.href = "/documents/?type=preparation-systems";
+    window.location.href = "/documents/?type=preparationSystems";
   };
 
   /* ---------- 3D TILT EFFECT ---------- */

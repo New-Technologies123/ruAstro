@@ -23,13 +23,13 @@ export const Accessories = () => {
       docType: '2-4',
     },
     {
-      title: 'Сертификат СТ-1 УРПД',
-      docType: '2-3',
-    },    
-    {
       title: 'Сертификат № ЕАЭС RU C-RU.АЖ58.В.04522_23',
       docType: '2-5',
     },
+    {
+      title: 'Сертификат СТ-1 УРПД',
+      docType: '2-3',
+    },    
     {
       title: 'Декларация ТР ТС 032 от 2023 г.',
       docType: '2-6',
