@@ -8,6 +8,8 @@ import news_7 from '../../../images/news/news_7.webp';
 import news_8 from '../../../images/news/news_8.webp';
 import news_9 from '../../../images/news/news_9.webp';
 import news_10 from '../../../images/news/news_10.webp';
+import news_11 from '../../../images/news/news_11.webp';
+import news_12 from '../../../images/news/news_12.webp';
 import Styles from './news.module.scss';
 import { Gallery } from '../../ui/gallery/Gallery';
 import { useState, useEffect } from 'react';
@@ -18,6 +20,8 @@ import { BackToTop } from '../../ui/back-to-top/BackToTop'
 export const News = () => {
   const [photoIsOpen, setPhotoIsOpen] = useState(false);
   const [photoTwoIsOpen, setPhotoTwoIsOpen] = useState(false);
+  const [photoThreeIsOpen, setPhotoThreeIsOpen] = useState(false);
+  const [photoFourIsOpen, setPhotoFourIsOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -34,6 +38,32 @@ export const News = () => {
       <Title text="Новости"></Title>
       <div className={`${isLoaded ? Styles.loaded : ''}`}>
         <div className={Styles.newsContent}>
+          <div className={Styles.newsItem}>
+            <img src={news_12.src} className={Styles.thumbnail} onClick={() => { setPhotoFourIsOpen(true); }} />
+              <p>
+                Инженерно-производственное предприятие „Новые Технологии“ с радостью сообщает о своем участии в выставке 
+                Egypt Energy Show (EGYPES) 2026!
+                Приглашаем посетить наш стенд 1D64 – New Technologies с 30 марта по 1 апреля.
+                Мы будем рады представить наши передовые технологии и обсудить возможные направления сотрудничества.
+                До встречи на EGYPES!
+              </p>
+          </div>
+          <div className={Styles.newsItem}>
+            <img src={news_11.src} className={Styles.thumbnail} onClick={() => { setPhotoThreeIsOpen(true); }} />
+            <div>
+              <p>
+                ООО «ИПП Новые Технологии» включено в список одобренных поставщиков SOCAR.</p>
+              <p>
+                29 декабря 2025 года наша компания успешно прошла квалификацию и вошла в Approved Vendor List 
+                Государственной нефтяной компании Азербайджанской Республики (SOCAR / Azərbaycan Respublikası Dövlət Neft 
+                Şirkəti). Статус официального поставщика подтвержден на закупочной платформе socar.az.
+              </p>
+              <p>
+                Мы гордимся высокой оценкой нашего производства и выражаем искреннюю надежду на долгосрочное и 
+                плодотворное сотрудничество с SOCAR как в Азербайджане, так и в других странах ее присутствия.
+              </p>
+            </div>            
+          </div>
           <div className={Styles.newsItem}>
             <Gallery
               photos={[
@@ -110,6 +140,8 @@ export const News = () => {
       <BackToTop />
       {photoIsOpen && <BigPhoto src={news_3.src} onClose={() => setPhotoIsOpen(false)} />}
       {photoTwoIsOpen && <BigPhoto src={news_4.src} onClose={() => setPhotoTwoIsOpen(false)} />}
+      {photoThreeIsOpen && <BigPhoto src={news_11.src} onClose={() => setPhotoThreeIsOpen(false)} />}
+      {photoFourIsOpen && <BigPhoto src={news_12.src} onClose={() => setPhotoFourIsOpen(false)} />}
     </>
 
   );
