@@ -9,13 +9,8 @@
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  padding: 1rem; // Добавляем внутренний отступ для маленьких экранов
-  overflow-y: auto; // Позволяет прокручивать модалку, если она слишком высокая
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  padding: 1rem;
+  overflow-y: auto;
 }
 
 .modal {
@@ -23,15 +18,10 @@
   border-radius: 12px;
   width: 100%;
   max-width: 600px;
-  max-height: 90vh; // Ограничиваем высоту до 90% высоты экрана
+  max-height: 90vh;
   padding: 2rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-  overflow-y: auto; // Добавляем прокрутку внутри модалки
-}
-
-@keyframes slideUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  overflow-y: auto;
 }
 
 h3 {
@@ -42,18 +32,23 @@ h3 {
   text-align: center;
 }
 
-.errorBlock {
-  margin-bottom: 1rem;
-  padding: 1rem;
-  background: #ffe6e6;
-  border: 1px solid #ff4d4f;
-  border-radius: 8px;
-}
+/* ❌ больше не нужен общий блок ошибок */
+/* .errorBlock можно удалить если не используешь */
 
 .error {
-  margin: 0.2rem 0;
+  margin-top: 0.3rem;
   color: #ff4d4f;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+}
+
+/* ✅ подсветка инпута с ошибкой */
+.errorInput {
+  border: 1px solid #ff4d4f !important;
+
+  &:focus {
+    border-color: #ff4d4f !important;
+    box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.2) !important;
+  }
 }
 
 .downloadBlock {
@@ -80,6 +75,12 @@ h3 {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  /* 👉 обёртка поля + ошибки */
+  div {
+    display: flex;
+    flex-direction: column;
+  }
 
   input[type="text"],
   input[type="email"],
