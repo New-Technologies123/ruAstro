@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from "react"; 
 import * as XLSX from "xlsx";
 import Styles from "./procurement.module.scss";
 import { Title } from "../../ui/title/Title";
@@ -24,8 +24,9 @@ export const Procurement = () => {
   const [search, setSearch] = useState("");
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
   
-  // 👇 только одна модалка
+  // модалка
   const [showModal, setShowModal] = useState(false);
+  const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
   useEffect(() => {
     loadExcel();
@@ -71,7 +72,6 @@ export const Procurement = () => {
     setExpandedGroups(prev => ({ ...prev, [note]: !prev[note] }));
   };
 
-  // ✅ отправка формы (FormData из OfferModal)
   const handleSubmit = async (formData: FormData) => {
     try {
       const response = await fetch("/send-offer.php", {
@@ -106,16 +106,6 @@ export const Procurement = () => {
         onChange={e => setSearch(e.target.value)}
       />
 
-      {/* 👇 КНОПКА ДОБАВИТЬ СВОЕ ПРЕДЛОЖЕНИЕ */}
-      {/* <div className={Styles.topActions}>
-        <button
-          className={Styles.button}
-          onClick={() => setShowModal(true)}
-        >
-          Добавить свое предложение
-        </button>
-      </div> */}
-
       <div className={Styles.itemsGrid}>
         {filteredGroups.map(group => {
           const isExpanded = isSearching ? true : expandedGroups[group.note] || false;
@@ -127,17 +117,21 @@ export const Procurement = () => {
               isExpanded={isExpanded}
               isSearching={isSearching}
               onToggle={toggleGroup}
-              onAddOffer={() => setShowModal(true)} // тоже открывает форму
+              onAddOffer={() => {
+                setSelectedGroup(group);
+                setShowModal(true);
+              }}
             />
           );
         })}
       </div>
 
-      {/* 👇 НОВАЯ МОДАЛКА */}
-      {showModal && (
+      {showModal && selectedGroup && (
         <OfferModal
+          group={selectedGroup}
           onClose={() => setShowModal(false)}
-          onSubmit={handleSubmit}
+          // onSubmit={handleSubmit}
+          // onDownload={() => exportGroupToExcel(selectedGroup)}
         />
       )}
 

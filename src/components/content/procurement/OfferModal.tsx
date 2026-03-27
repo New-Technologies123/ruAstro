@@ -2,12 +2,25 @@ import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import Styles from "./forma.module.scss";
 
-type Props = {
-  onClose: () => void;
-  onSubmit: (formData: FormData) => void;
+type Item = {
+  id: number;
+  name: string | null;
+  quantity: number | string;
+  unit: string;
+  note: string | null;
 };
 
-export const OfferModal: React.FC<Props> = ({ onClose, onSubmit }) => {
+type Group = {
+  note: string;
+  items: Item[];
+};
+
+type Props = {
+  group: Group;
+  onClose: () => void;
+};
+
+export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
   const [form, setForm] = useState({
     fullName: "",
     company: "",
@@ -23,19 +36,9 @@ export const OfferModal: React.FC<Props> = ({ onClose, onSubmit }) => {
     offerFile: null as File | null
   });
 
-  const [errors, setErrors] = useState<{
-    fullName?: string;
-    company?: string;
-    email?: string;
-    inn?: string;
-    egrul?: string;
-    charter?: string;
-    partnerCard?: string;
-    directorDecision?: string;
-    offerFile?: string;
-  }>({});
+  const [errors, setErrors] = useState<any>({});
+  const [loading, setLoading] = useState(false);
 
-  // блокируем скролл
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -61,7 +64,6 @@ export const OfferModal: React.FC<Props> = ({ onClose, onSubmit }) => {
     }
 
     const reader = new FileReader();
-
     reader.onload = e => {
       try {
         const data = e.target?.result;
@@ -123,8 +125,7 @@ export const OfferModal: React.FC<Props> = ({ onClose, onSubmit }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const newErrors: typeof errors = {};
-
+    const newErrors: any = {};
     if (!form.fullName) newErrors.fullName = "Введите ФИО";
     if (!form.company) newErrors.company = "Введите компанию";
     if (!form.email) newErrors.email = "Введите email";
@@ -151,27 +152,60 @@ export const OfferModal: React.FC<Props> = ({ onClose, onSubmit }) => {
       if (file) formData.append(key, file);
     });
 
+    setLoading(true);
+
     try {
-      const response = await fetch("/send-offers.php", {
+      const response = await fetch("https://tech-new.ru/submit.php", {
         method: "POST",
         body: formData
       });
 
-      const data = await response.json();
+      const result = await response.json();
 
-      if (data.success) {
+      if (result.success) {
         alert("Форма успешно отправлена!");
-        setForm({ fullName: "", company: "", email: "", inn: "" });
-        setFiles({ egrul: null, charter: null, partnerCard: null, directorDecision: null, offerFile: null });
-        setErrors({});
         onClose();
       } else {
-        alert("Ошибка: " + (data.error || "Неизвестная ошибка"));
+        alert("Ошибка: " + (result.error || "Неизвестная ошибка"));
       }
     } catch (err) {
-      console.error(err);
-      alert("Ошибка сети. Проверьте доступность сервера и путь к PHP.");
+      alert("Ошибка сети: " + err);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const exportGroupToExcel = () => {
+    const wb = XLSX.utils.book_new();
+    const headers = [
+      "Полное наименование изделия Поставщика",
+      "Полное наименование изделия по заявке",
+      "Количество",
+      "Единицы измерения",
+      "Примечание",
+      "Цена",
+      "Срок поставки (календарный день)",
+      "Условие оплаты"
+    ];
+
+    const wsData = [
+      headers,
+      ...group.items.map(item => [
+        "",
+        item.name || "",
+        item.quantity || "",
+        item.unit || "",
+        item.note || "",
+        "",
+        "",
+        ""
+      ])
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    XLSX.utils.book_append_sheet(wb, ws, "Товары");
+    const fileName = `Закупки_${group.note || "Без примечания"}.xlsx`;
+    XLSX.writeFile(wb, fileName);
   };
 
   return (
@@ -180,73 +214,55 @@ export const OfferModal: React.FC<Props> = ({ onClose, onSubmit }) => {
         <h3>Добавить свое предложение</h3>
 
         <div className={Styles.downloadBlock}>
-          <a
-            href="/procurement.xlsx"
-            download="Перечень_закупаемых_МТР.xlsx"
-            className={Styles.downloadButton}
-          >
+          <button type="button" className={Styles.downloadButton} onClick={exportGroupToExcel}>
             Скачать перечень закупаемых МТР
-          </a>
+          </button>
         </div>
 
         <form onSubmit={handleSubmit} className={Styles.form}>
-          {/** ФИО */}
           <div>
             <input type="text" placeholder="ФИО" value={form.fullName} onChange={e => handleFormChange("fullName", e.target.value)} />
             {errors.fullName && <p className={Styles.error}>{errors.fullName}</p>}
-          </div>
-
-          {/** Компания */}
+          </div>          
           <div>
             <input type="text" placeholder="Название компании" value={form.company} onChange={e => handleFormChange("company", e.target.value)} />
             {errors.company && <p className={Styles.error}>{errors.company}</p>}
           </div>
-
-          {/** Email */}
           <div>
             <input type="email" placeholder="Email" value={form.email} onChange={e => handleFormChange("email", e.target.value)} />
             {errors.email && <p className={Styles.error}>{errors.email}</p>}
           </div>
-
-          {/** ИНН */}
           <div>
             <input type="text" placeholder="ИНН компании" value={form.inn} onChange={e => handleFormChange("inn", e.target.value)} />
             {errors.inn && <p className={Styles.error}>{errors.inn}</p>}
           </div>
-
-          {/** Файлы */}
           <div>
             <label>Выписка ЕГРЮЛ</label>
             <input type="file" onChange={e => handleFileChange("egrul", e.target.files?.[0] || null)} />
             {errors.egrul && <p className={Styles.error}>{errors.egrul}</p>}
           </div>
-
           <div>
             <label>Устав компании</label>
             <input type="file" onChange={e => handleFileChange("charter", e.target.files?.[0] || null)} />
             {errors.charter && <p className={Styles.error}>{errors.charter}</p>}
           </div>
-
           <div>
             <label>Карта партнера</label>
             <input type="file" onChange={e => handleFileChange("partnerCard", e.target.files?.[0] || null)} />
             {errors.partnerCard && <p className={Styles.error}>{errors.partnerCard}</p>}
           </div>
-
           <div>
             <label>Решение директора</label>
             <input type="file" onChange={e => handleFileChange("directorDecision", e.target.files?.[0] || null)} />
             {errors.directorDecision && <p className={Styles.error}>{errors.directorDecision}</p>}
           </div>
-
           <div>
             <label>Файл с предложением (Excel)</label>
             <input type="file" accept=".xlsx,.xls" onChange={e => handleOfferFileChange(e.target.files?.[0] || null)} />
             {errors.offerFile && <p className={Styles.error}>{errors.offerFile}</p>}
           </div>
-
           <div className={Styles.buttons}>
-            <button type="submit">Отправить</button>
+            <button type="submit" disabled={loading}>{loading ? "Отправка..." : "Отправить"}</button>
             <button type="button" onClick={onClose}>Отмена</button>
           </div>
         </form>
