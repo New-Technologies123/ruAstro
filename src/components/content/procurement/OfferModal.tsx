@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import * as XLSX from "xlsx";
 import Styles from "./forma.module.scss";
+import { exportGroupToExcel } from "./exportExcel";
+import * as XLSX from "xlsx";
 
 type Item = {
   id: number;
@@ -33,7 +34,8 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     charter: null as File | null,
     partnerCard: null as File | null,
     directorDecision: null as File | null,
-    offerFile: null as File | null
+    offerFile: null as File | null,
+    invoicePDF: null as File | null
   });
 
   const [errors, setErrors] = useState<any>({});
@@ -41,9 +43,7 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
 
   useEffect(() => {
     document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, []);
 
   const handleFormChange = (field: keyof typeof form, value: string) => {
@@ -51,7 +51,10 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     setErrors(prev => ({ ...prev, [field]: undefined }));
   };
 
-  const handleFileChange = (field: keyof Omit<typeof files, "offerFile">, file: File | null) => {
+  const handleFileChange = (
+    field: keyof Omit<typeof files, "offerFile" | "invoicePDF">,
+    file: File | null
+  ) => {
     setFiles(prev => ({ ...prev, [field]: file }));
     setErrors(prev => ({ ...prev, [field]: undefined }));
   };
@@ -70,38 +73,33 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
         const workbook = XLSX.read(data, { type: "array" });
         const sheet = workbook.Sheets[workbook.SheetNames[0]];
         const json: any[][] = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-
         if (!json.length) throw new Error("Пустой файл");
 
         const headerRow = json[0];
         const requiredHeaders = [
           "Полное наименование изделия Поставщика",
-          "Цена",
+          "Цена с НДС",
+          "Сумма с НДС",
           "Срок поставки (календарный день)",
           "Условие оплаты"
         ];
-
         const requiredIndexes = requiredHeaders.map(h => headerRow.indexOf(h));
-        if (requiredIndexes.some(idx => idx === -1)) {
-          throw new Error("Не найдены нужные заголовки Excel");
-        }
+        if (requiredIndexes.some(idx => idx === -1)) throw new Error("Не найдены нужные заголовки Excel");
 
         let hasValidRow = false;
         for (let i = 1; i < json.length; i++) {
           const row = [...json[i]];
           while (row.length < Math.max(...requiredIndexes) + 1) row.push("");
-          const allFilled = requiredIndexes.every(idx => (row[idx] ?? "").toString().trim() !== "");
-          if (allFilled) {
+          if (requiredIndexes.every(idx => (row[idx] ?? "").toString().trim() !== "")) {
             hasValidRow = true;
             break;
           }
         }
-
         if (!hasValidRow) {
           setFiles(prev => ({ ...prev, offerFile: null }));
           setErrors(prev => ({
             ...prev,
-            offerFile: "Должна быть хотя бы одна строка с заполненными столбцами: Полное наименование, Цена, Срок поставки, Условие оплаты"
+            offerFile: "Должна быть хотя бы одна строка с заполненными столбцами: Полное наименование, Цена с НДС, Сумма с НДС, Срок поставки, Условие оплаты"
           }));
           return;
         }
@@ -124,7 +122,6 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     const newErrors: any = {};
     if (!form.fullName) newErrors.fullName = "Введите ФИО";
     if (!form.company) newErrors.company = "Введите компанию";
@@ -136,6 +133,7 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     if (!files.partnerCard) newErrors.partnerCard = "Загрузите файл";
     if (!files.directorDecision) newErrors.directorDecision = "Загрузите файл";
     if (!files.offerFile) newErrors.offerFile = "Загрузите Excel";
+    if (!files.invoicePDF) newErrors.invoicePDF = "Загрузите PDF счет";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -147,21 +145,14 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     formData.append("company", form.company);
     formData.append("email", form.email);
     formData.append("inn", form.inn);
-
     Object.entries(files).forEach(([key, file]) => {
       if (file) formData.append(key, file);
     });
 
     setLoading(true);
-
     try {
-      const response = await fetch("https://tech-new.ru/submit.php", {
-        method: "POST",
-        body: formData
-      });
-
+      const response = await fetch("https://tech-new.ru/submit.php", { method: "POST", body: formData });
       const result = await response.json();
-
       if (result.success) {
         alert("Форма успешно отправлена!");
         onClose();
@@ -170,51 +161,17 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
       }
     } catch (err) {
       alert("Ошибка сети: " + err);
-    } finally {
-      setLoading(false);
-    }
+    } finally { setLoading(false); }
   };
-
-  const exportGroupToExcel = () => {
-    const wb = XLSX.utils.book_new();
-    const headers = [
-      "Полное наименование изделия Поставщика",
-      "Полное наименование изделия по заявке",
-      "Количество",
-      "Единицы измерения",
-      "Примечание",
-      "Цена",
-      "Срок поставки (календарный день)",
-      "Условие оплаты"
-    ];
-
-    const wsData = [
-      headers,
-      ...group.items.map(item => [
-        "",
-        item.name || "",
-        item.quantity || "",
-        item.unit || "",
-        item.note || "",
-        "",
-        "",
-        ""
-      ])
-    ];
-
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-    XLSX.utils.book_append_sheet(wb, ws, "Товары");
-    const fileName = `Закупки_${group.note || "Без примечания"}.xlsx`;
-    XLSX.writeFile(wb, fileName);
-  };
+  
 
   return (
     <div className={Styles.modalBg} onClick={onClose}>
       <div className={Styles.modal} onClick={e => e.stopPropagation()}>
-        <h3>Добавить свое предложение</h3>
+        <h1>Добавить свое предложение</h1>
 
         <div className={Styles.downloadBlock}>
-          <button type="button" className={Styles.downloadButton} onClick={exportGroupToExcel}>
+          <button type="button" className={Styles.downloadButton} onClick={() => exportGroupToExcel(group)}>
             Скачать перечень закупаемых МТР
           </button>
         </div>
@@ -223,7 +180,7 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
           <div>
             <input type="text" placeholder="ФИО" value={form.fullName} onChange={e => handleFormChange("fullName", e.target.value)} />
             {errors.fullName && <p className={Styles.error}>{errors.fullName}</p>}
-          </div>          
+          </div>
           <div>
             <input type="text" placeholder="Название компании" value={form.company} onChange={e => handleFormChange("company", e.target.value)} />
             {errors.company && <p className={Styles.error}>{errors.company}</p>}
@@ -257,10 +214,15 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
             {errors.directorDecision && <p className={Styles.error}>{errors.directorDecision}</p>}
           </div>
           <div>
+            <label>Счет с подписью и печатью (PDF)</label>
+            <input type="file" accept=".pdf" onChange={e => setFiles(prev => ({ ...prev, invoicePDF: e.target.files?.[0] || null }))} />
+            {errors.invoicePDF && <p className={Styles.error}>{errors.invoicePDF}</p>}
+          </div>
+          <div>
             <label>Файл с предложением (Excel)</label>
             <input type="file" accept=".xlsx,.xls" onChange={e => handleOfferFileChange(e.target.files?.[0] || null)} />
             {errors.offerFile && <p className={Styles.error}>{errors.offerFile}</p>}
-          </div>
+          </div>          
           <div className={Styles.buttons}>
             <button type="submit" disabled={loading}>{loading ? "Отправка..." : "Отправить"}</button>
             <button type="button" onClick={onClose}>Отмена</button>
