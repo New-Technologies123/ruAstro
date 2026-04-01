@@ -18,6 +18,7 @@ $subject = "=?UTF-8?B?" . base64_encode("Предложение закупок �
 $name    = $_POST["fullName"] ?? "";
 $company = $_POST["company"] ?? "";
 $email   = $_POST["email"] ?? "";
+$phone   = $_POST["phone"] ?? "";
 $inn     = $_POST["inn"] ?? "";
 
 // Проверка обязательных полей
@@ -42,6 +43,7 @@ $message .= "<h2>Контактные данные</h2>";
 $message .= "<b>ФИО:</b> $name<br>";
 $message .= "<b>Компания:</b> $company<br>";
 $message .= "<b>Email:</b> $email<br>";
+$message .= "<b>Телефон:</b> $phone<br>";
 $message .= "<b>ИНН:</b> $inn<br><br>";
 
 // Обработка файлов

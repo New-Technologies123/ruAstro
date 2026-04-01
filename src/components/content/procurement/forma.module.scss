@@ -138,3 +138,84 @@ h1 {
     }
   }
 }
+
+.input {
+  padding: 0.8rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    border-color: #4f9aff;
+    box-shadow: 0 0 0 3px rgba(79, 154, 255, 0.2);
+    outline: none;
+  }
+}
+
+.errorInput {
+  border: 1px solid #ff4d4f !important;
+
+  &:focus {
+    border-color: #ff4d4f !important;
+    box-shadow: 0 0 0 3px rgba(255, 77, 79, 0.2) !important;
+  }
+}
+
+.checkboxContainer {
+  margin: 10px 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  position: relative;
+  user-select: none;
+  gap: 10px;
+}
+
+.checkboxLabel input {
+  display: none;
+}
+
+.customCheckbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid #4f9aff;
+  border-radius: 6px;
+  background-color: #fff;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+
+  /* эффект наведения */
+  &:hover {
+    border-color: #1c6fff;
+  }
+
+  /* галочка */
+  &::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 12px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform 0.25s ease;
+  }
+}
+
+/* при включении чекбокса */
+.checkboxLabel input:checked + .customCheckbox {
+  background-color: #1c67c9;
+  border-color: #001836;
+}
+
+.checkboxLabel input:checked + .customCheckbox::after {
+  transform: rotate(45deg) scale(1);
+}

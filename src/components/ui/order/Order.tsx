@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Styles from './order.module.scss';
 import { getCart, clearCart, type CartItem } from '../../utils/cartStorage';
@@ -6,7 +6,15 @@ import { Title } from '../../ui/title/Title';
 import back from '../../../images/back.svg';
 
 type OrderProps = { onBack: () => void };
-type Errors = { name?: string; position?: string; company?: string; email?: string; phone?: string; };
+
+type Errors = {
+  name?: string;
+  position?: string;
+  company?: string;
+  email?: string;
+  phone?: string;
+  agree?: string;
+};
 
 export const Order = ({ onBack }: OrderProps) => {
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -16,8 +24,12 @@ export const Order = ({ onBack }: OrderProps) => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [comment, setComment] = useState('');
+  const [agree, setAgree] = useState(false);
+
   const [errors, setErrors] = useState<Errors>({});
   const [successMessage, setSuccessMessage] = useState('');
+
+  const checkboxRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => setCart(getCart()), []);
 
@@ -29,9 +41,11 @@ export const Order = ({ onBack }: OrderProps) => {
   }, [successMessage]);
 
   const parsePrice = (price: string) => Number(price.replace(/\s/g, ''));
-  const totalPrice = cart.reduce((sum, item) => sum + parsePrice(item.price) * item.count, 0);
+  const totalPrice = cart.reduce(
+    (sum, item) => sum + parsePrice(item.price) * item.count,
+    0
+  );
 
-  // Валидация в реальном времени
   const validateField = (key: keyof Errors, value: string) => {
     switch (key) {
       case 'email':
@@ -53,8 +67,15 @@ export const Order = ({ onBack }: OrderProps) => {
       company: validateField('company', company),
       email: validateField('email', email),
       phone: validateField('phone', phone),
+      agree: agree ? undefined : 'Необходимо подтвердить согласие на обработку данных',
     };
+
     setErrors(newErrors);
+
+    if (newErrors.agree && checkboxRef.current) {
+      checkboxRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     if (Object.values(newErrors).some(Boolean)) return;
 
     const orderData = { name, position, company, email, phone, comment, cart };
@@ -65,14 +86,24 @@ export const Order = ({ onBack }: OrderProps) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(orderData),
       });
+
       const result = await res.json();
+
       if (result.success) {
         setSuccessMessage('Спасибо за заказ!');
         setCart([]);
         clearCart();
-        setName(''); setPosition(''); setCompany(''); setEmail(''); setPhone(''); setComment('');
+        setName('');
+        setPosition('');
+        setCompany('');
+        setEmail('');
+        setPhone('');
+        setComment('');
+        setAgree(false);
         setErrors({});
-      } else alert('Ошибка при отправке: ' + (result.error || 'Неизвестная ошибка'));
+      } else {
+        alert('Ошибка при отправке: ' + (result.error || 'Неизвестная ошибка'));
+      }
     } catch (err) {
       alert('Ошибка сети: ' + err);
     }
@@ -100,20 +131,25 @@ export const Order = ({ onBack }: OrderProps) => {
             </motion.div>
           ) : (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+              {/* Корзина */}
               <div className={Styles.summary}>
                 {cart.map(item => (
                   <div key={item.id} className={Styles.product}>
                     <div className={Styles.title}>{item.title}</div>
                     <div className={Styles.count}>{item.count} ×</div>
-                    <div className={Styles.price}>{parsePrice(item.price) * item.count} ₽ без НДС</div>
+                    <div className={Styles.price}>
+                      {parsePrice(item.price) * item.count} ₽ без НДС
+                    </div>
                   </div>
                 ))}
+
                 <div className={Styles.total}>
                   <span>Итого:</span>
                   <strong>{totalPrice.toLocaleString('ru-RU')} ₽ без НДС</strong>
                 </div>
               </div>
 
+              {/* Форма */}
               <form className={Styles.form} onSubmit={handleSubmit}>
                 {[
                   { value: name, setter: setName, label: 'ФИО', errorKey: 'name' },
@@ -122,18 +158,29 @@ export const Order = ({ onBack }: OrderProps) => {
                   { value: email, setter: setEmail, label: 'Email', errorKey: 'email', type: 'email' },
                   { value: phone, setter: setPhone, label: 'Телефон', errorKey: 'phone', type: 'tel' }
                 ].map(f => (
-                  <div key={f.label} className={`${Styles.field} ${errors[f.errorKey] ? Styles.fieldError : ''}`}>
+                  <div
+                    key={f.label}
+                    className={`${Styles.field} ${errors[f.errorKey] ? Styles.fieldError : ''}`}
+                  >
                     <input
                       type={f.type || 'text'}
                       value={f.value}
                       onChange={e => {
                         f.setter(e.target.value);
-                        setErrors(prev => ({ ...prev, [f.errorKey]: validateField(f.errorKey as keyof Errors, e.target.value) }));
+                        setErrors(prev => ({
+                          ...prev,
+                          [f.errorKey]: validateField(
+                            f.errorKey as keyof Errors,
+                            e.target.value
+                          )
+                        }));
                       }}
                       required
                     />
                     <label className={f.value ? Styles.filled : ''}>{f.label}</label>
-                    {errors[f.errorKey] && <span className={Styles.g }>{errors[f.errorKey]}</span>}
+                    {errors[f.errorKey] && (
+                      <span className={Styles.g}>{errors[f.errorKey]}</span>
+                    )}
                   </div>
                 ))}
 
@@ -144,6 +191,31 @@ export const Order = ({ onBack }: OrderProps) => {
                     value={comment}
                     onChange={e => setComment(e.target.value)}
                   />
+                </div>
+
+                {/* Чекбокс */}
+                <div
+                  ref={checkboxRef}
+                  className={`${Styles.checkboxContainer} ${errors.agree ? Styles.errorState : ''}`}
+                >
+                  <label className={Styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={agree}
+                      onChange={(e) => {
+                        setAgree(e.target.checked);
+                        setErrors(prev => ({
+                          ...prev,
+                          agree: e.target.checked ? undefined : 'Необходимо согласие'
+                        }));
+                      }}
+                    />
+                    <span className={Styles.customCheckbox}></span>
+                    Я согласен на обработку персональных данных и принимаю политику конфиденциальности
+                  </label>
+                  {errors.agree && (
+                    <p className={Styles.error}>{errors.agree}</p>
+                  )}
                 </div>
 
                 <motion.button
