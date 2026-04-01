@@ -2,7 +2,7 @@ import type { Product } from './types';
 
 export const shop4Products: Product[] = [
   {
-    id: 1,
+    id: 121,
     title: 'Корпус верхний НТ.100.000.002.0',
     description: '',
     price: '12 500',
@@ -11,7 +11,7 @@ export const shop4Products: Product[] = [
     image: '/images/shop/kmr/1.webp',
   },
   {
-    id: 2,
+    id: 122,
     title: 'Шток НТ.112.000.003.0',
     description: '',
     price: '7 125',
@@ -20,7 +20,7 @@ export const shop4Products: Product[] = [
     image: '/images/shop/kmr/2.webp',
   },
   {
-    id: 3,
+    id: 123,
     title: 'Втулка немагнитная НТ.100.000.004.0',
     description: '',
     price: '2 595',
@@ -29,7 +29,7 @@ export const shop4Products: Product[] = [
     image: '/images/shop/kmr/3.webp',
   },
   {
-    id: 4,
+    id: 124,
     title: 'Шайба магнитная НТ.200.000.006.0',
     description: '',
     price: '16 730',
@@ -38,7 +38,7 @@ export const shop4Products: Product[] = [
     image: '/images/shop/kmr/4.webp',
   },
   {
-    id: 5,
+    id: 125,
     title: 'Шайба пружины опорная НТ.200.000.007.0',
     description: '',
     price: '2 590',
@@ -47,7 +47,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 6,
+    id: 126,
     title: 'Штифт НТ.200.000.009.0',
     description: '',
     price: '120',
@@ -56,7 +56,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 7,
+    id: 127,
     title: 'Клапан НТ.100.000.010.0',
     description: '',
     price: '3 375',
@@ -65,7 +65,7 @@ export const shop4Products: Product[] = [
     image: '/images/shop/kmr/20.webp',
   },
   {
-    id: 8,
+    id: 128,
     title: 'Дроссель Ф57 НТ.250.000.013.0',
     description: '',
     price: '2 085',
@@ -74,7 +74,7 @@ export const shop4Products: Product[] = [
     image: '/images/shop/kmr/9.webp',
   },
   {
-    id: 9,
+    id: 129,
     title: 'Седло НТ.110.000.015.0',
     description: '',
     price: '6 450',
@@ -83,7 +83,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 10,
+    id: 1210,
     title: 'Кольцо концентрическое НТ.100.000.016.0',
     description: '',
     price: '2 520',
@@ -92,7 +92,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 11,
+    id: 1211,
     title: 'Штифт НТ.200.000.009.0',
     description: '',
     price: '150',
@@ -101,7 +101,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 12,
+    id: 1212,
     title: 'Втулка НТ.210.000.100.0',
     description: '',
     price: '4 840',
@@ -110,7 +110,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 13,
+    id: 1213,
     title: 'Втулка немагнитная НТ.302.000.003.0',
     description: '',
     price: '5 310',
@@ -119,7 +119,7 @@ export const shop4Products: Product[] = [
     image: '/images/shop/kmr/3.webp',
   },
   {
-    id: 14,
+    id: 1214,
     title: 'Корпус магнита НТ.202.004.005.0',
     description: '',
     price: '1 200',
@@ -128,7 +128,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 15,
+    id: 1215,
     title: 'Крышка корпуса НТ.210.004.008.0 (мех.уч)',
     description: '',
     price: '6 240',
@@ -137,7 +137,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 16,
+    id: 1216,
     title: 'Корпус верхний НТ.300.000.002.0',
     description: '',
     price: '9 480',
@@ -146,7 +146,7 @@ export const shop4Products: Product[] = [
     image: '/images/shop/kmr/1.webp',
   },
   {
-    id: 17,
+    id: 1217,
     title: 'Пробка НТ.202.004.009.0',
     description: '',
     price: '3 150',
@@ -155,7 +155,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 18,
+    id: 1218,
     title: 'Пробка НТ.200.000.030.0 (ЧПУ)',
     description: '',
     price: '3 075',
@@ -164,7 +164,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 19,
+    id: 1219,
     title: 'Седло НТ.300.000.007.0',
     description: '',
     price: '12 250',
@@ -173,7 +173,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 20,
+    id: 1220,
     title: 'Экран НТ.302.000.004.0',
     description: '',
     price: '2 190',
@@ -182,7 +182,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 21,
+    id: 1221,
     title: 'Пружина крышки НТ.200.004.003.0',
     description: '',
     price: '3 480',
@@ -191,7 +191,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 22,
+    id: 1222,
     title: 'Пружина №467 НТ.200.000.029.0',
     description: '',
     price: '3 150,00',
@@ -200,7 +200,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 23,
+    id: 1223,
     title: 'Кольцо уплотнительное НТ.300.000.010.0',
     description: '',
     price: '2 175',
@@ -209,7 +209,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 24,
+    id: 1224,
     title: 'Кольцо 055-060-33-1-6 ГОСТ 9833-73',
     description: '',
     price: '100',
@@ -218,7 +218,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 25,
+    id: 1225,
     title: 'Кольцо 080-086-36-1-6 ГОСТ 9833-73',
     description: '',
     price: '120',
@@ -227,7 +227,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 26,
+    id: 1226,
     title: 'Кольцо 080-085-30 ГОСТ 9833-73',
     description: '',
     price: '120',
@@ -236,7 +236,7 @@ export const shop4Products: Product[] = [
     image: '',
   },
   {
-    id: 27,
+    id: 1227,
     title: 'Кольцо А75 ГОСТ 13943-86',
     description: '',
     price: '410',

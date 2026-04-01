@@ -2,7 +2,7 @@ import type { Product } from './types';
 
 export const urpd2Products: Product[] = [
   {
-    id: 1,
+    id: 311,
     title: 'Рычаг НТ.510.000.003.0',
     description: '',
     price: '2 820',
@@ -12,7 +12,7 @@ export const urpd2Products: Product[] = [
 
   },
   {
-    id: 2,
+    id: 302,
     title: 'Валик НТ.511.000.004.0',
     description: '',
     price: '4 470',
@@ -21,7 +21,7 @@ export const urpd2Products: Product[] = [
     image: '/images/shop/urpd/2-2.webp',
   },
   {
-    id: 3,
+    id: 313,
     title: 'Шибер НТ.530.000.005.0',
     description: '',
     price: '7 245',
@@ -30,7 +30,7 @@ export const urpd2Products: Product[] = [
     image: '/images/shop/urpd/2-3.webp',
   },
   {
-    id: 4,
+    id: 304,
     title: 'Подшипник НТ.510.000.006.0',
     description: '',
     price: '450',
@@ -39,7 +39,7 @@ export const urpd2Products: Product[] = [
     image: '/images/shop/urpd/2-4.webp',
   },
   {
-    id: 5,
+    id: 315,
     title: 'Уплотнение заслонки НТ.531.000.007.0',
     description: '',
     price: '7 275',
@@ -48,7 +48,7 @@ export const urpd2Products: Product[] = [
     image: '',
   },
   {
-    id: 6,
+    id: 307,
     title: 'Кольцо фторопластовое НТ.510.000.009.0',
     description: '',
     price: '1 590',
@@ -57,7 +57,7 @@ export const urpd2Products: Product[] = [
     image: '/images/shop/urpd/2-6.webp',
   },
   {
-    id: 7,
+    id: 317,
     title: 'Кольцо уплотнения 059-065-36 – 2шт.',
     description: '',
     price: '1 590',
@@ -66,7 +66,7 @@ export const urpd2Products: Product[] = [
     image: '/images/shop/urpd/2-7.webp',
   },
   {
-    id: 8,
+    id: 309,
     title: 'Кольцо уплотнения валика 014-018-25 – 2шт.',
     description: '',
     price: '1 215',

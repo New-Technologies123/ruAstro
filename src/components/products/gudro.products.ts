@@ -2,7 +2,7 @@ import type { Product } from './types';
 
 export const gudroProducts: Product[] = [
   {
-    id: 1,
+    id: 201,
     title: 'Крышка НТ.3.05.00.00.000',
     description: '',
     price: '14 000',
@@ -11,7 +11,7 @@ export const gudroProducts: Product[] = [
     image: '',
   },
   {
-    id: 2,
+    id: 202,
     title: 'Емкость НТ.3.01.00.00.000',
     description: '',
     price: '9 500',
@@ -20,7 +20,7 @@ export const gudroProducts: Product[] = [
     image: '',
   },
   {
-    id: 3,
+    id: 203,
     title: 'Трубка НТ.3.03.00.00.000',
     description: '',
     price: '5 500',
@@ -29,7 +29,7 @@ export const gudroProducts: Product[] = [
     image: '',
   },
   {
-    id: 4,
+    id: 204,
     title: 'Фильтр НТ.3.04.04.00.000',
     description: '',
     price: '3 550',
@@ -38,7 +38,7 @@ export const gudroProducts: Product[] = [
     image: '',
   },
   {
-    id: 5,
+    id: 205,
     title: 'Сухарь НТ.3.00.00.00.005',
     description: '',
     price: '500',
@@ -47,7 +47,7 @@ export const gudroProducts: Product[] = [
     image: '',
   },
   {
-    id: 6,
+    id: 206,
     title: 'Клапан предохранительный НТ.3.02.00.00.000',
     description: '',
     price: '3 600',
@@ -56,7 +56,7 @@ export const gudroProducts: Product[] = [
     image: '',
   },
   {
-    id: 7,
+    id: 207,
     title: 'Прокладка НТ.3.00.00.00.006',
     description: '',
     price: '500',
