@@ -14,9 +14,9 @@ import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
 import product_1 from '../../../images/products/product_2.webp';
 import product_2 from '../../../images/products/product_2_1.webp';
-import product_3 from '../../../images/products/product_2_2.png';
-import product_4 from '../../../images/products/product_2_3.png';
-import product_5 from '../../../images/products/product_2_4.png';
+import product_3 from '../../../images/products/product_2_2.webp';
+import product_4 from '../../../images/products/product_2_3.webp';
+import product_5 from '../../../images/products/product_2_4.webp';
 
 type TProducts = 'shop_1' | 'shop_2' | 'shop_3' | 'shop_4' | 'shop_5';
 type Page = 'shop' | TProducts | 'order';

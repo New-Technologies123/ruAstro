@@ -4,10 +4,10 @@ import Styles from './products.module.scss';
 
 import product_2_1 from '../../../images/products/product_2.webp';
 import product_2_2 from '../../../images/products/product_2_1.webp';
-import product_2_3 from '../../../images/products/product_2_2.png';
-import product_2_4 from '../../../images/products/product_2_3.png';
-import product_2_5 from '../../../images/products/product_2_4.png';
-import product_2_6 from '../../../images/products/product_2_5.png';
+import product_2_3 from '../../../images/products/product_2_2.webp';
+import product_2_4 from '../../../images/products/product_2_3.webp';
+import product_2_5 from '../../../images/products/product_2_4.webp';
+import product_2_6 from '../../../images/products/product_2_5.webp';
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
 type TAccessories = 'ervip' | 'urpd' | 'psm' | 'kmr' | 'gidroprivod' | 'separation';
