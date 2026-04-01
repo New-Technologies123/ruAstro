@@ -1,18 +1,45 @@
-// QuestionForm.tsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import InputMask from 'react-input-mask';
 import Styles from './question-form.module.scss';
 
 interface QuestionFormProps {
-  formData: { name: string; email: string; message: string };
-  onChange: (field: string, value: string) => void;
+  formData: {
+    name: string;
+    email: string;
+    phone: string;
+    message: string;
+    agreement: boolean;
+  };
+  agreementError: boolean;
+  onChange: (field: string, value: string | boolean) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
 
+const phoneMasks: Record<string, string> = {
+  RU: '+7 (999) 999-99-99',
+  US: '+1 (999) 999-9999',
+  NL: '+31 99 999 9999',
+  DE: '+49 9999 999999',
+  FR: '+33 9 99 99 99 99',
+};
+
 export const QuestionForm: React.FC<QuestionFormProps> = ({
   formData,
+  agreementError,
   onChange,
   onSubmit,
 }) => {
+  const [mask, setMask] = useState('+1 (999) 999-9999');
+
+  useEffect(() => {
+    const locale = navigator.language || 'en-US';
+    const country = locale.split('-')[1] || 'US';
+
+    if (phoneMasks[country]) {
+      setMask(phoneMasks[country]);
+    }
+  }, []);
+
   return (
     <form className={Styles.questionForm} onSubmit={onSubmit}>
       <input
@@ -22,6 +49,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         onChange={e => onChange('name', e.target.value)}
         required
       />
+
       <input
         type="email"
         placeholder="Email для ответа"
@@ -29,6 +57,17 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         onChange={e => onChange('email', e.target.value)}
         required
       />
+
+      <InputMask
+        mask={mask}
+        value={formData.phone}
+        onChange={e => onChange('phone', e.target.value)}
+      >
+        {(inputProps: any) => (
+          <input {...inputProps} type="tel" placeholder="Телефон" required />
+        )}
+      </InputMask>
+
       <textarea
         placeholder="Ваш вопрос"
         value={formData.message}
@@ -36,6 +75,31 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         rows={4}
         required
       />
+
+      <label
+        className={`${Styles.checkbox} ${
+          agreementError ? Styles.error : ''
+        }`}
+      >
+        <input
+          type="checkbox"
+          checked={formData.agreement}
+          onChange={e => onChange('agreement', e.target.checked)}
+        />
+
+        <span className={Styles.customCheckbox}></span>
+
+        <span className={Styles.checkboxText}>
+          Я согласен на обработку персональных данных и принимаю политику конфиденциальности
+        </span>
+      </label>
+
+      {agreementError && (
+        <div className={Styles.errorText}>
+          Пожалуйста, подтвердите согласие
+        </div>
+      )}
+
       <button type="submit">Отправить вопрос</button>
     </form>
   );

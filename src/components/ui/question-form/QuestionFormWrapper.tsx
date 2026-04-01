@@ -2,19 +2,23 @@ import React, { useState, useEffect } from 'react';
 import Styles from './question-form.module.scss';
 import { QuestionForm } from './QuestionForm';
 
-const REOPEN_DELAY = 30000; // 30 секунд
+const REOPEN_DELAY = 30000;
 const STORAGE_KEY = 'questionFormClosedAt';
 
 export const QuestionFormWrapper: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    phone: '',
+    message: '',
+    agreement: false,
   });
-  const [submitted, setSubmitted] = useState(false);
 
-  // Проверяем при загрузке — можно ли открывать форму
+  const [submitted, setSubmitted] = useState(false);
+  const [agreementError, setAgreementError] = useState(false);
+
   useEffect(() => {
     const closedAt = localStorage.getItem(STORAGE_KEY);
 
@@ -28,8 +32,6 @@ export const QuestionFormWrapper: React.FC = () => {
     if (diff >= REOPEN_DELAY) {
       setIsOpen(true);
     } else {
-      setIsOpen(false);
-
       const timer = setTimeout(() => {
         setIsOpen(true);
       }, REOPEN_DELAY - diff);
@@ -38,19 +40,26 @@ export const QuestionFormWrapper: React.FC = () => {
     }
   }, []);
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+
+    if (field === 'agreement' && value === true) {
+      setAgreementError(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    if (!formData.agreement) {
+      setAgreementError(true);
+      return;
+    }
+
     try {
       const response = await fetch('/send-question.php', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
 
@@ -58,12 +67,18 @@ export const QuestionFormWrapper: React.FC = () => {
 
       if (result.success) {
         setSubmitted(true);
-        setFormData({ name: '', email: '', message: '' });
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          message: '',
+          agreement: false,
+        });
         setTimeout(() => setSubmitted(false), 3000);
       } else {
         alert('Ошибка отправки: ' + result.error);
       }
-    } catch (error) {
+    } catch {
       alert('Ошибка соединения с сервером');
     }
   };
@@ -93,6 +108,7 @@ export const QuestionFormWrapper: React.FC = () => {
             formData={formData}
             onChange={handleChange}
             onSubmit={handleSubmit}
+            agreementError={agreementError}
           />
 
           {submitted && (
