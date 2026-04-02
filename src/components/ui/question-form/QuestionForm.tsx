@@ -15,13 +15,13 @@ interface QuestionFormProps {
   onSubmit: (e: React.FormEvent) => void;
 }
 
-const phoneMasks: Record<string, string> = {
-  RU: '+7 (999) 999-99-99',
-  US: '+1 (999) 999-9999',
-  NL: '+31 99 999 9999',
-  DE: '+49 9999 999999',
-  FR: '+33 9 99 99 99 99',
-};
+// const phoneMasks: Record<string, string> = {
+//   RU: '+7 (999) 999-99-99',
+//   // US: '+1 (999) 999-9999',
+//   // NL: '+31 99 999 9999',
+//   // DE: '+49 9999 999999',
+//   // FR: '+33 9 99 99 99 99',
+// };
 
 export const QuestionForm: React.FC<QuestionFormProps> = ({
   formData,
@@ -29,15 +29,15 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   onChange,
   onSubmit,
 }) => {
-  const [mask, setMask] = useState('+1 (999) 999-9999');
+  const [mask, setMask] = useState('+7 (999) 999-9999');
 
   useEffect(() => {
-    const locale = navigator.language || 'en-US';
-    const country = locale.split('-')[1] || 'US';
+    const locale = navigator.language || 'ru-RU';
+    const country = locale.split('-')[7] || 'RU';
 
-    if (phoneMasks[country]) {
-      setMask(phoneMasks[country]);
-    }
+    // if (phoneMasks[country]) {
+    //   setMask(phoneMasks[country]);
+    // }
   }, []);
 
   return (
@@ -90,7 +90,10 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         <span className={Styles.customCheckbox}></span>
 
         <span className={Styles.checkboxText}>
-          Я согласен на обработку персональных данных и принимаю политику конфиденциальности
+          Я даю согласие на обработку моих персональных данных 
+          в целях рассмотрения моего обращения. С 
+          <a href="/public/privacy/v_1.docx" target="_blank"> политикой конфиденциальности </a> 
+          ознакомлен(а).
         </span>
       </label>
 

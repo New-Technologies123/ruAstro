@@ -207,7 +207,7 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
                 onChange={e => handleFormChange("consent", e.target.checked)}
               />
               <span className={Styles.customCheckbox}></span>
-              Я согласен на обработку персональных данных и принимаю политику конфиденциальности
+              Я даю согласие на обработку моих персональных данных, включая загрузку и обработку прилагаемых документов, в соответствии с Политикой конфиденциальности.
             </label>
             {errors.consent && <p className={Styles.error}>{errors.consent}</p>}
           </div>
