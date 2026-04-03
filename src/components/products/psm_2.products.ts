@@ -2,7 +2,7 @@ import type { Product } from './types';
 
 export const psm_2Products: Product[] = [
   {
-    id: 1,
+    id: 401,
     title: 'Диск НТ.103.000.002-01 (8скв)',
     description: '',
     price: '1 500',
@@ -11,7 +11,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/1.webp',
   },
   {
-    id: 2,
+    id: 402,
     title: 'Крышка ПСМНТ.001.011.000-01',
     description: '',
     price: '150 000',
@@ -20,7 +20,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/крышка_1.webp',
   },
   {
-    id: 3,
+    id: 403,
     title: 'Вал ПСМНТ.001.015.000',
     description: '',
     price: '83 100',
@@ -29,7 +29,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/вал.webp',
   },
   {
-    id: 4,
+    id: 404,
     title: 'Колодка клеммная ПСМНТ.001.016.000',
     description: '',
     price: '3 600',
@@ -38,7 +38,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/колодка.webp',
   },
   {
-    id: 5,
+    id: 405,
     title: 'Крышка ПСМНТ.001.000.001 (с маркировкой)',
     description: '',
     price: '5 100',
@@ -47,7 +47,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/крышка_2.webp',
   },
   {
-    id: 6,
+    id: 416,
     title: 'Корпус ПСМНТ.001.018.000-02 8 скв(без наплавки)',
     description: '',
     price: '180 000',
@@ -56,7 +56,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/корпус_1.webp',
   },
   {
-    id: 7,
+    id: 407,
     title: 'Датчик положения ПСМ.11.00.00.00(8 скважин)',
     description: '',
     price: '21 000',
@@ -65,7 +65,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 8,
+    id: 408,
     title: 'Указатель ПСМНТ.001.021.000',
     description: '',
     price: '2 500',
@@ -74,7 +74,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/указатель.webp',
   },
   {
-    id: 9,
+    id: 409,
     title: 'Каретка ПСМНТ.001.022.000',
     description: '',
     price: '36 700',
@@ -83,7 +83,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/каретка.webp',
   },
   {
-    id: 10,
+    id: 4010,
     title: 'Угольник ПСМНТ.001.029.000 СБ',
     description: '',
     price: '31 200',
@@ -92,7 +92,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/угольник.webp',
   },
   {
-    id: 11,
+    id: 4011,
     title: 'Подпятник ПСМНТ.001.000.002',
     description: '',
     price: '450',
@@ -101,7 +101,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 12,
+    id: 4012,
     title: 'Поршень ПСМНТ.001.000.003',
     description: '',
     price: '3 300',
@@ -110,7 +110,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 13,
+    id: 4013,
     title: 'Корпус ПСМНТ.001.000.005 (литье - СЧ18 ГОСТ 1412-85)',
     description: '',
     price: '90 500',
@@ -119,7 +119,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/корпус_2.webp',
   },
   {
-    id: 14,
+    id: 4014,
     title: 'Корпус ПСМНТ.001.000.006',
     description: '',
     price: '50 500',
@@ -128,7 +128,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/корпус_3.webp',
   },
   {
-    id: 15,
+    id: 4015,
     title: 'Крышка ПСМНТ.001.000.007',
     description: '',
     price: '3 000',
@@ -137,7 +137,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/крышка_3.webp',
   },
   {
-    id: 16,
+    id: 4016,
     title: 'Гильза ПСМНТ.001.000.008',
     description: '',
     price: '6 000',
@@ -146,7 +146,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 17,
+    id: 4017,
     title: 'Кольцо ПСМНТ.001.000.009',
     description: '',
     price: '3 000',
@@ -155,7 +155,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/кольцо.webp',
   },
   {
-    id: 18,
+    id: 4018,
     title: 'Кольцо ПСМНТ.001.000.010',
     description: '',
     price: '2 500',
@@ -164,7 +164,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/кольцо уплотнения.webp',
   },
   {
-    id: 19,
+    id: 4019,
     title: ' Кольцо ПСМНТ.001.000.010-03',
     description: '',
     price: '2 500',
@@ -173,7 +173,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 20,
+    id: 4020,
     title: 'Кольцо ПСМНТ.001.000.010-05',
     description: '',
     price: '2 500',
@@ -182,7 +182,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 21,
+    id: 4021,
     title: 'Храповик ПСМНТ.001.000.011-02 (8 скв)',
     description: '',
     price: '14 500',
@@ -191,7 +191,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/храповик.webp',
   },
   {
-    id: 22,
+    id: 4022,
     title: 'Пружина ПСМНТ.001.000.013 (крашенная)',
     description: '',
     price: '4 200',
@@ -200,7 +200,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/пружина.webp',
   },
   {
-    id: 23,
+    id: 4023,
     title: 'Колесо зубчатое ПСМНТ.001.000.014-02 (8 скв)',
     description: '',
     price: '15 000',
@@ -209,8 +209,8 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/колесо_зубчист.webp',
   },
   {
-    id: 24,
-    title: ' Пробка ПСМНТ.001.000.016',
+    id: 4024,
+    title: 'Пробка ПСМНТ.001.000.016',
     description: '',
     price: '800',
     nds: 'без НДС',
@@ -218,7 +218,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/пробка.webp',
   },
   {
-    id: 25,
+    id: 4025,
     title: 'Пробка ПСМНТ.001.000.017',
     description: '',
     price: '600',
@@ -227,7 +227,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 26,
+    id: 4026,
     title: 'Шпилька ПСМНТ.001.000.020',
     description: '',
     price: '800',
@@ -236,7 +236,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 27,
+    id: 4027,
     title: 'Ось-винт ПСМНТ.001.022.006',
     description: '',
     price: '900',
@@ -245,7 +245,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/винт.webp',
   },
   {
-    id: 28,
+    id: 4028,
     title: 'Бобышка ПСМНТ.001.000.022',
     description: '',
     price: '350',
@@ -254,7 +254,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 29,
+    id: 4029,
     title: 'Ролик ПСМНТ.001.022.005',
     description: '',
     price: '1 500',
@@ -263,7 +263,7 @@ export const psm_2Products: Product[] = [
     image: '/images/shop/psm/ролик.webp',
   },
   {
-    id: 30,
+    id: 4030,
     title: 'Кольцо ПСМНТ.001.000.029',
     description: '',
     price: '350',
@@ -272,7 +272,7 @@ export const psm_2Products: Product[] = [
     image: '',
   },
   {
-    id: 31,
+    id: 4031,
     title: 'Втулка ПСМНТ.001.000.031',
     description: '',
     price: '300',
