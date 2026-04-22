@@ -11,13 +11,13 @@ export const Careers = () => {
 
     const vacancyLinks: Record<TCareers, string> = {
         vacancy1: "https://ufa.hh.ru/vacancy/132221496?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy2: "https://ufa.hh.ru/vacancy/131908550?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy3: "https://ufa.hh.ru/vacancy/132058432?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy4: "https://ufa.hh.ru/vacancy/131979965?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
+        vacancy2: "https://ufa.hh.ru/vacancy/132288467?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy3: "https://ufa.hh.ru/vacancy/132287600?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy4: "https://ufa.hh.ru/vacancy/132317538?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
         vacancy5: "https://ufa.hh.ru/vacancy/132221506?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",        
-        vacancy6: "",
-        vacancy7: "",
-        vacancy8: "",
+        vacancy6: "https://ufa.hh.ru/vacancy/132274433?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy7: "https://ufa.hh.ru/vacancy/132274399?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy8: "https://ufa.hh.ru/vacancy/132334546?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy9: "",
         vacancy10: "",
         vacancy11: "",
@@ -70,21 +70,42 @@ export const Careers = () => {
                             <p>Благоварская 16/2</p>
                             <div className={Styles.team}>
                                 <Vacancy
-                                    header="Руководитель проектов"
+                                    header="Мастер цех"
                                     title="Опыт работы: 3–6 лет"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy2, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Специалист по охране труда"
-                                    title="Опыт работы: 1-3 года"
+                                    header="Начальник ОТК"
+                                    title="Опыт работы: 3–6 лет"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy3, "_blank")}
+                                />                                
+                                <Vacancy
+                                    header="Монтажник ТТ"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy6, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Юрист"
+                                    header="Электрогазосварщик ТТ"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy7, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Мастер сварочного участка"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy8, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Пескоструйщик-дробеструйщик"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"

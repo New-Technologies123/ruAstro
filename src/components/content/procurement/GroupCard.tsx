@@ -1,5 +1,5 @@
 import React from "react";
-import Styles from "./procurement.module.scss";
+import Styles from "./group-card.module.scss";
 
 type Item = {
   id: number;
@@ -30,18 +30,18 @@ export const GroupCard: React.FC<Props> = ({
 }) => {
   const showMultiple = group.items.length > 1;
 
+  const handleToggle = () => {
+    if (!isSearching && showMultiple) {
+      onToggle(group.note);
+    }
+  };
+
   return (
-    <div className={Styles.card}>
-      <div
-        className={Styles.cardHeader}
-        onClick={() =>
-          !isSearching && showMultiple && onToggle(group.note)
-        }
-        style={{
-          cursor: !isSearching && showMultiple ? "pointer" : "default"
-        }}
-      >
+    <div className={Styles.card} onClick={handleToggle}>
+      
+      <div className={Styles.cardHeader}>
         <h3>Лот: {group.note}</h3>
+
         {showMultiple && !isSearching && (
           <span>{isExpanded ? "▲" : "▼"}</span>
         )}
@@ -54,7 +54,9 @@ export const GroupCard: React.FC<Props> = ({
           return (
             <div key={item.id} className={Styles.groupItem}>
               <p><b>{item.name}</b></p>
-              <p>{item.quantity} {item.unit}</p>
+              <p>
+                {item.quantity} {item.unit}
+              </p>
             </div>
           );
         })}
@@ -62,7 +64,10 @@ export const GroupCard: React.FC<Props> = ({
 
       <button
         className={Styles.button}
-        onClick={() => onAddOffer(group)}
+        onClick={(e) => {
+          e.stopPropagation(); // 👈 ключевой момент
+          onAddOffer(group);
+        }}
       >
         Добавить предложение
       </button>

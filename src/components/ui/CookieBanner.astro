@@ -1,0 +1,139 @@
+---
+
+---
+
+<div id="cookie-banner">
+  <div class="cookie-content">
+    <div class="cookie-text">
+      🍪 Мы используем cookies для анализа посещаемости и улучшения сайта.
+    </div>
+    <div class="cookie-actions">
+      <button id="cookie-accept">Принять</button>
+    </div>
+  </div>
+</div>
+
+<style>
+#cookie-banner {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  width: calc(100% - 40px);
+  max-width: 600px;
+  background: rgba(30, 30, 30, 0.95);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  padding: 16px 20px;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.4s ease;
+}
+
+#cookie-banner.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.cookie-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cookie-text {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.cookie-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+#cookie-accept {
+  background: linear-gradient(135deg, #146bee, #234a9e);
+  border: none;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#cookie-accept:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 15px rgba(76,175,80,0.4);
+}
+
+#cookie-accept:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 480px) {
+  #cookie-banner {
+    bottom: 10px;
+    padding: 14px;
+  }
+
+  .cookie-text {
+    font-size: 13px;
+  }
+}
+</style>
+
+<script is:inline>
+function loadAnalytics() {
+  // Yandex Metrika
+  (function(m,e,t,r,i,k,a){
+    m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}
+    m[i].l=1*new Date()
+    k=e.createElement(t),a=e.getElementsByTagName(t)[0]
+    k.async=1
+    k.src=r
+    a.parentNode.insertBefore(k,a)
+  })(window, document,'script','https://mc.yandex.ru/metrika/tag.js','ym')
+
+  ym(105811197, 'init', {
+    ssr:true,
+    webvisor:true,
+    clickmap:true,
+    ecommerce:"dataLayer",
+    accurateTrackBounce:true,
+    trackLinks:true
+  })
+
+  // Google Tag Manager
+  (function(w,d,s,l,i){
+    w[l]=w[l]||[]
+    w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'})
+    var f=d.getElementsByTagName(s)[0],
+        j=d.createElement(s)
+    j.async=true
+    j.src='https://www.googletagmanager.com/gtm.js?id='+i
+    f.parentNode.insertBefore(j,f)
+  })(window,document,'script','dataLayer','GTM-KNWDPJD5')
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const banner = document.getElementById('cookie-banner')
+  const consent = localStorage.getItem('cookieConsent')
+
+  if (!consent) {
+    setTimeout(() => {
+      banner.classList.add('show')
+    }, 500)
+  } else if (consent === 'accepted') {
+    loadAnalytics()
+  }
+
+  document.getElementById('cookie-accept').addEventListener('click', () => {
+    localStorage.setItem('cookieConsent', 'accepted')
+    banner.classList.remove('show')
+    loadAnalytics()
+  })
+})
+</script>

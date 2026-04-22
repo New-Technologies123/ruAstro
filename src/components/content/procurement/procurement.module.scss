@@ -35,313 +35,66 @@
   padding-bottom: 25px;
 }
 
-/* 🧾 Карточка */
-.card {
-  background: #fff;
-  border-radius: 18px;
-  padding: 18px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
-  transition: 0.25s ease;
-  display: flex;
-  flex-direction: column;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
-  }
-}
-
-.cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-
-  h3 {
-    font-size: 15px;
-    font-weight: 600;
-  }
-
-  span {
-    font-size: 12px;
-    opacity: 0.6;
-  }
-}
-
-/* 📄 Элементы */
-.groupItems {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.groupItem {
-  background: #f9fafb;
-  padding: 10px 12px;
-  border-radius: 10px;
-  font-size: 14px;
-
-  p {
-    margin: 2px 0;
-  }
-}
-
-/* 🔘 Кнопка */
-.button {
-  margin-top: auto;
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: #0e3cd3;
-  color: #fff;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.2s;
-
-  &:hover {
-    background: #001dbe;
-  }
-}
-
-/* 🪟 Модалка */
-.modalBg {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+//кнопки переключений страниц
+.pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
-}
-
-.modal {
-  background: #fff;
-  padding: 24px;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 600px;
-  max-height: 90vh;
-  overflow-y: auto;
-  animation: fadeIn 0.25s ease;
-
-  h3 {
-    margin-bottom: 16px;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.groupItemsInModal {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
   gap: 8px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-/* 🧾 Форма */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-
-  input,
-  textarea {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    font-size: 14px;
-
-    &:focus {
-      outline: none;
-      border-color: #6366f1;
-    }
-  }
-
-  textarea {
-    resize: none;
-    min-height: 60px;
-  }
-}
-//кнопка удалить в форме
-.removeButton {
-  margin-top: 8px;
-  align-self: flex-end;
-
-  padding: 6px 10px;
-  font-size: 13px;
-
-  color: #fff;
-  background-color: #e53935;
-  border: none;
-  border-radius: 6px;
-
+/* общие кнопки */
+.pagination button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #111827;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-
-  &:hover {
-    background-color: #c62828;
-  }
-
-  &:active {
-    transform: scale(0.97);
-  }
+  user-select: none;
 }
 
-.offerFormBlock {
-  background: #f9fafb;
-  padding: 12px;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* 📎 Файл */
-.fileUpload {
-  font-size: 14px;
-
-  input {
-    margin-top: 6px;
-  }
-}
-
-.error {
-  color: #ef4444;
-  font-size: 12px;
-}
-
-/* 🔘 Кнопки формы */
-.buttons {
-  display: flex;
-  gap: 10px;
-
-  button {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    cursor: pointer;
-  }
-
-  button[type="submit"] {
-    background: #10b981;
-    color: #fff;
-
-    &:hover {
-      background: #059669;
-    }
-  }
-
-  button[type="button"] {
-    background: #e5e7eb;
-
-    &:hover {
-      background: #d1d5db;
-    }
-  }
-}
-
-/* 📊 Блок предложений */
-.offersBlock {
-  margin-top: 40px;
-
-  h2 {
-    margin-bottom: 20px;
-  }
-}
-
-.offerCard {
-  background: #fff;
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
-  transition: 0.2s;
-
-  &:hover {
-    transform: translateY(-2px);
-  }
-}
-
-.offerHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.offerActions {
-  display: flex;
-  gap: 8px;
-}
-
-.editButton {
-  background: #3b82f6;
+/* hover */
+.pagination button:hover:not(:disabled) {
+  background: #1b51c7;
   color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background: #2563eb;
-  }
+  border-color: 2px #031846;
+  transform: translateY(-1px);
 }
 
-.deleteButton {
-  background: #ef4444;
-  color: #fff;
-  border: none;
-  padding: 6px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background: #dc2626;
-  }
+/* disabled */
+.pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 
-.offerContent {
-  margin-top: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* активная страница */
+.activePage {
+  background: #186cda !important;
+  color: #fff !important;
+  border-color: 3px #021233 !important;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(17, 24, 39, 0.2);
 }
 
-.proposedItem {
-  background: #f3f4f6;
-  padding: 10px;
-  border-radius: 10px;
-}
-
-.addMoreButton {
-  margin-top: 6px;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px dashed #6366f1;
-  background: #eef2ff;
-  color: #4f46e5;
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.2s;
-
-  &:hover {
-    background: #e0e7ff;
-    border-style: solid;
+/* мобильная адаптация */
+@media (max-width: 600px) {
+  .pagination {
+    gap: 6px;
   }
 
-  &:active {
-    transform: scale(0.98);
+  .pagination button {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
+    border-radius: 8px;
   }
 }
 

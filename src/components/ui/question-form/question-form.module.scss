@@ -55,8 +55,8 @@
   position: fixed;
   bottom: 20px;
   right: 90px;
-  width: 320px;
-  background: rgba(255, 255, 255, 0.12);
+  width: 350px;
+  background: rgba(200, 226, 255, 0.781);
   backdrop-filter: blur(16px);
   border-radius: 20px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2),
@@ -225,6 +225,12 @@
   margin-top: 4px;
 }
 
+.checkboxText{
+  a{
+    margin: 0 3px;
+  }
+}
+
 /* ✨ Анимация появления окна */
 @keyframes slideUp {
   from { transform: translateY(20px) scale(0.95); opacity: 0; }
@@ -235,8 +241,8 @@
 @media (max-width: 500px) {
   .chatButton { bottom: 18px; right: 18px; width: 50px; height: 50px; }
   .chatWindow { width: 90%; right: 5%; }
-  .chatHeader { font-size: 14px; padding: 10px 12px; }
-  .questionForm { padding: 14px; gap: 10px; }
+  .chatHeader { font-size: 14px; padding: 10px 8px; }
+  .questionForm { padding: 14px; gap: 7px; }
   .questionForm input,
   .questionForm textarea { padding: 9px; font-size: 13px; }
 }

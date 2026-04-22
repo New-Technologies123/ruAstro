@@ -6,7 +6,7 @@ import InputMask from "react-input-mask";
 
 type Item = { id: number; name: string | null; quantity: number | string; unit: string; note: string | null };
 type Group = { note: string; items: Item[] };
-type Props = { group: Group; onClose: () => void };
+type Props = { group: Group; onClose: () => void;};
 
 export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
   const [form, setForm] = useState({
@@ -207,7 +207,12 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
                 onChange={e => handleFormChange("consent", e.target.checked)}
               />
               <span className={Styles.customCheckbox}></span>
-              Я даю согласие на обработку моих персональных данных, включая загрузку и обработку прилагаемых документов, в соответствии с Политикой конфиденциальности.
+              <span className={Styles.checkboxText}>
+                Я даю согласие на обработку моих персональных данных, включая загрузку и обработку прилагаемых документов, 
+                в соответствии с
+                <a href="/public/privacy/v_1.docx" target="_blank"> Политикой конфиденциальности </a>. 
+              </span>
+              
             </label>
             {errors.consent && <p className={Styles.error}>{errors.consent}</p>}
           </div>

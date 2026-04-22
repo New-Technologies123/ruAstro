@@ -23,14 +23,31 @@ export const Procurement = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [search, setSearch] = useState("");
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
-  
+
   // модалка
   const [showModal, setShowModal] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
+  // пагинация
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 16; //количестово карточек на страничке
+
   useEffect(() => {
     loadExcel();
   }, []);
+
+  // сброс страницы при поиске
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search]);
+
+  // плавный скролл вверх при смене страницы
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  }, [currentPage]);
 
   const loadExcel = async () => {
     const response = await fetch("/procurement.xlsx");
@@ -68,8 +85,18 @@ export const Procurement = () => {
     )
   );
 
+  const totalPages = Math.ceil(filteredGroups.length / itemsPerPage);
+
+  const paginatedGroups = filteredGroups.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   const toggleGroup = (note: string) => {
-    setExpandedGroups(prev => ({ ...prev, [note]: !prev[note] }));
+    setExpandedGroups(prev => ({
+      ...prev,
+      [note]: !prev[note]
+    }));
   };
 
   const handleSubmit = async (formData: FormData) => {
@@ -107,8 +134,10 @@ export const Procurement = () => {
       />
 
       <div className={Styles.itemsGrid}>
-        {filteredGroups.map(group => {
-          const isExpanded = isSearching ? true : expandedGroups[group.note] || false;
+        {paginatedGroups.map(group => {
+          const isExpanded = isSearching
+            ? true
+            : expandedGroups[group.note] || false;
 
           return (
             <GroupCard
@@ -126,12 +155,40 @@ export const Procurement = () => {
         })}
       </div>
 
+      {/* пагинация */}
+      {totalPages > 1 && (
+        <div className={Styles.pagination}>
+          <button
+            onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+            disabled={currentPage === 1}
+          >
+            Назад
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+            <button
+              key={page}
+              onClick={() => setCurrentPage(page)}
+              className={currentPage === page ? Styles.activePage : ""}
+            >
+              {page}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+            disabled={currentPage === totalPages}
+          >
+            Вперёд
+          </button>
+        </div>
+      )}
+
       {showModal && selectedGroup && (
         <OfferModal
           group={selectedGroup}
           onClose={() => setShowModal(false)}
           // onSubmit={handleSubmit}
-          // onDownload={() => exportGroupToExcel(selectedGroup)}
         />
       )}
 
