@@ -92,7 +92,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         <span className={Styles.checkboxText}>
           Я даю согласие на обработку моих персональных данных 
           в целях рассмотрения моего обращения. С 
-          <a href="/public/privacy/v_1.docx" target="_blank">политикой конфиденциальности</a> 
+          <a href="/privacy" target="_blank">Политикой конфиденциальности</a> 
           ознакомлен(а).
         </span>
       </label>

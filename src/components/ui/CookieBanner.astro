@@ -30,11 +30,13 @@
   z-index: 9999;
   opacity: 0;
   transition: all 0.4s ease;
+  pointer-events: none;
 }
 
 #cookie-banner.show {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
+  pointer-events: auto;
 }
 
 .cookie-content {
@@ -86,54 +88,55 @@
 </style>
 
 <script is:inline>
-function loadAnalytics() {
-  // Yandex Metrika
-  (function(m,e,t,r,i,k,a){
-    m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}
-    m[i].l=1*new Date()
-    k=e.createElement(t),a=e.getElementsByTagName(t)[0]
-    k.async=1
-    k.src=r
-    a.parentNode.insertBefore(k,a)
-  })(window, document,'script','https://mc.yandex.ru/metrika/tag.js','ym')
+  function loadAnalytics() {
+    (function(m,e,t,r,i,k,a){
+      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}
+      m[i].l=1*new Date()
+      k=e.createElement(t),a=e.getElementsByTagName(t)[0]
+      k.async=1
+      k.src=r
+      a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js','ym')
 
-  ym(105811197, 'init', {
-    ssr:true,
-    webvisor:true,
-    clickmap:true,
-    ecommerce:"dataLayer",
-    accurateTrackBounce:true,
-    trackLinks:true
-  })
+    ym(105811197, 'init', {
+      ssr:true,
+      webvisor:true,
+      clickmap:true,
+      ecommerce:"dataLayer",
+      accurateTrackBounce:true,
+      trackLinks:true
+    })
 
-  // Google Tag Manager
-  (function(w,d,s,l,i){
-    w[l]=w[l]||[]
-    w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'})
-    var f=d.getElementsByTagName(s)[0],
-        j=d.createElement(s)
-    j.async=true
-    j.src='https://www.googletagmanager.com/gtm.js?id='+i
-    f.parentNode.insertBefore(j,f)
-  })(window,document,'script','dataLayer','GTM-KNWDPJD5')
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const banner = document.getElementById('cookie-banner')
-  const consent = localStorage.getItem('cookieConsent')
-
-  if (!consent) {
-    setTimeout(() => {
-      banner.classList.add('show')
-    }, 500)
-  } else if (consent === 'accepted') {
-    loadAnalytics()
+    (function(w,d,s,l,i){
+      w[l]=w[l]||[]
+      w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'})
+      var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s)
+      j.async=true
+      j.src='https://www.googletagmanager.com/gtm.js?id='+i
+      f.parentNode.insertBefore(j,f)
+    })(window,document,'script','dataLayer','GTM-KNWDPJD5')
   }
 
-  document.getElementById('cookie-accept').addEventListener('click', () => {
-    localStorage.setItem('cookieConsent', 'accepted')
-    banner.classList.remove('show')
-    loadAnalytics()
+  document.addEventListener('DOMContentLoaded', () => {
+    const banner = document.getElementById('cookie-banner')
+    const btn = document.getElementById('cookie-accept')
+    const consent = localStorage.getItem('cookieConsent')
+
+    // 👉 если уже принял — сразу грузим аналитику
+    if (consent === 'accepted') {
+      loadAnalytics()
+      return
+    }
+
+    // 👉 показываем баннер всегда, пока нет согласия
+    banner.classList.add('show')
+
+    // 👉 только кнопка даёт согласие
+    btn.addEventListener('click', () => {
+      localStorage.setItem('cookieConsent', 'accepted')
+      banner.classList.remove('show')
+      loadAnalytics()
+    })
   })
-})
 </script>

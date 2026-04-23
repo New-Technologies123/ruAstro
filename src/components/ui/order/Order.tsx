@@ -213,7 +213,7 @@ export const Order = ({ onBack }: OrderProps) => {
                     <span className={Styles.customCheckbox}></span>
                     <span>
                       Я согласен на обработку персональных данных и принимаю
-                      <a href="/public/privacy/v_1.docx" target="_blank"> Политику конфиденциальности </a> 
+                      <a href="/privacy" target="_blank"> Политику конфиденциальности </a> 
                     </span>
                     
                   </label>

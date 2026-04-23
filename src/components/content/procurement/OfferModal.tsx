@@ -210,7 +210,7 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
               <span className={Styles.checkboxText}>
                 Я даю согласие на обработку моих персональных данных, включая загрузку и обработку прилагаемых документов, 
                 в соответствии с
-                <a href="/public/privacy/v_1.docx" target="_blank"> Политикой конфиденциальности </a>. 
+                <a href="/privacy" target="_blank"> Политикой конфиденциальности </a>. 
               </span>
               
             </label>
