@@ -10,6 +10,7 @@ import news_9 from '../../../images/news/news_9.webp';
 import news_10 from '../../../images/news/news_10.webp';
 import news_11 from '../../../images/news/news_11.webp';
 import news_12 from '../../../images/news/news_12.webp';
+import news_13 from '../../../images/news/news_13.webp';
 import Styles from './news.module.scss';
 import { Gallery } from '../../ui/gallery/Gallery';
 import { useState, useEffect } from 'react';
@@ -39,14 +40,39 @@ export const News = () => {
       <div className={`${isLoaded ? Styles.loaded : ''}`}>
         <div className={Styles.newsContent}>
           <div className={Styles.newsItem}>
-            <img src={news_12.src} className={Styles.thumbnail} onClick={() => { setPhotoFourIsOpen(true); }} />
+            <Gallery
+              photos={[
+                { id: 1, src: news_12.src, alt: '' },
+                { id: 2, src: news_13.src, alt: '' },
+              ]}
+            />
+            <div>
               <p>
-                Инженерно-производственное предприятие „Новые Технологии“ с радостью сообщает о своем участии в выставке 
-                Egypt Energy Show (EGYPES) 2026!
-                Приглашаем посетить наш стенд 1D64 – New Technologies с 30 марта по 1 апреля.
-                Мы будем рады представить наши передовые технологии и обсудить возможные направления сотрудничества.
-                До встречи на EGYPES!
+                Рады сообщить, что ООО ИПП "Новые Технологии“ успешно приняла участие в выставке Egypt Energy Show (EGYPES) 2026, состоявшейся Каире.
               </p>
+              <p>
+                За время работы выставки наша команда:
+              </p>
+              <p>
+                Представила новейшие инжиниринговые и производственные решения для энергетического сектора
+              </p>
+              <p>
+                Провела продуктивные переговоры с профессионалами отрасли и потенциальными партнёрами
+              </p>
+              <p>
+                Укрепила существующие деловые связи и установила новые стратегические контакты
+              </p>
+              <p>
+                Получила положительные отзывы о нашем инновационном подходе и технологических возможностях
+              </p>
+              <p>
+                Мы благодарим организаторов EGYPES за мероприятие высокого уровня и всех участников, посетивших наш стенд. 
+                Ваш интерес к нашим решениям подтверждает, что мы движемся в правильном направлении.
+              </p>
+              <p>
+                Мы с нетерпением ждём новых проектов и продолжения сотрудничества в рамках мировой энергетической отрасли!
+              </p>
+            </div>              
           </div>
           <div className={Styles.newsItem}>
             <img src={news_11.src} className={Styles.thumbnail} onClick={() => { setPhotoThreeIsOpen(true); }} />

@@ -9,7 +9,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 7;
+  z-index: 12;
   animation: fadeIn 0.3s ease-out;
 }
 
@@ -23,8 +23,8 @@
 }
 
 .fullImage {
-  max-width: 95vw;
-  max-height: 95vh;
+  max-width: 99vw;
+  max-height: 99vh;
   object-fit: contain;
   cursor: zoom-out;
   user-select: none;
