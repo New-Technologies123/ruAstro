@@ -5,7 +5,8 @@ import { Title } from '../../ui/title/Title';
 import { useEffect } from 'react';
 
 type TCareers = 'vacancy1' | 'vacancy2' | 'vacancy3' | 'vacancy4' | 'vacancy5' | 'vacancy6' 
- | 'vacancy7' | 'vacancy8' | 'vacancy9' | 'vacancy10' | 'vacancy11' | 'vacancy12' | 'vacancy13' | 'vacancy14';
+ | 'vacancy7' | 'vacancy8' | 'vacancy9' | 'vacancy10' | 'vacancy11' | 'vacancy12' | 'vacancy13' 
+ | 'vacancy14' | 'vacancy15' ;
 
 export const Careers = () => {
 
@@ -22,8 +23,9 @@ export const Careers = () => {
         vacancy10: "https://ufa.hh.ru/vacancy/132560445?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy11: "https://ufa.hh.ru/vacancy/132716963?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy12: "https://ufa.hh.ru/vacancy/132560457?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy13: "https://ufa.hh.ru/vacancy/132605870?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy13: "https://ufa.hh.ru/vacancy/133031609?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy14: "https://ufa.hh.ru/vacancy/132605772?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy15: "https://ufa.hh.ru/vacancy/133090639?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
     };
 
     const [typeLayoutBackOpen, setTypeLayoutBackOpen] = useState<TCareers | null>(null);
@@ -91,6 +93,13 @@ export const Careers = () => {
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy6, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Механик"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy15, "_blank")}
                                 />
                                 <Vacancy
                                     header="Электрогазосварщик ТТ"
