@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import InputMask from 'react-input-mask';
 import Styles from './question-form.module.scss';
 
@@ -9,19 +9,12 @@ interface QuestionFormProps {
     phone: string;
     message: string;
     agreement: boolean;
+    privacyAgreement: boolean;
   };
   agreementError: boolean;
   onChange: (field: string, value: string | boolean) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
-
-// const phoneMasks: Record<string, string> = {
-//   RU: '+7 (999) 999-99-99',
-//   // US: '+1 (999) 999-9999',
-//   // NL: '+31 99 999 9999',
-//   // DE: '+49 9999 999999',
-//   // FR: '+33 9 99 99 99 99',
-// };
 
 export const QuestionForm: React.FC<QuestionFormProps> = ({
   formData,
@@ -29,19 +22,38 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   onChange,
   onSubmit,
 }) => {
-  const [mask, setMask] = useState('+7 (999) 999-9999');
+  const [mask] = React.useState('+7 (999) 999-9999');
+  const [errors, setErrors] = React.useState({
+    agreement: false,
+    privacyAgreement: false
+  });
 
-  useEffect(() => {
-    const locale = navigator.language || 'ru-RU';
-    const country = locale.split('-')[7] || 'RU';
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    const newErrors = {
+      agreement: !formData.agreement,
+      privacyAgreement: !formData.privacyAgreement
+    };
+    
+    setErrors(newErrors);
+    
+    if (newErrors.agreement || newErrors.privacyAgreement) {
+      return;
+    }
+    
+    onSubmit(e);
+  };
 
-    // if (phoneMasks[country]) {
-    //   setMask(phoneMasks[country]);
-    // }
-  }, []);
+  const handleCheckboxChange = (field: string, checked: boolean) => {
+    onChange(field, checked);
+    if (checked) {
+      setErrors(prev => ({ ...prev, [field]: false }));
+    }
+  };
 
   return (
-    <form className={Styles.questionForm} onSubmit={onSubmit}>
+    <form className={Styles.questionForm} onSubmit={handleSubmit}>
       <input
         type="text"
         placeholder="Ваше имя"
@@ -75,31 +87,57 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         rows={4}
         required
       />
+      
+      <div>
+        {/* Первый чекбокс - согласие на обработку данных */}
+        <div className={Styles.checkboxWrapper}>
+          <label className={`${Styles.checkbox} ${errors.agreement ? Styles.error : ''}`}>
+            <input
+              type="checkbox"
+              checked={formData.agreement}
+              onChange={e => handleCheckboxChange('agreement', e.target.checked)}
+            />
+            <span className={Styles.customCheckbox}></span>
+            <span className={Styles.checkboxText}>
+              Я даю согласие на
+              <a href="/file/personal_data_v1.pdf" target="_blank">
+                 обработку моих персональных данных
+              </a> 
+              в целях рассмотрения моего обращения.
+            </span>
+          </label>
+          {errors.agreement && (
+            <div className={Styles.errorText}>
+              ⚠️ Необходимо дать согласие на обработку персональных данных
+            </div>
+          )}
+        </div>
 
-      <label
-        className={`${Styles.checkbox} ${
-          agreementError ? Styles.error : ''
-        }`}
-      >
-        <input
-          type="checkbox"
-          checked={formData.agreement}
-          onChange={e => onChange('agreement', e.target.checked)}
-        />
+        {/* Второй чекбокс - согласие с политикой конфиденциальности */}
+        <div className={Styles.checkboxWrapper}>
+          <label className={`${Styles.checkbox} ${errors.privacyAgreement ? Styles.error : ''}`}>
+            <input
+              type="checkbox"
+              checked={formData.privacyAgreement}
+              onChange={e => handleCheckboxChange('privacyAgreement', e.target.checked)}
+            />
+            <span className={Styles.customCheckbox}></span>
+            <span className={Styles.checkboxText}>
+              С <a href="/file/privacy_v1.pdf" target="_blank">политикой конфиденциальности</a> 
+              ознакомлен(а).
+            </span>
+          </label>
+          {errors.privacyAgreement && (
+            <div className={Styles.errorText}>
+              ⚠️ Необходимо подтвердить ознакомление с политикой конфиденциальности
+            </div>
+          )}
+        </div>
+      </div>
 
-        <span className={Styles.customCheckbox}></span>
-
-        <span className={Styles.checkboxText}>
-          Я даю согласие на обработку моих персональных данных 
-          в целях рассмотрения моего обращения. С 
-          <a href="/privacy" target="_blank">Политикой конфиденциальности</a> 
-          ознакомлен(а).
-        </span>
-      </label>
-
-      {agreementError && (
-        <div className={Styles.errorText}>
-          Пожалуйста, подтвердите согласие
+      {agreementError && (errors.agreement || errors.privacyAgreement) && (
+        <div className={Styles.errorTextGeneral}>
+          Пожалуйста, отметьте все необходимые согласия
         </div>
       )}
 

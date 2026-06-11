@@ -13,7 +13,8 @@ type Errors = {
   company?: string;
   email?: string;
   phone?: string;
-  agree?: string;
+  consent?: string;        // согласие на обработку ПД
+  offerAgreement?: string; // согласие с офертой и возвратом
 };
 
 export const Order = ({ onBack }: OrderProps) => {
@@ -24,12 +25,14 @@ export const Order = ({ onBack }: OrderProps) => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [comment, setComment] = useState('');
-  const [agree, setAgree] = useState(false);
+  const [consent, setConsent] = useState(false);           // согласие на обработку ПД
+  const [offerAgreement, setOfferAgreement] = useState(false); // согласие с офертой и возвратом
 
   const [errors, setErrors] = useState<Errors>({});
   const [successMessage, setSuccessMessage] = useState('');
 
-  const checkboxRef = useRef<HTMLDivElement | null>(null);
+  const consentRef = useRef<HTMLDivElement | null>(null);
+  const offerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => setCart(getCart()), []);
 
@@ -67,18 +70,32 @@ export const Order = ({ onBack }: OrderProps) => {
       company: validateField('company', company),
       email: validateField('email', email),
       phone: validateField('phone', phone),
-      agree: agree ? undefined : 'Необходимо подтвердить согласие на обработку данных',
+      consent: consent ? undefined : 'Необходимо дать согласие на обработку персональных данных',
+      offerAgreement: offerAgreement ? undefined : 'Необходимо подтвердить ознакомление с офертой и условиями возврата',
     };
 
     setErrors(newErrors);
 
-    if (newErrors.agree && checkboxRef.current) {
-      checkboxRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    // Скролл к первому неподтвержденному чекбоксу
+    if (newErrors.consent && consentRef.current) {
+      consentRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else if (newErrors.offerAgreement && offerRef.current) {
+      offerRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
     if (Object.values(newErrors).some(Boolean)) return;
 
-    const orderData = { name, position, company, email, phone, comment, cart };
+    const orderData = { 
+      name, 
+      position, 
+      company, 
+      email, 
+      phone, 
+      comment, 
+      cart,
+      consent,
+      offerAgreement 
+    };
 
     try {
       const res = await fetch('/sendOrder.php', {
@@ -99,7 +116,8 @@ export const Order = ({ onBack }: OrderProps) => {
         setEmail('');
         setPhone('');
         setComment('');
-        setAgree(false);
+        setConsent(false);
+        setOfferAgreement(false);
         setErrors({});
       } else {
         alert('Ошибка при отправке: ' + (result.error || 'Неизвестная ошибка'));
@@ -179,7 +197,7 @@ export const Order = ({ onBack }: OrderProps) => {
                     />
                     <label className={f.value ? Styles.filled : ''}>{f.label}</label>
                     {errors[f.errorKey] && (
-                      <span className={Styles.g}>{errors[f.errorKey]}</span>
+                      <span className={Styles.error}>{errors[f.errorKey]}</span>
                     )}
                   </div>
                 ))}
@@ -193,34 +211,72 @@ export const Order = ({ onBack }: OrderProps) => {
                   />
                 </div>
 
-                {/* Чекбокс */}
-                <div
-                  ref={checkboxRef}
-                  className={`${Styles.checkboxContainer} ${errors.agree ? Styles.errorState : ''}`}
-                >
-                  <label className={Styles.checkboxLabel}>
-                    <input
-                      type="checkbox"
-                      checked={agree}
-                      onChange={(e) => {
-                        setAgree(e.target.checked);
-                        setErrors(prev => ({
-                          ...prev,
-                          agree: e.target.checked ? undefined : 'Необходимо согласие'
-                        }));
-                      }}
-                    />
-                    <span className={Styles.customCheckbox}></span>
-                    <span>
-                      Я согласен на обработку персональных данных и принимаю
-                      <a href="/privacy" target="_blank"> Политику конфиденциальности </a> 
-                    </span>
-                    
-                  </label>
-                  {errors.agree && (
-                    <p className={Styles.error}>{errors.agree}</p>
-                  )}
+                <div>
+                  {/* Первый чекбокс - согласие на обработку ПД */}
+                  <div
+                    ref={consentRef}
+                    className={`${Styles.checkboxContainer} ${errors.consent ? Styles.errorState : ''}`}
+                  >
+                    <label className={Styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={consent}
+                        onChange={(e) => {
+                          setConsent(e.target.checked);
+                          setErrors(prev => ({
+                            ...prev,
+                            consent: e.target.checked ? undefined : 'Необходимо дать согласие'
+                          }));
+                        }}
+                      />
+                      <span className={Styles.customCheckbox}></span>
+                      <span className={Styles.checkboxText}>
+                        Я даю согласие на{' '}
+                        <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">
+                          обработку моих персональных данных
+                        </a>
+                      </span>
+                    </label>
+                    {errors.consent && (
+                      <p className={Styles.errorText}>{errors.consent}</p>
+                    )}
+                  </div>
+
+                  {/* Второй чекбокс - согласие с офертой и условиями возврата */}
+                  <div
+                    ref={offerRef}
+                    className={`${Styles.checkboxContainer} ${errors.offerAgreement ? Styles.errorState : ''}`}
+                  >
+                    <label className={Styles.checkboxLabel}>
+                      <input
+                        type="checkbox"
+                        checked={offerAgreement}
+                        onChange={(e) => {
+                          setOfferAgreement(e.target.checked);
+                          setErrors(prev => ({
+                            ...prev,
+                            offerAgreement: e.target.checked ? undefined : 'Необходимо подтвердить ознакомление'
+                          }));
+                        }}
+                      />
+                      <span className={Styles.customCheckbox}></span>
+                      <span className={Styles.checkboxText}>
+                        Я ознакомлен(а) и согласен(на) с{' '}
+                        <a href="/file/offer_v1.pdf" target="_blank" rel="noopener noreferrer">
+                          договором оферты
+                        </a>
+                        {' и '}
+                        <a href="/file/return_v1.pdf" target="_blank" rel="noopener noreferrer">
+                          условиями возврата товара
+                        </a>
+                      </span>
+                    </label>
+                    {errors.offerAgreement && (
+                      <p className={Styles.errorText}>{errors.offerAgreement}</p>
+                    )}
+                  </div>
                 </div>
+                
 
                 <motion.button
                   type="submit"

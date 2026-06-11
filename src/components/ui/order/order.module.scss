@@ -276,6 +276,14 @@ $glass-shadow: 0 12px 24px rgba(0, 26, 255, 0.582);
   font-weight: 700;
 }
 
+.errorText {
+  color: #dc3545;
+  font-size: 12px;
+  margin-top: 8px;
+  margin-left: 32px;
+  font-weight: 500;
+}
+
 /* красная рамка при ошибке */
 .errorState .customCheckbox {
   border-color: #ff0606;
@@ -290,6 +298,7 @@ $glass-shadow: 0 12px 24px rgba(0, 26, 255, 0.582);
   75% { transform: translateX(-3px); }
   100% { transform: translateX(0); }
 }
+
 
 @media (max-width: 900px){
   .orderPage{

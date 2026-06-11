@@ -13,7 +13,8 @@ export const QuestionFormWrapper: React.FC = () => {
     email: '',
     phone: '',
     message: '',
-    agreement: false,
+    agreement: false,        // согласие на обработку данных
+    privacyAgreement: false, // согласие с политикой конфиденциальности
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -43,15 +44,23 @@ export const QuestionFormWrapper: React.FC = () => {
   const handleChange = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
 
-    if (field === 'agreement' && value === true) {
-      setAgreementError(false);
+    // Сбрасываем ошибку если оба чекбокса отмечены
+    if ((field === 'agreement' || field === 'privacyAgreement') && value === true) {
+      // Проверяем оба чекбокса после изменения
+      const newAgreement = field === 'agreement' ? value : formData.agreement;
+      const newPrivacyAgreement = field === 'privacyAgreement' ? value : formData.privacyAgreement;
+      
+      if (newAgreement && newPrivacyAgreement) {
+        setAgreementError(false);
+      }
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.agreement) {
+    // Проверяем оба чекбокса
+    if (!formData.agreement || !formData.privacyAgreement) {
       setAgreementError(true);
       return;
     }
@@ -73,8 +82,15 @@ export const QuestionFormWrapper: React.FC = () => {
           phone: '',
           message: '',
           agreement: false,
+          privacyAgreement: false,
         });
         setTimeout(() => setSubmitted(false), 3000);
+        
+        // Закрываем окно через 1 секунду после успешной отправки
+        setTimeout(() => {
+          setIsOpen(false);
+          localStorage.setItem(STORAGE_KEY, Date.now().toString());
+        }, 1000);
       } else {
         alert('Ошибка отправки: ' + result.error);
       }
@@ -113,7 +129,7 @@ export const QuestionFormWrapper: React.FC = () => {
 
           {submitted && (
             <div className={Styles.successMessage}>
-              ✅ Запрос принят!
+              ✅ Запрос принят! Мы свяжемся с вами в ближайшее время.
             </div>
           )}
         </div>

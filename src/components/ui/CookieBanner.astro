@@ -1,11 +1,13 @@
----
-
----
-
 <div id="cookie-banner">
   <div class="cookie-content">
     <div class="cookie-text">
-      🍪 Мы используем cookies для анализа посещаемости и улучшения сайта.
+      <div class="cookie-icon">🍪</div>
+      <div class="cookie-message">
+        <strong>Мы ценим вашу конфиденциальность</strong>
+        <p>Этот сайт использует cookies для улучшения работы, анализа трафика и персонализации. 
+          Продолжая использовать сайт, вы соглашаетесь с нашей 
+          <a href="/file/cookie_v1.pdf" target="_blank" class="cookie-link">политикой использования cookies</a>.</p>
+      </div>
     </div>
     <div class="cookie-actions">
       <button id="cookie-accept">Принять</button>
@@ -21,16 +23,17 @@
   transform: translateX(-50%) translateY(100%);
   width: calc(100% - 40px);
   max-width: 600px;
-  background: rgba(30, 30, 30, 0.95);
+  background: rgba(30, 30, 30, 0.98);
   backdrop-filter: blur(10px);
   color: #fff;
-  padding: 16px 20px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  padding: 20px 24px;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
   z-index: 9999;
   opacity: 0;
   transition: all 0.4s ease;
   pointer-events: none;
+  border: 1px solid rgba(255,255,255,0.1);
 }
 
 #cookie-banner.show {
@@ -42,12 +45,51 @@
 .cookie-content {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 .cookie-text {
-  font-size: 14px;
-  line-height: 1.4;
+  display: flex;
+  gap: 12px;
+  line-height: 1.5;
+}
+
+.cookie-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.cookie-message {
+  flex: 1;
+}
+
+.cookie-message strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 6px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.cookie-message p {
+  font-size: 13px;
+  color: #e0e0e0;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.cookie-link {
+  color: #4caf50;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(76, 175, 80, 0.4);
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.cookie-link:hover {
+  color: #66bb6a;
+  border-bottom-color: #66bb6a;
 }
 
 .cookie-actions {
@@ -56,87 +98,62 @@
 }
 
 #cookie-accept {
-  background: linear-gradient(135deg, #146bee, #234a9e);
+  background: linear-gradient(135deg, #4caf50, #45a049);
   border: none;
   color: white;
-  padding: 10px 16px;
-  border-radius: 10px;
+  padding: 10px 24px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 14px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
 }
 
 #cookie-accept:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 15px rgba(76,175,80,0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+  background: linear-gradient(135deg, #5cb860, #4caf50);
 }
 
 #cookie-accept:active {
-  transform: scale(0.97);
+  transform: translateY(0);
 }
 
 @media (max-width: 480px) {
   #cookie-banner {
     bottom: 10px;
-    padding: 14px;
+    padding: 16px;
+    width: calc(100% - 20px);
+    border-radius: 16px;
   }
 
   .cookie-text {
+    gap: 10px;
+  }
+
+  .cookie-icon {
+    font-size: 28px;
+  }
+
+  .cookie-message strong {
+    font-size: 14px;
+    margin-bottom: 4px;
+  }
+
+  .cookie-message p {
+    font-size: 12px;
+  }
+  
+  .cookie-link {
+    font-size: 12px;
+  }
+  
+  #cookie-accept {
+    padding: 8px 20px;
     font-size: 13px;
+    width: 100%;
   }
 }
 </style>
-
-<script is:inline>
-  function loadAnalytics() {
-    (function(m,e,t,r,i,k,a){
-      m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)}
-      m[i].l=1*new Date()
-      k=e.createElement(t),a=e.getElementsByTagName(t)[0]
-      k.async=1
-      k.src=r
-      a.parentNode.insertBefore(k,a)
-    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js','ym')
-
-    ym(105811197, 'init', {
-      ssr:true,
-      webvisor:true,
-      clickmap:true,
-      ecommerce:"dataLayer",
-      accurateTrackBounce:true,
-      trackLinks:true
-    })
-
-    (function(w,d,s,l,i){
-      w[l]=w[l]||[]
-      w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'})
-      var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s)
-      j.async=true
-      j.src='https://www.googletagmanager.com/gtm.js?id='+i
-      f.parentNode.insertBefore(j,f)
-    })(window,document,'script','dataLayer','GTM-KNWDPJD5')
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const banner = document.getElementById('cookie-banner')
-    const btn = document.getElementById('cookie-accept')
-    const consent = localStorage.getItem('cookieConsent')
-
-    // 👉 если уже принял — сразу грузим аналитику
-    if (consent === 'accepted') {
-      loadAnalytics()
-      return
-    }
-
-    // 👉 показываем баннер всегда, пока нет согласия
-    banner.classList.add('show')
-
-    // 👉 только кнопка даёт согласие
-    btn.addEventListener('click', () => {
-      localStorage.setItem('cookieConsent', 'accepted')
-      banner.classList.remove('show')
-      loadAnalytics()
-    })
-  })
-</script>

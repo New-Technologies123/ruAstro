@@ -1,0 +1,162 @@
+.productsContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.productsWrapper, .servicesWrapper, .shopWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  // padding: 20px;
+}
+
+.cardsTrack {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+/* Скрываем кнопки на десктопе */
+.mobileNav {
+  display: none;
+}
+
+/* Мобильные стили */
+@media (max-width: 720px) {
+  .productsContainer {
+    display: block;
+  }
+
+  .productsWrapper {
+    padding: 0;
+    overflow: visible;
+    position: relative;
+  }
+
+  .cardsTrack {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding: 20px 60px 30px;
+    width: 100%;
+    
+    /* Скрываем скроллбар */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .cardsTrack::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Каждая карточка занимает 100% ширины окна */
+  .cardsTrack > div {
+    flex: 0 0 100%;
+    scroll-snap-align: center;
+    min-width: 0;
+    max-width: none;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Переопределяем стили карточки для мобильной версии */
+  .cardsTrack > div > div {
+    width: 100% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+  }
+
+  /* Показываем кнопки на мобильных */
+  .mobileNav {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    pointer-events: none;
+    padding: 0;
+    z-index: 1;
+  }
+
+  .prevBtn,
+  .nextBtn {
+    pointer-events: auto;
+    width: 48px;
+    height: 48px;
+    border: none;
+    border-radius: 50%;
+    background: #045d99;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    // z-index: 10;
+    position: relative;
+  }
+
+  .prevBtn {
+    left: 10px;
+  }
+
+  .nextBtn {
+    right: 10px;
+  }
+
+  .prevBtn:hover,
+  .nextBtn:hover {
+    background: #034877;
+    transform: scale(1.05);
+  }
+
+  .prevBtn:active,
+  .nextBtn:active {
+    transform: scale(0.95);
+  }
+}
+
+/* Для планшетов */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .cardsTrack {
+    gap: 20px;
+  }
+}
+
+/* Для очень маленьких экранов */
+@media (max-width: 480px) {
+  .cardsTrack {
+    padding: 20px 50px 30px;
+  }
+
+  .prevBtn,
+  .nextBtn {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .prevBtn {
+    left: 5px;
+  }
+
+  .nextBtn {
+    right: 5px;
+  }
+}

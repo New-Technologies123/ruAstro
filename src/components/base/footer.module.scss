@@ -43,33 +43,6 @@
   }
 }
 
-.socialText {
-  font-size: 16px;
-  margin-bottom: 8px;
-  margin-top: 10px;
-}
-
-.socialIcons {
-  display: flex;
-  gap: 15px;
-  font-size: 20px;
-
-  a {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #383838c4;
-    transition: all 0.3s;
-
-    &:hover {
-      background: #00aaff;
-      color: #fff;
-    }
-  }
-}
 
 .contactInfo {
   display: flex;
@@ -150,6 +123,71 @@
   }
 }
 
+.leftSection {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+// Блок с файлами
+.filesBlock {
+  margin-top: 20px;
+  
+  ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    
+    li {
+      position: relative;
+      
+      a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: #b3b3b3;
+        text-decoration: none;
+        font-size: 13px;
+        transition: all 0.3s ease;
+        position: relative;
+        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        
+        // Иконки через псевдоэлементы
+        &::before {
+          content: '📄';
+          font-size: 14px;
+          transition: transform 0.3s ease;
+        }
+        
+        &:hover {
+          color: #ffffff;
+          background: rgba(0, 170, 255, 0.1);
+          border-color: rgba(0, 170, 255, 0.3);
+          transform: translateY(-2px);
+          
+          &::before {
+            transform: translateY(-2px);
+          }
+        }
+        
+        &:active {
+          transform: translateY(0);
+        }
+      }
+      
+      Разные иконки для разных документов
+      &:nth-child(1) a::before { content: '📋'; }
+      &:nth-child(2) a::before { content: '🔒'; }
+      &:nth-child(3) a::before { content: '📝'; }
+      &:nth-child(4) a::before { content: '🔄'; }
+    }
+  }
+}
+
 @media (max-width: 1400px){
   .logoContainer{
     img{
@@ -185,9 +223,9 @@
 }
 
 @media (max-width: 1100px){
-  .footer{
-    margin-top: 65px;
-  }
+  // .footer{
+  //   margin-top: 65px;
+  // }
   .container{
     padding: 25px 45px;
   }
@@ -197,9 +235,6 @@
     p{
       font-size: 12px;
     }
-  }
-  .socialText{
-    font-size: 14px;
   }
 }
 
@@ -254,6 +289,37 @@
       font-size: 12px;
     }
   }
+
+  .filesBlock {
+    margin-top: 15px;
+    
+    ul {
+      gap: 10px;
+      flex-direction: column;
+      align-items: stretch;
+      
+      li {
+        width: 100%;
+        
+        a {
+          width: 100%;
+          justify-content: flex-start;
+          padding: 10px 14px;
+          font-size: 13px;
+          border-radius: 12px;
+          
+          &::before {
+            font-size: 16px;
+          }
+          
+          &:hover {
+            transform: translateX(5px);
+            background: rgba(0, 170, 255, 0.15);
+          }
+        }
+      }
+    }
+  }
 }
 
 @media (max-width: 600px){
@@ -266,9 +332,9 @@
 }
 
 @media (max-width: 500px){
-  .footer{
-    margin-top: 45px;
-  }
+  // .footer{
+  //   margin-top: 45px;
+  // }
   .container{
     padding: 0 25px;
     gap: 25px;

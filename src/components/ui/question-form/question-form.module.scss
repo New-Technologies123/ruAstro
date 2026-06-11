@@ -231,6 +231,110 @@
   }
 }
 
+.checkboxWrapper {
+  margin-bottom: 8px;
+}
+
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.2s ease;
+}
+
+.checkbox input {
+  display: none;
+}
+
+.customCheckbox {
+  min-width: 18px;
+  height: 18px;
+  border: 2px solid #136fdf;
+  border-radius: 6px;
+  position: relative;
+  transition: 0.2s;
+  margin-top: 2px;
+}
+
+.checkbox input:checked + .customCheckbox {
+  background: linear-gradient(135deg, #021f80, #3b82f6);
+  border-color: transparent;
+}
+
+.customCheckbox::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+}
+
+.checkbox input:checked + .customCheckbox::after {
+  opacity: 1;
+}
+
+.checkbox.error .customCheckbox {
+  border-color: #ff1111;
+  animation: shake 0.3s ease-in-out;
+}
+
+.errorText {
+  color: #fc0000;
+  font-size: 11px;
+  margin-top: 6px;
+  margin-left: 28px;
+  animation: fadeIn 0.3s ease;
+}
+
+.errorTextGeneral {
+  color: #fc0000;
+  font-size: 12px;
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(252, 0, 0, 0.1);
+  border-radius: 8px;
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+.checkboxText {
+  line-height: 1.4;
+  
+  a {
+    margin: 0 3px;
+    color: #3b82f6;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* ✨ Анимация появления окна */
 @keyframes slideUp {
   from { transform: translateY(20px) scale(0.95); opacity: 0; }

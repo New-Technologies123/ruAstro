@@ -1,231 +1,287 @@
-.hero {
-  position: relative;
-  overflow: hidden;
-  width: 100%;
-  height: 300px;
-  background-color: rgb(32, 187, 239); 
-  // &Image {
-  //   width: 100%;
-  //   object-fit: cover;
-  //   display: block;
-  // } 
+.page {
+  background: #fff;
 }
 
-.heroOverlay{
+/* SECTION BASE */
+// .section {
+//   padding: 0px 20px;
+// }
+
+.section:nth-child(even) {
+  background: #f7fbff;
+}
+
+/* ================= HERO ================= */
+
+.hero {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  overflow: hidden;
+
+  background: linear-gradient(135deg, #20bbef, #0a8cc8);
+}
+
+/* animated glow background */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), transparent 60%);
+  animation: floatBg 10s ease-in-out infinite;
+}
+
+@keyframes floatBg {
+  0%, 100% { transform: translate(0,0); }
+  50% { transform: translate(40px, -20px); }
+}
+
+.heroOverlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 25px 50px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
-  color: white;
-  h1{
-    font-size: 36px;
-    margin-bottom: 5px;
-    font-weight: 700;
-  }    
-  p{
-    font-size: 24px;
-    opacity: 0.9;
+
+  padding: 50px 60px;
+  color: #fff;
+
+  background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
+
+  h1 {
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: -1px;
+  }
+
+  p {
+    font-size: 18px;
+    opacity: 0.85;
+    margin-top: 8px;
   }
 }
 
-.Img{
+/* ================= MAP ================= */
+
+.mapWrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-top: 5px;
+  margin-top: 20px;
 }
 
-.homeImg {
-  width: 80%;
-}
-
-//карта
 .map {
-  margin-top: 10px;
-  border-radius: 25px;
-  width: 90%;
-  height: 650px;
-  overflow: hidden;
+  width: min(92%, 1100px);
+  height: 600px;
 
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
+  border-radius: 24px;
+  border: none;
+
+  box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+  transition: 0.3s;
+
+  &:hover {
+    transform: translateY(-3px);
   }
 }
 
-/* Слайдер на главной странице */
-.brandParent {
-  display: flex;
-  display: -webkit-flex;
-  flex-wrap: nowrap;
-  -webkit-flex-wrap: nowrap;
-  align-items: center;
-  -webkit-align-items: center;
+/* ================= CLIENTS ================= */
+
+.brandsWrapper {
   overflow: hidden;
+  position: relative;
+  padding: 20px 0;
 }
-.brandsCarousel {
-  height: 270px;
-  display: flex;
-  display: -webkit-flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  -webkit-align-items: center;
-  animation: animate 30s linear infinite;
-}
-.brandsCarousel .slideContent {
+
+/* fade edges */
+.brandsWrapper::before,
+.brandsWrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 120px;
   height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.brandsWrapper::before {
+  left: 0;
+  background: linear-gradient(to right, #fff, transparent);
+}
+
+.brandsWrapper::after {
+  right: 0;
+  background: linear-gradient(to left, #fff, transparent);
+}
+
+.brandsTrack {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: scroll 25s linear infinite;
+  will-change: transform;
+}
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.brandItem {
   flex: 0 0 auto;
+  width: 200px;
+  height: 120px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 320px;
-}
-.brandsCarousel .slideContent a {
-  height: 100%;
-  display: flex;
-  display: -webkit-flex;
-  align-items: center;
-  -webkit-align-items: center;
-  justify-content: center;
-  -webkit-justify-content: center;
-  white-space: nowrap;
-  text-transform: uppercase;
-  padding: 20px;
-  width: 100%;
-  transition: all 0.3s ease-in-out 0s;
-}
-/* Отвечает за выделение карточки заказчиков цветом.*/
-// .brandsCarousel .slideContent a:hover,
-// .brandsCarousel .slideContent a:active {
-//   box-shadow: 0 0 25px rgb(41, 194, 255);
-// }
 
-.brandsCarousel .slideContent a img {
-  display: inline-block;
-  width: auto;
-  max-width: 100% !important;
-  height: auto;
-  max-height: 100%;
-  /* Отвечает за затемнение заказчиков. 
-      Если код работает, то фото черно белое и при наведении на него становица цветным*/
-  // filter: grayscale(100%);
-  // -webkit-filter: grayscale(100%);
-  // opacity: 0.5;
-  // transition: all 0.3s ease-in-out;
-}
-// .brandsCarousel .slideContent a:hover img,
-// .brandsCarousel .slideContent a:active img {
-//   filter: grayscale(0);
-//   -webkit-filter: grayscale(0);
-//   opacity: 1;
-// }
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 
-@keyframes animate {
-  0% {
-    transform: translate3d(0, 0, 0);
+    transition: 0.35s ease;
   }
-  100% {
-    transform: translate3d(-100%, 0, 0);
-  }
-}
-@-webkit-keyframes animate {
-  0% {
-    transform: translate3d(0, 0, 0);
-  }
-  100% {
-    transform: translate3d(-100%, 0, 0);
+
+  &:hover img {
+    filter: grayscale(0%) opacity(1);
+    transform: scale(1.08);
   }
 }
 
-@media (max-width: 1400px){
-  .brandsCarousel{
-    height: 200px;
+/* ================= GLOBAL ANIMATION ================= */
+
+.section {
+  animation: fadeUp 0.6s ease both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
   }
-  .brandsCarousel .slideContent{
-    width: 250px;
-  }
-  .heroOverlay{
-    h1{
-      font-size: 34px;
-    }
-    p{
-      font-size: 22px;
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 1200px){
-  .heroOverlay{
-    h1{
-      font-size: 32px;
-    }
-    p{
-      font-size: 20px;
-    }
+@media (max-width: 1024px) {
+  .heroOverlay {
+    padding: 35px 40px;
   }
-  .homeImg{
-    width: 90%;
+  
+  .heroOverlay h1 {
+    font-size: 38px;
   }
-}
-
-@media (max-width: 1030px){
-  .hero{
-    height: 250px;
+  
+  .heroOverlay p {
+    font-size: 16px;
   }
-  .brandsCarousel{
-    height: 150px;
+  
+  .map {
+    height: 500px;
   }
-  .brandsCarousel .slideContent{
-    width: 200px;
+  
+  .brandItem {
+    width: 160px;
+    height: 100px;
   }
-  .brandsCarousel .slideContent a{
-    padding: 10px;
-  }
-  .heroOverlay{
-    h1{
-      font-size: 30px;
-    }
+  
+  .brandsTrack {
+    gap: 30px;
   }
 }
 
-@media (max-width: 770px){
-  .hero{
-    height: 200px;
+/* Мобильные устройства (портретная ориентация) */
+@media (max-width: 768px) {
+  .hero {
+    height: 320px;
   }
-  .heroOverlay{
-    padding: 20px 30px;
-    h1{
-      font-size: 25px;
-    }
-    p{
-      font-size: 18px;
-    }
+  
+  .heroOverlay {
+    padding: 25px 20px;
   }
-  .homeImg{
-    width: 95%;
+  
+  .heroOverlay h1 {
+    font-size: 28px;
+    letter-spacing: -0.5px;
+  }
+  
+  .heroOverlay p {
+    font-size: 14px;
+    margin-top: 6px;
+  }
+  
+  .mapWrapper {
+    margin-top: 15px;
+  }
+  
+  .map {
+    height: 350px;
+    border-radius: 16px;
+  }
+  
+  .brandsWrapper {
+    padding: 15px 0;
+  }
+  
+  .brandsWrapper::before,
+  .brandsWrapper::after {
+    width: 60px;
+  }
+  
+  .brandItem {
+    width: 130px;
+    height: 85px;
+  }
+  
+  .brandsTrack {
+    gap: 25px;
+    animation-duration: 20s;
+  }
+  
+  .section {
+    animation-duration: 0.5s;
   }
 }
 
-@media (max-width: 430px) {
-  .hero{
-    height: 150px;
-  }  
-  .brandsCarousel{
-    height: 120px;
+/* Маленькие мобильные устройства */
+@media (max-width: 480px) {
+  .hero {
+    height: 280px;
   }
-  .brandsCarousel .slideContent{
-    width: 170px;
+  
+  .heroOverlay {
+    padding: 20px 16px;
   }
-  .heroOverlay{
-    padding: 15px 20px;
-    h1{
-      font-size: 20px;
-    }
-    p{
-      font-size: 16px;
-    }
+  
+  .heroOverlay h1 {
+    font-size: 24px;
+  }
+  
+  .heroOverlay p {
+    font-size: 13px;
+  }
+  
+  .map {
+    height: 280px;
+    border-radius: 12px;
+    width: min(96%, 1100px);
+  }
+  
+  .brandItem {
+    width: 110px;
+    height: 70px;
+  }
+  
+  .brandsTrack {
+    gap: 20px;
+    animation-duration: 18s;
+  }
+  
+  .brandsWrapper::before,
+  .brandsWrapper::after {
+    width: 40px;
   }
 }

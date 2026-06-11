@@ -12,77 +12,193 @@ header("Content-Type: application/json; charset=UTF-8");
 $to = "dekslerid@tech-new.ru";
 
 // Тема
-$subject = "=?UTF-8?B?" . base64_encode("Предложение закупок МОТ с сайта") . "?=";
+$subject = "=?UTF-8?B?" . base64_encode("📦 Предложение закупок МТР с сайта") . "?=";
 
-// Получаем данные
-$name    = $_POST["fullName"] ?? "";
-$company = $_POST["company"] ?? "";
-$email   = $_POST["email"] ?? "";
-$phone   = $_POST["phone"] ?? "";
-$inn     = $_POST["inn"] ?? "";
+// Получаем данные (проверяем как POST, так и JSON)
+$inputData = [];
+if ($_SERVER['CONTENT_TYPE'] === 'application/json') {
+    $inputJSON = file_get_contents('php://input');
+    $inputData = json_decode($inputJSON, true) ?? [];
+}
 
-// ✅ Согласие
-$agreement = !empty($_POST["agreement"]) ? "ДА" : "НЕТ";
+// Функция для получения данных
+function getValue($key, $default = '', $isCheckbox = false) {
+    global $inputData;
+    
+    if (isset($_POST[$key])) {
+        return $isCheckbox ? ($_POST[$key] === 'true' || $_POST[$key] === 'on' || $_POST[$key] === '1') : $_POST[$key];
+    }
+    if (isset($inputData[$key])) {
+        return $isCheckbox ? (bool)$inputData[$key] : $inputData[$key];
+    }
+    return $default;
+}
 
-// ❗ Метаданные
-$date = gmdate("c"); // UTC ISO 8601
-$policyVersion = "v1.0 (от 01.04.2024)";
+// Получаем данные формы
+$name    = trim(getValue('fullName', ''));
+$company = trim(getValue('company', ''));
+$email   = trim(getValue('email', ''));
+$phone   = trim(getValue('phone', ''));
+$inn     = trim(getValue('inn', ''));
+
+// Получаем состояния чекбоксов
+$consent = getValue('consent', false, true);
+$privacyAgreement = getValue('privacyAgreement', false, true);
+
+// Метаданные
+$date = date("d.m.Y H:i:s");
 $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
 
 // Проверка обязательных полей
-if (!$name || !$company || !$email || !$inn) {
-    echo json_encode(["success" => false, "error" => "Заполните все поля"]);
+$errors = [];
+if (!$name) $errors[] = "ФИО";
+if (!$company) $errors[] = "Компания";
+if (!$email) $errors[] = "Email";
+if (!$inn) $errors[] = "ИНН";
+if (empty($phone)) $errors[] = "Телефон";
+
+if (count($errors) > 0) {
+    echo json_encode([
+        "success" => false, 
+        "error" => "Заполните обязательные поля: " . implode(", ", $errors)
+    ]);
     exit;
 }
 
-// Граница
-$boundary = md5(time());
+// Проверка чекбоксов
+if (!$consent) {
+    echo json_encode([
+        "success" => false, 
+        "error" => "Необходимо дать согласие на обработку персональных данных"
+    ]);
+    exit;
+}
 
-// Заголовки
-$headers = "MIME-Version: 1.0\r\n";
-$headers .= "From: no-reply@tech-new.ru\r\n";
-$headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+if (!$privacyAgreement) {
+    echo json_encode([
+        "success" => false, 
+        "error" => "Необходимо подтвердить ознакомление с политикой конфиденциальности"
+    ]);
+    exit;
+}
 
-// Тело письма
-$message = "--$boundary\r\n";
-$message .= "Content-Type: text/html; charset=UTF-8\r\n\r\n";
+// Формируем текстовое письмо
+$message = "";
+$message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+$message .= "📦 НОВОЕ ПРЕДЛОЖЕНИЕ ЗАКУПОК МТР\n";
+$message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
 
-$message .= "<h2>Контактные данные</h2>";
-$message .= "<b>ФИО:</b> $name<br>";
-$message .= "<b>Компания:</b> $company<br>";
-$message .= "<b>Email:</b> $email<br>";
-$message .= "<b>Телефон:</b> $phone<br>";
-$message .= "<b>ИНН:</b> $inn<br><br>";
+$message .= "👤 КОНТАКТНЫЕ ДАННЫЕ:\n";
+$message .= "────────────────────────────────────────\n";
+$message .= "ФИО: $name\n";
+$message .= "Компания: $company\n";
+$message .= "Email: $email\n";
+$message .= "Телефон: $phone\n";
+$message .= "ИНН: $inn\n\n";
 
-$message .= "<h3>Согласие и юридические данные</h3>";
-$message .= "<b>Политика конфиденциальности:</b> " . ($agreement === "ДА" ? "✔ ДА" : "✖ НЕТ") . "<br>";
-$message .= "<b>Дата согласия:</b> $date<br>";
-$message .= "<b>Версия политики:</b> $policyVersion<br>";
-$message .= "<b>IP адрес:</b> $ip<br>";
-$message .= "<b>User-Agent:</b> $userAgent<br><br>";
+$message .= "✅ СОГЛАСИЯ:\n";
+$message .= "────────────────────────────────────────\n";
+$message .= "Согласие на обработку персональных данных: " . ($consent ? "✅ ДА" : "❌ НЕТ") . "\n";
+$message .= "Согласие с политикой конфиденциальности: " . ($privacyAgreement ? "✅ ДА" : "❌ НЕТ") . "\n\n";
 
-// Файлы
-foreach ($_FILES as $file) {
-    if ($file["error"] === 0) {
-        $fileName = $file["name"];
-        $fileType = $file["type"] ?: "application/octet-stream";
-        $fileData = chunk_split(base64_encode(file_get_contents($file["tmp_name"])));
+$message .= "📎 ПРИКРЕПЛЕННЫЕ ФАЙЛЫ:\n";
+$message .= "────────────────────────────────────────\n";
 
-        $message .= "--$boundary\r\n";
-        $message .= "Content-Type: $fileType; name=\"$fileName\"\r\n";
-        $message .= "Content-Transfer-Encoding: base64\r\n";
-        $message .= "Content-Disposition: attachment; filename=\"$fileName\"\r\n\r\n";
-        $message .= $fileData . "\r\n";
+// Обрабатываем файлы
+$attachments = [];
+$fileList = "";
+
+if (!empty($_FILES)) {
+    foreach ($_FILES as $fieldName => $file) {
+        if ($file['error'] === UPLOAD_ERR_OK && $file['size'] > 0) {
+            $fileName = basename($file['name']);
+            $attachments[] = $fileName;
+            $fileList .= "• $fileName\n";
+        }
     }
 }
 
-$message .= "--$boundary--";
+if (count($attachments) > 0) {
+    $message .= $fileList;
+} else {
+    $message .= "Файлы не прикреплены\n";
+}
 
-// Отправка
-$success = mail($to, $subject, $message, $headers);
+$message .= "\n📊 ТЕХНИЧЕСКАЯ ИНФОРМАЦИЯ:\n";
+$message .= "────────────────────────────────────────\n";
+$message .= "Дата и время: $date\n";
+$message .= "IP-адрес: $ip\n";
+$message .= "User-Agent: $userAgent\n";
+$message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
-// Ответ
-echo json_encode([
-    "success" => $success
-]);
+// Заголовки для текстового письма
+$headers = "MIME-Version: 1.0\r\n";
+$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
+$headers .= "From: no-reply@tech-new.ru\r\n";
+$headers .= "Reply-To: $email\r\n";
+
+// Если есть файлы, отправляем multipart письмо
+if (count($attachments) > 0) {
+    $boundary = md5(uniqid(time()));
+    $headers = "MIME-Version: 1.0\r\n";
+    $headers .= "From: no-reply@tech-new.ru\r\n";
+    $headers .= "Reply-To: $email\r\n";
+    $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+    
+    $multipartMessage = "--$boundary\r\n";
+    $multipartMessage .= "Content-Type: text/plain; charset=UTF-8\r\n\r\n";
+    $multipartMessage .= $message . "\r\n\r\n";
+    
+    // Прикрепляем файлы
+    foreach ($_FILES as $fieldName => $file) {
+        if ($file['error'] === UPLOAD_ERR_OK && $file['size'] > 0) {
+            $fileName = basename($file['name']);
+            $fileType = $file['type'] ?: 'application/octet-stream';
+            $fileData = chunk_split(base64_encode(file_get_contents($file['tmp_name'])));
+            
+            $multipartMessage .= "--$boundary\r\n";
+            $multipartMessage .= "Content-Type: $fileType; name=\"$fileName\"\r\n";
+            $multipartMessage .= "Content-Transfer-Encoding: base64\r\n";
+            $multipartMessage .= "Content-Disposition: attachment; filename=\"$fileName\"\r\n\r\n";
+            $multipartMessage .= $fileData . "\r\n";
+        }
+    }
+    
+    $multipartMessage .= "--$boundary--";
+    $messageToSend = $multipartMessage;
+} else {
+    $messageToSend = $message;
+}
+
+// Логирование
+$logData = [
+    'timestamp' => date('Y-m-d H:i:s'),
+    'name' => $name,
+    'company' => $company,
+    'email' => $email,
+    'consent' => $consent,
+    'privacy_agreement' => $privacyAgreement,
+    'attachments' => $attachments,
+    'ip' => $ip
+];
+$logFile = __DIR__ . '/form-submissions.log';
+file_put_contents($logFile, json_encode($logData, JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
+
+// Отправка письма
+$mailSent = mail($to, $subject, $messageToSend, $headers);
+
+if ($mailSent) {
+    echo json_encode([
+        "success" => true,
+        "message" => "Предложение успешно отправлено",
+        "attachments" => count($attachments)
+    ]);
+} else {
+    error_log("Mail send failed to: $to");
+    echo json_encode([
+        "success" => false,
+        "error" => "Не удалось отправить письмо. Пожалуйста, попробуйте позже."
+    ]);
+}
+?>

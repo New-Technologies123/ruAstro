@@ -8,32 +8,45 @@ export const Footer = () => {
       <div className={Styles.container}>
         {/* Логотип и соцсети */}
         <div className={Styles.topSection}>
-          <div className={Styles.infa}>
-            <div className={Styles.logoContainer}>
-              <img src={logoRu.src} alt="Новые Технологии" />
-              {/* <p className={Styles.socialText}>Мы в соцсетях</p>
-              <div className={Styles.socialIcons}>
-                <a href="https://vk.com" target="_blank" rel="noopener noreferrer">
-                  <FaVk />
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                  <FaInstagram />
-                </a>
-                <a href="https://t.me" target="_blank" rel="noopener noreferrer">
-                  <FaTelegram />
-                </a>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                  <FaFacebookF />
-                </a>
-              </div> */}
+          <div className={Styles.leftSection}>
+            <div className={Styles.infa}>
+              <div className={Styles.logoContainer}>
+                <img src={logoRu.src} alt="Новые Технологии" />
+              </div>
+              {/* Контакты */}
+              <div className={Styles.contactInfo}>
+                <p>г.Уфа, ул Заки Валиди 32/2</p>
+                <p><a href="tel:+73472939333">+7 (347) 293-93-33</a></p>
+                <p><a href="mailto:nt@tech-new.ru">nt@tech-new.ru</a></p>
+              </div>
             </div>
-            {/* Контакты */}
-            <div className={Styles.contactInfo}>
-              <p>г.Уфа, ул Заки Валиди 32/2</p>
-              <p><a href="tel:+73472939333">+7 (347) 293-93-33</a></p>
-              <p><a href="mailto:nt@tech-new.ru">nt@tech-new.ru</a></p>
+
+            {/* Блок с файлами */}
+            <div className={Styles.filesBlock}>
+              <ul>
+                <li>
+                  <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">
+                    Соглашение на обработку ПД
+                  </a>
+                </li>
+                <li>
+                  <a href="/file/privacy_v1.pdf" target="_blank" rel="noopener noreferrer">
+                    Политика конфиденциальности
+                  </a>
+                </li>
+                <li>
+                  <a href="/file/offer_v1.pdf" target="_blank" rel="noopener noreferrer">
+                    Договор оферты
+                  </a>
+                </li>
+                <li>
+                  <a href="/file/return_v1.pdf" target="_blank" rel="noopener noreferrer">
+                    Условия возврата товара
+                  </a>
+                </li>
+              </ul>
             </div>
-          </div>         
+          </div>
 
           {/* Навигация */}
           <div className={Styles.navSections}>

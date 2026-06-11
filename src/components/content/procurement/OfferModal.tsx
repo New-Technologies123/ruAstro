@@ -15,7 +15,8 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     email: "",
     inn: "",
     phone: "",
-    consent: false
+    consent: false,        // согласие на обработку данных
+    privacyAgreement: false // согласие с политикой конфиденциальности
   });
 
   const [files, setFiles] = useState<{[key:string]: File | null}>({
@@ -30,11 +31,25 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
   const handleFormChange = (field: keyof typeof form, value: string | boolean) => {
     setForm(prev => ({ ...prev, [field]: value }));
     setErrors(prev => ({ ...prev, [field]: undefined }));
+    
+    // Сбрасываем общую ошибку согласия если оба чекбокса отмечены
+    if ((field === 'consent' || field === 'privacyAgreement') && value === true) {
+      const newConsent = field === 'consent' ? value : form.consent;
+      const newPrivacyAgreement = field === 'privacyAgreement' ? value : form.privacyAgreement;
+      
+      if (newConsent && newPrivacyAgreement) {
+        setErrors(prev => ({ ...prev, agreementError: false }));
+      }
+    }
   };
 
   const handleFileChange = (field: keyof typeof files, file: File | null) => {
     setFiles(prev => ({ ...prev, [field]: file }));
     setErrors(prev => ({ ...prev, [field]: undefined }));
+  };
+
+  const handleCheckboxChange = (field: 'consent' | 'privacyAgreement', checked: boolean) => {
+    handleFormChange(field, checked);
   };
 
   const handleOfferFileChange = (file: File | null) => {
@@ -77,13 +92,21 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: any = {};
+    
+    // Валидация полей
     if (!form.fullName) newErrors.fullName = "Введите ФИО";
     if (!form.company) newErrors.company = "Введите компанию";
     if (!form.email) newErrors.email = "Введите email";
     if (!form.inn) newErrors.inn = "Введите ИНН";
     if (!form.phone || form.phone.includes("_")) newErrors.phone = "Введите корректный номер телефона";
-    if (!form.consent) newErrors.consent = "Необходимо подтвердить согласие на обработку данных";
+    
+    // Проверка чекбоксов
+    if (!form.consent) newErrors.consent = "Необходимо дать согласие на обработку персональных данных";
+    if (!form.privacyAgreement) newErrors.privacyAgreement = "Необходимо подтвердить ознакомление с политикой конфиденциальности";
+    
+    // Проверка файлов
     Object.entries(files).forEach(([key, file]) => { if (!file) newErrors[key] = "Загрузите файл"; });
+    
     if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
 
     const formData = new FormData();
@@ -199,22 +222,52 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
             {errors.offerFile && <p className={Styles.error}>{errors.offerFile}</p>}
           </div>
 
-          <div className={Styles.checkboxContainer}>
-            <label className={Styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={form.consent}
-                onChange={e => handleFormChange("consent", e.target.checked)}
-              />
-              <span className={Styles.customCheckbox}></span>
-              <span className={Styles.checkboxText}>
-                Я даю согласие на обработку моих персональных данных, включая загрузку и обработку прилагаемых документов, 
-                в соответствии с
-                <a href="/privacy" target="_blank"> Политикой конфиденциальности </a>. 
-              </span>
-              
-            </label>
-            {errors.consent && <p className={Styles.error}>{errors.consent}</p>}
+          {/* Чекбоксы*/}
+          <div>
+            {/* Первый чекбокс - согласие на обработку данных */}
+            <div className={Styles.checkboxWrapper}>
+              <label className={`${Styles.checkbox} ${errors.consent ? Styles.error : ''}`}>
+                <input
+                  type="checkbox"
+                  checked={form.consent}
+                  onChange={e => handleCheckboxChange('consent', e.target.checked)}
+                />
+                <span className={Styles.customCheckbox}></span>
+                <span className={Styles.checkboxText}>
+                  Я даю согласие на
+                  <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">
+                    обработку моих персональных данных
+                  </a>
+                  , включая загрузку и обработку прилагаемых документов.
+                </span>
+              </label>
+              {errors.consent && (
+                <div className={Styles.errorText}>
+                  ⚠️ {errors.consent}
+                </div>
+              )}
+            </div>
+
+            {/* Второй чекбокс - согласие с политикой конфиденциальности */}
+            <div className={Styles.checkboxWrapper}>
+              <label className={`${Styles.checkbox} ${errors.privacyAgreement ? Styles.error : ''}`}>
+                <input
+                  type="checkbox"
+                  checked={form.privacyAgreement}
+                  onChange={e => handleCheckboxChange('privacyAgreement', e.target.checked)}
+                />
+                <span className={Styles.customCheckbox}></span>
+                <span className={Styles.checkboxText}>
+                  С <a href="/file/privacy_v1.pdf" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a> 
+                  ознакомлен(а) и согласен(на).
+                </span>
+              </label>
+              {errors.privacyAgreement && (
+                <div className={Styles.errorText}>
+                  ⚠️ {errors.privacyAgreement}
+                </div>
+              )}
+            </div>
           </div>
 
           <div className={Styles.buttons}>
