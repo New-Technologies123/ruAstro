@@ -3,7 +3,7 @@ import { LayoutBack } from '../../layout/LayoutBack';
 import Styles from './accounting.module.scss';
 
 import product_2_1 from '../../../images/products/product_2.webp';
-import product_2_2 from '../../../images/products/product_2_1.webp';
+import product_2_2 from '../../../images/products/urpd.webp';
 import product_2_3 from '../../../images/products/product_2_2.webp';
 import product_2_4 from '../../../images/products/product_2_3.webp';
 import product_2_5 from '../../../images/products/product_2_4.webp';

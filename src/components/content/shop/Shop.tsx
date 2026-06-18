@@ -12,7 +12,6 @@ import { Shop_5 } from './Shop_5';
 import { CartButton } from '../../ui/cart-button/CartButton';
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
-import product_1 from '../../../images/products/product_2.webp';
 import product_2 from '../../../images/products/product_2_1.webp';
 import product_3 from '../../../images/products/product_2_2.webp';
 import product_4 from '../../../images/products/product_2_3.webp';
@@ -22,6 +21,11 @@ import styles from '../products/scroll.module.scss';
 
 type TProducts = 'shop_1' | 'shop_2' | 'shop_3' | 'shop_4' | 'shop_5';
 type Page = 'shop' | TProducts | 'order';
+
+// Ключи для хранения данных в sessionStorage
+const SCROLL_POSITION_KEY = 'shop_scroll_position';
+const SELECTED_CARD_KEY = 'shop_selected_card';
+const FROM_SHOP_KEY = 'from_shop_page';
 
 export const Shop = () => {
   const cardTitle: Record<TProducts, string> = {
@@ -36,6 +40,7 @@ export const Shop = () => {
   const trackRef = useRef<HTMLDivElement>(null);
   const prevBtnRef = useRef<HTMLButtonElement>(null);
   const nextBtnRef = useRef<HTMLButtonElement>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   // 🔁 синхронизация состояния со строкой браузера
   const syncFromUrl = () => {
@@ -69,8 +74,22 @@ export const Shop = () => {
     let current = 0;
 
     const updateArrows = () => {
-      prevBtn.style.visibility = current <= 0 ? 'hidden' : 'visible';
-      nextBtn.style.visibility = current >= cards.length - 1 ? 'hidden' : 'visible';
+      // Используем классы вместо style.visibility
+      if (current <= 0) {
+        prevBtn.classList.remove('visible');
+        prevBtn.style.visibility = 'hidden';
+      } else {
+        prevBtn.classList.add('visible');
+        prevBtn.style.visibility = 'visible';
+      }
+      
+      if (current >= cards.length - 1) {
+        nextBtn.classList.remove('visible');
+        nextBtn.style.visibility = 'hidden';
+      } else {
+        nextBtn.classList.add('visible');
+        nextBtn.style.visibility = 'visible';
+      }
     };
 
     const cardStep = () => {
@@ -79,40 +98,118 @@ export const Shop = () => {
         : (cards[0] as HTMLElement).offsetWidth;
     };
 
-    const goToCard = (index: number) => {
+    const goToCard = (index: number, smooth: boolean = true) => {
       current = Math.max(0, Math.min(cards.length - 1, index));
       const card = cards[current] as HTMLElement;
       const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
-      track.scrollTo({ left, behavior: 'smooth' });
+      track.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
       updateArrows();
     };
 
     const handleScroll = () => {
-      current = Math.round(track.scrollLeft / cardStep());
-      current = Math.max(0, Math.min(cards.length - 1, current));
-      updateArrows();
+      const step = cardStep();
+      if (step > 0) {
+        current = Math.round(track.scrollLeft / step);
+        current = Math.max(0, Math.min(cards.length - 1, current));
+        updateArrows();
+      }
     };
 
-    nextBtn.addEventListener('click', () => goToCard(current + 1));
-    prevBtn.addEventListener('click', () => goToCard(current - 1));
-    track.addEventListener('scroll', handleScroll, { passive: true });
+    // Функция для определения целевой карточки при возврате
+    const getTargetCardIndex = (): number => {
+      // Проверяем, возвращаемся ли мы с детальной страницы товара
+      const fromShop = sessionStorage.getItem(FROM_SHOP_KEY);
+      
+      if (fromShop === 'true') {
+        // Возвращаемся с детальной страницы - показываем карточку, с которой перешли
+        const savedCardIndex = sessionStorage.getItem(SELECTED_CARD_KEY);
+        
+        // Очищаем флаги после использования
+        sessionStorage.removeItem(FROM_SHOP_KEY);
+        sessionStorage.removeItem(SELECTED_CARD_KEY);
+        sessionStorage.removeItem(SCROLL_POSITION_KEY);
+        
+        if (savedCardIndex !== null) {
+          const index = parseInt(savedCardIndex, 10);
+          if (!isNaN(index) && index >= 0 && index < cards.length) {
+            return index;
+          }
+        }
+        // Если индекс не валидный - показываем первую карточку
+        return 0;
+      }
 
-    updateArrows();
+      // Если пришли с другой страницы (не с детальной страницы товара)
+      // или зашли впервые - показываем первую карточку
+      // Очищаем все сохраненные данные
+      sessionStorage.removeItem(SELECTED_CARD_KEY);
+      sessionStorage.removeItem(SCROLL_POSITION_KEY);
+      
+      return 0;
+    };
+
+    // Восстанавливаем позицию
+    const targetIndex = getTargetCardIndex();
+    goToCard(targetIndex, false);
+
+    setIsInitialized(true);
+
+    // Сохраняем обработчики в переменные для правильного удаления
+    const handleNextClick = () => {
+      goToCard(current + 1);
+      setTimeout(() => {
+        if (trackRef.current) {
+          sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
+        }
+      }, 100);
+    };
+
+    const handlePrevClick = () => {
+      goToCard(current - 1);
+      setTimeout(() => {
+        if (trackRef.current) {
+          sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
+        }
+      }, 100);
+    };
+
+    const handleTrackScroll = () => {
+      handleScroll();
+      if (trackRef.current) {
+        sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
+      }
+    };
+
+    nextBtn.addEventListener('click', handleNextClick);
+    prevBtn.addEventListener('click', handlePrevClick);
+    track.addEventListener('scroll', handleTrackScroll, { passive: true });
 
     return () => {
-      nextBtn.removeEventListener('click', () => goToCard(current + 1));
-      prevBtn.removeEventListener('click', () => goToCard(current - 1));
-      track.removeEventListener('scroll', handleScroll);
+      nextBtn.removeEventListener('click', handleNextClick);
+      prevBtn.removeEventListener('click', handlePrevClick);
+      track.removeEventListener('scroll', handleTrackScroll);
     };
-  }, [currentPage]); // Добавляем зависимость от currentPage
+  }, [currentPage]); // Добавляем currentPage в зависимости
 
   // 🔹 навигация по каталогу
-  const openCategory = (type: TProducts) => {
+  const openCategory = (type: TProducts, cardIndex?: number) => {
+    // Сохраняем индекс карточки, с которой переходим на детальную страницу
+    if (cardIndex !== undefined) {
+      sessionStorage.setItem(SELECTED_CARD_KEY, String(cardIndex));
+      // Отмечаем, что переходим с страницы магазина на детальную страницу
+      sessionStorage.setItem(FROM_SHOP_KEY, 'true');
+    }
+    // Сохраняем текущую позицию скролла перед уходом
+    if (trackRef.current) {
+      sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
+    }
+
     const url = new URL(window.location.href);
     url.searchParams.set('type', type);
     url.searchParams.delete('view');
     window.history.pushState({}, '', url.toString());
     setCurrentPage(type);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const backToShop = () => {
@@ -121,6 +218,7 @@ export const Shop = () => {
     url.searchParams.delete('view');
     window.history.pushState({}, '', url.toString());
     setCurrentPage('shop');
+    // Не очищаем sessionStorage здесь, это сделает useEffect при восстановлении
   };
 
   // 🛒 глобальная корзина
@@ -145,7 +243,6 @@ export const Shop = () => {
 
   // Массив товаров для отображения
   const products = [
-    // { img: product_1.src, title: cardTitle.shop_1, type: 'shop_1' as TProducts },
     { img: product_2.src, title: cardTitle.shop_2, type: 'shop_2' as TProducts },
     { img: product_3.src, title: cardTitle.shop_3, type: 'shop_3' as TProducts },
     { img: product_4.src, title: cardTitle.shop_4, type: 'shop_4' as TProducts },
@@ -174,15 +271,25 @@ export const Shop = () => {
                     <Card
                       imgSrc={product.img}
                       title={product.title}
-                      onClick={() => openCategory(product.type)}
+                      onClick={() => openCategory(product.type, index)}
                     />
                   </div>
                 ))}
               </div>
               
               <div className={styles.mobileNav}>
-                <button className={styles.prevBtn} ref={prevBtnRef}>←</button>
-                <button className={styles.nextBtn} ref={nextBtnRef}>→</button>
+                <button 
+                  className={`${styles.prevBtn}`} 
+                  ref={prevBtnRef}
+                >
+                  ←
+                </button>
+                <button 
+                  className={`${styles.nextBtn}`} 
+                  ref={nextBtnRef}
+                >
+                  →
+                </button>
               </div>
             </div>
           </>

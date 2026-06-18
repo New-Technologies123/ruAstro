@@ -8,8 +8,15 @@ header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: *");
 header("Content-Type: application/json; charset=UTF-8");
 
-// Кому отправляем
-$to = "dekslerid@tech-new.ru";
+// Кому отправляем - СПИСОК ПОЛУЧАТЕЛЕЙ
+$recipients = [
+    "nadyrgulovty@tech-new.ru",
+    "naf@tech-new.ru",
+    "dolgushinasl@tech-new.ru",
+    "elizarevaiv@tech-new.ru",
+    "nurmukhametovab@tech-new.ru",
+    "zinurovih@tech-new.ru"
+];
 
 // Тема
 $subject = "=?UTF-8?B?" . base64_encode("📦 Предложение закупок МТР с сайта") . "?=";
@@ -108,6 +115,7 @@ $message .= "──────────────────────�
 // Обрабатываем файлы
 $attachments = [];
 $fileList = "";
+$uploadedFiles = [];
 
 if (!empty($_FILES)) {
     foreach ($_FILES as $fieldName => $file) {
@@ -115,6 +123,7 @@ if (!empty($_FILES)) {
             $fileName = basename($file['name']);
             $attachments[] = $fileName;
             $fileList .= "• $fileName\n";
+            $uploadedFiles[] = $file;
         }
     }
 }
@@ -132,18 +141,13 @@ $message .= "IP-адрес: $ip\n";
 $message .= "User-Agent: $userAgent\n";
 $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
-// Заголовки для текстового письма
+// Подготавливаем письмо с вложениями (если есть)
+$boundary = md5(uniqid(time()));
 $headers = "MIME-Version: 1.0\r\n";
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 $headers .= "From: no-reply@tech-new.ru\r\n";
 $headers .= "Reply-To: $email\r\n";
 
-// Если есть файлы, отправляем multipart письмо
 if (count($attachments) > 0) {
-    $boundary = md5(uniqid(time()));
-    $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "From: no-reply@tech-new.ru\r\n";
-    $headers .= "Reply-To: $email\r\n";
     $headers .= "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
     
     $multipartMessage = "--$boundary\r\n";
@@ -168,6 +172,7 @@ if (count($attachments) > 0) {
     $multipartMessage .= "--$boundary--";
     $messageToSend = $multipartMessage;
 } else {
+    $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
     $messageToSend = $message;
 }
 
@@ -180,25 +185,48 @@ $logData = [
     'consent' => $consent,
     'privacy_agreement' => $privacyAgreement,
     'attachments' => $attachments,
-    'ip' => $ip
+    'ip' => $ip,
+    'recipients' => $recipients
 ];
 $logFile = __DIR__ . '/form-submissions.log';
 file_put_contents($logFile, json_encode($logData, JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
 
-// Отправка письма
-$mailSent = mail($to, $subject, $messageToSend, $headers);
+// ============================================
+// ОТПРАВКА ПИСЬМА НА НЕСКОЛЬКО ПОЧТ ОДНОВРЕМЕННО
+// ============================================
+$successCount = 0;
+$failedEmails = [];
 
-if ($mailSent) {
-    echo json_encode([
+// Отправляем каждому получателю
+foreach ($recipients as $recipient) {
+    if (mail($recipient, $subject, $messageToSend, $headers)) {
+        $successCount++;
+    } else {
+        $failedEmails[] = $recipient;
+    }
+}
+
+// Формируем ответ
+if ($successCount > 0) {
+    $response = [
         "success" => true,
         "message" => "Предложение успешно отправлено",
+        "sent_to" => $successCount . " из " . count($recipients) . " получателей",
         "attachments" => count($attachments)
-    ]);
+    ];
+    
+    // Если есть неудачные отправки, добавляем информацию в ответ
+    if (count($failedEmails) > 0) {
+        $response["warning"] = "Письмо не отправлено на: " . implode(", ", $failedEmails);
+        $response["failed_recipients"] = $failedEmails;
+    }
+    
+    echo json_encode($response);
 } else {
-    error_log("Mail send failed to: $to");
+    error_log("Mail send failed to all recipients");
     echo json_encode([
         "success" => false,
-        "error" => "Не удалось отправить письмо. Пожалуйста, попробуйте позже."
+        "error" => "Не удалось отправить письмо ни одному получателю. Пожалуйста, попробуйте позже."
     ]);
 }
 ?>

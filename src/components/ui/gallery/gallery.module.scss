@@ -2,7 +2,7 @@
 .slider {
   max-width: 100%;
   position: relative;
-  margin: auto;
+  // margin: auto;
   display: flex;
   align-items: center;
 
@@ -89,6 +89,9 @@
 }
 
 @media (max-width: 500px) {
+  .slider{
+    margin: auto;
+  }
 
   .previous,
   .next {

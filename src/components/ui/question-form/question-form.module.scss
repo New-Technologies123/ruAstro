@@ -62,7 +62,7 @@
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2),
               inset 0 0 0 1px rgba(255, 255, 255, 0.25);
   animation: slideUp 0.25s ease-out;
-  z-index: 1000;
+  z-index: 9999;
   overflow: hidden;
   border: 1px solid rgba(59, 130, 246, 0.3);
 }
@@ -171,69 +171,69 @@
 }
 
 /* ☑️ Чекбоксы */
-.checkbox {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  cursor: pointer;
-  font-size: 12px;
-  margin-top: 10px;
-}
+// .checkbox {
+//   display: flex;
+//   align-items: flex-start;
+//   gap: 10px;
+//   cursor: pointer;
+//   font-size: 12px;
+//   margin-top: 10px;
+// }
 
-.checkbox input {
-  display: none;
-}
+// .checkbox input {
+//   display: none;
+// }
 
-.customCheckbox {
-  min-width: 18px;
-  height: 18px;
-  border: 2px solid #136fdf;
-  border-radius: 6px;
-  position: relative;
-  transition: 0.2s;
-}
+// .customCheckbox {
+//   min-width: 18px;
+//   height: 18px;
+//   border: 2px solid #136fdf;
+//   border-radius: 6px;
+//   position: relative;
+//   transition: 0.2s;
+// }
 
-.checkbox input:checked + .customCheckbox {
-  background: linear-gradient(135deg, #021f80, #3b82f6);
-  border-color: transparent;
-}
+// .checkbox input:checked + .customCheckbox {
+//   background: linear-gradient(135deg, #021f80, #3b82f6);
+//   border-color: transparent;
+// }
 
-.customCheckbox::after {
-  content: '';
-  position: absolute;
-  top: 2px;
-  left: 5px;
-  width: 4px;
-  height: 8px;
-  border: solid #fff;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
-  opacity: 0;
-}
+// .customCheckbox::after {
+//   content: '';
+//   position: absolute;
+//   top: 2px;
+//   left: 5px;
+//   width: 4px;
+//   height: 8px;
+//   border: solid #fff;
+//   border-width: 0 2px 2px 0;
+//   transform: rotate(45deg);
+//   opacity: 0;
+// }
 
-.checkbox input:checked + .customCheckbox::after {
-  opacity: 1;
-}
+// .checkbox input:checked + .customCheckbox::after {
+//   opacity: 1;
+// }
 
-.error .customCheckbox {
-  border-color: #ff1111;
-}
+// .error .customCheckbox {
+//   border-color: #ff1111;
+// }
 
-.errorText {
-  color: #fc0000;
-  font-size: 12px;
-  margin-top: 4px;
-}
+// .errorText {
+//   color: #fc0000;
+//   font-size: 12px;
+//   margin-top: 4px;
+// }
 
-.checkboxText{
-  a{
-    margin: 0 3px;
-  }
-}
+// .checkboxText{
+//   a{
+//     margin: 0 3px;
+//   }
+// }
 
-.checkboxWrapper {
-  margin-bottom: 8px;
-}
+// .checkboxWrapper {
+//   margin-bottom: 8px;
+// }
 
 .checkbox {
   display: flex;
@@ -288,7 +288,7 @@
 .errorText {
   color: #fc0000;
   font-size: 11px;
-  margin-top: 6px;
+  margin-bottom: 8px;
   margin-left: 28px;
   animation: fadeIn 0.3s ease;
 }
@@ -309,7 +309,7 @@
   
   a {
     margin: 0 3px;
-    color: #3b82f6;
+    color: #1d5fc9;
     text-decoration: none;
     
     &:hover {
@@ -345,7 +345,7 @@
 @media (max-width: 500px) {
   .chatButton { bottom: 18px; right: 18px; width: 50px; height: 50px; }
   .chatWindow { width: 90%; right: 5%; }
-  .chatHeader { font-size: 14px; padding: 10px 8px; }
+  .chatHeader { font-size: 14px; padding: 10px 8px; padding-left: 17px;}
   .questionForm { padding: 14px; gap: 7px; }
   .questionForm input,
   .questionForm textarea { padding: 9px; font-size: 13px; }

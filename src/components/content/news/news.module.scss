@@ -73,8 +73,8 @@
 
 @media (max-width: 1220px) {
   .newsItem {
-    display: grid;
-
+    // display: grid;
+    flex-direction: column;
     p {
       margin-top: 8px;
     }

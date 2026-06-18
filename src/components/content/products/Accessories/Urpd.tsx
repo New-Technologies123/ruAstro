@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Styles from "../products.module.scss";
 import back from '../../../../images/back.svg'
-import product from "../../../../images/products/product_2_1.webp";
+import product from "../../../../images/products/urpd.webp";
 
 import { LayoutBack } from "../../../layout/LayoutBack";
 import { BigPhoto } from "../../../ui/big-photo/BigPhoto";

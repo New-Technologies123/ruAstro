@@ -19,6 +19,8 @@
   gap: 30px;
   flex-wrap: wrap;
   width: 100%;
+  padding: 0 15px;
+  margin-bottom: 15px;
 }
 
 /* Скрываем кнопки на десктопе */
@@ -93,6 +95,7 @@
 
   .prevBtn,
   .nextBtn {
+    visibility: hidden;
     pointer-events: auto;
     width: 48px;
     height: 48px;
