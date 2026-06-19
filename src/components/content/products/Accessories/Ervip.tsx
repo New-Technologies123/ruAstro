@@ -169,6 +169,30 @@ export const Ervip = () => {
               импульсы, которые обрабатываются электроникой расходомера.
             </p>
 
+            {/* QUESTIONNAIRE */}
+
+            <div className={Styles.questionnaireBlock}>
+              <h3>Опросный лист</h3>
+              <p className={Styles.questionnaireDesc}>
+                Скачайте опросный лист для заполнения технических требований к вихревым расходомерам Эрвип.
+              </p>
+              <div className={Styles.questionnaireActions}>
+                <button 
+                  className={Styles.viewBtn}
+                  onClick={() => window.open('/survey/ervip.pdf', '_blank')}
+                >
+                  Открыть
+                </button>
+                <a 
+                  href="/survey/ervip.pdf" 
+                  download 
+                  className={Styles.downloadBtn}
+                >
+                  Скачать
+                </a>
+              </div>
+            </div>
+
             <section className={`${Styles.related} ${Styles.reveal}`}>
               <h1>Смотрите также</h1>
 

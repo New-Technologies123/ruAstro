@@ -147,6 +147,30 @@ export const Stationary = () => {
               используются для учета продукции скважин.
             </p>
 
+            {/* QUESTIONNAIRE */}
+
+            <div className={Styles.questionnaireBlock}>
+              <h3>Опросный лист</h3>
+              <p className={Styles.questionnaireDesc}>
+                Скачайте опросный лист для заполнения технических требований к стационарной АГЗУ.
+              </p>
+              <div className={Styles.questionnaireActions}>
+                <button 
+                  className={Styles.viewBtn}
+                  onClick={() => window.open('/survey/agzu_stationary.pdf', '_blank')}
+                >
+                  Открыть
+                </button>
+                <a 
+                  href="/survey/agzu_stationary.pdf" 
+                  download 
+                  className={Styles.downloadBtn}
+                >
+                  Скачать
+                </a>
+              </div>
+            </div>
+
             <section className={Styles.related}>
               <h1>Смотрите также:</h1>
               <div className={Styles.relatedGrid}>

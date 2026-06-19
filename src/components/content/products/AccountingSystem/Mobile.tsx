@@ -52,6 +52,40 @@ export const Mobile = () => {
     };
   }, []);
 
+  // Массив с файлами опросных листов
+  const questionnaireFiles = [
+    {
+      id: 1,
+      name: "АГЗУ мобильный исп.1",
+      fileName: "agzu_mobile_1.pdf",
+    },
+    {
+      id: 2,
+      name: "АГЗУ мобильный исп.2",
+      fileName: "agzu_mobile_2.pdf",
+    },
+    {
+      id: 3,
+      name: "АГЗУ мобильный исп.3",
+      fileName: "agzu_mobile_3.pdf",
+    },
+    {
+      id: 4,
+      name: "АГЗУ мобильный исп.4",
+      fileName: "agzu_mobile_4.pdf",
+    },
+    {
+      id: 5,
+      name: "АГЗУ мобильный исп.5",
+      fileName: "agzu_mobile_5.pdf",
+    },
+    {
+      id: 6,
+      name: "АГЗУ мобильный исп.6",
+      fileName: "agzu_mobile_6.pdf",
+    }
+  ];
+
   return (
     <>
       <div className={Styles.page}>
@@ -171,6 +205,50 @@ export const Mobile = () => {
               также объема свободного нефтяного газа. Полученные параметры
               используются для точного учета продукции скважин.
             </p>
+
+            {/* QUESTIONNAIRE FILES */}
+
+            <div className={Styles.questionnaireBlock}>
+              <h3>Опросные листы</h3>
+              <p className={Styles.questionnaireDesc}>
+                Здесь вы можете открыть или скачать опросные листы и документацию для заполнения.
+              </p>
+              
+              <div className={Styles.filesGrid}>
+                {questionnaireFiles.map((file) => (
+                  <div key={file.id} className={Styles.fileCard}>
+                    <div className={Styles.fileCardIcon}>
+                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                        <polyline points="14 2 14 8 20 8" />
+                      </svg>
+                    </div>
+                    <div className={Styles.fileCardContent}>
+                      <div className={Styles.fileCardInfo}>
+                        <div className={Styles.fileCardName}>{file.name}</div>
+                      </div>
+                      <div className={Styles.fileCardActions}>
+                        <a 
+                          href={`/survey/${file.fileName}`} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className={Styles.viewBtn}
+                        >
+                          Открыть
+                        </a>
+                        <a 
+                          href={`/survey/${file.fileName}`} 
+                          download={file.name.replace(/\s/g, '_') + '.pdf'}
+                          className={Styles.downloadBtn}
+                        >
+                          Скачать
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             <section className={Styles.related}>
               <h1>Смотрите также:</h1>
