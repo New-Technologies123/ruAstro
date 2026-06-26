@@ -2,6 +2,7 @@
 import Styles from './about.module.scss';
 import { Title } from '../../ui/title/Title';
 import { CountCard } from '../../ui/count-card/CountCard';
+import { BackToTop } from "../../ui/back-to-top/BackToTop";
 
 export const About = () => {
   return (
@@ -68,6 +69,7 @@ export const About = () => {
           />
         </div>
       </section>
+      <BackToTop />
     </div>
   );
 };

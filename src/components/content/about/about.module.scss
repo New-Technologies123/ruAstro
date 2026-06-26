@@ -145,7 +145,7 @@
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  margin-bottom: 12px;
+  // margin-bottom: 12px;
 }
 
 .statsSubtitle {
@@ -175,6 +175,9 @@
 }
 
 @media (max-width: 768px) {
+  .statsHeader{
+    margin-bottom: 45px;
+  }
   .heroSection {
     padding: 60px 16px 80px;
   }
@@ -198,7 +201,7 @@
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 520px) {  
   .heroSection {
     padding: 40px 16px 60px;
   }
@@ -224,9 +227,11 @@
       padding: 4px 12px;
     }
   }
-  
+  .statsHeader{
+    margin-bottom: 25px;
+  }
   .statsSection {
-    padding: 50px 16px 60px;
+    padding: 30px 16px 40px;
   }
   
   .statsSubtitle {
@@ -235,5 +240,8 @@
   
   .sectionBadge {
     font-size: 11px;
+  }
+  .numberAbout{
+    padding: 0;
   }
 }

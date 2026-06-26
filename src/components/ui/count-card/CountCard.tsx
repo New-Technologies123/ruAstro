@@ -30,7 +30,7 @@ export const CountCard = ({ header, number, title, offer, index = 0 }: TVacancyP
   const animatedValue = useCounterAnimation(numericValue, isVisible, 2000);
 
   // Массив цветов для каждой карточки
-  const accentColors = ['#2a7de1', '#07357a', '#1a5cb0', '#2a8a3a', '#d48a1a'];
+  const accentColors = ['#2a7de1', '#0a1e3c', '#1a5cb0', '#2a8a3a', '#d48a1a'];
   const gradientColors = [
     'linear-gradient(135deg, #2a7de1, #6db3ff)',
     'linear-gradient(135deg, #0a1e3c, #2a5a8a)',
