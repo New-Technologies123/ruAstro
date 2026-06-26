@@ -1,109 +1,317 @@
+// count-card.module.scss - иконка слева от цифры
+
 .bloc {
-    background-color: #e6f7ff93;
-    padding: 14px; 
-    width: 260px; 
-    text-align: left;
-    color: #000000;
-    will-change: opacity, transform;
-    // Общие параметры анимации
-    transition: 
-      opacity 0.5s ease-out,
-      transform 0.5s ease-out;    
+  position: relative;
+  background: #ffffff;
+  padding: 28px 24px 24px;
+  width: 240px;
+//   min-height: 180px;
+  border-radius: 20px;
+  box-shadow: 
+    0 4px 20px rgba(0, 20, 50, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: opacity, transform;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  
+  &.hidden {
+    opacity: 0;
+    transform: translateY(50px) scale(0.95);
+  }
+  
+  &.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  
+  &:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 
+      0 20px 60px rgba(42, 125, 225, 0.15),
+      0 8px 30px rgba(42, 125, 225, 0.08);
+    border-color: rgba(42, 125, 225, 0.2);
+    
+    .iconCircle {
+      transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(42, 125, 225, 0.3);
+    }
+    
+    .cornerDot {
+      transform: scale(2);
+      opacity: 0.6;
+    }
+  }
+  
+  p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #4a5a6e;
+    margin: 8px 0 0 0;
+    position: relative;
+    z-index: 1;
+    padding-left: 4px;
+  }
+}
+
+// ===== ВЕРХНЯЯ ГРАДИЕНТНАЯ ПОЛОСА =====
+.accentBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  border-radius: 20px 20px 0 0;
+  opacity: 0.8;
+  transition: height 0.3s ease;
+  
+  .bloc:hover & {
+    height: 6px;
+  }
+}
+
+// ===== КОНТЕНТ =====
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+// ===== ВЕРХНЯЯ СТРОКА: ИКОНКА + ЧИСЛО =====
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+
+// ===== ИКОНКА (МАЛЕНЬКАЯ) =====
+.iconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 12px;
+    background: inherit;
+    opacity: 0.15;
+    filter: blur(8px);
+    z-index: -1;
+  }
+}
+
+.icon {
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+}
+
+// ===== ЧИСЛО =====
+.numberWrapper {
+  flex: 1;
+  display: flex;
+  
+  h3 {
+    font-size: 34px;
+    font-weight: 800;
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    transition: color 0.3s ease;
+  }
+}
+
+// ===== ДОПОЛНИТЕЛЬНАЯ ИНФОРМАЦИЯ =====
+.subInfo {
+  display: flex;
+  align-items: end;
+  padding-left: 8px;
+}
+
+.numberUnit {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2a7de1;
+  opacity: 0.8;
+}
+
+.offerText {
+  font-size: 14px;
+  font-weight: 400;
+  color: #5a6a7e;
+  opacity: 0.8;
+}
+
+// ===== ДЕКОРАТИВНАЯ ТОЧКА =====
+.cornerDot {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  opacity: 0.15;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 0;
+}
+
+// ========== АДАПТИВНОСТЬ ==========
+@media (max-width: 1200px) {
+  .bloc {
+    width: 210px;
+    // min-height: 160px;
+    padding: 24px 20px 20px;
+    
+    .numberWrapper h3 {
+      font-size: 30px;
+    }
+  }
+  
+  .iconCircle {
+    width: 40px;
+    height: 40px;
+    
+    .icon {
+      font-size: 18px;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .bloc {
+    width: 190px;
+    // min-height: 150px;
+    padding: 20px 16px 18px;
+    
+    .numberWrapper h3 {
+      font-size: 26px;
+    }
+    
     p {
+      font-size: 13px;
+    }
+  }
+  
+  .iconCircle {
+    width: 36px;
+    height: 36px;
+    
+    .icon {
       font-size: 16px;
-    }     
-    // Состояние скрытия
-    &.hidden {
-      opacity: 0;
-      transform: translateY(20px);
-    }  
-    // Состояние показа
-    &.visible {
-      opacity: 1;
-      transform: translateY(0);
     }
+  }
+  
+  .headerRow {
+    gap: 10px;
+  }
+  
+  .cornerDot {
+    display: none;
+  }
+  
+  .numberUnit {
+    font-size: 14px;
+  }
+  
+  .offerText {
+    font-size: 13px;
+  }
 }
 
-.headerText{
-    display: flex;
-    align-items: center;
-    h3{
-        font-size: 26px;
-        margin-bottom: 8px;
-    }   
+@media (max-width: 768px) {
+  .bloc {
+    width: 45%;
+    min-width: 150px;
+    // min-height: 140px;
+    padding: 18px 14px 16px;
+    border-radius: 16px;
+    
+    .numberWrapper h3 {
+      font-size: 22px;
+    }
+    
+    p {
+      font-size: 13px;
+    }
+  }
+  
+  .iconCircle {
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    
+    .icon {
+      font-size: 14px;
+    }
+  }
+  
+  .headerRow {
+    gap: 8px;
+  }
+  
+  .accentBar {
+    height: 3px;
+  }
+  
+  .subInfo {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  
+  .numberUnit {
+    font-size: 13px;
+  }
+  
+  .offerText {
+    font-size: 12px;
+  }
 }
 
-.explanationText{
-    display: flex;
-    align-items: center;
-    h4{
-        font-size: 18px;
-        margin-bottom: 12px;
+@media (max-width: 520px) {
+  .bloc {
+    width: 100%;
+    max-width: 280px;
+    // min-height: 120px;
+    padding: 16px 14px;
+    border-radius: 14px;
+    
+    .numberWrapper h3 {
+      font-size: 20px;
     }
-    h5{
-        margin-left: 10px;
-        font-size: 18px;
-        margin-bottom: 8px;
+    
+    p {
+      font-size: 12px;
+      margin-top: 4px;
     }
-}
-
-@media (max-width: 1400px){
-    .bloc{
-        width: 240px;
-        p{
-            font-size: 15px;
-        }
+  }
+  
+  .iconCircle {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    
+    .icon {
+      font-size: 12px;
     }
-    .headerText{
-        h3{
-            font-size: 24px;
-        }
-    }
-    .explanationText{
-        h4{
-            font-size: 16px;
-        }
-        h5{
-            font-size: 16px;
-        }
-    }
-}
-
-@media (max-width: 1030px){
-    .bloc{
-        width: 225px;
-        p{
-            font-size: 14px;
-        }
-    }
-    .headerText{
-        h3{
-            font-size: 20px;
-            margin-bottom: 5px;
-        }        
-    }
-    .explanationText{
-        h4{
-            font-size: 12px;
-        }
-        h5{
-            font-size: 15px;
-            margin-bottom: 5px;
-        }
-    }
-}
-
-@media (max-width: 520px){
-    .headerText{
-        h3{
-            font-size: 18px;
-            margin-bottom: 5px;
-        }
-        
-    }
-    .explanationText{
-        h5{
-            font-size: 14px;
-        }
-    }
+  }
+  
+  .headerRow {
+    gap: 6px;
+  }
+  
+  .numberUnit {
+    font-size: 12px;
+  }
+  
+  .offerText {
+    font-size: 12px;
+  }
 }

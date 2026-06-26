@@ -12,33 +12,98 @@ import { CartButton } from '../ui/cart-button/CartButton';
 import { useState, useEffect } from 'react';
 
 /* ===== РЕКУРСИВНЫЙ ПУНКТ МЕНЮ ===== */
-const MenuItem = ({ item, pageType }) => {
+interface MenuItemProps {
+  item: any;
+  pageType: any;
+  isMobile: boolean;
+  openItems: any[];
+  setOpenItems: any;
+  parentId?: string; // ← Сделали опциональным
+}
+
+const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId }: MenuItemProps) => {
   const [open, setOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+
+  // Создаем уникальный ID для пункта меню
+  const itemId = item.url || item.title;
+  
+  // Создаем полный путь для идентификации (для вложенных пунктов)
+  const fullId = parentId ? `${parentId}-${itemId}` : itemId;
+
+  // Проверяем, открыт ли этот пункт (только для мобильной версии)
+  const isOpen = isMobile ? openItems.includes(fullId) : open;
 
   const hasChildren = item.children && item.children.length > 0;
 
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 1000);
-    };
+  // Обработчик клика по стрелке (только для мобильной версии)
+  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    if (!isMobile) return; // Игнорируем на десктопе
+    
+    if (isOpen) {
+      // Если уже открыт - закрываем только этот пункт
+      setOpenItems((prev: string[]) => prev.filter((id: string) => id !== fullId));
+    } else {
+      // Если закрыт - открываем и закрываем все остальные на этом уровне
+      const newOpenItems: string[] = [];
+      
+      // Добавляем все родительские пункты (если есть)
+      if (parentId) {
+        const parentParts = parentId.split('-');
+        let currentPath = '';
+        for (const part of parentParts) {
+          currentPath = currentPath ? `${currentPath}-${part}` : part;
+          if (!newOpenItems.includes(currentPath)) {
+            newOpenItems.push(currentPath);
+          }
+        }
+      }
+      
+      // Добавляем текущий пункт
+      newOpenItems.push(fullId);
+      
+      setOpenItems(newOpenItems);
+    }
+  };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  // 🔹 Проверяем активность: текущий пункт ИЛИ любой потомок
+  const isActive = (() => {
+    if (item.pageType === pageType) return true;
+    
+    if (item.children) {
+      for (const child of item.children) {
+        if (child.pageType === pageType) return true;
+        if (child.children) {
+          for (const grandchild of child.children) {
+            if (grandchild.pageType === pageType) return true;
+          }
+        }
+      }
+    }
+    
+    return false;
+  })();
 
-  // 🔹 активен ли пункт
-  const isActive =
-    item.pageType === pageType ||
-    item.children?.some(child => child.pageType === pageType);
+  // Для десктопа используем hover
+  const handleMouseEnter = () => {
+    if (!isMobile && hasChildren) {
+      setOpen(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!isMobile && hasChildren) {
+      setOpen(false);
+    }
+  };
 
   return (
     <li
       className={Styles.menuItem}
-      onMouseEnter={!isMobile && hasChildren ? () => setOpen(true) : undefined}
-      onMouseLeave={!isMobile && hasChildren ? () => setOpen(false) : undefined}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <div className={Styles.menuRow}>
         <a
@@ -51,12 +116,8 @@ const MenuItem = ({ item, pageType }) => {
         {hasChildren && (
           <button
             type="button"
-            className={`${Styles.arrow} ${open ? Styles.arrowOpen : ''}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              setOpen(prev => !prev);
-            }}
+            className={`${Styles.arrow} ${isOpen ? Styles.arrowOpen : ''}`}
+            onClick={handleToggle}
           >
             ▸
           </button>
@@ -64,12 +125,16 @@ const MenuItem = ({ item, pageType }) => {
       </div>
 
       {hasChildren && (
-        <ul className={`${Styles.subMenu} ${open ? Styles.open : ''}`}>
-          {item.children.map((child, index) => (
+        <ul className={`${Styles.subMenu} ${isOpen ? Styles.open : ''}`}>
+          {item.children.map((child: any, index: number) => (
             <MenuItem
               key={index}
               item={child}
               pageType={pageType}
+              isMobile={isMobile}
+              openItems={openItems}
+              setOpenItems={setOpenItems}
+              parentId={fullId} // Передаем ID родителя для дочерних элементов
             />
           ))}
         </ul>
@@ -78,53 +143,73 @@ const MenuItem = ({ item, pageType }) => {
   );
 };
 
-
 export default MenuItem;
 
 /* ===== ОСНОВНОЙ ХЭДЕР ===== */
-export const Header = ({ pageType }) => {
+export const Header = ({ pageType }: { pageType: string }) => {
   const [isActiveMobileMenu, setIsActiveMobileMenu] = useState(false);
   const [closeAllSubMenus, setCloseAllSubMenus] = useState(false);
+  const [openItems, setOpenItems] = useState<string[]>([]); // Массив открытых пунктов (только для мобильной версии)
+  const [isMobile, setIsMobile] = useState(false);
 
   const onToggleMobileMenu = () => {
-     setIsActiveMobileMenu(prev => {
+     setIsActiveMobileMenu((prev: boolean) => {
       const next = !prev;
 
-      // если закрываем бургер → закрываем всё внутри
       if (!next) {
-        setCloseAllSubMenus(prev => !prev);
+        setCloseAllSubMenus((prev: boolean) => !prev);
+        setOpenItems([]); // Закрываем все подменю при закрытии бургера
       }
 
       return next;
     });
   };
 
- const [lang, setLang] = useState('ru');
+  // Определяем мобильную версию
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 1000;
+      setIsMobile(mobile);
+      
+      // Если десктоп - сбрасываем openItems
+      if (!mobile) {
+        setOpenItems([]);
+      }
+    };
 
-const changeLanguage = (newLang) => {
-  setLang(newLang);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
-  if (newLang === 'en') {
-    window.location.href = 'https://eng.tech-new.ru';
-  } else {
-    window.location.href = 'https://tech-new.ru';
-  }
-};
+  const [lang, setLang] = useState('ru');
+
+  const changeLanguage = (newLang: string) => {
+    setLang(newLang);
+
+    if (newLang === 'en') {
+      window.location.href = 'https://eng.tech-new.ru';
+    } else {
+      window.location.href = 'https://tech-new.ru';
+    }
+  };
 
   /* Закрытие меню при клике вне */
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       const nav = document.querySelector(`.${Styles.navMenu}`);
       const toggle = document.querySelector(`.${Styles.menuToggle}`);
 
       if (
         isActiveMobileMenu &&
         nav &&
-        !nav.contains(event.target) &&
+        !nav.contains(event.target as Node) &&
         toggle &&
-        !toggle.contains(event.target)
+        !toggle.contains(event.target as Node)
       ) {
         setIsActiveMobileMenu(false);
+        setOpenItems([]); // Закрываем все подменю
       }
     };
 
@@ -157,7 +242,6 @@ const changeLanguage = (newLang) => {
             <div className={Styles.languageSwitch}>
               <div className={Styles.langToggle}>
                 
-                {/* sliding background */}
                 <div
                   className={Styles.langSlider}
                   style={{
@@ -210,7 +294,15 @@ const changeLanguage = (newLang) => {
           </li>
 
           {menuData.map((item, index) => (
-            <MenuItem key={index} item={item} pageType={pageType}/>
+            <MenuItem 
+              key={index} 
+              item={item} 
+              pageType={pageType}
+              isMobile={isMobile}
+              openItems={openItems}
+              setOpenItems={setOpenItems}
+              // parentId не передаем для корневых элементов
+            />
           ))}
 
           <li>
