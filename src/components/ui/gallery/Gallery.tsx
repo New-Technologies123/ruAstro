@@ -1,12 +1,7 @@
 import Styles from './gallery.module.scss';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GalleryModal } from './GalleryModal';
-
-type TPhoto = {
-  src: string;
-  id: number;
-  alt: string;
-};
+import { type TPhoto } from '../../content/news/newsData';
 
 type TProps = {
   photos: TPhoto[];
@@ -15,6 +10,21 @@ type TProps = {
 export const Gallery = ({ photos = [] }: TProps) => {
   const [showPhotoId, setShowPhotoId] = useState<number>(1);
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
+
+  // Определяем touch-устройство и добавляем класс на body
+  useEffect(() => {
+    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsTouchDevice(isTouch);
+    
+    if (isTouch) {
+      document.body.classList.add('no-hover');
+    }
+    
+    return () => {
+      document.body.classList.remove('no-hover');
+    };
+  }, []);
 
   const showPhoto = photos.find((photo) => photo.id === showPhotoId);
 
@@ -39,20 +49,44 @@ export const Gallery = ({ photos = [] }: TProps) => {
 
   return (
     <div className={Styles.slider}>
-      <div className={Styles.item}>
-        <img className={Styles.thumbnail} src={showPhoto.src} alt={showPhoto.alt} onClick={() => setIsOpenModal(true)} />
+      <div 
+        className={Styles.item} 
+        onClick={() => setIsOpenModal(true)}
+      >
+        <img 
+          className={Styles.thumbnail} 
+          src={showPhoto?.src} 
+          alt={showPhoto?.alt || 'Фото'} 
+        />
+        
+        <div className={Styles.imageOverlay}>
+          <span className={Styles.zoomText}>🔍 Увеличить</span>
+        </div>
+
+        {photos.length > 1 && (
+          <div className={Styles.photoCounter}>
+            {showPhotoId} / {photos.length}
+          </div>
+        )}
       </div>
 
       {photos.length > 1 && (
         <>
-          <a className={Styles.previous} onClick={previousSlide}>
-            &#10094;
-          </a>
-          <a className={Styles.next} onClick={nextSlide}>
-            &#10095;
-          </a>
+          <button 
+            className={`${Styles.previous} ${isTouchDevice ? Styles.touchDevice : ''}`} 
+            onClick={(e) => { e.stopPropagation(); previousSlide(); }}
+          >
+            ‹
+          </button>
+          <button 
+            className={`${Styles.next} ${isTouchDevice ? Styles.touchDevice : ''}`} 
+            onClick={(e) => { e.stopPropagation(); nextSlide(); }}
+          >
+            ›
+          </button>
         </>
       )}
+      
       {isOpenModal && (
         <GalleryModal
           openPhotoId={showPhotoId}

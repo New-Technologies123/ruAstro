@@ -3,20 +3,21 @@ import Styles from "./back-to-top.module.scss";
 import up from "../../../images/arrow.svg";
 
 export const BackToTop = () => {
-  const btnRef = useRef(null);
+  const btnRef = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
-  const rafRef = useRef(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     const footer = document.querySelector("footer");
     if (!footer || !btnRef.current) return;
 
     const updatePosition = () => {
+      if (!btnRef.current) return;
       const footerRect = footer.getBoundingClientRect();
       const vh = window.innerHeight;
 
       const baseOffset = parseFloat(
-        getComputedStyle(btnRef.current).getPropertyValue("offset")
+        getComputedStyle(btnRef.current).getPropertyValue("offset") || "25"
       );
 
       let bottom = baseOffset;
@@ -30,14 +31,18 @@ export const BackToTop = () => {
     };
 
     const checkVisibility = () => {
-      setVisible(window.scrollY > 160);
-      requestAnimationFrame(checkVisibility);
+      setVisible(window.scrollY > 300);
+      rafRef.current = requestAnimationFrame(checkVisibility);
     };
 
     rafRef.current = requestAnimationFrame(updatePosition);
     requestAnimationFrame(checkVisibility);
 
-    return () => cancelAnimationFrame(rafRef.current);
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, []);
 
   const scrollToTop = () => {

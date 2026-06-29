@@ -1,174 +1,99 @@
-import news_1 from '../../../images/news/news_1.webp';
-import news_2 from '../../../images/news/news_2.webp';
-import news_3 from '../../../images/news/news_3.webp';
-import news_4 from '../../../images/news/news_4.webp';
-import news_5 from '../../../images/news/news_5.webp';
-import news_6 from '../../../images/news/news_6.webp';
-import news_7 from '../../../images/news/news_7.webp';
-import news_8 from '../../../images/news/news_8.webp';
-import news_9 from '../../../images/news/news_9.webp';
-import news_10 from '../../../images/news/news_10.webp';
-import news_11 from '../../../images/news/news_11.webp';
-import news_12 from '../../../images/news/news_12.webp';
-import news_13 from '../../../images/news/news_13.webp';
+// News.tsx
 import Styles from './news.module.scss';
 import { Gallery } from '../../ui/gallery/Gallery';
 import { useState, useEffect } from 'react';
 import { BigPhoto } from '../../ui/big-photo/BigPhoto';
 import { Title } from '../../ui/title/Title';
-import { BackToTop } from '../../ui/back-to-top/BackToTop'
+import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import {
+  NEWS_DATA,
+  CATEGORIES,
+  getCategoryColor,
+  getCategoryIcon,
+  type TNewsItem
+} from './newsData';
 
 export const News = () => {
-  const [photoIsOpen, setPhotoIsOpen] = useState(false);
-  const [photoTwoIsOpen, setPhotoTwoIsOpen] = useState(false);
-  const [photoThreeIsOpen, setPhotoThreeIsOpen] = useState(false);
-  const [photoFourIsOpen, setPhotoFourIsOpen] = useState(false);
+  const [activeFilter, setActiveFilter] = useState('Все');
+  const [filteredNews, setFilteredNews] = useState<TNewsItem[]>(NEWS_DATA);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
 
+  // Фильтрация новостей
   useEffect(() => {
-    // Имитация загрузки контента
+    if (activeFilter === 'Все') {
+      setFilteredNews(NEWS_DATA);
+    } else {
+      setFilteredNews(NEWS_DATA.filter(news => news.category === activeFilter));
+    }
+  }, [activeFilter]);
+
+  // Анимация загрузки
+  useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 300);
-
     return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      <Title text="Новости"></Title>
-      <div className={`${isLoaded ? Styles.loaded : ''}`}>
-        <div className={Styles.newsContent}>
-          <div className={Styles.newsItem}>
-            <Gallery
-              photos={[
-                { id: 1, src: news_12.src, alt: '' },
-                { id: 2, src: news_13.src, alt: '' },
-              ]}
-            />
-            <div>
-              <p>
-                Рады сообщить, что ООО ИПП "Новые Технологии“ успешно приняла участие в выставке Egypt Energy Show (EGYPES) 2026, состоявшейся Каире.
-              </p>
-              <p>
-                За время работы выставки наша команда:
-              </p>
-              <p>
-                Представила новейшие инжиниринговые и производственные решения для энергетического сектора
-              </p>
-              <p>
-                Провела продуктивные переговоры с профессионалами отрасли и потенциальными партнёрами
-              </p>
-              <p>
-                Укрепила существующие деловые связи и установила новые стратегические контакты
-              </p>
-              <p>
-                Получила положительные отзывы о нашем инновационном подходе и технологических возможностях
-              </p>
-              <p>
-                Мы благодарим организаторов EGYPES за мероприятие высокого уровня и всех участников, посетивших наш стенд. 
-                Ваш интерес к нашим решениям подтверждает, что мы движемся в правильном направлении.
-              </p>
-              <p>
-                Мы с нетерпением ждём новых проектов и продолжения сотрудничества в рамках мировой энергетической отрасли!
-              </p>
-            </div>              
-          </div>
-          <div className={Styles.newsItem}>
-            <img src={news_11.src} className={Styles.thumbnail} onClick={() => { setPhotoThreeIsOpen(true); }} />
-            <div>
-              <p>
-                ООО «ИПП Новые Технологии» включено в список одобренных поставщиков SOCAR.</p>
-              <p>
-                29 декабря 2025 года наша компания успешно прошла квалификацию и вошла в Approved Vendor List 
-                Государственной нефтяной компании Азербайджанской Республики (SOCAR / Azərbaycan Respublikası Dövlət Neft 
-                Şirkəti). Статус официального поставщика подтвержден на закупочной платформе socar.az.
-              </p>
-              <p>
-                Мы гордимся высокой оценкой нашего производства и выражаем искреннюю надежду на долгосрочное и 
-                плодотворное сотрудничество с SOCAR как в Азербайджане, так и в других странах ее присутствия.
-              </p>
-            </div>            
-          </div>
-          <div className={Styles.newsItem}>
-            <Gallery
-              photos={[
-                { id: 1, src: news_9.src, alt: '' },
-                { id: 2, src: news_10.src, alt: '' },
-              ]}
-            />
-            <p>
-              ООО ИПП «Новые Технологии» успешно приняли участие в международной выставке ADIPEC-2025, прошедшей в
-              Абу-Даби, ОАЭ с 3 по 6 ноября 2025 года. Наше предприятие успешно провело переговоры с представителями
-              ADNOC, Aramco и других глобальных игроков, обсудив потенциальные контракты на поставку оборудования и
-              совместные проекты. Участие нашего предприятия позволило укрепить наши позиции в регионе MENA, где спрос
-              на российские технологии остаётся неизменно высоким. Участие в данном международном мероприятии открывает
-              путь для успешного глобального сотрудничества и экспорта высокотехнологического оборудования, производимого
-              нашим предприятием.
-            </p>
-          </div>
-          <div className={Styles.newsItem}>
-            <Gallery
-              photos={[
-                { id: 1, src: news_7.src, alt: '' },
-                { id: 2, src: news_8.src, alt: '' },
-              ]}
-            />
-            <p>
-              2-4 июня 2025 года ООО ИПП «Новые Технологии» успешно приняли участие в 30-ой Международной Выставке «Нефть
-              и Газ Каспия» - Caspian oil & gas 2025, г. Баку. В рамках выставки были проведены несколько десятков переговоров
-              и презентаций, в результате которых был выявлен интерес к высокотехнологичной продукции нашего предприятия, что
-              открывает нам новые экспортные возможности
-            </p>
-          </div>
-          <div className={Styles.newsItem}>
-            <Gallery
-              photos={[
-                { id: 1, src: news_5.src, alt: '' },
-                { id: 2, src: news_6.src, alt: '' },
-              ]}
-            />
-            <p>
-              В рамках 30-ой Международной Выставке «Нефть и Газ Каспия» - Caspian oil & gas 2025, г. Баку сотрудники ООО
-              ИПП «Новые Технологии» приняли участие в посадке деревьев и цветов на территории Баку Экспо Центра. Эта акция,
-              приуроченная к юбилею выставки, направлена на поддержку принципов устойчивого развития и охрану окружающей среды.
-            </p>
-          </div>
-          <div className={Styles.newsItem}>
-            <img src={news_4.src} className={Styles.thumbnail} onClick={() => { setPhotoTwoIsOpen(true); }} />
-            <p>
-              27 марта 2025 года Генеральный директор ООО ИПП  «Новые Технологии» Сафаров Ян Рауфович был награждён Почётной грамотой за заслуги
-              в развитии международных, внешнеэкономических и межрегиональных связей Республики Башкортостан с субъектами Российской Федерации
-            </p>
-          </div>
-          <div className={Styles.newsItem}>
-            <Gallery
-              photos={[
-                { id: 1, src: news_1.src, alt: '' },
-                { id: 2, src: news_2.src, alt: '' },
-              ]}
-            />
-            <p>
-              С 25 по 27 сентября 2024 года ООО ИПП «Новые Технологии» успешно приняло участие в 29-й Казахстанской Международной выставке
-              KIOGE «Нефть и газ», где были представлены инновационные технологии и основные тенденции развития мировой нефтегазовой отрасли.
-            </p>
-          </div>
+      <Title text="Новости" />
 
-          <div className={Styles.newsItem}>
-            <img src={news_3.src} className={Styles.thumbnail} onClick={() => { setPhotoIsOpen(true); }} />
-            <p>
-              ООО ИПП «Новые Технологии» заняло 2 место в конкурсе «Экспортер года 2022» в номинации «Прорыв года среди субъектов,
-              малого и среднего предпринимательства» по Республике Башкортостан в рамках Международной недели бизнеса.
-            </p>
-          </div>
-        </div>
+      {/* ===== ФИЛЬТРЫ ===== */}
+      <div className={Styles.filters}>
+        {CATEGORIES.map((category) => (
+          <button
+            key={category}
+            className={`${Styles.filterBtn} ${activeFilter === category ? Styles.active : ''}`}
+            onClick={() => setActiveFilter(category)}
+          >
+            {category === 'Все' ? '📰 Все' : `${getCategoryIcon(category)} ${category}`}
+          </button>
+        ))}
       </div>
-      <BackToTop />
-      {photoIsOpen && <BigPhoto src={news_3.src} onClose={() => setPhotoIsOpen(false)} />}
-      {photoTwoIsOpen && <BigPhoto src={news_4.src} onClose={() => setPhotoTwoIsOpen(false)} />}
-      {photoThreeIsOpen && <BigPhoto src={news_11.src} onClose={() => setPhotoThreeIsOpen(false)} />}
-      {photoFourIsOpen && <BigPhoto src={news_12.src} onClose={() => setPhotoFourIsOpen(false)} />}
-    </>
 
+      {/* ===== КОЛ-ВО НОВОСТЕЙ ===== */}
+      <div className={Styles.newsCount}>
+        {filteredNews.length} {filteredNews.length === 1 ? 'новость' : filteredNews.length < 5 ? 'новости' : 'новостей'}
+      </div>
+
+      {/* ===== СПИСОК НОВОСТЕЙ ===== */}
+      <div className={`${Styles.newsContent} ${isLoaded ? Styles.loaded : ''}`}>
+        {filteredNews.map((news, index) => (
+          <div key={news.id} className={Styles.newsItem} style={{ transitionDelay: `${index * 100}ms` }}>
+            <div className={Styles.newsHeader}>
+              <div className={Styles.newsBadge} style={{ background: getCategoryColor(news.category) }}>
+                {getCategoryIcon(news.category)} {news.category}
+              </div>
+              <div className={Styles.newsDate}>{news.date}</div>
+            </div>
+
+            <h3 className={Styles.newsTitle}>{news.title}</h3>
+
+            {news.photos.length > 0 && (
+              <Gallery photos={news.photos} />
+            )}
+
+            <p className={Styles.newsDescription}>{news.description}</p>
+
+            <details className={Styles.newsDetails}>
+              <summary className={Styles.newsSummary}>Читать подробнее</summary>
+              <div className={Styles.newsFullContent}>
+                {news.content.map((paragraph, idx) => (
+                  <p key={idx}>{paragraph}</p>
+                ))}
+              </div>
+            </details>
+          </div>
+        ))}
+      </div>
+
+      <BackToTop />
+
+      {bigPhoto && (
+        <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
+      )}
+    </>
   );
 };
