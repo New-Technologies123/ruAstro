@@ -7,9 +7,8 @@
 .productsWrapper, .servicesWrapper, .shopWrapper {
   position: relative;
   width: 100%;
-  max-width: 1400px;
+  // max-width: 1400px;
   margin: 0 auto;
-  // padding: 20px;
 }
 
 .cardsTrack {
@@ -28,8 +27,13 @@
   display: none;
 }
 
+/* Индикаторы пагинации (скрыты на десктопе) */
+.paginationDots {
+  display: none;
+}
+
 /* Мобильные стили */
-@media (max-width: 720px) {
+@media (max-width: 535px) {
   .productsContainer {
     display: block;
   }
@@ -49,7 +53,9 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
-    padding: 20px 60px 30px;
+    // padding: 20px 60px 30px;
+    padding-bottom: 15px;
+    margin-bottom: 8px;
     width: 100%;
     
     /* Скрываем скроллбар */
@@ -111,7 +117,6 @@
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    // z-index: 10;
     position: relative;
   }
 
@@ -132,6 +137,44 @@
   .prevBtn:active,
   .nextBtn:active {
     transform: scale(0.95);
+  }
+
+  /* Индикаторы пагинации - НОВЫЙ БЛОК */
+  .paginationDots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0 20px;
+    padding: 0 20px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #045d99;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    flex-shrink: 0;
+
+    &:hover {
+      background: rgba(4, 93, 153, 0.2);
+      transform: scale(1.1);
+    }
+
+    &:focus-visible {
+      outline: 2px solid #045d99;
+      outline-offset: 2px;
+    }
+
+    &.active {
+      background: #045d99;
+      transform: scale(1.1);
+      width: 30px;
+      border-radius: 5px;
+    }
   }
 }
 
@@ -161,5 +204,15 @@
 
   .nextBtn {
     right: 5px;
+  }
+
+  /* Адаптивные точки */
+  .dot {
+    width: 8px;
+    height: 8px;
+    
+    &.active {
+      width: 25px;
+    }
   }
 }

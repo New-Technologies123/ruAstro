@@ -34,10 +34,23 @@ const FROM_SERVICE_KEY = 'from_service_page';
 
 export const Services = () => {
   const [currentPage, setCurrentPage] = useState<TServices | null>(null);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  
   const trackRef = useRef<HTMLDivElement>(null);
   const prevBtnRef = useRef<HTMLButtonElement>(null);
   const nextBtnRef = useRef<HTMLButtonElement>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  // Проверка мобильного устройства
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 720);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const goTo = (path: string, cardIndex?: number) => {
     // Сохраняем индекс карточки, с которой переходим на детальную страницу
@@ -84,6 +97,10 @@ export const Services = () => {
       }
     };
 
+    const updateDots = (index: number) => {
+      setCurrentCardIndex(index);
+    };
+
     const cardStep = () => {
       return cards.length > 1
         ? (cards[1] as HTMLElement).offsetLeft - (cards[0] as HTMLElement).offsetLeft
@@ -96,6 +113,7 @@ export const Services = () => {
       const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
       track.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
       updateArrows();
+      updateDots(current);
     };
 
     const handleScroll = () => {
@@ -104,6 +122,7 @@ export const Services = () => {
         current = Math.round(track.scrollLeft / step);
         current = Math.max(0, Math.min(cards.length - 1, current));
         updateArrows();
+        updateDots(current);
       }
     };
 
@@ -146,7 +165,8 @@ export const Services = () => {
 
     setIsInitialized(true);
 
-    nextBtn.addEventListener('click', () => {
+    // Сохраняем ссылки на обработчики для правильного удаления
+    const handleNextClick = () => {
       goToCard(current + 1);
       // Сохраняем позицию после клика (только если не переходим на другую страницу)
       setTimeout(() => {
@@ -154,9 +174,9 @@ export const Services = () => {
           sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
         }
       }, 100);
-    });
+    };
     
-    prevBtn.addEventListener('click', () => {
+    const handlePrevClick = () => {
       goToCard(current - 1);
       // Сохраняем позицию после клика (только если не переходим на другую страницу)
       setTimeout(() => {
@@ -164,20 +184,24 @@ export const Services = () => {
           sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
         }
       }, 100);
-    });
-    
-    track.addEventListener('scroll', () => {
+    };
+
+    const handleScrollEvent = () => {
       handleScroll();
       // Сохраняем позицию при скролле (только если не переходим на другую страницу)
       if (trackRef.current) {
         sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
       }
-    }, { passive: true });
+    };
+
+    nextBtn.addEventListener('click', handleNextClick);
+    prevBtn.addEventListener('click', handlePrevClick);
+    track.addEventListener('scroll', handleScrollEvent, { passive: true });
 
     return () => {
-      nextBtn.removeEventListener('click', () => {});
-      prevBtn.removeEventListener('click', () => {});
-      track.removeEventListener('scroll', handleScroll);
+      nextBtn.removeEventListener('click', handleNextClick);
+      prevBtn.removeEventListener('click', handlePrevClick);
+      track.removeEventListener('scroll', handleScrollEvent);
     };
   }, []);
 
@@ -246,16 +270,49 @@ export const Services = () => {
             <button 
               className={`${styles.prevBtn}`} 
               ref={prevBtnRef}
+              aria-label="Предыдущая услуга"
             >
               ←
             </button>
             <button 
               className={`${styles.nextBtn}`} 
               ref={nextBtnRef}
+              aria-label="Следующая услуга"
             >
               →
             </button>
           </div>
+
+          {/* Индикаторы пагинации (только на мобильных) */}
+          {isMobile && (
+            <div className={styles.paginationDots} role="tablist" aria-label="Навигация по услугам">
+              {Array.from({ length: 4 }).map((_, index) => {
+                const cards = trackRef.current?.querySelectorAll('.card');
+                const total = cards?.length || 4;
+                if (index >= total) return null;
+                
+                return (
+                  <button
+                    key={index}
+                    className={`${styles.dot} ${currentCardIndex === index ? styles.active : ''}`}
+                    onClick={() => {
+                      const track = trackRef.current;
+                      const cards = track?.querySelectorAll('.card');
+                      if (!track || !cards) return;
+                      
+                      const card = cards[index] as HTMLElement;
+                      const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+                      track.scrollTo({ left, behavior: 'smooth' });
+                      setCurrentCardIndex(index);
+                    }}
+                    role="tab"
+                    aria-selected={currentCardIndex === index}
+                    aria-label={`Перейти к услуге ${index + 1}`}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </>
       <BackToTop />

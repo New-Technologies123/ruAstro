@@ -37,10 +37,23 @@ export const Shop = () => {
   };
 
   const [currentPage, setCurrentPage] = useState<Page>('shop');
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  
   const trackRef = useRef<HTMLDivElement>(null);
   const prevBtnRef = useRef<HTMLButtonElement>(null);
   const nextBtnRef = useRef<HTMLButtonElement>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+
+  // Проверка мобильного устройства
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 720);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // 🔁 синхронизация состояния со строкой браузера
   const syncFromUrl = () => {
@@ -92,6 +105,10 @@ export const Shop = () => {
       }
     };
 
+    const updateDots = (index: number) => {
+      setCurrentCardIndex(index);
+    };
+
     const cardStep = () => {
       return cards.length > 1
         ? (cards[1] as HTMLElement).offsetLeft - (cards[0] as HTMLElement).offsetLeft
@@ -104,6 +121,7 @@ export const Shop = () => {
       const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
       track.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
       updateArrows();
+      updateDots(current);
     };
 
     const handleScroll = () => {
@@ -112,6 +130,7 @@ export const Shop = () => {
         current = Math.round(track.scrollLeft / step);
         current = Math.max(0, Math.min(cards.length - 1, current));
         updateArrows();
+        updateDots(current);
       }
     };
 
@@ -281,16 +300,49 @@ export const Shop = () => {
                 <button 
                   className={`${styles.prevBtn}`} 
                   ref={prevBtnRef}
+                  aria-label="Предыдущий товар"
                 >
                   ←
                 </button>
                 <button 
                   className={`${styles.nextBtn}`} 
                   ref={nextBtnRef}
+                  aria-label="Следующий товар"
                 >
                   →
                 </button>
               </div>
+
+              {/* Индикаторы пагинации (только на мобильных) */}
+              {isMobile && (
+                <div className={styles.paginationDots} role="tablist" aria-label="Навигация по товарам">
+                  {products.map((_, index) => {
+                    const cards = trackRef.current?.querySelectorAll('.card');
+                    const total = cards?.length || products.length;
+                    if (index >= total) return null;
+                    
+                    return (
+                      <button
+                        key={index}
+                        className={`${styles.dot} ${currentCardIndex === index ? styles.active : ''}`}
+                        onClick={() => {
+                          const track = trackRef.current;
+                          const cards = track?.querySelectorAll('.card');
+                          if (!track || !cards) return;
+                          
+                          const card = cards[index] as HTMLElement;
+                          const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+                          track.scrollTo({ left, behavior: 'smooth' });
+                          setCurrentCardIndex(index);
+                        }}
+                        role="tab"
+                        aria-selected={currentCardIndex === index}
+                        aria-label={`Перейти к товару ${index + 1}`}
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </>
           <BackToTop />

@@ -8,7 +8,7 @@ import news_7 from '../../../images/news/news_7.webp';
 import news_8 from '../../../images/news/news_8.webp';
 import news_9 from '../../../images/news/news_9.webp';
 import news_10 from '../../../images/news/news_10.webp';
-import news_11 from '../../../images/news/news_11.webp';
+import news_11 from '../../../images/news/news_11.jpg';
 import news_12 from '../../../images/news/news_12.webp';
 import news_13 from '../../../images/news/news_13.webp';
 

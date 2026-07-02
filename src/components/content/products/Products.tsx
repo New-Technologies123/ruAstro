@@ -34,25 +34,35 @@ const FROM_PRODUCT_KEY = 'from_product_page';
 
 export const Products = () => {
   const [currentPage, setCurrentPage] = useState<TProducts | null>(null);
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  
   const trackRef = useRef<HTMLDivElement>(null);
   const prevBtnRef = useRef<HTMLButtonElement>(null);
   const nextBtnRef = useRef<HTMLButtonElement>(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
+  // Проверка мобильного устройства
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 720);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   const goTo = (path: string, cardIndex?: number) => {
-    // Сохраняем индекс карточки, с которой переходим на детальную страницу
     if (cardIndex !== undefined) {
       sessionStorage.setItem(SELECTED_CARD_KEY, String(cardIndex));
-      // Отмечаем, что переходим с страницы продукции на детальную страницу
       sessionStorage.setItem(FROM_PRODUCT_KEY, 'true');
     }
-    // Сохраняем текущую позицию скролла перед уходом
     if (trackRef.current) {
       sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
     }
     window.history.pushState({}, '', path);
     setCurrentPage(pathnameToProduct(path));
-    window.scrollTo({ top: 0, behavior: 'smooth', });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   useEffect(() => {
@@ -66,7 +76,6 @@ export const Products = () => {
     let current = 0;
 
     const updateArrows = () => {
-      // Используем классы вместо style.visibility
       if (current <= 0) {
         prevBtn.classList.remove('visible');
         prevBtn.style.visibility = 'hidden';
@@ -84,6 +93,10 @@ export const Products = () => {
       }
     };
 
+    const updateDots = (index: number) => {
+      setCurrentCardIndex(index);
+    };
+
     const cardStep = () => {
       return cards.length > 1
         ? (cards[1] as HTMLElement).offsetLeft - (cards[0] as HTMLElement).offsetLeft
@@ -96,6 +109,7 @@ export const Products = () => {
       const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
       track.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
       updateArrows();
+      updateDots(current);
     };
 
     const handleScroll = () => {
@@ -104,19 +118,15 @@ export const Products = () => {
         current = Math.round(track.scrollLeft / step);
         current = Math.max(0, Math.min(cards.length - 1, current));
         updateArrows();
+        updateDots(current);
       }
     };
 
-    // Функция для определения целевой карточки при возврате
     const getTargetCardIndex = (): number => {
-      // Проверяем, возвращаемся ли мы с детальной страницы продукта
       const fromProduct = sessionStorage.getItem(FROM_PRODUCT_KEY);
       
       if (fromProduct === 'true') {
-        // Возвращаемся с детальной страницы - показываем карточку, с которой перешли
         const savedCardIndex = sessionStorage.getItem(SELECTED_CARD_KEY);
-        
-        // Очищаем флаги после использования
         sessionStorage.removeItem(FROM_PRODUCT_KEY);
         sessionStorage.removeItem(SELECTED_CARD_KEY);
         sessionStorage.removeItem(SCROLL_POSITION_KEY);
@@ -127,57 +137,53 @@ export const Products = () => {
             return index;
           }
         }
-        // Если индекс не валидный - показываем первую карточку
         return 0;
       }
 
-      // Если пришли с другой страницы (не с детальной страницы продукта)
-      // или зашли впервые - показываем первую карточку
-      // Очищаем все сохраненные данные
       sessionStorage.removeItem(SELECTED_CARD_KEY);
       sessionStorage.removeItem(SCROLL_POSITION_KEY);
-      
       return 0;
     };
 
-    // Восстанавливаем позицию
     const targetIndex = getTargetCardIndex();
     goToCard(targetIndex, false);
 
     setIsInitialized(true);
 
-    nextBtn.addEventListener('click', () => {
+    // Сохраняем ссылки на обработчики для правильного удаления
+    const handleNextClick = () => {
       goToCard(current + 1);
-      // Сохраняем позицию после клика (только если не переходим на другую страницу)
       setTimeout(() => {
         if (trackRef.current) {
           sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
         }
       }, 100);
-    });
+    };
     
-    prevBtn.addEventListener('click', () => {
+    const handlePrevClick = () => {
       goToCard(current - 1);
-      // Сохраняем позицию после клика (только если не переходим на другую страницу)
       setTimeout(() => {
         if (trackRef.current) {
           sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
         }
       }, 100);
-    });
-    
-    track.addEventListener('scroll', () => {
+    };
+
+    const handleScrollEvent = () => {
       handleScroll();
-      // Сохраняем позицию при скролле (только если не переходим на другую страницу)
       if (trackRef.current) {
         sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
       }
-    }, { passive: true });
+    };
+
+    nextBtn.addEventListener('click', handleNextClick);
+    prevBtn.addEventListener('click', handlePrevClick);
+    track.addEventListener('scroll', handleScrollEvent, { passive: true });
 
     return () => {
-      nextBtn.removeEventListener('click', () => {});
-      prevBtn.removeEventListener('click', () => {});
-      track.removeEventListener('scroll', handleScroll);
+      nextBtn.removeEventListener('click', handleNextClick);
+      prevBtn.removeEventListener('click', handlePrevClick);
+      track.removeEventListener('scroll', handleScrollEvent);
     };
   }, []);
 
@@ -259,16 +265,49 @@ export const Products = () => {
             <button 
               className={`${styles.prevBtn}`} 
               ref={prevBtnRef}
+              aria-label="Предыдущий продукт"
             >
               ←
             </button>
             <button 
               className={`${styles.nextBtn}`} 
               ref={nextBtnRef}
+              aria-label="Следующий продукт"
             >
               →
             </button>
           </div>
+
+          {/* Индикаторы пагинации (только на мобильных) */}
+          {isMobile && (
+            <div className={styles.paginationDots} role="tablist" aria-label="Навигация по продуктам">
+              {Array.from({ length: 5 }).map((_, index) => {
+                const cards = trackRef.current?.querySelectorAll('.card');
+                const total = cards?.length || 5;
+                if (index >= total) return null;
+                
+                return (
+                  <button
+                    key={index}
+                    className={`${styles.dot} ${currentCardIndex === index ? styles.active : ''}`}
+                    onClick={() => {
+                      const track = trackRef.current;
+                      const cards = track?.querySelectorAll('.card');
+                      if (!track || !cards) return;
+                      
+                      const card = cards[index] as HTMLElement;
+                      const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+                      track.scrollTo({ left, behavior: 'smooth' });
+                      setCurrentCardIndex(index);
+                    }}
+                    role="tab"
+                    aria-selected={currentCardIndex === index}
+                    aria-label={`Перейти к продукту ${index + 1}`}
+                  />
+                );
+              })}
+            </div>
+          )}
         </div>
       </>
       <BackToTop />
