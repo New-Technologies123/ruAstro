@@ -98,29 +98,6 @@
   margin: 0 0 32px 0;
 }
 
-.heroTags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  
-  span {
-    padding: 8px 18px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 50px;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 14px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    
-    &:hover {
-      background: rgba(42, 125, 225, 0.3);
-      border-color: rgba(42, 125, 225, 0.5);
-      color: #ffffff;
-    }
-  }
-}
-
 // ============================================
 // ========== 2. БЛОК С ЦИФРАМИ ==========
 // ============================================
@@ -133,19 +110,6 @@
 .statsHeader {
   text-align: center;
   margin-bottom: 60px;
-}
-
-.sectionBadge {
-  display: inline-block;
-  padding: 6px 16px;
-  background: linear-gradient(135deg, #e8f0fe, #d4e4ff);
-  color: #1a5cb0;
-  border-radius: 50px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  // margin-bottom: 12px;
 }
 
 .statsSubtitle {
@@ -190,11 +154,6 @@
     font-size: 17px;
   }
   
-  .heroTags span {
-    font-size: 12px;
-    padding: 6px 14px;
-  }
-  
   .numberAbout {
     gap: 16px;
     padding: 10px;
@@ -219,14 +178,6 @@
     padding: 6px 14px;
   }
   
-  .heroTags {
-    gap: 8px;
-    
-    span {
-      font-size: 11px;
-      padding: 4px 12px;
-    }
-  }
   .statsHeader{
     margin-bottom: 25px;
   }
@@ -238,9 +189,6 @@
     font-size: 15px;
   }
   
-  .sectionBadge {
-    font-size: 11px;
-  }
   .numberAbout{
     padding: 0;
   }

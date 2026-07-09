@@ -21,19 +21,12 @@ export const About = () => {
             для обустройства нефтегазовых месторождений. Работаем в условиях Крайнего Севера, 
             обеспечивая бесперебойную работу наших клиентов.
           </p>
-          <div className={Styles.heroTags}>
-            <span>📍 Красноярский край</span>
-            <span>📍 Пермский край</span>
-            <span>📍 Иркутская область</span>
-            <span>📍 Тюменская область</span>
-          </div>
         </div>
       </section>
 
       {/* ===== БЛОК С ЦИФРАМИ ===== */}
       <section className={Styles.statsSection}>
         <div className={Styles.statsHeader}>
-          <span className={Styles.sectionBadge}>Достижения</span>
           <Title text="Компания в цифрах" />
           <p className={Styles.statsSubtitle}>
             Более 15 лет опыта и сотни реализованных проектов

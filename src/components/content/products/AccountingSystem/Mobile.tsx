@@ -58,31 +58,43 @@ export const Mobile = () => {
       id: 1,
       name: "АГЗУ мобильный исп.1",
       fileName: "agzu_mobile_1.pdf",
+      size: "1.2 МБ",
+      type: "PDF"
     },
     {
       id: 2,
       name: "АГЗУ мобильный исп.2",
       fileName: "agzu_mobile_2.pdf",
+      size: "1.4 МБ",
+      type: "PDF"
     },
     {
       id: 3,
       name: "АГЗУ мобильный исп.3",
       fileName: "agzu_mobile_3.pdf",
+      size: "1.1 МБ",
+      type: "PDF"
     },
     {
       id: 4,
       name: "АГЗУ мобильный исп.4",
       fileName: "agzu_mobile_4.pdf",
+      size: "1.3 МБ",
+      type: "PDF"
     },
     {
       id: 5,
       name: "АГЗУ мобильный исп.5",
       fileName: "agzu_mobile_5.pdf",
+      size: "1.5 МБ",
+      type: "PDF"
     },
     {
       id: 6,
       name: "АГЗУ мобильный исп.6",
       fileName: "agzu_mobile_6.pdf",
+      size: "1.2 МБ",
+      type: "PDF"
     }
   ];
 
@@ -111,10 +123,19 @@ export const Mobile = () => {
                 className={Styles.primaryBtn}
                 onClick={() => setBigPhoto(product.src)}
               >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <circle cx="8.5" cy="8.5" r="1.5" />
+                  <path d="M21 15L16 10L5 21" />
+                </svg>
                 Смотреть фото
               </button>
 
               <button className={Styles.secondaryBtn} onClick={onDoc}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
                 Документация
               </button>
             </div>
@@ -209,16 +230,22 @@ export const Mobile = () => {
             {/* QUESTIONNAIRE FILES */}
 
             <div className={Styles.questionnaireBlock}>
-              <h3>Опросные листы</h3>
-              <p className={Styles.questionnaireDesc}>
-                Здесь вы можете открыть или скачать опросные листы и документацию для заполнения.
-              </p>
+              <div className={Styles.questionnaireHeader}>
+                <div className={Styles.questionnaireTitleWrapper}>
+                  <div>
+                    <h3>Опросные листы</h3>
+                    <p className={Styles.questionnaireDesc}>
+                      Выберите модификацию и скачайте опросный лист для заполнения технических требований
+                    </p>
+                  </div>
+                </div>
+              </div>
               
               <div className={Styles.filesGrid}>
                 {questionnaireFiles.map((file) => (
                   <div key={file.id} className={Styles.fileCard}>
                     <div className={Styles.fileCardIcon}>
-                      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#2e53f8" strokeWidth="1.8">
                         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                         <polyline points="14 2 14 8 20 8" />
                       </svg>
@@ -226,6 +253,10 @@ export const Mobile = () => {
                     <div className={Styles.fileCardContent}>
                       <div className={Styles.fileCardInfo}>
                         <div className={Styles.fileCardName}>{file.name}</div>
+                        <div className={Styles.fileCardMeta}>
+                          <span className={Styles.fileCardType}>{file.type}</span>
+                          <span className={Styles.fileCardSize}>{file.size}</span>
+                        </div>
                       </div>
                       <div className={Styles.fileCardActions}>
                         <a 
@@ -234,6 +265,10 @@ export const Mobile = () => {
                           rel="noopener noreferrer"
                           className={Styles.viewBtn}
                         >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
                           Открыть
                         </a>
                         <a 
@@ -241,6 +276,11 @@ export const Mobile = () => {
                           download={file.name.replace(/\s/g, '_') + '.pdf'}
                           className={Styles.downloadBtn}
                         >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                            <polyline points="7 10 12 15 17 10" />
+                            <line x1="12" y1="15" x2="12" y2="3" />
+                          </svg>
                           Скачать
                         </a>
                       </div>
@@ -253,7 +293,9 @@ export const Mobile = () => {
             <section className={Styles.related}>
               <h1>Смотрите также:</h1>
               <div className={Styles.relatedGrid}>
-                <a href="/products/accounting-system/stationary/">Стационарная АГЗУ</a>
+                <a href="/products/accounting-system/stationary/">
+                  Стационарная АГЗУ
+                </a>
               </div>
             </section>
           </div>

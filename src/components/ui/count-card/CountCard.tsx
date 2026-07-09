@@ -14,13 +14,11 @@ type TVacancyProps = {
 export const CountCard = ({ header, number, title, offer, index = 0 }: TVacancyProps) => {
   const { ref, isVisible } = useScrollAnimation(index * 100);
   
-  // Извлекаем число из строки header для анимации
   const getNumberFromString = (str: string): number => {
     const match = str.match(/\d+([,.]\d+)?/);
     return match ? parseFloat(match[0].replace(',', '.')) : 0;
   };
   
-  // Получаем суффикс (+, %, м² и т.д.)
   const getSuffix = (str: string): string => {
     return str.replace(/[\d,.\s]/g, '').trim();
   };
@@ -29,15 +27,59 @@ export const CountCard = ({ header, number, title, offer, index = 0 }: TVacancyP
   const suffix = getSuffix(header);
   const animatedValue = useCounterAnimation(numericValue, isVisible, 2000);
 
-  // Массив цветов для каждой карточки
-  const accentColors = ['#2a7de1', '#0a1e3c', '#1a5cb0', '#2a8a3a', '#d48a1a'];
+  // Профессиональная цветовая гамма
+  const accentColors = ['#1a3a6b', '#2c4a7c', '#3a5a8c', '#1a5a4a', '#8a6a2a'];
   const gradientColors = [
-    'linear-gradient(135deg, #2a7de1, #6db3ff)',
-    'linear-gradient(135deg, #0a1e3c, #2a5a8a)',
-    'linear-gradient(135deg, #1a5cb0, #4a8ad4)',
-    'linear-gradient(135deg, #2a8a3a, #6aba6a)',
-    'linear-gradient(135deg, #d48a1a, #f0b84a)',
+    'linear-gradient(135deg, #1a3a6b, #4a7ab8)',
+    'linear-gradient(135deg, #2c4a7c, #5a8ab8)',
+    'linear-gradient(135deg, #3a5a8c, #6a9ac8)',
+    'linear-gradient(135deg, #1a5a4a, #4a8a7a)',
+    'linear-gradient(135deg, #8a6a2a, #b89a4a)',
   ];
+
+  // Профессиональные иконки
+  const getIcon = (index: number) => {
+    const icons = {
+      0: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
+        </svg>
+      ),
+      1: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" />
+          <path d="M9 7h6" />
+          <path d="M9 12h6" />
+          <path d="M9 17h4" />
+        </svg>
+      ),
+      2: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+          <path d="M14 2v6h6" />
+          <path d="M16 13H8" />
+          <path d="M16 17H8" />
+          <path d="M10 9H8" />
+        </svg>
+      ),
+      3: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z" />
+          <path d="M2 17l10 5 10-5" />
+          <path d="M2 12l10 5 10-5" />
+        </svg>
+      ),
+      4: (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 8v4l3 3" />
+        </svg>
+      ),
+    };
+    return icons[index as keyof typeof icons] || icons[0];
+  };
 
   return (
     <div 
@@ -47,54 +89,37 @@ export const CountCard = ({ header, number, title, offer, index = 0 }: TVacancyP
         transitionDelay: isVisible ? `${index * 150}ms` : '0ms',
       }}
     >
-      {/* Градиентный акцент сверху */}
-      <div 
-        className={Styles.accentBar} 
-        style={{ background: gradientColors[index % gradientColors.length] }}
-      />
+      <div className={Styles.accentBar} style={{ background: gradientColors[index % gradientColors.length] }} />
 
       <div className={Styles.content}>
-        {/* Верхняя часть: иконка + число в одной строке */}
         <div className={Styles.headerRow}>
           <div 
             className={Styles.iconCircle}
-            style={{ background: gradientColors[index % gradientColors.length] }}
+            style={{ 
+              borderColor: accentColors[index % accentColors.length],
+              color: accentColors[index % accentColors.length]
+            }}
           >
-            <span className={Styles.icon}>
-              {index === 0 && '👥'}
-              {index === 1 && '🏭'}
-              {index === 2 && '📋'}
-              {index === 3 && '🌿'}
-              {index === 4 && '🚛'}
-            </span>
+            {getIcon(index)}
           </div>
           
           <div className={Styles.numberWrapper}>
             <h3 style={{ color: accentColors[index % accentColors.length] }}>
               {isVisible ? animatedValue : numericValue}
-              {suffix}              
+              {suffix}
             </h3>
-            {/* Дополнительная информация (м², единиц и т.д.) */}
-              {(number || offer) && (
-                <div className={Styles.subInfo}>
-                  {number && <span className={Styles.numberUnit}>{number}</span>}
-                  {offer && <span className={Styles.offerText}>{offer}</span>}
-                </div>
-              )}
+            
+            {(number || offer) && (
+              <div className={Styles.subInfo}>
+                {number && <span className={Styles.numberUnit}>{number}</span>}
+                {offer && <span className={Styles.offerText}>{offer}</span>}
+              </div>
+            )}
           </div>
         </div>
 
-        
-
-        {/* Описание */}
-        <p>{title}</p>
+        <p className={Styles.title}>{title}</p>
       </div>
-
-      {/* Декоративная точка в углу */}
-      <div 
-        className={Styles.cornerDot}
-        style={{ background: accentColors[index % accentColors.length] }}
-      />
     </div>
   );
 };
