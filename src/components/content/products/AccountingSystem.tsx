@@ -90,7 +90,7 @@ export const AccountingSystem = () => {
                 </div>
               </div>
             </div>
-          </div>          
+          </div>
         </div>
 
         <div className={Styles.cardsColumn}>

@@ -1,6 +1,5 @@
 import logoRu from '../../images/logo_fut_ru.webp';
 import Styles from './footer.module.scss';
-import { FaVk, FaInstagram, FaTelegram, FaFacebookF } from 'react-icons/fa';
 
 export const Footer = () => {
   return (

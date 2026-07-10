@@ -62,23 +62,33 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         required
       />
 
-      <input
-        type="email"
-        placeholder="Email для ответа"
-        value={formData.email}
-        onChange={e => onChange('email', e.target.value)}
-        required
-      />
+      {/* Контейнер для email и телефона в одну строку */}
+      <div className={Styles.contactRow}>
+        <input
+          type="email"
+          placeholder="Email для ответа"
+          value={formData.email}
+          onChange={e => onChange('email', e.target.value)}
+          required
+          className={Styles.contactInput}
+        />
 
-      <InputMask
-        mask={mask}
-        value={formData.phone}
-        onChange={e => onChange('phone', e.target.value)}
-      >
-        {(inputProps: any) => (
-          <input {...inputProps} type="tel" placeholder="Телефон" required />
-        )}
-      </InputMask>
+        <InputMask
+          mask={mask}
+          value={formData.phone}
+          onChange={e => onChange('phone', e.target.value)}
+        >
+          {(inputProps: any) => (
+            <input 
+              {...inputProps} 
+              type="tel" 
+              placeholder="Телефон" 
+              required 
+              className={Styles.contactInput}
+            />
+          )}
+        </InputMask>
+      </div>
 
       <textarea
         placeholder="Ваш вопрос"

@@ -3,7 +3,7 @@ import Styles from "./group-card.module.scss";
 
 type Item = {
   id: number;
-  name: string;
+  name: string | null;
   quantity: number | string;
   unit: string;
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import Styles from "./procurement.module.scss";
 import { Title } from "../../ui/title/Title";
@@ -30,7 +30,28 @@ export const Procurement = () => {
 
   // пагинация
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 16; //количестово карточек на страничке
+  const [itemsPerPage, setItemsPerPage] = useState(16);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Определяем количество карточек в зависимости от ширины экрана
+  useEffect(() => {
+    const updateLayout = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobile(mobile);
+      if (mobile) {
+        setItemsPerPage(6);
+      } else {
+        setItemsPerPage(16);
+      }
+    };
+
+    updateLayout();
+    window.addEventListener('resize', updateLayout);
+
+    return () => {
+      window.removeEventListener('resize', updateLayout);
+    };
+  }, []);
 
   useEffect(() => {
     loadExcel();
@@ -122,6 +143,11 @@ export const Procurement = () => {
 
   const isSearching = search.trim().length > 0;
 
+  // Функция для перехода на страницу
+  const goToPage = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <div className={Styles.container}>
       <Title text="Закупки" />
@@ -159,7 +185,8 @@ export const Procurement = () => {
       {totalPages > 1 && (
         <div className={Styles.pagination}>
           <button
-            onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
+            className={`${Styles.navButton} ${!isMobile ? Styles.navButtonDesktop : ''}`}
+            onClick={() => goToPage(Math.max(currentPage - 1, 1))}
             disabled={currentPage === 1}
           >
             Назад
@@ -168,7 +195,7 @@ export const Procurement = () => {
           {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
             <button
               key={page}
-              onClick={() => setCurrentPage(page)}
+              onClick={() => goToPage(page)}
               className={currentPage === page ? Styles.activePage : ""}
             >
               {page}
@@ -176,7 +203,8 @@ export const Procurement = () => {
           ))}
 
           <button
-            onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
+            className={`${Styles.navButton} ${!isMobile ? Styles.navButtonDesktop : ''}`}
+            onClick={() => goToPage(Math.min(currentPage + 1, totalPages))}
             disabled={currentPage === totalPages}
           >
             Вперёд

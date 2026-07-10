@@ -9,14 +9,39 @@ import { maxGasNonSepPriceRules } from './maxGasNonSepPriceRules';
 import { LayoutBack } from '../../layout/LayoutBack';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
+// Определяем типы
+type Selection = {
+  [key: string]: any;
+};
+
+type FieldErrors = {
+  [key: number]: {
+    [field: string]: boolean;
+  };
+};
+
+type ErrorMessages = {
+  [key: number]: boolean;
+};
+
+type OpenSelected = {
+  [key: number]: boolean;
+};
+
+type SelectedInstallation = {
+  [key: string]: any;
+  price: number;
+  summary: string;
+};
+
 export const Calculator = () => {
-  const [loaded, setLoaded] = useState(false);
-  const [selections, setSelections] = useState<any>({});
-  const [selectedInstallations, setSelectedInstallations] = useState<any[]>([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [fieldErrors, setFieldErrors] = useState<any>({});
-  const [openSelected, setOpenSelected] = useState<Record<number, boolean>>({});
-  const [errorMessages, setErrorMessages] = useState<Record<number, boolean>>({});
+  const [loaded, setLoaded] = useState<boolean>(false);
+  const [selections, setSelections] = useState<Selection>({});
+  const [selectedInstallations, setSelectedInstallations] = useState<SelectedInstallation[]>([]);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [openSelected, setOpenSelected] = useState<OpenSelected>({});
+  const [errorMessages, setErrorMessages] = useState<ErrorMessages>({});
 
   const onBackAccountingSystem = () => {
     window.location.href = '/products/accounting-system';
@@ -66,14 +91,14 @@ export const Calculator = () => {
   useEffect(() => setLoaded(true), []);
 
   const handleChange = (instId: number, field: string, value: any) => {
-    setSelections(prev => ({
+    setSelections((prev: Selection) => ({
       ...prev,
-      [instId]: { ...prev[instId], [field]: value }
+      [instId]: { ...(prev[instId] || {}), [field]: value }
     }));
 
-    setFieldErrors(prev => ({
+    setFieldErrors((prev: FieldErrors) => ({
       ...prev,
-      [instId]: { ...prev[instId], [field]: false }
+      [instId]: { ...(prev[instId] || {}), [field]: false }
     }));
   };
 
@@ -84,17 +109,12 @@ export const Calculator = () => {
 
     // Количество скважин
     total +=
-      inst.quantityOptions.find(q => q.label === selection.quantity)?.price || 0;
-
+      inst.quantityOptions.find((q: any) => q.label === selection.quantity)?.price || 0;
 
     const fields = [
       { field: 'volume', options: inst.volumeOptions },
       { field: 'heating', options: inst.heatingOptions },
       { field: 'fittings', options: inst.fittingsOptions },
-      // { field: 'max_gas', options: inst.max_gasOptions },
-      // { field: 'max_gas_1', options: inst.max_gas_1Options },
-      // { field: 'pressure', options: inst.pressureOptions },
-      // { field: 'pressure1', options: inst.pressure1Options },
       { field: 'vagometer', options: inst.vagometerOptions },
       { field: 'vagometer1', options: inst.vagometer1Options },
       { field: 'vagometer2', options: inst.vagometer2Options },
@@ -103,17 +123,9 @@ export const Calculator = () => {
       { field: 'density', options: inst.densityOptions }
     ];
 
-    // fields.forEach(({ field, options }) => {
-    //   const selectedValues: any[] = selection[field] || [];
-    //   selectedValues.forEach(value => {
-    //     const price = options.find(o => o.label === value)?.price || 0;
-    //     total += price;
-    //   });
-    // });
-
     fields.forEach(({ field, options }) => {
       (selection[field] || []).forEach((value: any) => {
-        total += options.find(o => o.label === value)?.price || 0;
+        total += options.find((o: any) => o.label === value)?.price || 0;
       });
     });
 
@@ -123,7 +135,7 @@ export const Calculator = () => {
 
       total +=
         dynamicPrice ??
-        inst.max_gasOptions.find(o => o.label === gasLabel)?.price ??
+        inst.max_gasOptions.find((o: any) => o.label === gasLabel)?.price ??
         0;
     });
 
@@ -133,7 +145,7 @@ export const Calculator = () => {
 
       total +=
         dynamicPrice ??
-        inst.max_gas_1Options.find(o => o.label === gasLabel)?.price ??
+        inst.max_gas_1Options.find((o: any) => o.label === gasLabel)?.price ??
         0;
     });
 
@@ -143,7 +155,6 @@ export const Calculator = () => {
   const validateSelection = (instId: number, selection: any) => {
     const required = [
       'quantity', 'volume', 'fittings', 'max_gas', 'max_gas_1',
-      // 'pressure', 'pressure1', 
       'vagometer', 'vagometer1',
       'vagometer2', 'heating', 'pollution', 'closet', 'density'
     ];
@@ -160,10 +171,10 @@ export const Calculator = () => {
     });
 
     if (Object.keys(errors).length > 0) {
-      setFieldErrors(prev => ({ ...prev, [instId]: errors }));
-      setErrorMessages(prev => ({ ...prev, [instId]: true }));
+      setFieldErrors((prev: FieldErrors) => ({ ...prev, [instId]: errors }));
+      setErrorMessages((prev: ErrorMessages) => ({ ...prev, [instId]: true }));
       setTimeout(() => {
-        setErrorMessages(prev => ({ ...prev, [instId]: false }));
+        setErrorMessages((prev: ErrorMessages) => ({ ...prev, [instId]: false }));
       }, 3000);
       return false;
     }
@@ -192,19 +203,19 @@ export const Calculator = () => {
       ? base
       : `${base}-${volume}`;
 
-    setSelectedInstallations(prev => [
+    setSelectedInstallations((prev: SelectedInstallation[]) => [
       ...prev,
       { ...inst, ...selection, price, summary }
     ]);
-    setTotalPrice(prev => prev + price);
-    setSelections(prev => ({ ...prev, [instId]: {} }));
-    setFieldErrors(prev => ({ ...prev, [instId]: {} }));
+    setTotalPrice((prev: number) => prev + price);
+    setSelections((prev: Selection) => ({ ...prev, [instId]: {} }));
+    setFieldErrors((prev: FieldErrors) => ({ ...prev, [instId]: {} }));
   };
 
   const removeInstallation = (index: number) => {
     const removed = selectedInstallations[index];
-    setTotalPrice(prev => prev - removed.price);
-    setSelectedInstallations(prev => prev.filter((_, i) => i !== index));
+    setTotalPrice((prev: number) => prev - removed.price);
+    setSelectedInstallations((prev: SelectedInstallation[]) => prev.filter((_, i) => i !== index));
   };
 
   return (
@@ -218,7 +229,7 @@ export const Calculator = () => {
               inst={inst}
               sel={selections[inst.id] || {}}
               errors={fieldErrors[inst.id] || {}}
-              showMessage={errorMessages[inst.id]}
+              showMessage={errorMessages[inst.id] || false}
               onChange={(field, value) => handleChange(inst.id, field, value)}
               onAdd={() => addInstallation(inst.id)}
             />
@@ -235,7 +246,7 @@ export const Calculator = () => {
                   key={index}
                   className={Styles.selectedItem}
                   onClick={() =>
-                    setOpenSelected(prev => ({ ...prev, [index]: !prev[index] }))
+                    setOpenSelected((prev: OpenSelected) => ({ ...prev, [index]: !prev[index] }))
                   }
                 >
                   <div className={Styles.selectedHeader}>
@@ -263,8 +274,6 @@ export const Calculator = () => {
                       <p>Исполнение по входным трубопроводам: {item.density?.join(', ')}</p>
                       <p>Максимальная производительность по газу для сепарационного способа измерения: {item.max_gas?.join(', ')}</p>
                       <p>Максимальная производительность по газу для бессепарационного способа измерения: {item.max_gas_1?.join(', ')}</p>
-                      {/* <p>Габариты блока технологии: {item.pressure?.join(', ')}</p>
-                      <p>Габариты блока автоматики: {item.pressure1?.join(', ')}</p> */}
                       <p>Расходомер на линии газа: {item.vagometer?.join(', ')}</p>
                       <p>Расходомер на линии жидкости: {item.vagometer1?.join(', ')}</p>
                       <p>Дублирующий расходомер: {item.vagometer2?.join(', ')}</p>

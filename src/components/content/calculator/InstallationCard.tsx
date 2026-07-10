@@ -2,6 +2,12 @@ import { useEffect } from 'react';
 import Styles from './card.module.scss';
 import { ParamCard } from '../../ui/param-card/ParamCard';
 
+// Определяем типы для опций
+interface Option {
+    label: string;
+    price?: number;
+}
+
 interface InstallationCardProps {
     inst: any;
     sel: any;
@@ -23,20 +29,20 @@ export const InstallationCard = ({
     /* ===============================
        Фильтрация max_gas_1
     =============================== */
-    const getMaxGas1Options = () => {
-        const maxGasValues = sel.max_gas || [];
+    const getMaxGas1Options = (): Option[] => {
+        const maxGasValues: string[] = sel.max_gas || [];
 
         const hasSepGas = maxGasValues.length > 0 && !maxGasValues.includes('Не требуется');
         const isSepNotRequired = maxGasValues.length === 1 && maxGasValues[0] === 'Не требуется';
 
         if (hasSepGas) {
             // Сепарационный способ → только "Не требуется"
-            return inst.max_gas_1Options.filter(o => o.label === 'Не требуется');
+            return inst.max_gas_1Options.filter((o: Option) => o.label === 'Не требуется');
         }
 
         if (isSepNotRequired) {
             // max_gas = "Не требуется" → скрываем "Не требуется" в max_gas_1
-            return inst.max_gas_1Options.filter(o => o.label !== 'Не требуется');
+            return inst.max_gas_1Options.filter((o: Option) => o.label !== 'Не требуется');
         }
 
         return inst.max_gas_1Options;
@@ -45,16 +51,16 @@ export const InstallationCard = ({
     /* ===============================
        Фильтрация расходомера на линии жидкости
     =============================== */
-    const getVagometer1Options = () => {
+    const getVagometer1Options = (): Option[] => {
         const hasNonSepGas = sel.max_gas_1?.length && !sel.max_gas_1.includes('Не требуется');
         const hasSepGas = sel.max_gas?.length && !sel.max_gas.includes('Не требуется');
 
         if (hasNonSepGas) {
-            return inst.vagometer1Options.filter(o => o.label === 'Многофазный расходомер');
+            return inst.vagometer1Options.filter((o: Option) => o.label === 'Многофазный расходомер');
         }
 
         if (hasSepGas) {
-            return inst.vagometer1Options.filter(o => o.label !== 'Многофазный расходомер');
+            return inst.vagometer1Options.filter((o: Option) => o.label !== 'Многофазный расходомер');
         }
 
         return inst.vagometer1Options;
@@ -64,7 +70,7 @@ export const InstallationCard = ({
        useEffect для max_gas
     =============================== */
     useEffect(() => {
-        const values = sel.max_gas || [];
+        const values: string[] = sel.max_gas || [];
 
         const isEmpty = values.length === 0;
         const hasRealValue = values.length > 0 && !values.includes('Не требуется');
@@ -80,7 +86,7 @@ export const InstallationCard = ({
         if (isSepNotRequired) {
             // Скрываем "Не требуется" в max_gas_1
             if (sel.max_gas_1?.includes('Не требуется')) {
-                onChange('max_gas_1', sel.max_gas_1.filter(v => v !== 'Не требуется'));
+                onChange('max_gas_1', sel.max_gas_1.filter((v: string) => v !== 'Не требуется'));
             }
         }
 
@@ -97,7 +103,7 @@ export const InstallationCard = ({
        useEffect для max_gas_1
     =============================== */
     useEffect(() => {
-        const values = sel.max_gas_1 || [];
+        const values: string[] = sel.max_gas_1 || [];
         const isEmpty = values.length === 0;
         const hasRealValue = values.length > 0 && !values.includes('Не требуется');
 
@@ -120,19 +126,25 @@ export const InstallationCard = ({
     /* ===============================
        Количество скважин
     =============================== */
-    const getQuantityOptions = () => {
+    const getQuantityOptions = (): Option[] => {
         if (sel.density?.[0] === 'Одностороннее') {
-            return inst.quantityOptions.filter(o => o.label >= 1 && o.label <= 10);
+            return inst.quantityOptions.filter((o: Option) => {
+                const numLabel = Number(o.label);
+                return numLabel >= 1 && numLabel <= 10;
+            });
         }
         if (sel.density?.[0] === 'Двустороннее') {
-            return inst.quantityOptions.filter(o => o.label >= 4 && o.label <= 14);
+            return inst.quantityOptions.filter((o: Option) => {
+                const numLabel = Number(o.label);
+                return numLabel >= 4 && numLabel <= 14;
+            });
         }
         return inst.quantityOptions;
     };
 
     useEffect(() => {
         if (!sel.quantity || !sel.density?.length) return;
-        const q = sel.quantity;
+        const q = Number(sel.quantity);
         const d = sel.density[0];
 
         if (d === 'Одностороннее' && (q < 1 || q > 10)) onChange('quantity', null);
@@ -142,7 +154,7 @@ export const InstallationCard = ({
     /* ===============================
        Вспомогательные функции для UI
     =============================== */
-    const handleToggleOption = (field: string, option: any, numeric?: boolean) => {
+    const handleToggleOption = (field: string, option: Option, numeric?: boolean) => {
         if (numeric) {
             onChange(field, option.label);
             return;
@@ -151,16 +163,16 @@ export const InstallationCard = ({
         const current: any[] = Array.isArray(sel[field]) ? sel[field] : [];
         const val = option?.label ?? option;
         const updated = current.includes(val)
-            ? current.filter(v => v !== val)
+            ? current.filter((v: any) => v !== val)
             : [...current, val];
 
         onChange(field, updated);
     };
 
-    const renderCheckboxes = (field: string, options: any[], numeric?: boolean) => {
+    const renderCheckboxes = (field: string, options: Option[], numeric?: boolean) => {
         return (
             <div className={Styles.checkboxListCompact}>
-                {options?.map((o: any) => {
+                {options?.map((o: Option) => {
                     const value = o.label ?? o;
                     const checked = numeric
                         ? sel[field] === value

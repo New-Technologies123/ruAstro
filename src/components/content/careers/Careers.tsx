@@ -17,8 +17,8 @@ export const Careers = () => {
         vacancy5: "https://ufa.hh.ru/vacancy/134638985?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy6: "https://ufa.hh.ru/vacancy/134647244?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy7: "https://ufa.hh.ru/vacancy/134715331?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy8: "https://ufa.hh.ru/vacancy/133990312?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy9: "https://ufa.hh.ru/vacancy/134639015?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy8: "https://ufa.hh.ru/vacancy/134639015?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy9: "",
         vacancy10: "",
         vacancy11: "",
     };
@@ -76,13 +76,6 @@ export const Careers = () => {
                                 />                                
                                 <Vacancy
                                     header="Маляр по металлу"
-                                    title="Опыт работы: 1–3 года"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy9, "_blank")}
-                                />
-                                <Vacancy
-                                    header="Слесарь КИПиА"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
