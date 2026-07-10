@@ -186,7 +186,7 @@ export const InstallationCard = ({
                                 checked={checked}
                                 onChange={() => handleToggleOption(field, o, numeric)}
                             />
-                            {value}
+                            {String(value)}
                         </label>
                     );
                 })}
