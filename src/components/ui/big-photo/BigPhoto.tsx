@@ -1,7 +1,12 @@
 import { useEffect } from 'react';
 import Styles from './big-photo.module.scss';
 
-export const BigPhoto = ({ src, onClose }) => {
+interface BigPhotoProps {
+  src: string;
+  onClose: () => void;
+}
+
+export const BigPhoto = ({ src, onClose }: BigPhotoProps) => {
   useEffect(() => {
     const scrollY = window.scrollY;
     document.body.style.overflow = 'hidden';

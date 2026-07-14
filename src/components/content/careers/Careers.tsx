@@ -18,7 +18,7 @@ export const Careers = () => {
         vacancy6: "https://ufa.hh.ru/vacancy/134647244?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy7: "https://ufa.hh.ru/vacancy/134715331?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy8: "https://ufa.hh.ru/vacancy/134639015?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy9: "",
+        vacancy9: "https://ufa.hh.ru/vacancy/135137776?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy10: "",
         vacancy11: "",
     };
@@ -94,6 +94,13 @@ export const Careers = () => {
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy3, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Механик-слесарь грузового автотранспорта"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy9, "_blank")}
                                 />
                             </div>
                         </div>

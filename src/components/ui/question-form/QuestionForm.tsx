@@ -66,7 +66,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
       <div className={Styles.contactRow}>
         <input
           type="email"
-          placeholder="Email для ответа"
+          placeholder="Email"
           value={formData.email}
           onChange={e => onChange('email', e.target.value)}
           required
