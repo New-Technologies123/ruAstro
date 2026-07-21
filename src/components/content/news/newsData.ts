@@ -32,7 +32,7 @@ export const NEWS_DATA: TNewsItem[] = [
   {
     id: 1,
     category: 'Выставка',
-    date: 'Февраль 2026',
+    date: 'Март 2026',
     title: 'Участие в EGYPES 2026',
     description: 'Успешное участие в выставке Egypt Energy Show в Каире',
     photos: [
@@ -132,8 +132,8 @@ export const NEWS_DATA: TNewsItem[] = [
     title: 'Участие в KIOGE 2024',
     description: '29-я Казахстанская международная выставка «Нефть и газ»',
     photos: [
-      { id: 1, src: news_1.src, alt: 'KIOGE 2024' },
-      { id: 2, src: news_2.src, alt: 'KIOGE 2024' },
+      { id: 1, src: news_2.src, alt: 'KIOGE 2024' },
+      { id: 2, src: news_1.src, alt: 'KIOGE 2024' },      
     ],
     content: [
       'С 25 по 27 сентября 2024 года ООО ИПП «Новые Технологии» успешно приняло участие в 29-й Казахстанской Международной выставке KIOGE «Нефть и газ», где были представлены инновационные технологии и основные тенденции развития мировой нефтегазовой отрасли.'
