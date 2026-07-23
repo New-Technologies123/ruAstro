@@ -1,9 +1,10 @@
 // News.tsx
 import Styles from './news.module.scss';
 import { Gallery } from '../../ui/gallery/Gallery';
-import { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
+import { useState, useEffect, useMemo, useCallback, lazy, Suspense, memo, useRef } from 'react';
 import { Title } from '../../ui/title/Title';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { useInView } from 'react-intersection-observer';
 import {
   NEWS_DATA,
   CATEGORIES,
@@ -12,21 +13,47 @@ import {
   type TNewsItem
 } from './newsData';
 
-// Ленивая загрузка BigPhoto - правильная обработка для именованного экспорта
+// Ленивая загрузка BigPhoto
 const BigPhoto = lazy(() => 
   import('../../ui/big-photo/BigPhoto').then(module => ({
-    default: module.BigPhoto // Явно указываем, что берем именованный экспорт
+    default: module.BigPhoto
   }))
 );
 
+// Компонент-плейсхолдер для новости
+const NewsPlaceholder = memo(({ index }: { index: number }) => (
+  <div 
+    className={`${Styles.newsItem} ${Styles.placeholder}`}
+    style={{ transitionDelay: `${Math.min(index * 30, 300)}ms` }}
+  >
+    <div className={Styles.placeholderContent}>
+      <div className={Styles.placeholderBadge}></div>
+      <div className={Styles.placeholderTitle}></div>
+      <div className={Styles.placeholderImage}></div>
+      <div className={Styles.placeholderText}></div>
+      <div className={Styles.placeholderText}></div>
+    </div>
+  </div>
+));
+
+NewsPlaceholder.displayName = 'NewsPlaceholder';
+
 // Мемоизированный компонент карточки новости
-const NewsItem = ({ news, index }: { news: TNewsItem; index: number }) => {
+const NewsItem = memo(({ news, index }: { news: TNewsItem; index: number }) => {
   const [isOpen, setIsOpen] = useState(false);
   
+  // Intersection Observer только для анимации появления карточки
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+    rootMargin: '50px 0px',
+  });
+
   return (
     <div 
-      className={Styles.newsItem} 
-      style={{ transitionDelay: `${index * 50}ms` }}
+      ref={ref}
+      className={`${Styles.newsItem} ${inView ? Styles.visible : Styles.hidden}`}
+      style={{ transitionDelay: `${Math.min(index * 30, 300)}ms` }}
     >
       <div className={Styles.newsHeader}>
         <div className={Styles.newsBadge} style={{ background: getCategoryColor(news.category) }}>
@@ -37,6 +64,7 @@ const NewsItem = ({ news, index }: { news: TNewsItem; index: number }) => {
 
       <h3 className={Styles.newsTitle}>{news.title}</h3>
 
+      {/* Галерея рендерится всегда, без условия inView */}
       {news.photos.length > 0 && (
         <Gallery photos={news.photos} />
       )}
@@ -58,12 +86,18 @@ const NewsItem = ({ news, index }: { news: TNewsItem; index: number }) => {
       </details>
     </div>
   );
-};
+});
+
+NewsItem.displayName = 'NewsItem';
 
 export const News = () => {
   const [activeFilter, setActiveFilter] = useState('Все');
   const [bigPhoto, setBigPhoto] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(4);
+  
+  // Реф для заголовка новостей
+  const newsTitleRef = useRef<HTMLDivElement>(null);
 
   // Мемоизация отфильтрованных новостей
   const filteredNews = useMemo(() => {
@@ -72,6 +106,52 @@ export const News = () => {
     }
     return NEWS_DATA.filter(news => news.category === activeFilter);
   }, [activeFilter]);
+
+  // Сброс видимого количества при смене фильтра
+  useEffect(() => {
+    setVisibleCount(4);
+  }, [activeFilter]);
+
+  // Видимые новости
+  const visibleNews = useMemo(() => {
+    return filteredNews.slice(0, visibleCount);
+  }, [filteredNews, visibleCount]);
+
+  // Проверка, есть ли еще новости для показа
+  const hasMoreNews = visibleCount < filteredNews.length;
+  
+  // Проверка, показаны ли все новости (и их больше 4)
+  const isAllShown = visibleCount >= filteredNews.length && filteredNews.length > 4;
+
+  // Показать еще новости (добавляем по 2)
+  const handleShowMore = useCallback(() => {
+    setVisibleCount(prev => Math.min(prev + 2, filteredNews.length));
+  }, [filteredNews.length]);
+
+  // Скрыть все новости (сбросить до 4) с плавным скроллом
+  const handleHideAll = useCallback(() => {
+    setVisibleCount(4);
+    
+    // Плавный скролл к заголовку новостей
+    setTimeout(() => {
+      if (newsTitleRef.current) {
+        const titleElement = newsTitleRef.current;
+        const titlePosition = titleElement.getBoundingClientRect().top + window.pageYOffset;
+        const offsetPosition = titlePosition - 80; // Отступ сверху 80px
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        // Если реф не сработал, скроллим к началу страницы
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+    }, 100); // Небольшая задержка для обновления DOM
+  }, []);
 
   // Оптимизированная анимация загрузки
   useEffect(() => {
@@ -90,10 +170,6 @@ export const News = () => {
     setBigPhoto(null);
   }, []);
 
-  const handleBigPhotoOpen = useCallback((src: string) => {
-    setBigPhoto(src);
-  }, []);
-
   // Подсчет количества новостей
   const newsCount = filteredNews.length;
   const countText = useMemo(() => {
@@ -104,7 +180,10 @@ export const News = () => {
 
   return (
     <>
-      <Title text="Новости" />
+      {/* Заголовок новостей с рефом для скролла */}
+      <div ref={newsTitleRef}>
+        <Title text="Новости" />
+      </div>
 
       {/* ===== ФИЛЬТРЫ ===== */}
       <div className={Styles.filters}>
@@ -121,14 +200,35 @@ export const News = () => {
 
       {/* ===== КОЛ-ВО НОВОСТЕЙ ===== */}
       <div className={Styles.newsCount}>
-        {newsCount} {countText}
+        Показано {visibleNews.length} из {newsCount} {countText}
       </div>
 
       {/* ===== СПИСОК НОВОСТЕЙ ===== */}
       <div className={`${Styles.newsContent} ${isLoaded ? Styles.loaded : ''}`}>
-        {filteredNews.map((news, index) => (
+        {visibleNews.map((news, index) => (
           <NewsItem key={news.id} news={news} index={index} />
         ))}
+      </div>
+
+      {/* ===== КНОПКИ УПРАВЛЕНИЯ ===== */}
+      <div className={Styles.controlsContainer}>
+        {hasMoreNews && (
+          <button 
+            className={Styles.showMoreBtn}
+            onClick={handleShowMore}
+          >
+            Показать еще
+          </button>
+        )}
+        
+        {isAllShown && (
+          <button 
+            className={Styles.hideBtn}
+            onClick={handleHideAll}
+          >
+            Скрыть все
+          </button>
+        )}
       </div>
 
       <BackToTop />

@@ -1,5 +1,6 @@
+// GalleryModal.tsx - добавьте ленивую загрузку для полноразмерных изображений
 import Styles from './gallery-modal.module.scss';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 type TPhoto = {
@@ -19,6 +20,8 @@ export const GalleryModal = ({ openPhotoId, photos, onClose }: TProps) => {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
@@ -39,6 +42,11 @@ export const GalleryModal = ({ openPhotoId, photos, onClose }: TProps) => {
       document.body.style.overflow = '';
     };
   }, []);
+
+  // Сброс состояния загрузки при смене фото
+  useEffect(() => {
+    setIsImageLoaded(false);
+  }, [showPhotoId]);
 
   const currentPhoto = photos.find(photo => photo.id === showPhotoId);
   const currentIndex = photos.findIndex(photo => photo.id === showPhotoId) + 1;
@@ -89,6 +97,10 @@ export const GalleryModal = ({ openPhotoId, photos, onClose }: TProps) => {
     handleClose();
   };
 
+  const handleImageLoad = () => {
+    setIsImageLoaded(true);
+  };
+
   if (!modalRoot) return null;
 
   return createPortal(
@@ -102,11 +114,22 @@ export const GalleryModal = ({ openPhotoId, photos, onClose }: TProps) => {
           ✕
         </button>
 
-        <img
-          src={currentPhoto?.src}
-          alt={currentPhoto?.alt || ''}
-          className={`${Styles.fullImage} ${isTransitioning ? Styles.transitioning : ''}`}
-        />
+        <div className={Styles.imageWrapper}>
+          {!isImageLoaded && (
+            <div className={Styles.modalPlaceholder}>
+              <div className={Styles.modalSpinner}></div>
+            </div>
+          )}
+          <img
+            ref={imgRef}
+            src={currentPhoto?.src}
+            alt={currentPhoto?.alt || ''}
+            className={`${Styles.fullImage} ${isTransitioning ? Styles.transitioning : ''} ${isImageLoaded ? Styles.loaded : Styles.loading}`}
+            onLoad={handleImageLoad}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
 
         {photos.length > 1 && (
           <div className={Styles.counter}>

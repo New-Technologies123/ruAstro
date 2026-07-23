@@ -6,7 +6,7 @@ import news_5 from '../../../images/news/news_5.webp';
 import news_6 from '../../../images/news/news_6.webp';
 import news_7 from '../../../images/news/news_7.webp';
 import news_8 from '../../../images/news/news_8.webp';
-import news_9 from '../../../images/news/news_9.webp';
+import news_9 from '../../../images/news/news_14.webp';
 import news_10 from '../../../images/news/news_10.webp';
 import news_11 from '../../../images/news/news_11.jpg';
 import news_12 from '../../../images/news/news_12.webp';
@@ -54,7 +54,7 @@ export const NEWS_DATA: TNewsItem[] = [
     id: 2,
     category: 'Партнерство',
     date: 'Декабрь 2025',
-    title: 'Включение в список поставщиков SOCAR',
+    title: 'Включение в список SOCAR',
     description: 'ООО ИПП «Новые Технологии» включено в список одобренных поставщиков SOCAR',
     photos: [
       { id: 1, src: news_11.src, alt: 'SOCAR' }

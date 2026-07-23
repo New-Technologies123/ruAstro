@@ -1,3 +1,4 @@
+// Gallery.tsx
 import Styles from './gallery.module.scss';
 import { useState, useEffect } from 'react';
 import { GalleryModal } from './GalleryModal';
