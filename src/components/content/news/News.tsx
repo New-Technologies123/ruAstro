@@ -1,8 +1,7 @@
 // News.tsx
 import Styles from './news.module.scss';
 import { Gallery } from '../../ui/gallery/Gallery';
-import { useState, useEffect } from 'react';
-import { BigPhoto } from '../../ui/big-photo/BigPhoto';
+import { useState, useEffect, useMemo, useCallback, lazy, Suspense } from 'react';
 import { Title } from '../../ui/title/Title';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
 import {
@@ -13,28 +12,95 @@ import {
   type TNewsItem
 } from './newsData';
 
+// Ленивая загрузка BigPhoto - правильная обработка для именованного экспорта
+const BigPhoto = lazy(() => 
+  import('../../ui/big-photo/BigPhoto').then(module => ({
+    default: module.BigPhoto // Явно указываем, что берем именованный экспорт
+  }))
+);
+
+// Мемоизированный компонент карточки новости
+const NewsItem = ({ news, index }: { news: TNewsItem; index: number }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <div 
+      className={Styles.newsItem} 
+      style={{ transitionDelay: `${index * 50}ms` }}
+    >
+      <div className={Styles.newsHeader}>
+        <div className={Styles.newsBadge} style={{ background: getCategoryColor(news.category) }}>
+          {getCategoryIcon(news.category)} {news.category}
+        </div>
+        <div className={Styles.newsDate}>{news.date}</div>
+      </div>
+
+      <h3 className={Styles.newsTitle}>{news.title}</h3>
+
+      {news.photos.length > 0 && (
+        <Gallery photos={news.photos} />
+      )}
+
+      <p className={Styles.newsDescription}>{news.description}</p>
+
+      <details 
+        className={Styles.newsDetails}
+        onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}
+      >
+        <summary className={Styles.newsSummary}>
+          {isOpen ? 'Скрыть' : 'Читать подробнее'}
+        </summary>
+        <div className={Styles.newsFullContent}>
+          {news.content.map((paragraph, idx) => (
+            <p key={idx}>{paragraph}</p>
+          ))}
+        </div>
+      </details>
+    </div>
+  );
+};
+
 export const News = () => {
   const [activeFilter, setActiveFilter] = useState('Все');
-  const [filteredNews, setFilteredNews] = useState<TNewsItem[]>(NEWS_DATA);
-  const [isLoaded, setIsLoaded] = useState(false);
   const [bigPhoto, setBigPhoto] = useState<string | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Фильтрация новостей
-  useEffect(() => {
+  // Мемоизация отфильтрованных новостей
+  const filteredNews = useMemo(() => {
     if (activeFilter === 'Все') {
-      setFilteredNews(NEWS_DATA);
-    } else {
-      setFilteredNews(NEWS_DATA.filter(news => news.category === activeFilter));
+      return NEWS_DATA;
     }
+    return NEWS_DATA.filter(news => news.category === activeFilter);
   }, [activeFilter]);
 
-  // Анимация загрузки
+  // Оптимизированная анимация загрузки
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const rafId = requestAnimationFrame(() => {
       setIsLoaded(true);
-    }, 300);
-    return () => clearTimeout(timer);
+    });
+    return () => cancelAnimationFrame(rafId);
   }, []);
+
+  // Мемоизация обработчиков
+  const handleFilterChange = useCallback((category: string) => {
+    setActiveFilter(category);
+  }, []);
+
+  const handleBigPhotoClose = useCallback(() => {
+    setBigPhoto(null);
+  }, []);
+
+  const handleBigPhotoOpen = useCallback((src: string) => {
+    setBigPhoto(src);
+  }, []);
+
+  // Подсчет количества новостей
+  const newsCount = filteredNews.length;
+  const countText = useMemo(() => {
+    if (newsCount === 1) return 'новость';
+    if (newsCount < 5) return 'новости';
+    return 'новостей';
+  }, [newsCount]);
 
   return (
     <>
@@ -46,7 +112,7 @@ export const News = () => {
           <button
             key={category}
             className={`${Styles.filterBtn} ${activeFilter === category ? Styles.active : ''}`}
-            onClick={() => setActiveFilter(category)}
+            onClick={() => handleFilterChange(category)}
           >
             {category === 'Все' ? '📰 Все' : `${getCategoryIcon(category)} ${category}`}
           </button>
@@ -55,44 +121,23 @@ export const News = () => {
 
       {/* ===== КОЛ-ВО НОВОСТЕЙ ===== */}
       <div className={Styles.newsCount}>
-        {filteredNews.length} {filteredNews.length === 1 ? 'новость' : filteredNews.length < 5 ? 'новости' : 'новостей'}
+        {newsCount} {countText}
       </div>
 
       {/* ===== СПИСОК НОВОСТЕЙ ===== */}
       <div className={`${Styles.newsContent} ${isLoaded ? Styles.loaded : ''}`}>
         {filteredNews.map((news, index) => (
-          <div key={news.id} className={Styles.newsItem} style={{ transitionDelay: `${index * 100}ms` }}>
-            <div className={Styles.newsHeader}>
-              <div className={Styles.newsBadge} style={{ background: getCategoryColor(news.category) }}>
-                {getCategoryIcon(news.category)} {news.category}
-              </div>
-              <div className={Styles.newsDate}>{news.date}</div>
-            </div>
-
-            <h3 className={Styles.newsTitle}>{news.title}</h3>
-
-            {news.photos.length > 0 && (
-              <Gallery photos={news.photos} />
-            )}
-
-            <p className={Styles.newsDescription}>{news.description}</p>
-
-            <details className={Styles.newsDetails}>
-              <summary className={Styles.newsSummary}>Читать подробнее</summary>
-              <div className={Styles.newsFullContent}>
-                {news.content.map((paragraph, idx) => (
-                  <p key={idx}>{paragraph}</p>
-                ))}
-              </div>
-            </details>
-          </div>
+          <NewsItem key={news.id} news={news} index={index} />
         ))}
       </div>
 
       <BackToTop />
 
+      {/* Ленивая загрузка BigPhoto */}
       {bigPhoto && (
-        <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
+        <Suspense fallback={null}>
+          <BigPhoto src={bigPhoto} onClose={handleBigPhotoClose} />
+        </Suspense>
       )}
     </>
   );

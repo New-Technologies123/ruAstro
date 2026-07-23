@@ -333,3 +333,41 @@
     font-size: 12px;
   }
 }
+
+// ============================================
+// ===== ОПТИМИЗАЦИЯ ПРОИЗВОДИТЕЛЬНОСТИ =====
+// ============================================
+
+// Использование will-change для элементов с анимацией
+.newsItem {
+  will-change: transform, opacity;
+  
+  // Оптимизация рендеринга
+  &, & * {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+// Оптимизация для галереи
+.gallery {
+  will-change: transform;
+}
+
+// Оптимизация для кнопок
+.filterBtn {
+  will-change: transform, box-shadow;
+  
+  // Предотвращение перерисовки при наведении
+  &:hover {
+    transform: translateY(-2px) translateZ(0);
+  }
+}
+
+// Оптимизация для скрытых элементов
+.newsFullContent {
+  // Не рендерить содержимое, пока details не открыт
+  &:not([open]) {
+    display: none;
+  }
+}
