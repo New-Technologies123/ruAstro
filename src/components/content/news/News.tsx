@@ -41,19 +41,71 @@ NewsPlaceholder.displayName = 'NewsPlaceholder';
 // Мемоизированный компонент карточки новости
 const NewsItem = memo(({ news, index }: { news: TNewsItem; index: number }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [contentHeight, setContentHeight] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
   
-  // Intersection Observer только для анимации появления карточки
+  // Intersection Observer для анимации появления карточки
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
     rootMargin: '50px 0px',
   });
 
+  // Измеряем высоту контента при открытии
+  useEffect(() => {
+    if (isOpen && contentRef.current) {
+      const height = contentRef.current.scrollHeight;
+      setContentHeight(height);
+    } else {
+      setContentHeight(0);
+    }
+  }, [isOpen, news.content]);
+
+  // Функция для переключения состояния
+  const toggleDetails = useCallback((e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setIsOpen(prev => !prev);
+  }, []);
+
+  // Обработчик клика по карточке
+  const handleCardClick = useCallback((e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    
+    // Проверяем, не кликнули ли по интерактивным элементам
+    const isInteractive = 
+      target.closest('summary') ||
+      target.closest(`.${Styles.newsSummary}`) ||
+      target.closest(`.${Styles.galleryWrapper}`) ||
+      target.closest('[data-gallery]') ||
+      target.closest('button') ||
+      target.closest('a') ||
+      target.closest('img');
+    
+    if (!isInteractive) {
+      toggleDetails();
+    }
+  }, [toggleDetails]);
+
+  // Обработчик клавиатуры
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleDetails();
+    }
+  }, [toggleDetails]);
+
   return (
     <div 
       ref={ref}
       className={`${Styles.newsItem} ${inView ? Styles.visible : Styles.hidden}`}
       style={{ transitionDelay: `${Math.min(index * 30, 300)}ms` }}
+      onClick={handleCardClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={0}
     >
       <div className={Styles.newsHeader}>
         <div className={Styles.newsBadge} style={{ background: getCategoryColor(news.category) }}>
@@ -64,26 +116,56 @@ const NewsItem = memo(({ news, index }: { news: TNewsItem; index: number }) => {
 
       <h3 className={Styles.newsTitle}>{news.title}</h3>
 
-      {/* Галерея рендерится всегда, без условия inView */}
       {news.photos.length > 0 && (
-        <Gallery photos={news.photos} />
+        <div className={Styles.galleryWrapper} data-gallery>
+          <Gallery photos={news.photos} />
+        </div>
       )}
 
       <p className={Styles.newsDescription}>{news.description}</p>
 
-      <details 
-        className={Styles.newsDetails}
-        onToggle={(e) => setIsOpen((e.target as HTMLDetailsElement).open)}
-      >
-        <summary className={Styles.newsSummary}>
-          {isOpen ? 'Скрыть' : 'Читать подробнее'}
-        </summary>
-        <div className={Styles.newsFullContent}>
-          {news.content.map((paragraph, idx) => (
-            <p key={idx}>{paragraph}</p>
-          ))}
+      <div className={Styles.newsDetails}>
+        <button 
+          className={`${Styles.newsSummary} ${isOpen ? Styles.open : ''}`}
+          onClick={toggleDetails}
+          type="button"
+        >
+          <span className={Styles.summaryContent}>
+            <span className={Styles.summaryText}>
+              {isOpen ? 'Скрыть' : 'Читать далее'}
+            </span>
+            <svg 
+              className={`${Styles.summaryIcon} ${isOpen ? Styles.rotated : ''}`}
+              width="18" 
+              height="18" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path 
+                d="M6 9L12 15L18 9" 
+                stroke="currentColor" 
+                strokeWidth="2.5" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              />
+            </svg>
+          </span>
+        </button>
+        <div 
+          className={Styles.newsContentWrapper}
+          style={{ 
+            maxHeight: isOpen ? `${contentHeight}px` : '0px',
+            opacity: isOpen ? 1 : 0,
+          }}
+        >
+          <div ref={contentRef} className={Styles.newsFullContent}>
+            {news.content.map((paragraph, idx) => (
+              <p key={idx}>{paragraph}</p>
+            ))}
+          </div>
         </div>
-      </details>
+      </div>
     </div>
   );
 });
@@ -137,20 +219,19 @@ export const News = () => {
       if (newsTitleRef.current) {
         const titleElement = newsTitleRef.current;
         const titlePosition = titleElement.getBoundingClientRect().top + window.pageYOffset;
-        const offsetPosition = titlePosition - 80; // Отступ сверху 80px
+        const offsetPosition = titlePosition - 80;
         
         window.scrollTo({
           top: offsetPosition,
           behavior: 'smooth'
         });
       } else {
-        // Если реф не сработал, скроллим к началу страницы
         window.scrollTo({
           top: 0,
           behavior: 'smooth'
         });
       }
-    }, 100); // Небольшая задержка для обновления DOM
+    }, 100);
   }, []);
 
   // Оптимизированная анимация загрузки

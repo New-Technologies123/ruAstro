@@ -66,21 +66,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $headers .= "Reply-To: $email\r\n";
     $headers .= "X-Mailer: PHP/" . phpversion();
 
-    // Логирование для отладки
-    $logData = [
-        'timestamp' => date('Y-m-d H:i:s'),
-        'to' => $to,
-        'subject' => $subject,
-        'from' => $email,
-        'name' => $name,
-        'agreement' => $agreement,
-        'privacyAgreement' => $privacyAgreement,
-        'ip' => $ip
-    ];
+    // ✅ Логирование в читаемом формате
+    $logEntry = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $logEntry .= "📅 Дата: " . date('Y-m-d H:i:s') . "\n";
+    $logEntry .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    $logEntry .= "👤 Имя: $name\n";
+    $logEntry .= "📧 Email: $email\n";
+    $logEntry .= "📱 Телефон: $phone\n";
+    $logEntry .= "💬 Сообщение: $messageText\n";
+    $logEntry .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
+    $logEntry .= "✅ Согласие на обработку: $agreement\n";
+    $logEntry .= "✅ Политика конфиденциальности: $privacyAgreement\n";
+    $logEntry .= "🌐 IP-адрес: $ip\n";
+    $logEntry .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
     
-    // Сохраняем лог (опционально)
+    // Сохраняем лог в читаемом формате
     $logFile = 'form-submissions.log';
-    file_put_contents($logFile, json_encode($logData) . PHP_EOL, FILE_APPEND);
+    file_put_contents($logFile, $logEntry, FILE_APPEND);
 
     // Отправка письма
     if (mail($to, $subject, $message, $headers)) {

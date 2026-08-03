@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import * as XLSX from "xlsx";
 import Styles from "./procurement.module.scss";
 import { Title } from "../../ui/title/Title";
@@ -23,25 +23,31 @@ export const Procurement = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [search, setSearch] = useState("");
   const [expandedGroups, setExpandedGroups] = useState<Record<string, boolean>>({});
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
 
-  // модалка
   const [showModal, setShowModal] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
-  // пагинация
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(16);
-  const [isMobile, setIsMobile] = useState(false);
+  
+  const gridRef = useRef<HTMLDivElement>(null);
 
-  // Определяем количество карточек в зависимости от ширины экрана
+  // Определяем количество карточек и мобильное устройство
   useEffect(() => {
     const updateLayout = () => {
-      const mobile = window.innerWidth <= 768;
+      const width = window.innerWidth;
+      const mobile = width <= 768;
       setIsMobile(mobile);
+      
       if (mobile) {
         setItemsPerPage(6);
+      } else if (width <= 1250) {
+        setItemsPerPage(8);
       } else {
-        setItemsPerPage(16);
+        setItemsPerPage(12);
       }
     };
 
@@ -57,12 +63,10 @@ export const Procurement = () => {
     loadExcel();
   }, []);
 
-  // сброс страницы при поиске
   useEffect(() => {
     setCurrentPage(1);
   }, [search]);
 
-  // плавный скролл вверх при смене страницы
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -70,25 +74,49 @@ export const Procurement = () => {
     });
   }, [currentPage]);
 
+  useEffect(() => {
+    if (items.length > 0) {
+      setIsDataLoaded(true);
+    }
+  }, [items]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [itemsPerPage]);
+
+  // Закрываем все карточки при смене страницы или поиске
+  useEffect(() => {
+    setExpandedGroups({});
+  }, [currentPage]);
+
+  // Закрываем все карточки при поиске
+  useEffect(() => {
+    setExpandedGroups({});
+  }, [search]);
+
   const loadExcel = async () => {
-    const response = await fetch("/procurement.xlsx");
-    const arrayBuffer = await response.arrayBuffer();
-    const workbook = XLSX.read(arrayBuffer);
-    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    try {
+      const response = await fetch("/procurement.xlsx");
+      const arrayBuffer = await response.arrayBuffer();
+      const workbook = XLSX.read(arrayBuffer);
+      const sheet = workbook.Sheets[workbook.SheetNames[0]];
+      const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
-    const parsed: Item[] = json
-      .slice(1)
-      .map((row: any, i) => ({
-        id: i + 1,
-        name: row[2],
-        quantity: row[3],
-        unit: row[4],
-        note: row[5] || null
-      }))
-      .filter((i: Item) => i.name);
+      const parsed: Item[] = json
+        .slice(1)
+        .map((row: any, i) => ({
+          id: i + 1,
+          name: row[2],
+          quantity: row[3],
+          unit: row[4],
+          note: row[5] || null
+        }))
+        .filter((i: Item) => i.name);
 
-    setItems(parsed);
+      setItems(parsed);
+    } catch (error) {
+      console.error("Ошибка загрузки данных:", error);
+    }
   };
 
   const groupedItems: Group[] = Object.values(
@@ -112,6 +140,19 @@ export const Procurement = () => {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  // 🆕 Анимация появления карточек при смене страницы - ПЕРЕМЕЩЕНА СЮДА
+  useEffect(() => {
+    if (isDataLoaded && paginatedGroups.length > 0) {
+      setIsAnimating(true);
+      
+      const timer = setTimeout(() => {
+        setIsAnimating(false);
+      }, 800);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [currentPage, isDataLoaded, paginatedGroups.length]);
 
   const toggleGroup = (note: string) => {
     setExpandedGroups(prev => ({
@@ -143,7 +184,6 @@ export const Procurement = () => {
 
   const isSearching = search.trim().length > 0;
 
-  // Функция для перехода на страницу
   const goToPage = (page: number) => {
     setCurrentPage(page);
   };
@@ -159,30 +199,54 @@ export const Procurement = () => {
         onChange={e => setSearch(e.target.value)}
       />
 
-      <div className={Styles.itemsGrid}>
-        {paginatedGroups.map(group => {
-          const isExpanded = isSearching
-            ? true
-            : expandedGroups[group.note] || false;
+      {!isDataLoaded && (
+        <div className={Styles.skeletonGrid}>
+          {Array.from({ length: itemsPerPage }).map((_, index) => (
+            <div key={index} className={Styles.skeletonCard}>
+              <div className={Styles.skeletonHeader}></div>
+              <div className={Styles.skeletonTitle}></div>
+              <div className={Styles.skeletonText}></div>
+              <div className={Styles.skeletonText}></div>
+              <div className={Styles.skeletonButton}></div>
+            </div>
+          ))}
+        </div>
+      )}
 
-          return (
-            <GroupCard
-              key={group.note}
-              group={group}
-              isExpanded={isExpanded}
-              isSearching={isSearching}
-              onToggle={toggleGroup}
-              onAddOffer={() => {
-                setSelectedGroup(group);
-                setShowModal(true);
+      {isDataLoaded && (
+        <div 
+          className={`${Styles.itemsGrid} ${isAnimating ? Styles.animating : ''}`}
+          ref={gridRef}
+        >
+          {paginatedGroups.map((group, index) => (
+            <div 
+              key={`${group.note}-${currentPage}`}
+              className={Styles.cardWrapper}
+              style={{ 
+                animationDelay: `${Math.min(index * 50, 500)}ms`,
+                opacity: 0
               }}
-            />
-          );
-        })}
-      </div>
+              onAnimationEnd={(e) => {
+                const target = e.target as HTMLDivElement;
+                target.style.opacity = '1';
+              }}
+            >
+              <GroupCard
+                group={group}
+                isExpanded={isSearching ? true : expandedGroups[group.note] || false}
+                isSearching={isSearching}
+                onToggle={toggleGroup}
+                onAddOffer={() => {
+                  setSelectedGroup(group);
+                  setShowModal(true);
+                }}
+              />
+            </div>
+          ))}
+        </div>
+      )}
 
-      {/* пагинация */}
-      {totalPages > 1 && (
+      {isDataLoaded && totalPages > 1 && (
         <div className={Styles.pagination}>
           <button
             className={`${Styles.navButton} ${!isMobile ? Styles.navButtonDesktop : ''}`}
@@ -216,7 +280,6 @@ export const Procurement = () => {
         <OfferModal
           group={selectedGroup}
           onClose={() => setShowModal(false)}
-          // onSubmit={handleSubmit}
         />
       )}
 

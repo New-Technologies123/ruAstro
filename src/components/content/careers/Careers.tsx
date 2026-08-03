@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 type TCareers = 'vacancy1' | 'vacancy2' | 'vacancy3' | 'vacancy4' | 'vacancy5'
     | 'vacancy6' | 'vacancy7' | 'vacancy8' | 'vacancy9' | 'vacancy10' | 'vacancy11' 
-    | 'vacancy12' | 'vacancy13' | 'vacancy14' | 'vacancy15' ;
+    | 'vacancy12' | 'vacancy13' | 'vacancy14' | 'vacancy15' | 'vacancy16' | 'vacancy17' ;
 
 export const Careers = () => {
 
@@ -15,10 +15,10 @@ export const Careers = () => {
         vacancy2: "https://ufa.hh.ru/vacancy/134939247?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy3: "https://ufa.hh.ru/vacancy/134866807?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy4: "https://ufa.hh.ru/vacancy/135277484?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy5: "https://ufa.hh.ru/vacancy/134638985?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy6: "https://ufa.hh.ru/vacancy/134647244?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy7: "https://ufa.hh.ru/vacancy/134715331?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
-        vacancy8: "https://ufa.hh.ru/vacancy/134639015?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy5: "https://ufa.hh.ru/vacancy/135685100?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy6: "https://ufa.hh.ru/vacancy/135766362?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy7: "https://ufa.hh.ru/vacancy/135389832?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy8: "https://ufa.hh.ru/vacancy/135452575?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy9: "https://ufa.hh.ru/vacancy/135137776?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy10: "https://ufa.hh.ru/vacancy/135256047?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy11: "https://ufa.hh.ru/vacancy/135275235?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
@@ -26,6 +26,8 @@ export const Careers = () => {
         vacancy13: "https://ufa.hh.ru/vacancy/135294937?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy14: "https://ufa.hh.ru/vacancy/135378345?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
         vacancy15: "https://ufa.hh.ru/vacancy/135389742?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy16: "https://ufa.hh.ru/vacancy/135660808?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
+        vacancy17: "https://ufa.hh.ru/vacancy/135707059?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer",
     };
 
     const [typeLayoutBackOpen] = useState<TCareers | null>(null);
@@ -47,18 +49,11 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy2, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Инженер ПТО"
-                                    title="Опыт работы: 1–3 года"
+                                    header="Специалист службы безопасности"
+                                    title="Опыт работы: 3–6 лет"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy6, "_blank")}
-                                />
-                                <Vacancy
-                                    header="Инженер-конструктор"
-                                    title="Опыт работы: 1–3 года"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy7, "_blank")}
                                 />
                                 <Vacancy
                                     header="Главный метролог"
@@ -80,6 +75,13 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy1, "_blank")}
                                 />
                                 <Vacancy
+                                    header="Водитель C E"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy7, "_blank")}
+                                />
+                                <Vacancy
                                     header="Токарь"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
@@ -94,18 +96,11 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy11, "_blank")}
                                 />
                                 <Vacancy
-                                    header="Электрогазосварщик ТТ"
+                                    header="Специалист по охране труда"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy5, "_blank")}
-                                />                                
-                                <Vacancy
-                                    header="Маляр по металлу"
-                                    title="Опыт работы: 1–3 года"
-                                    experience="Полная занятость"
-                                    employmentType="График: 5/2"
-                                    onClick={() => window.open(vacancyLinks.vacancy8, "_blank")}
                                 />
                                 <Vacancy
                                     header="Инженер-механик"
@@ -115,11 +110,32 @@ export const Careers = () => {
                                     onClick={() => window.open(vacancyLinks.vacancy12, "_blank")}
                                 />
                                 <Vacancy
+                                    header="Маляр по металлу"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy17, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Электрогазосварщик ТТ"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy16, "_blank")}
+                                />
+                                <Vacancy
                                     header="Мастер сварочного участка"
                                     title="Опыт работы: 1–3 года"
                                     experience="Полная занятость"
                                     employmentType="График: 5/2"
                                     onClick={() => window.open(vacancyLinks.vacancy14, "_blank")}
+                                />
+                                <Vacancy
+                                    header="Ведущий инженер ПНР КИПиА"
+                                    title="Опыт работы: 1–3 года"
+                                    experience="Полная занятость"
+                                    employmentType="График: 5/2"
+                                    onClick={() => window.open(vacancyLinks.vacancy8, "_blank")}
                                 />
                                 <Vacancy
                                     header="Заместитель главного бухгалтера"

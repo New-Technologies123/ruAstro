@@ -1,8 +1,7 @@
+// procurement.module.scss
+
 .container {
-  // max-width: 1200px;
-  // margin: 0 auto;
   padding: 0 250px;
-  // padding: 32px 16px;
   font-family: Inter, system-ui, sans-serif;
   color: #1f2937;
   background:
@@ -27,6 +26,76 @@
   }
 }
 
+/* ============================================
+   СКЕЛЕТОН (ПЛЕЙСХОЛДЕР)
+   ============================================ */
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding-bottom: 25px;
+}
+
+.skeletonCard {
+  background: #f0f2f5;
+  border-radius: 12px;
+  padding: 20px;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: shimmer 1.5s infinite;
+  background: linear-gradient(135deg, #f0f2f5 25%, #e4e7ec 50%, #f0f2f5 75%);
+  background-size: 200% 100%;
+}
+
+.skeletonHeader {
+  width: 60%;
+  height: 20px;
+  background: #d1d5db;
+  border-radius: 6px;
+}
+
+.skeletonTitle {
+  width: 80%;
+  height: 16px;
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.skeletonText {
+  width: 100%;
+  height: 12px;
+  background: #d1d5db;
+  border-radius: 4px;
+  
+  &:nth-child(4) {
+    width: 70%;
+  }
+}
+
+.skeletonButton {
+  width: 40%;
+  height: 32px;
+  background: #d1d5db;
+  border-radius: 8px;
+  margin-top: auto;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ============================================
+   КАРТОЧКИ С АНИМАЦИЕЙ
+   ============================================ */
+
 /* 📦 Сетка */
 .itemsGrid {
   display: grid;
@@ -35,7 +104,50 @@
   padding-bottom: 25px;
 }
 
-//кнопки переключений страниц
+/* 🆕 Анимация появления карточек */
+@keyframes cardAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.95);
+  }
+  60% {
+    transform: translateY(-5px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes cardAppearMobile {
+  0% {
+    opacity: 0;
+    transform: translateY(30px) scale(0.94);
+  }
+  60% {
+    transform: translateY(-3px) scale(1.01);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.cardWrapper {
+  opacity: 0;
+  animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+  
+  /* Отключаем анимацию если уже загружено */
+  &.visible {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   ПАГИНАЦИЯ
+   ============================================ */
+
 .pagination {
   display: flex;
   justify-content: center;
@@ -108,18 +220,69 @@
   box-shadow: 0 4px 10px rgba(17, 24, 39, 0.2);
 }
 
-@media (max-width: 1200px){
-  .container{
+/* ============================================
+   АДАПТИВНОСТЬ
+   ============================================ */
+
+/* Планшеты и маленькие ноутбуки */
+@media (max-width: 1200px) {
+  .container {
     padding: 0 100px;
+  }
+  
+  .itemsGrid,
+  .skeletonGrid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
   }
 }
 
-@media (max-width: 600px){
-  .container{
-    padding: 0 30px;
+/* Планшеты */
+@media (max-width: 992px) {
+  .container {
+    padding: 0 60px;
   }
+  
+  .itemsGrid,
+  .skeletonGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+/* Мобильные устройства - 1 колонка */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 25px;
+  }
+  
+  .itemsGrid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  .cardWrapper {
+    animation: cardAppearMobile 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .search {
+    font-size: 13px;
+    padding: 10px 14px;
+    margin: 16px 0 20px;
+  }
+  
   .pagination {
-    gap: 6px;
+    gap: 5px;
+    margin-top: 16px;
   }
 
   .pagination button {
@@ -127,5 +290,140 @@
     height: 32px;
     font-size: 13px;
     border-radius: 8px;
+    padding: 0 8px;
+  }
+  
+  .navButton {
+    min-width: 32px;
+    height: 32px;
+    font-size: 13px;
+    padding: 0 8px;
+  }
+}
+
+/* Маленькие мобильные устройства */
+@media (max-width: 480px) {
+  .container {
+    padding: 0 35px;
+  }
+  
+  .itemsGrid,
+  .skeletonGrid {
+    gap: 10px;
+    max-width: 100%;
+  }
+  
+  .cardWrapper {
+    animation: cardAppearMobile 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .search {
+    font-size: 12px;
+    padding: 8px 12px;
+    margin: 12px 0 16px;
+    border-radius: 10px;
+  }
+  
+  .pagination {
+    gap: 4px;
+    margin-top: 12px;
+  }
+
+  .pagination button {
+    min-width: 28px;
+    height: 28px;
+    font-size: 11px;
+    border-radius: 6px;
+    padding: 0 6px;
+  }
+  
+  .navButton {
+    min-width: 28px;
+    height: 28px;
+    font-size: 11px;
+    padding: 0 6px;
+  }
+}
+
+/* Очень маленькие экраны */
+@media (max-width: 360px) {
+  .container {
+    padding: 0 15px;
+  }
+  
+  .itemsGrid,
+  .skeletonGrid {
+    gap: 8px;
+  }
+  
+  .cardWrapper {
+    animation: cardAppearMobile 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  
+  .pagination button {
+    min-width: 24px;
+    height: 24px;
+    font-size: 10px;
+    padding: 0 4px;
+    border-radius: 4px;
+  }
+  
+  .navButton {
+    min-width: 24px;
+    height: 24px;
+    font-size: 10px;
+    padding: 0 4px;
+  }
+}
+
+/* ============================================
+   ОПТИМИЗАЦИЯ АНИМАЦИЙ
+   ============================================ */
+
+/* Отключаем анимации для пользователей с ограниченными возможностями */
+@media (prefers-reduced-motion: reduce) {
+  .cardWrapper {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  
+  .skeletonCard {
+    animation: none !important;
+  }
+  
+  .pagination button {
+    transition: none !important;
+  }
+}
+
+/* Аппаратное ускорение */
+.cardWrapper {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   ДОПОЛНИТЕЛЬНЫЕ ОПТИМИЗАЦИИ ДЛЯ МОБИЛЬНЫХ
+   ============================================ */
+
+/* Отключаем сложные эффекты на мобильных */
+@media (max-width: 768px) {
+  .container {
+    background:
+      radial-gradient(circle at 20% 30%, #accdff, transparent 30%),
+      radial-gradient(circle at 80% 70%, #a4d2ff, transparent 40%);
+  }
+  
+  .skeletonCard {
+    min-height: 160px;
+  }
+}
+
+/* Плавный скролл для мобильных */
+@media (max-width: 768px) {
+  .itemsGrid {
+    -webkit-overflow-scrolling: touch;
   }
 }
