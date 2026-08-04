@@ -48,11 +48,22 @@ export const Gallery = ({ photos = [] }: TProps) => {
     setIsOpenModal(false);
   };
 
+  // Предотвращаем всплытие клика к карточке новости
+  const handleGalleryClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+  };
+
+  // Открываем модалку с фото
+  const handlePhotoClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsOpenModal(true);
+  };
+
   return (
-    <div className={Styles.slider}>
+    <div className={Styles.slider} onClick={handleGalleryClick}>
       <div 
         className={Styles.item} 
-        onClick={() => setIsOpenModal(true)}
+        onClick={handlePhotoClick}
       >
         <img 
           className={Styles.thumbnail} 

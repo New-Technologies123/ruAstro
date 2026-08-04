@@ -1,3 +1,58 @@
+// ============================================
+// ===== СТАБИЛИЗАЦИЯ ТОЛЬКО ДЛЯ ДЕСКТОПА =====
+// ============================================
+
+// ✅ Добавляем стабилизацию для десктопа (выше 1070px)
+@media (min-width: 1071px) {
+  .headerContainer,
+  .navSticky,
+  .navMenu,
+  .menuItem,
+  .menuLink,
+  .subMenu {
+    contain: layout style;
+  }
+
+  .navSticky {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .navMenu {
+    min-height: 50px;
+    
+    > li {
+      height: 50px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  // .menuItem {
+  //   height: 50px;
+  //   flex-shrink: 0;
+  //   display: flex;
+  //   align-items: center;
+  // }
+
+  // .menuLink {
+  //   height: 100%;
+  //   display: flex;
+  //   align-items: center;
+  //   white-space: nowrap;
+  // }
+
+  .subMenu {
+    contain: layout style;
+  }
+}
+
+// ============================================
+// ===== ВАШИ ОРИГИНАЛЬНЫЕ СТИЛИ (БЕЗ ИЗМЕНЕНИЙ) =====
+// ============================================
+
 .headerContainer {
   display: flex;
   align-items: center;

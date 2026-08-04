@@ -1,5 +1,5 @@
 ---
-// import { ViewTransitions } from 'astro:transitions';
+// layouts/Layout.astro
 import { QuestionEntry } from '../components/ui/question-form/QuestionEntry';
 import { GlobalCart } from '../components/ui/global-cart/GlobalCart';
 import CookieBanner from '../components/ui/CookieBanner.astro';
@@ -13,7 +13,6 @@ const {
 
 <html lang="ru">
   <head>
-    <!-- Кодировка должна быть ПЕРВОЙ -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -58,8 +57,6 @@ const {
     </script>
     <!-- End Google Tag Manager -->
 
-    <!-- <ViewTransitions /> -->
-
     <!-- SEO -->
     <title>{title}</title>
     <meta name="description" content={description} />
@@ -69,7 +66,6 @@ const {
 
     <link rel="icon" type="image/png" href="/images/icon.png" />
 
-    <!-- БАЗОВЫЕ СТИЛИ -->
     <style is:inline>
       * {
         margin: 0;
@@ -121,6 +117,31 @@ const {
 </html>
 
 <style is:global>
+  /* ============================================
+     ===== СТАБИЛИЗАЦИЯ НАВИГАЦИИ =====
+     ============================================ */
+
+  /* Отключаем view-transition для навигации */
+  nav, 
+  .navSticky, 
+  .navMenu, 
+  .menuItem, 
+  .menuLink,
+  .subMenu {
+    view-transition-name: none !important;
+  }
+
+  /* Отключаем анимации для переходов навигации */
+  ::view-transition-group(nav),
+  ::view-transition-group(.navSticky),
+  ::view-transition-group(.navMenu) {
+    animation: none !important;
+  }
+
+  /* ============================================
+     ===== АНИМАЦИИ ДЛЯ ПЕРЕХОДОВ СТРАНИЦ =====
+     ============================================ */
+
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation-duration: 0.3s;

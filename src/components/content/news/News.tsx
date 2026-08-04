@@ -56,8 +56,6 @@ const NewsItem = memo(({ news, index }: { news: TNewsItem; index: number }) => {
     if (isOpen && contentRef.current) {
       const height = contentRef.current.scrollHeight;
       setContentHeight(height);
-    } else {
-      setContentHeight(0);
     }
   }, [isOpen, news.content]);
 
@@ -76,17 +74,21 @@ const NewsItem = memo(({ news, index }: { news: TNewsItem; index: number }) => {
     
     // Проверяем, не кликнули ли по интерактивным элементам
     const isInteractive = 
-      target.closest('summary') ||
       target.closest(`.${Styles.newsSummary}`) ||
       target.closest(`.${Styles.galleryWrapper}`) ||
       target.closest('[data-gallery]') ||
+      target.closest('.slider') ||
+      target.closest('.item') ||
+      target.closest('img') ||
       target.closest('button') ||
-      target.closest('a') ||
-      target.closest('img');
+      target.closest('a');
     
-    if (!isInteractive) {
-      toggleDetails();
+    // Если клик по интерактивному элементу - ничего не делаем
+    if (isInteractive) {
+      return;
     }
+    
+    toggleDetails();
   }, [toggleDetails]);
 
   // Обработчик клавиатуры
@@ -97,11 +99,16 @@ const NewsItem = memo(({ news, index }: { news: TNewsItem; index: number }) => {
     }
   }, [toggleDetails]);
 
+  // Определяем, нужно ли показывать скролл
+  const shouldScroll = isOpen && contentHeight > 160;
+
   return (
     <div 
       ref={ref}
-      className={`${Styles.newsItem} ${inView ? Styles.visible : Styles.hidden}`}
-      style={{ transitionDelay: `${Math.min(index * 30, 300)}ms` }}
+      className={`${Styles.newsItem} ${inView ? Styles.visible : Styles.hidden} ${isOpen ? Styles.expanded : ''}`}
+      style={{ 
+        transitionDelay: `${Math.min(index * 30, 300)}ms`,
+      }}
       onClick={handleCardClick}
       onKeyDown={handleKeyDown}
       role="button"
@@ -153,10 +160,9 @@ const NewsItem = memo(({ news, index }: { news: TNewsItem; index: number }) => {
           </span>
         </button>
         <div 
-          className={Styles.newsContentWrapper}
+          className={`${Styles.newsContentWrapper} ${isOpen ? Styles.expanded : ''} ${shouldScroll ? Styles.scrollable : ''}`}
           style={{ 
-            maxHeight: isOpen ? `${contentHeight}px` : '0px',
-            opacity: isOpen ? 1 : 0,
+            maxHeight: isOpen ? '160px' : '0px',
           }}
         >
           <div ref={contentRef} className={Styles.newsFullContent}>
