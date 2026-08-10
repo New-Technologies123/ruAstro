@@ -1,150 +1,139 @@
-// header.tsx - с правильной логикой открытия подменю
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import Styles from './header.module.scss';
 import logoRu from '../../images/logo_ru.webp';
+
 import menuIcon from '../../images/header/menu.svg';
 import cross from '../../images/header/cross.svg';
 import location from '../../images/location.svg';
 import email from '../../images/email.svg';
 import phone from '../../images/phone.svg';
 import { menuData } from './menuData';
-import type { MenuItemType } from './menuData';
 
-// ===== ТИПЫ =====
+import { useState, useEffect } from 'react';
+
+/* ===== RECURSIVE MENU ITEM ===== */
 interface MenuItemProps {
-  item: MenuItemType;
-  pageType: string;
+  item: any;
+  pageType: any;
   isMobile: boolean;
-  openItems: string[];
-  setOpenItems: React.Dispatch<React.SetStateAction<string[]>>;
-  parentId?: string;
+  openItems: any[];
+  setOpenItems: any;
+  parentId?: string; // ← Made optional
 }
 
-interface HeaderProps {
-  pageType?: string;
-}
+const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId }: MenuItemProps) => {
+  const [open, setOpen] = useState(false);
 
-// ===== КОМПОНЕНТ ПУНКТА МЕНЮ =====
-const MenuItem: React.FC<MenuItemProps> = ({ 
-  item, 
-  pageType, 
-  isMobile, 
-  openItems, 
-  setOpenItems, 
-  parentId = '' 
-}) => {
-  const itemId = item.url || item.title || `item-${Math.random()}`;
+  // Create a unique ID for the menu item
+  const itemId = item.url || item.title;
+  
+  // Create full path for identification (for nested items)
   const fullId = parentId ? `${parentId}-${itemId}` : itemId;
-  const hasChildren = !!(item.children && item.children.length > 0);
-  
-  const [isHoverOpen, setIsHoverOpen] = useState(false);
-  
-  // ✅ На десктопе используем isHoverOpen, на мобилке - openItems
-  const isOpen = isMobile ? openItems.includes(fullId) : isHoverOpen;
 
-  const isActive = useMemo(() => {
+  // Check if this item is open (mobile only)
+  const isOpen = isMobile ? openItems.includes(fullId) : open;
+
+  const hasChildren = item.children && item.children.length > 0;
+
+  // Click handler for the arrow (mobile only)
+  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    
+    if (!isMobile) return; // Ignore on desktop
+    
+    if (isOpen) {
+      // If already open - close only this item
+      setOpenItems((prev: string[]) => prev.filter((id: string) => id !== fullId));
+    } else {
+      // If closed - open this item and close all others at this level
+      const newOpenItems: string[] = [];
+      
+      // Add all parent items (if any)
+      if (parentId) {
+        const parentParts = parentId.split('-');
+        let currentPath = '';
+        for (const part of parentParts) {
+          currentPath = currentPath ? `${currentPath}-${part}` : part;
+          if (!newOpenItems.includes(currentPath)) {
+            newOpenItems.push(currentPath);
+          }
+        }
+      }
+      
+      // Add the current item
+      newOpenItems.push(fullId);
+      
+      setOpenItems(newOpenItems);
+    }
+  };
+
+  // 🔹 Check if active: current item OR any child
+  const isActive = (() => {
     if (item.pageType === pageType) return true;
     
-    if (item.children && item.children.length > 0) {
+    if (item.children) {
       for (const child of item.children) {
         if (child.pageType === pageType) return true;
-        if (child.children && child.children.length > 0) {
+        if (child.children) {
           for (const grandchild of child.children) {
             if (grandchild.pageType === pageType) return true;
           }
         }
       }
     }
-    return false;
-  }, [item, pageType]);
-
-  // ✅ Для десктопа - НЕ БЛОКИРУЕМ переход, только hover
-  const handleLinkClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
-    // Если есть дети и это мобильная версия - предотвращаем переход
-    if (hasChildren && isMobile) {
-      e.preventDefault();
-      e.stopPropagation();
-      
-      // Переключаем открытие подменю
-      if (isOpen) {
-        setOpenItems(prev => prev.filter(id => id !== fullId));
-      } else {
-        const newItems = [fullId];
-        if (parentId && !newItems.includes(parentId)) {
-          newItems.unshift(parentId);
-        }
-        setOpenItems(newItems);
-      }
-    }
-    // ✅ На десктопе - ссылка работает как обычно (переход на страницу)
-  }, [hasChildren, isMobile, isOpen, fullId, parentId, setOpenItems]);
-
-  // ✅ Обработчик клика по стрелке (только для мобильной версии)
-  const handleToggle = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
     
-    if (!isMobile || !hasChildren) return;
+    return false;
+  })();
 
-    if (isOpen) {
-      setOpenItems(prev => prev.filter(id => id !== fullId));
-    } else {
-      const newItems = [fullId];
-      if (parentId && !newItems.includes(parentId)) {
-        newItems.unshift(parentId);
-      }
-      setOpenItems(newItems);
-    }
-  }, [isMobile, hasChildren, isOpen, fullId, parentId, setOpenItems]);
-
-  // ✅ Для десктопа - открываем по наведению
-  const handleMouseEnter = useCallback(() => {
+  // For desktop use hover
+  const handleMouseEnter = () => {
     if (!isMobile && hasChildren) {
-      setIsHoverOpen(true);
+      setOpen(true);
     }
-  }, [isMobile, hasChildren]);
+  };
 
-  const handleMouseLeave = useCallback(() => {
+  const handleMouseLeave = () => {
     if (!isMobile && hasChildren) {
-      setIsHoverOpen(false);
+      setOpen(false);
     }
-  }, [isMobile, hasChildren]);
+  };
 
   return (
-    <li 
+    <li
       className={Styles.menuItem}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div className={Styles.menuRow}>
-        <a 
-          href={item.url} 
+        <a
+          href={item.url}
           className={`${Styles.menuLink} ${isActive ? Styles.active : ''}`}
-          onClick={handleLinkClick}
         >
           {item.title}
         </a>
+
         {hasChildren && (
-          <button 
+          <button
+            type="button"
             className={`${Styles.arrow} ${isOpen ? Styles.arrowOpen : ''}`}
             onClick={handleToggle}
-            type="button"
           >
             ▸
           </button>
         )}
       </div>
-      {hasChildren && item.children && (
+
+      {hasChildren && (
         <ul className={`${Styles.subMenu} ${isOpen ? Styles.open : ''}`}>
-          {item.children.map((child: MenuItemType, idx: number) => (
+          {item.children.map((child: any, index: number) => (
             <MenuItem
-              key={`${child.title}-${idx}`}
+              key={index}
               item={child}
               pageType={pageType}
               isMobile={isMobile}
               openItems={openItems}
               setOpenItems={setOpenItems}
-              parentId={fullId}
+              parentId={fullId} // Pass parent ID for child items
             />
           ))}
         </ul>
@@ -153,90 +142,86 @@ const MenuItem: React.FC<MenuItemProps> = ({
   );
 };
 
-// ===== ОСНОВНОЙ HEADER =====
-export const Header: React.FC<HeaderProps> = ({ pageType = 'home' }) => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
-  const [openSubmenus, setOpenSubmenus] = useState<string[]>([]);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [lang, setLang] = useState<string>('ru');
-  
-  const mountedRef = useRef(true);
+export default MenuItem;
 
-  const changeLanguage = useCallback((newLang: string) => {
+/* ===== MAIN HEADER ===== */
+export const Header = ({ pageType }: { pageType: string }) => {
+  const [isActiveMobileMenu, setIsActiveMobileMenu] = useState(false);
+  const [closeAllSubMenus, setCloseAllSubMenus] = useState(false);
+  const [openItems, setOpenItems] = useState<string[]>([]); // Array of open items (mobile only)
+  const [isMobile, setIsMobile] = useState(false);
+
+  const onToggleMobileMenu = () => {
+     setIsActiveMobileMenu((prev: boolean) => {
+      const next = !prev;
+
+      if (!next) {
+        setCloseAllSubMenus((prev: boolean) => !prev);
+        setOpenItems([]); // Close all submenus when burger is closed
+      }
+
+      return next;
+    });
+  };
+
+  // Detect mobile version
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkMobile = () => {
+      const mobile = window.innerWidth <= 1000;
+      setIsMobile(mobile);
+      
+      // If desktop - reset openItems
+      if (!mobile) {
+        setOpenItems([]);
+      }
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const [lang, setLang] = useState('ru');
+
+  // Добавляем тип для параметра newLang
+  const changeLanguage = (newLang: string) => {
     setLang(newLang);
+
     if (newLang === 'en') {
       window.location.href = 'https://eng.tech-new.ru';
     } else {
       window.location.href = 'https://tech-new.ru';
     }
-  }, []);
+  };
 
-  useEffect(() => {
-    const checkMobile = () => {
-      requestAnimationFrame(() => {
-        if (!mountedRef.current) return;
-        
-        const width = window.innerWidth;
-        const mobile = width <= 1070;
-        
-        setIsMobile(prev => {
-          if (prev !== mobile) {
-            return mobile;
-          }
-          return prev;
-        });
-        
-        if (!mobile) {
-          setOpenSubmenus([]);
-          setIsMobileMenuOpen(false);
-        }
-      });
-    };
-
-    const timer = setTimeout(checkMobile, 0);
-    
-    window.addEventListener('resize', checkMobile);
-    
-    return () => {
-      mountedRef.current = false;
-      clearTimeout(timer);
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
-
-  const toggleMobileMenu = useCallback(() => {
-    setIsMobileMenuOpen(prev => {
-      const next = !prev;
-      if (!next) {
-        setOpenSubmenus([]);
-      }
-      return next;
-    });
-  }, []);
-
+  /* Close menu when clicking outside */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const nav = document.querySelector(`.${Styles.navMenu}`);
       const toggle = document.querySelector(`.${Styles.menuToggle}`);
-      
-      if (isMobileMenuOpen && nav && toggle) {
-        const target = event.target as Node;
-        if (!nav.contains(target) && !toggle.contains(target)) {
-          setIsMobileMenuOpen(false);
-          setOpenSubmenus([]);
-        }
+
+      if (
+        isActiveMobileMenu &&
+        nav &&
+        !nav.contains(event.target as Node) &&
+        toggle &&
+        !toggle.contains(event.target as Node)
+      ) {
+        setIsActiveMobileMenu(false);
+        setOpenItems([]); // Close all submenus
       }
     };
 
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
-  }, [isMobileMenuOpen]);
+  }, [isActiveMobileMenu]);
 
   return (
     <>
       <header>
         <div className={Styles.headerContainer}>
-          <img src={logoRu.src} alt="Новые Технологии" />
+          <img src={logoRu.src} alt="New Technologies" />
 
           <div className={Styles.contactBloc}>
             <div className={Styles.contactInfo}>
@@ -259,41 +244,42 @@ export const Header: React.FC<HeaderProps> = ({ pageType = 'home' }) => {
                 <div
                   className={Styles.langSlider}
                   style={{
-                    transform: lang === 'ru' ? 'translateX(0%)' : 'translateX(100%)'
+                    transform:
+                      lang === 'ru'
+                        ? 'translateX(0%)'
+                        : 'translateX(100%)'
                   }}
                 />
+
                 <button
                   onClick={() => changeLanguage('ru')}
                   className={lang === 'ru' ? Styles.active : ''}
                 >
                   RU
                 </button>
+
                 <button
                   onClick={() => changeLanguage('en')}
                   className={lang === 'en' ? Styles.active : ''}
                 >
                   EN
                 </button>
+
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      <nav className={`${Styles.navSticky} ${isMobileMenuOpen ? Styles.active : ''}`}>
-        <div 
-          className={Styles.menuToggle} 
-          onClick={toggleMobileMenu}
-          role="button"
-          aria-label="Toggle menu"
-        >
-          <img 
-            src={isMobileMenuOpen ? cross.src : menuIcon.src} 
-            alt={isMobileMenuOpen ? "Close menu" : "Open menu"} 
+      <nav className={`${Styles.navSticky} ${isActiveMobileMenu ? Styles.active : ''}`}>
+        <div className={Styles.menuToggle} onClick={onToggleMobileMenu}>
+          <img
+            src={isActiveMobileMenu ? cross.src : menuIcon.src}
+            alt=""
           />
         </div>
 
-        <ul className={`${Styles.navMenu} ${isMobileMenuOpen ? Styles.active : ''}`}>
+        <ul className={`${Styles.navMenu} ${isActiveMobileMenu ? Styles.active : ''}`}>
           <li>
             <a href="/home/" className={pageType === 'home' ? Styles.active : ''}>
               Главная
@@ -304,18 +290,19 @@ export const Header: React.FC<HeaderProps> = ({ pageType = 'home' }) => {
               О компании
             </a>
           </li>
-          
-          {menuData.map((item: MenuItemType, idx: number) => (
-            <MenuItem
-              key={`menu-${idx}`}
-              item={item}
+
+          {menuData.map((item, index) => (
+            <MenuItem 
+              key={index} 
+              item={item} 
               pageType={pageType}
               isMobile={isMobile}
-              openItems={openSubmenus}
-              setOpenItems={setOpenSubmenus}
+              openItems={openItems}
+              setOpenItems={setOpenItems}
+              // parentId не передаем для корневых элементов
             />
           ))}
-          
+
           <li>
             <a href="/documents/" className={pageType === 'documents' ? Styles.active : ''}>
               Документы
@@ -351,5 +338,3 @@ export const Header: React.FC<HeaderProps> = ({ pageType = 'home' }) => {
     </>
   );
 };
-
-export default Header;

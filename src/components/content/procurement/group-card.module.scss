@@ -14,8 +14,8 @@
   cursor: pointer;
   
   height: auto;
-  min-height: 240px;
-  max-height: 380px;
+  min-height: 240px; /* Оставляем как было */
+  max-height: 380px; /* Оставляем как было */
 
   &::before {
     content: "";
@@ -28,6 +28,7 @@
     );
     opacity: 0.4;
     pointer-events: none;
+    border-radius: 18px;
   }
 
   &:hover {
@@ -54,20 +55,21 @@
   }
 
   &.expanded {
-    min-height: 380px;
-    max-height: 380px;
+    min-height: 280px; /* Уменьшил */
+    max-height: 400px; /* Уменьшил */
     
     .groupItems {
-      max-height: 280px;
+      max-height: 280px; /* Уменьшил */
       overflow-y: auto;
       
       &::-webkit-scrollbar {
-        width: 6px;
+        width: 5px;
       }
 
       &::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0.03);
         border-radius: 10px;
+        margin: 2px 0;
       }
 
       &::-webkit-scrollbar-thumb {
@@ -176,7 +178,8 @@
   overflow: hidden;
   transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  min-height: 0;
 
   &::after {
     content: '';
@@ -196,15 +199,16 @@
   }
 
   &.expanded {
-    max-height: 280px;
+    max-height: 280px; /* Уменьшил */
     overflow-y: auto;
+    padding-right: 4px;
 
     &::after {
       opacity: 0;
     }
 
     &::-webkit-scrollbar {
-      width: 5px;
+      width: 4px;
     }
 
     &::-webkit-scrollbar-track {
@@ -215,6 +219,7 @@
     &::-webkit-scrollbar-thumb {
       background: rgba(99, 102, 241, 0.15);
       border-radius: 10px;
+      transition: background 0.3s ease;
     }
 
     &::-webkit-scrollbar-thumb:hover {
@@ -374,11 +379,10 @@
     height: auto;
     min-height: 210px;
     max-height: 340px;
-    padding: 14px;
     
     &.expanded {
-      min-height: 340px;
-      max-height: 340px;
+      min-height: 260px; /* Уменьшил */
+      max-height: 380px; /* Уменьшил */
     }
     
     &.singleItem {
@@ -412,7 +416,7 @@
     max-height: 120px;
     
     &.expanded {
-      max-height: 250px;
+      max-height: 260px; /* Уменьшил */
     }
   }
 
@@ -453,8 +457,8 @@
     max-height: 340px;
     
     &.expanded {
-      min-height: 340px;
-      max-height: 340px;
+      min-height: 260px;
+      max-height: 380px;
     }
     
     &.singleItem {
@@ -472,8 +476,8 @@
     max-height: 340px;
 
     &.expanded {
-      min-height: 340px;
-      max-height: 340px;
+      min-height: 260px; /* Уменьшил */
+      max-height: 380px; /* Уменьшил */
     }
 
     &.singleItem {
@@ -510,7 +514,7 @@
     max-height: 120px;
     
     &.expanded {
-      max-height: 250px;
+      max-height: 260px; /* Уменьшил */
     }
   }
 
@@ -556,8 +560,8 @@
     max-height: 300px;
 
     &.expanded {
-      min-height: 300px;
-      max-height: 300px;
+      min-height: 240px; /* Уменьшил */
+      max-height: 360px; /* Уменьшил */
     }
 
     &.singleItem {
@@ -607,7 +611,7 @@
     max-height: 120px;
     
     &.expanded {
-      max-height: 200px;
+      max-height: 240px; /* Уменьшил */
     }
   }
 
@@ -664,8 +668,8 @@
     max-height: 260px;
 
     &.expanded {
-      min-height: 260px;
-      max-height: 260px;
+      min-height: 220px; /* Уменьшил */
+      max-height: 340px; /* Уменьшил */
     }
 
     &.singleItem {

@@ -101,7 +101,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-  padding-bottom: 25px;
+  // padding-bottom: 25px;
 }
 
 /* 🆕 Анимация появления карточек */
@@ -153,9 +153,9 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
-  margin-top: 24px;
+  padding-top: 24px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
+  padding-bottom: 20px;
 }
 
 /* общие кнопки */
@@ -246,7 +246,7 @@
   .itemsGrid,
   .skeletonGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
+    gap: 20px;
   }
 }
 
@@ -282,7 +282,7 @@
   
   .pagination {
     gap: 5px;
-    margin-top: 16px;
+    padding-top: 16px;
   }
 
   .pagination button {
@@ -326,7 +326,7 @@
   
   .pagination {
     gap: 4px;
-    margin-top: 12px;
+    padding-top: 12px;
   }
 
   .pagination button {
