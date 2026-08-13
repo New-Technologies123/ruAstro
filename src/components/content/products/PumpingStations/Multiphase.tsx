@@ -15,7 +15,7 @@ export const Multiphase = () => {
   };
 
   const onDoc = () => {
-    window.location.href = "/documents/?type=pumpingStations";
+    window.location.href = "/documents/?category=pumping-stations";
   };
 
   /* ---------- 3D TILT EFFECT ---------- */

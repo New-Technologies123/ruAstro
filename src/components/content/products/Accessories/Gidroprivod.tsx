@@ -15,7 +15,7 @@ export const Gidroprivod = () => {
   };
 
   const onDoc = () => {
-    window.location.href = "/documents/?type=accessories";
+    window.location.href = "/documents/?category=accessories";
   };
 
   /* ---------- 3D TILT EFFECT ---------- */

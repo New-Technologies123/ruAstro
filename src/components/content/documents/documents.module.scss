@@ -1,31 +1,1052 @@
 .wrapper {
-  padding: 48px 32px;
-  background: linear-gradient(180deg, #f7fbff 0%, #eef6fd 100%);
-  min-height: 100%;
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --surface-soft: #f8f9fc;
+  --text: #151922;
+  --text-secondary: #697386;
+  --text-muted: #9aa3b2;
+  --border: #e7eaf0;
+  --accent: #5b5ff0;
+  --accent-dark: #494dd8;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 190px 90px;
+  color: var(--text);
+  background: radial-gradient(circle at 90% 0%, rgba(91, 95, 240, 0.08), transparent 25%), var(--bg);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  animation: pageEnter 0.75s cubic-bezier(0.22, 0.8, 0.25, 1) both;
 }
 
-/* Сетка карточек */
-.team {
-  padding-top: 26px;
-  margin: 0 50px;
-  margin-bottom: 30px;
+/* =========================================================
+   HEADER
+   ========================================================= */
 
+.header {
+  padding-top: 20px;
+  animation: contentEnter 0.7s cubic-bezier(0.22, 0.8, 0.25, 1) 0.08s both;
+}
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.headerTop {
   display: flex;
-  // grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 28px;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 24px;
+}
+
+/* =========================================================
+   BRAND
+   ========================================================= */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brandMark {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  width: 24px;
+  height: 24px;
+  padding: 4px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #262bcc, #8588ff);
+}
+
+.brandMark span {
+  display: block;
+  width: 4px;
+  border-radius: 3px;
+  background: white;
+}
+
+.brandMark span:nth-child(1) {
+  height: 8px;
+}
+
+.brandMark span:nth-child(2) {
+  height: 13px;
+}
+
+.brandMark span:nth-child(3) {
+  height: 17px;
+}
+
+.brandText {
+  color: #343a4a;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.13em;
+}
+
+/* =========================================================
+   HEADER STATS
+   ========================================================= */
+
+.headerStats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.headerStats i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #c3c8d2;
+}
+
+/* =========================================================
+   SEARCH + HERO (объединены в один контейнер)
+   ========================================================= */
+
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #0f659f41;
+  margin-bottom: 15px;
+  flex-direction: row-reverse; /* Кнопка справа, текст слева */
+}
+
+/* =========================================================
+   HERO TEXT (текст слева)
+   ========================================================= */
+
+.heroText {
+  flex: 1;
+  min-width: 0;
+  max-width: 680px;
+  transition: opacity 0.3s ease, visibility 0.3s ease, flex 0.3s ease, width 0.3s ease, height 0.3s ease;
+}
+
+.pageDescription {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+/* =========================================================
+   SEARCH BOX (справа)
+   ========================================================= */
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 380px;
+  height: 48px;
+  padding: 0 18px;
+  border: 1px solid #0a307ada;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 5px 20px rgba(40, 49, 80, 0.035);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+.searchBox:focus-within {
+  box-shadow: 0 0 0 4px rgba(91, 95, 240, 0.08), 0 10px 30px rgba(40, 49, 80, 0.06);
+  transform: translateY(-1px);
+}
+
+.searchBox svg {
+  flex-shrink: 0;
+  color: #8b94a5;
+}
+
+.searchBox input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.searchBox input::placeholder {
+  color: #a6adba;
+}
+
+.clearSearch {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: #eef0f4;
+  color: #737c8d;
+  font-size: 19px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
 }
 
-/* Плавное появление всей секции */
-.team {
-  animation: fadePage .5s ease;
+.clearSearch:hover {
+  background: #e3e6ec;
+  color: #333948;
+  transform: rotate(90deg);
 }
 
-@keyframes fadePage {
+/* =========================================================
+   MOBILE SEARCH BUTTON (скрыт на десктопе)
+   ========================================================= */
+
+.mobileSearchButton {
+  display: none;
+}
+
+/* =========================================================
+   HERO (скрыт, текст перенесен в searchWrapper)
+   ========================================================= */
+
+.hero {
+  display: none;
+}
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.sectionHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.sectionEyebrow {
+  display: block;
+  margin-bottom: 7px;
+  color: #8b94a5;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 750;
+  letter-spacing: -0.035em;
+}
+
+.sectionCount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: white;
+  color: #7b8493;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+/* =========================================================
+   CATEGORIES
+   ========================================================= */
+
+.categoriesSection {
+  animation: contentEnter 0.7s cubic-bezier(0.22, 0.8, 0.25, 1) 0.18s both;
+}
+
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 27px;
+}
+
+/* =========================================================
+   CATEGORY CARD
+   ========================================================= */
+
+.categoryCard {
+  position: relative;
+  min-height: auto;
+  overflow: hidden;
+  padding: 27px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  border-color: rgba(11, 17, 206, 0.267);
+  opacity: 0;
+  animation: categoryIn 0.65s cubic-bezier(0.22, 0.8, 0.25, 1) both;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.categoryCard:nth-child(1) {
+  animation-delay: 0.12s;
+}
+
+.categoryCard:nth-child(2) {
+  animation-delay: 0.18s;
+}
+
+.categoryCard:nth-child(3) {
+  animation-delay: 0.24s;
+}
+
+.categoryCard:nth-child(4) {
+  animation-delay: 0.30s;
+}
+
+.categoryCard:nth-child(5) {
+  animation-delay: 0.36s;
+  grid-column: span 2;
+  min-height: auto;
+}
+
+.categoryCard:hover {
+  transform: translateY(-6px);
+  border-color: rgba(7, 14, 211, 0.425);
+  box-shadow: 0 25px 55px rgba(46, 54, 83, 0.1);
+}
+
+.categoryCard:active {
+  transform: translateY(-2px) scale(0.995);
+}
+
+.categoryCard:focus-visible {
+  outline: 3px solid rgba(91, 95, 240, 0.25);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   CATEGORY COLORS
+   ========================================================= */
+
+.category1 {
+  --category-color: #5b5ff0;
+  --category-bg: #eef0ff;
+}
+
+.category2 {
+  --category-color: #0f9f83;
+  --category-bg: #e8f8f4;
+}
+
+.category3 {
+  --category-color: #e28a28;
+  --category-bg: #fff4e5;
+}
+
+.category4 {
+  --category-color: #dc5b70;
+  --category-bg: #fff0f3;
+}
+
+.category5 {
+  --category-color: #865bd6;
+  --category-bg: #f3edff;
+}
+
+/* =========================================================
+   CATEGORY GLOW
+   ========================================================= */
+
+.categoryGlow {
+  position: absolute;
+  right: -90px;
+  bottom: -110px;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: var(--category-bg);
+  opacity: 0.8;
+  filter: blur(2px);
+  transition: transform 0.5s ease, opacity 0.4s ease;
+}
+
+.categoryCard:hover .categoryGlow {
+  transform: scale(1.3);
+  opacity: 1;
+}
+
+/* =========================================================
+   CATEGORY NUMBER
+   ========================================================= */
+
+.categoryNumber {
+  position: absolute;
+  top: 24px;
+  right: 27px;
+  color: var(--category-color);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+/* =========================================================
+   CATEGORY CONTENT
+   ========================================================= */
+
+.categoryContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.categoryTitle {
+  max-width: 470px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: 750;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+.categoryDescription {
+  max-width: 480px;
+  margin: 12px 0 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.categoryBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 5px;
+  border-top: 1px solid rgba(30, 40, 60, 0.07);
+}
+
+.categoryCount {
+  color: var(--category-color);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.categoryOpen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(160, 167, 179, 0.1);
+  color: #a0a7b3;
+  transition: background 0.25s ease, color 0.25s ease, transform 0.3s ease;
+}
+
+.categoryCard:hover .categoryOpen {
+  background: var(--category-color);
+  color: white;
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   CATEGORY VIEW
+   ========================================================= */
+
+.categoryView {
+  animation: contentEnter 0.65s cubic-bezier(0.22, 0.8, 0.25, 1) both;
+}
+
+/* =========================================================
+   НОВАЯ КНОПКА "ВСЕ КАТЕГОРИИ" — КРАСИВАЯ И СОВРЕМЕННАЯ
+   ========================================================= */
+
+.allCategoriesButton {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 28px 0 32px;
+  padding: 12px 24px 12px 18px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #f0f2ff 0%, #ffffff 100%);
+  box-shadow: 0 2px 12px rgba(91, 95, 240, 0.08), 0 0 0 1px rgba(91, 95, 240, 0.06);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+}
+
+/* Неоновое свечение при ховере */
+.allCategoriesButton::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark), #7c7fff);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
+  filter: blur(8px);
+}
+
+.allCategoriesButton:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 32px rgba(91, 95, 240, 0.15), 0 0 0 1px rgba(91, 95, 240, 0.15);
+  color: var(--accent-dark);
+}
+
+.allCategoriesButton:hover::before {
+  opacity: 0.3;
+}
+
+.allCategoriesButton:active {
+  transform: scale(0.96) translateY(-1px);
+  box-shadow: 0 4px 16px rgba(91, 95, 240, 0.1);
+}
+
+/* Иконка стрелки */
+.allCategoriesIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: white;
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  box-shadow: 0 4px 12px rgba(91, 95, 240, 0.25);
+}
+
+.allCategoriesButton:hover .allCategoriesIcon {
+  transform: translateX(-4px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(91, 95, 240, 0.35);
+}
+
+.allCategoriesIcon svg {
+  width: 17px;
+  height: 17px;
+  transition: transform 0.4s ease;
+}
+
+.allCategoriesButton:hover .allCategoriesIcon svg {
+  transform: translateX(-2px);
+}
+
+/* Текст */
+.allCategoriesText {
+  position: relative;
+  z-index: 1;
+  letter-spacing: -0.01em;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--text), #2a3050);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transition: background 0.4s ease;
+}
+
+.allCategoriesButton:hover .allCategoriesText {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.selectedCategoryHeader {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 24px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+.selectedCategoryTitle {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.06em;
+}
+
+.selectedCategoryDescription {
+  max-width: 620px;
+  margin-top: 15px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.selectedCategoryCount {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.selectedCategoryCount strong {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+}
+
+.selectedCategoryCount span {
+  margin-top: 6px;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* =========================================================
+   DOCUMENTS GRID
+   ========================================================= */
+
+.documentsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 30px;
+}
+
+/* =========================================================
+   MODERN DOCUMENT CARD
+   ========================================================= */
+
+.documentCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 135px;
+  padding: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(172, 194, 248, 0.9);
+  border-radius: 17px;
+  background: linear-gradient(145deg, #e4f2ff34 0%, #cad6f869 100%);
+  box-shadow: 0 3px 14px rgba(40, 49, 80, 0.035);
+  opacity: 0;
+  animation: cardIn 0.55s cubic-bezier(0.22, 0.8, 0.25, 1) forwards;
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease, border-color 0.3s ease,
+    background 0.3s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.documentCard::before {
+  content: '';
+  position: absolute;
+  top: -95px;
+  right: -80px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(91, 96, 240, 0.116), rgba(91, 96, 240, 0.041));
+  opacity: 0.65;
+  pointer-events: none;
+  transition: transform 0.5s ease, opacity 0.4s ease;
+}
+
+.documentCard::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 18px;
+  bottom: 18px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: linear-gradient(180deg, var(--accent), #85ffef);
+  transform: scaleY(0.35);
+  transform-origin: center;
+  opacity: 0.45;
+  pointer-events: none;
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+.documentCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(91, 95, 240, 0.28);
+  box-shadow: 0 16px 38px rgba(40, 49, 80, 0.1);
+}
+
+.documentCard:hover::before {
+  transform: scale(1.35);
+  opacity: 1;
+}
+
+.documentCard:hover::after {
+  transform: scaleY(1.5);
+  opacity: 1;
+}
+
+/* =========================================================
+   DOCUMENT CATEGORY (для результатов поиска с номером)
+   ========================================================= */
+
+.documentCategory {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 4px 12px 4px 6px;
+  border-radius: 6px;
+  background: rgba(91, 95, 240, 0.06);
+  width: fit-content;
+  max-width: 100%;
+  overflow: hidden;
+  border: 1px solid rgba(91, 95, 240, 0.06);
+}
+
+.documentCategoryNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 4px;
+  background: rgba(91, 95, 240, 0.12);
+  color: var(--text-secondary);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+}
+
+.documentCategoryName {
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+/* =========================================================
+   DOCUMENT TOP
+   ========================================================= */
+
+.documentTop {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  margin-bottom: 7px;
+}
+
+/* =========================================================
+   FILE TYPE
+   ========================================================= */
+
+.fileType {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  height: 28px;
+  padding: 0 9px;
+  border: 1px solid rgba(7, 14, 218, 0.212);
+  border-radius: 7px;
+  background: linear-gradient(135deg, #f0f1ff, #f7f7ff);
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  box-shadow: 0 3px 10px rgba(91, 95, 240, 0.06);
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.documentCard:hover .fileType {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #e9eaff, #f4f4ff);
+}
+
+/* =========================================================
+   FILE SIZE
+   ========================================================= */
+
+.fileSize {
+  max-width: 80px;
+  overflow: hidden;
+  color: #a0a7b3;
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   DOCUMENT MAIN
+   ========================================================= */
+
+.documentMain {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* =========================================================
+   DOCUMENT TITLE
+   ========================================================= */
+
+.documentTitle {
+  display: -webkit-box;
+  max-width: 100%;
+  margin: 0;
+  overflow: hidden;
+  color: #202532;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.015em;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  transition: color 0.25s ease;
+}
+
+.documentCard:hover .documentTitle {
+  color: #151922;
+}
+
+/* =========================================================
+   DOCUMENT ACTIONS
+   ========================================================= */
+
+.documentActions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 7px;
+  margin-top: 18px;
+}
+
+/* =========================================================
+   OPEN BUTTON
+   ========================================================= */
+
+.openButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  gap: 7px;
+  height: 38px;
+  padding: 0 11px;
+  border: 1px solid #6993f5;
+  border-radius: 9px;
+  background: rgba(248, 249, 252, 0.9);
+  color: #163a79;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.openButton:hover {
+  transform: translateY(-2px);
+  border-color: rgba(14, 19, 155, 0.623);
+  background: #2937ff28;
+  color: var(--accent);
+  box-shadow: 0 5px 15px rgba(91, 95, 240, 0.08);
+}
+
+.openButton svg {
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.openButton:hover svg {
+  transform: translateX(2px);
+}
+
+/* =========================================================
+   DOWNLOAD BUTTON
+   ========================================================= */
+
+.downloadButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(91, 95, 240, 0.12);
+  border-radius: 9px;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 5px 14px rgba(91, 95, 240, 0.18);
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.downloadButton:hover {
+  transform: translateY(-2px);
+  background: var(--accent-dark);
+  box-shadow: 0 9px 22px rgba(91, 95, 240, 0.3);
+}
+
+.downloadButton svg {
+  transition: transform 0.3s ease;
+}
+
+.downloadButton:hover svg {
+  transform: translateY(2px);
+}
+
+/* =========================================================
+   BUTTON ACTIVE / FOCUS
+   ========================================================= */
+
+.openButton:active,
+.downloadButton:active {
+  transform: scale(0.96);
+}
+
+.openButton:focus-visible,
+.downloadButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   SEARCH RESULTS
+   ========================================================= */
+
+.searchResults {
+  animation: pageIn 0.35s ease both;
+}
+
+/* =========================================================
+   NO RESULTS
+   ========================================================= */
+
+.noResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  border: 1px dashed #dfe3ea;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.55);
+  text-align: center;
+  animation: contentEnter 0.45s ease both;
+}
+
+.noResultsIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: 15px;
+  border-radius: 50%;
+  background: #f0f1f5;
+  color: #8c94a3;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.noResults h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.noResults p {
+  margin: 7px 0 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+@keyframes pageEnter {
   from {
     opacity: 0;
-    transform: translateY(15px);
+    transform: translateY(18px);
+    filter: blur(6px);
+  }
+  45% {
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes contentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes categoryIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -33,25 +1054,1207 @@
   }
 }
 
-/* адаптивность */
-
-@media (max-width: 900px) {
-  .wrapper {
-    padding: 36px 24px;
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
   }
-
-  .team {
-    gap: 22px;
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
-@media (max-width: 600px) {
+/* =========================================================
+   LARGE TABLET (до 1150px)
+   ========================================================= */
+
+@media (max-width: 1150px) {
   .wrapper {
-    padding: 28px 16px;
+    padding: 0 30px;
   }
-  .team {
-    padding-top: 20px;
-    margin: 0 70px;
-    gap: 18px;
+
+  .documentsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .sectionTitle{
+    font-size: 23px;
+  }
+
+  .categoryTitle {
+    font-size: 22px;
+  }
+}
+
+/* =========================================================
+   TABLET (до 850px)
+   ========================================================= */
+
+@media (max-width: 850px) {
+  .documentsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================================
+   MOBILE (до 720px)
+   ========================================================= */
+
+@media (max-width: 720px) {
+  .header {
+    padding-top: 22px;
+  }
+
+  /* =======================================================
+     SEARCH WRAPPER - кнопка справа, текст слева
+     ======================================================= */
+
+  .searchWrapper {
+    display: flex;
+    // flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0 20px;
+    gap: 12px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+    height: auto;
+    min-height: 46px;
+    position: relative;
+    transition: min-height 0.3s ease, padding 0.3s ease, margin-bottom 0.3s ease;
+  }
+
+  /* =======================================================
+     СОВРЕМЕННАЯ КНОПКА ПОИСКА (слева)
+     ======================================================= */
+
+  .mobileSearchButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    height: 44px;
+    width: auto;
+    gap: 10px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    white-space: nowrap;
+    position: relative;
+    z-index: 2;
+    order: 0;
+    box-shadow: 0 4px 16px rgba(91, 95, 240, 0.3);
+  }
+
+  .mobileSearchButton::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+    filter: blur(8px);
+  }
+
+  .mobileSearchButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(91, 95, 240, 0.4);
+  }
+
+  .mobileSearchButton:hover::before {
+    opacity: 0.4;
+  }
+
+  .mobileSearchButton:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(91, 95, 240, 0.2);
+  }
+
+  .mobileSearchButton svg {
+    width: 18px;
+    height: 18px;
+    color: #ffffff;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease;
+  }
+
+  .mobileSearchButton:hover svg {
+    transform: scale(1.05);
+  }
+
+  .mobileSearchButton span {
+    transition: opacity 0.3s ease, width 0.3s ease, margin 0.3s ease;
+    letter-spacing: 0.3px;
+  }
+
+  /* Когда поиск открыт - кнопка исчезает */
+  .searchWrapperOpen .mobileSearchButton {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    width: 0;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    flex: 0;
+    min-width: 0;
+    box-shadow: none;
+  }
+
+  .searchWrapperOpen .mobileSearchButton svg {
+    width: 0;
+    height: 0;
+  }
+
+  .searchWrapperOpen .mobileSearchButton span {
+    opacity: 0;
+    width: 0;
+  }
+
+  /* =======================================================
+     ПОЛЕ ПОИСКА (появляется на месте кнопки)
+     ======================================================= */
+
+  .searchBox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    padding: 0 14px;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    background: transparent;
+    box-shadow: none;
+    flex: 0;
+    width: 0;
+    min-width: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+    flex-shrink: 0;
+    position: relative;
+    order: 0;
+  }
+
+  /* Открытое состояние */
+  .searchWrapperOpen .searchBox {
+    flex: 1;
+    width: 100%;
+    min-width: 100px;
+    opacity: 1;
+    visibility: visible;
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 24px rgba(91, 95, 240, 0.12), 0 0 0 4px rgba(91, 95, 240, 0.04);
+    pointer-events: auto;
+    padding: 0 18px;
+  }
+
+  .searchBox::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+
+  .searchWrapperOpen .searchBox::before {
+    opacity: 0.08;
+  }
+
+  .searchBox input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.1s;
+  }
+
+  .searchWrapperOpen .searchBox input {
+    opacity: 1;
+  }
+
+  .searchBox input::placeholder {
+    color: #a6adba;
+    font-weight: 400;
+  }
+
+  .searchBox input:focus {
+    outline: none;
+  }
+
+  /* Иконка лупы в поле поиска */
+  .searchBox > svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--accent);
+    opacity: 0;
+    transition: opacity 0.3s ease 0.1s, transform 0.3s ease;
+  }
+
+  .searchWrapperOpen .searchBox > svg {
+    opacity: 0.6;
+  }
+
+  /* Кнопка очистки */
+  .clearSearch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.05);
+    color: #7b8493;
+    font-size: 0;
+    cursor: pointer;
+    opacity: 0;
+    transform: scale(0.7);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  .searchWrapperOpen .clearSearch {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  .clearSearch:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #343a4a;
+  }
+
+  .clearSearch:active {
+    transform: scale(0.85);
+  }
+
+  .clearSearch svg {
+    width: 14px;
+    height: 14px;
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+
+  /* Показываем крестик когда есть текст в поиске */
+  .searchBox:has(input:not(:placeholder-shown)) .clearSearch {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  /* =======================================================
+     ТЕКСТ (справа) - может переноситься на 2 строки
+     ======================================================= */
+
+  .heroText {
+    display: block;
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    opacity: 1;
+    visibility: visible;
+    transition: flex 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
+    text-align: right;
+    margin-left: auto;
+    max-width: 60%;
+  }
+
+  .pageDescription {
+    font-size: 13px;
+    line-height: 1.4;
+    margin: 0;
+    color: var(--text-secondary);
+    transition: font-size 0.3s ease, opacity 0.3s ease;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    text-align: left;
+  }
+
+  /* Когда поиск открыт - текст становится прозрачнее */
+  .searchWrapperOpen .pageDescription {
+    font-size: 12px;
+    opacity: 0.4;
+    -webkit-line-clamp: 1;
+  }
+
+  /* Когда поиск открыт - текст полностью скрывается на маленьких экранах */
+  .searchWrapperOpen .heroText {
+    flex: 0;
+    opacity: 0;
+    visibility: hidden;
+    width: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    max-width: 0;
+  }
+
+  /* =======================================================
+     РЕЗУЛЬТАТЫ ПОИСКА
+     ======================================================= */
+
+  .searchResults {
+    animation: pageIn 0.35s ease both;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(91, 95, 240, 0.08);
+    transition: margin-top 0.3s ease;
+  }
+
+  /* =======================================================
+     СЕКЦИИ
+     ======================================================= */
+
+  .sectionHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 17px;
+  }
+
+  .sectionTitle {
+    font-size: 21px;
+    font-weight: 750;
+    letter-spacing: -0.035em;
+    margin: 0;
+  }
+
+  .sectionEyebrow {
+    display: block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8b94a5;
+    margin-bottom: 5px;
+  }
+
+  /* =======================================================
+     КАТЕГОРИИ
+     ======================================================= */
+
+  .categoriesGrid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 0;
+  }
+
+  .categoryCard {
+    position: relative;
+    grid-column: auto !important;
+    min-height: 0;
+    padding: 20px 18px 17px 20px;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--category-color) 18%, #e7eaf0);
+    border-radius: 18px;
+    background: linear-gradient(135deg, color-mix(in srgb, var(--category-bg) 78%, white) 0%, #ffffff 72%);
+    box-shadow: 0 2px 8px rgba(40, 49, 80, 0.035), 0 8px 22px color-mix(in srgb, var(--category-color) 7%, transparent);
+    cursor: pointer;
+    opacity: 0;
+    animation: categoryCardInMobile 0.55s cubic-bezier(0.22, 0.8, 0.25, 1) forwards;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .categoryCard::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    bottom: 16px;
+    width: 3px;
+    border-radius: 0 4px 4px 0;
+    background: linear-gradient(180deg, var(--category-color), color-mix(in srgb, var(--category-color) 45%, white));
+    opacity: 0.9;
+  }
+
+  .categoryGlow {
+    position: absolute;
+    right: -65px;
+    bottom: -85px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--category-color) 18%, transparent) 0%,
+      color-mix(in srgb, var(--category-color) 7%, transparent) 45%,
+      transparent 72%
+    );
+    opacity: 1;
+    filter: blur(2px);
+    pointer-events: none;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+  }
+
+  .categoryCard:hover {
+    transform: none;
+    border-color: color-mix(in srgb, var(--category-color) 18%, #e7eaf0);
+    box-shadow: 0 2px 8px rgba(40, 49, 80, 0.035), 0 8px 22px color-mix(in srgb, var(--category-color) 7%, transparent);
+  }
+
+  .categoryCard:active {
+    transform: scale(0.985);
+    border-color: color-mix(in srgb, var(--category-color) 35%, #e7eaf0);
+    box-shadow: 0 5px 18px color-mix(in srgb, var(--category-color) 13%, transparent);
+  }
+
+  .categoryCard:active .categoryGlow {
+    transform: scale(1.18);
+  }
+
+  .categoryNumber {
+    position: absolute;
+    top: 15px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 31px;
+    height: 27px;
+    padding: 0 9px;
+    border-radius: 8px;
+    background: color-mix(in srgb, var(--category-color) 10%, white);
+    border: 1px solid color-mix(in srgb, var(--category-color) 17%, transparent);
+    color: var(--category-color);
+    font-size: 10px;
+    font-weight: 850;
+    letter-spacing: 0.05em;
+    box-shadow: 0 3px 10px color-mix(in srgb, var(--category-color) 8%, transparent);
+    z-index: 2;
+  }
+
+  .categoryContent {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    gap: 0;
+  }
+
+  .categoryTitle {
+    max-width: calc(100% - 48px);
+    margin: 0;
+    color: var(--text);
+    font-size: 19px;
+    font-weight: 750;
+    line-height: 1.18;
+    letter-spacing: -0.035em;
+  }
+
+  .categoryDescription {
+    max-width: calc(100% - 20px);
+    margin: 8px 0 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    line-height: 1.5;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .categoryBottom {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid color-mix(in srgb, var(--category-color) 12%, #e7eaf0);
+  }
+
+  .categoryCount {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    border-radius: 7px;
+    background: color-mix(in srgb, var(--category-color) 8%, white);
+    border: 1px solid color-mix(in srgb, var(--category-color) 12%, transparent);
+    color: var(--category-color);
+    font-size: 10px;
+    font-weight: 750;
+  }
+
+  .categoryOpen {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: color-mix(in srgb, var(--category-color) 10%, white);
+    border: 2px solid color-mix(in srgb, var(--category-color) 14%, transparent);
+    color: var(--category-color);
+    border-radius: 8px;
+    transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease;
+  }
+
+  .categoryOpen svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .categoryCard:active .categoryOpen {
+    transform: translateX(3px);
+    background: var(--category-color);
+    color: #ffffff;
+  }
+
+  .categoryCard:nth-child(1) {
+    animation-delay: 0.05s;
+  }
+  .categoryCard:nth-child(2) {
+    animation-delay: 0.1s;
+  }
+  .categoryCard:nth-child(3) {
+    animation-delay: 0.15s;
+  }
+  .categoryCard:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+  .categoryCard:nth-child(5) {
+    animation-delay: 0.25s;
+  }
+
+  @keyframes categoryCardInMobile {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  /* =======================================================
+     КНОПКА "ВСЕ КАТЕГОРИИ"
+     ======================================================= */
+
+  .allCategoriesButton {
+    margin: 20px 0 24px;
+    padding: 10px 18px 10px 14px;
+    border-radius: 14px;
+    font-size: 13px;
+    gap: 8px;
+    width: auto;
+    min-width: 0;
+  }
+
+  .allCategoriesIcon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+  }
+
+  .allCategoriesIcon svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .allCategoriesButton:hover {
+    transform: none;
+    box-shadow: 0 2px 12px rgba(91, 95, 240, 0.08), 0 0 0 1px rgba(91, 95, 240, 0.06);
+    color: var(--text);
+  }
+
+  .allCategoriesButton:hover .allCategoriesText {
+    background: linear-gradient(135deg, var(--text), #2a3050);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .allCategoriesButton:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 8px rgba(91, 95, 240, 0.06);
+  }
+
+  .allCategoriesButton:active .allCategoriesIcon {
+    transform: translateX(-2px);
+  }
+
+  /* =======================================================
+     НЕТ РЕЗУЛЬТАТОВ
+     ======================================================= */
+
+  .noResults {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    border: 2px dashed rgba(91, 95, 240, 0.12);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    text-align: center;
+    padding: 30px 20px;
+    animation: contentEnter 0.45s ease both;
+  }
+
+  .noResultsIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+    border-radius: 50%;
+    background: rgba(91, 95, 240, 0.06);
+    color: var(--accent);
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .noResults h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .noResults p {
+    margin: 6px 0 0;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+
+  /* =======================================================
+     ДОКУМЕНТЫ В КАТЕГОРИИ (мобильная версия)
+     ======================================================= */
+
+  .selectedCategoryHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+  }
+
+  .selectedCategoryTitle {
+    font-size: 26px;
+  }
+
+  .selectedCategoryDescription {
+    font-size: 13px;
+    margin-top: 10px;
+  }
+
+  .selectedCategoryCount {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .selectedCategoryCount strong {
+    font-size: 28px;
+  }
+
+  .selectedCategoryCount span {
+    margin-top: 0;
+    font-size: 11px;
+  }
+  
+  /* =========================================================
+   Карточки файлов
+   ========================================================= */
+  .documentsGrid{
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 17px;
+  }
+  .documentCard {
+    min-height: auto;
+    padding: 16px 18px;
+    border: 1.5px solid var(--accent);
+    border-radius: 14px;
+    background: linear-gradient(135deg, #f0f2ff 0%, #ffffff 100%);
+    box-shadow: 0 4px 16px rgba(91, 95, 240, 0.12), 
+                0 0 0 1px rgba(91, 95, 240, 0.06);
+    cursor: default;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  /* ВСЕГДА ПОКАЗЫВАЕМ ДЕКОРАТИВНЫЕ ЭЛЕМЕНТЫ (как при hover на десктопе) */
+  .documentCard::before {
+    content: '';
+    position: absolute;
+    top: -95px;
+    right: -80px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91, 96, 240, 0.15), rgba(91, 96, 240, 0.05));
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  .documentCard::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 16px;
+    bottom: 16px;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background: linear-gradient(180deg, var(--accent), #85ffef);
+    transform: scaleY(1);
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  /* Отключаем все hover эффекты на мобильных */
+  .documentCard:hover {
+    transform: none !important;
+    border-color: var(--accent) !important;
+    box-shadow: 0 4px 16px rgba(91, 95, 240, 0.12), 
+                0 0 0 1px rgba(91, 95, 240, 0.06) !important;
+  }
+
+  .documentCard:hover::before {
+    transform: none !important;
+    opacity: 0.8 !important;
+  }
+
+  .documentCard:hover::after {
+    transform: scaleY(1) !important;
+    opacity: 0.7 !important;
+  }
+  
+
+  /* ПОЛНОСТЬЮ ОТКЛЮЧАЕМ HOVER НА МОБИЛЬНЫХ */
+  .openButton:hover,
+  .openButton:focus,
+  .openButton:active {
+    transform: none !important;
+    border-color: rgba(91, 95, 240, 0.3) !important;
+    background: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(91, 95, 240, 0.06) !important;
+    color: var(--accent) !important;
+  }
+
+  .openButton:hover svg,
+  .openButton:focus svg,
+  .openButton:active svg {
+    transform: none !important;
+  }
+
+  /* ПОЛНОСТЬЮ ОТКЛЮЧАЕМ HOVER НА МОБИЛЬНЫХ */
+  .downloadButton:hover,
+  .downloadButton:focus,
+  .downloadButton:active {
+    transform: none !important;
+    background: var(--accent) !important;
+    box-shadow: 0 3px 12px rgba(91, 95, 240, 0.25) !important;
+  }
+
+  .downloadButton:hover svg,
+  .downloadButton:focus svg,
+  .downloadButton:active svg {
+    transform: none !important;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE (до 430px)
+   ========================================================= */
+
+@media (max-width: 430px) {
+  .searchWrapper {
+    min-height: 42px;
+    padding: 10px 0 16px;
+    gap: 0px;
+  }
+  .brand{
+    gap: 7px;
+  }
+  .brandMark{
+    width: 22px;
+    height: 22px;
+  }
+  .brandMark span:nth-child(1) {
+    height: 5px;
+  }
+  .brandMark span:nth-child(2) {
+    height: 9px;
+  }
+  .brandMark span:nth-child(3) {
+    height: 14px;
+  }
+
+  .brandText{
+    font-size: 11px;
+  }
+
+  .heroText {
+    max-width: 100%;
+  }
+
+  .pageDescription {
+    font-size: 12px;
+    line-height: 1.3;
+    -webkit-line-clamp: 2;
+  }
+
+  .searchWrapperOpen .pageDescription {
+    font-size: 11px;
+    -webkit-line-clamp: 1;
+  }
+
+  .mobileSearchButton {
+    height: 40px;
+    border-radius: 12px;
+    font-size: 12px;
+    padding: 0 16px;
+    gap: 8px;
+    box-shadow: 0 3px 14px rgba(91, 95, 240, 0.25);
+  }
+
+  .mobileSearchButton svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .searchBox {
+    height: 40px;
+    border-radius: 12px;
+    padding: 0 12px;
+  }
+
+  .searchWrapperOpen .searchBox {
+    padding: 0 10px;
+  }
+
+  .searchBox input {
+    font-size: 13px;
+  }
+
+  .searchBox > svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .clearSearch {
+    width: 26px;
+    height: 26px;
+  }
+
+  .clearSearch svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  /* =======================================================
+     НОВАЯ КНОПКА "ВСЕ КАТЕГОРИИ" — SMALL MOBILE
+     ======================================================= */
+
+  .allCategoriesButton {
+    margin: 16px 0 20px;
+    padding: 8px 14px 8px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    gap: 6px;
+  }
+
+  .allCategoriesIcon {
+    width: 26px;
+    height: 26px;
+    border-radius: 7px;
+  }
+
+  .allCategoriesIcon svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .allCategoriesText {
+    font-size: 12px;
+  }
+
+  .categoriesGrid {
+    gap: 12px;
+  }
+
+  .categoryCard {
+    padding: 18px 16px 15px 18px;
+    border-radius: 16px;
+  }
+
+  .categoryCard::before {
+    top: 14px;
+    bottom: 14px;
+    width: 3px;
+  }
+
+  .categoryNumber {
+    top: 13px;
+    right: 14px;
+    min-width: 29px;
+    height: 25px;
+    padding: 0 8px;
+    font-size: 9px;
+  }
+
+  .categoryTitle {
+    max-width: calc(100% - 44px);
+    font-size: 17px;
+  }
+
+  .categoryDescription {
+    max-width: calc(100% - 10px);
+    margin-top: 7px;
+    font-size: 11px;
+    line-height: 1.45;
+  }
+
+  .categoryBottom {
+    margin-top: 12px;
+    padding-top: 10px;
+  }
+
+  .categoryCount {
+    padding: 3px 8px;
+    font-size: 9px;
+  }
+
+  .categoryOpen {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+  }
+
+  .categoryOpen svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .categoryGlow {
+    right: -70px;
+    bottom: -90px;
+    width: 170px;
+    height: 170px;
+  }
+
+  .selectedCategoryTitle {
+    font-size: 22px;
+  }
+
+  .selectedCategoryCount strong {
+    font-size: 24px;
+  }
+
+  .noResults {
+    min-height: 160px;
+    padding: 20px 16px;
+  }
+
+  .noResultsIcon {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+
+  .noResults h3 {
+    font-size: 15px;
+  }
+
+  .noResults p {
+    font-size: 12px;
+  }
+}
+
+/* =========================================================
+   VERY SMALL MOBILE (до 360px)
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .searchWrapper {
+    min-height: 38px;
+    padding: 10px 0 14px;
+  }
+
+  .pageDescription {
+    font-size: 11px;
+    line-height: 1.2;
+    -webkit-line-clamp: 2;
+  }
+
+  .searchWrapperOpen .pageDescription {
+    font-size: 10px;
+    -webkit-line-clamp: 1;
+  }
+
+  .mobileSearchButton {
+    height: 36px;
+    border-radius: 10px;
+    font-size: 11px;
+    padding: 0 12px;
+    gap: 6px;
+    box-shadow: 0 2px 12px rgba(91, 95, 240, 0.2);
+  }
+
+  .mobileSearchButton svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .searchBox {
+    height: 36px;
+    border-radius: 10px;
+    padding: 0 10px;
+  }
+
+  .searchWrapperOpen .searchBox {
+    padding: 0 12px;
+  }
+
+  .searchBox input {
+    font-size: 12px;
+  }
+
+  .searchBox > svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .clearSearch {
+    width: 24px;
+    height: 24px;
+  }
+
+  .clearSearch svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .categoryCard {
+    padding: 16px 14px 14px 17px;
+    border-radius: 15px;
+  }
+
+  .categoryTitle {
+    font-size: 16px;
+  }
+
+  .categoryDescription {
+    font-size: 10.5px;
+  }
+
+  .categoryNumber {
+    top: 11px;
+    right: 12px;
+    min-width: 27px;
+    height: 23px;
+    font-size: 8px;
+  }
+
+  .categoryBottom {
+    margin-top: 10px;
+    padding-top: 9px;
+  }
+
+  .categoryCount {
+    font-size: 9px;
+  }
+
+  .categoryOpen {
+    width: 28px;
+    height: 28px;
+  }
+
+  .selectedCategoryTitle {
+    font-size: 19px;
+  }
+
+  .selectedCategoryCount strong {
+    font-size: 20px;
+  }
+
+  /* =======================================================
+     НОВАЯ КНОПКА "ВСЕ КАТЕГОРИИ" — VERY SMALL MOBILE
+     ======================================================= */
+
+  .allCategoriesButton {
+    margin: 12px 0 16px;
+    padding: 6px 12px 6px 10px;
+    border-radius: 10px;
+    font-size: 11px;
+    gap: 5px;
+  }
+
+  .allCategoriesIcon {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+  }
+
+  .allCategoriesIcon svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .allCategoriesText {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================
+   АНИМАЦИИ
+   ========================================================= */
+
+@keyframes pageIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes contentEnter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+    filter: blur(3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
   }
 }

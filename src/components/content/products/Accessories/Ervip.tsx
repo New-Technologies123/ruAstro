@@ -15,7 +15,7 @@ export const Ervip = () => {
   };
 
   const onDoc = () => {
-    window.location.href = "/documents/?type=accessories";
+    window.location.href = "/documents/?category=accessories";
   };
 
   /* ---------- 3D TILT EFFECT ---------- */

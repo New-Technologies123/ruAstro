@@ -15,7 +15,7 @@ export const Cleaning = () => {
   };
 
   const onDoc = () => {
-    window.location.href = "/documents/?type=preparationSystems";
+    window.location.href = "/documents/?category=preparation-systems";
   };
 
   /* ---------- 3D TILT EFFECT ---------- */

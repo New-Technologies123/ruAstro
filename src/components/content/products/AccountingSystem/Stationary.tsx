@@ -15,7 +15,8 @@ export const Stationary = () => {
   };
 
   const onDoc = () => {
-    window.location.href = "/documents/?type=accountingSystem";
+    // Передаем параметр category=accounting-system для открытия категории АГЗУ
+    window.location.href = "/documents/?category=accounting-system";
   };
 
   /* 3D TILT */
