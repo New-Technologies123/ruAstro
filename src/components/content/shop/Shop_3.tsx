@@ -23,58 +23,58 @@ type TProps = {
 export const Shop_3 = ({ onBackProducts, title }: TProps) => {
   const PRODUCTS: Record<TTitleOptions, Product> = {
     psm_1: {
-      id: 101,
+      id: 9021,
       title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000-02 (8скв) с наплавкой',
       description: '',
       price: '950 000',
       nds: 'без НДС',
       deliveryTime: 'по запросу',
-      image: ''
+      image: '/images/shop/product_3.webp'
     },
     psm_2: {
-      id: 102,
+      id: 9022,
       title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000-02 (8скв) без наплавки',
       description: '',
       price: '900 000',
       nds: 'без НДС',
       deliveryTime: 'по запросу',
-      image: ''
+      image: '/images/shop/product_3.webp'
     },
     psm_3: {
-      id: 103,
+      id: 9023,
       title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000-01 (на 10 скв) с наплавкой',
       description: '',
       price: '1 050 000',
       nds: 'без НДС',
       deliveryTime: 'по запросу',
-      image: ''
+      image: '/images/shop/product_3.webp'
     },
     psm_4: {
-      id: 104,
+      id: 9024,
       title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000-01 (на 10 скв) без наплавки',
       description: '',
       price: '1 000 000',
       nds: 'без НДС',
       deliveryTime: 'по запросу',
-      image: ''
+      image: '/images/shop/product_3.webp'
     },
     psm_5: {
-      id: 105,
+      id: 9025,
       title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000 (на 14 скв) с наплавкой',
       description: '',
       price: '1 150 000',
       nds: 'без НДС',
       deliveryTime: 'по запросу',
-      image: ''
+      image: '/images/shop/product_3.webp'
     },
     psm_6: {
-      id: 106,
+      id: 9026,
       title: 'Переключатель скважин многоходовой ПСМНТ.001.000.000 (на 14 скв) без наплавки',
       description: '',
       price: '1 100 000',
       nds: 'без НДС',
       deliveryTime: 'по запросу',
-      image: ''
+      image: '/images/shop/product_3.webp'
     }
   };
 
@@ -135,39 +135,21 @@ export const Shop_3 = ({ onBackProducts, title }: TProps) => {
   return (
     <LayoutBack onBack={onBackProducts} title={title}>
       <div className={Styles.container}>
-        <div className={Styles.team}>
+        <div className={`${Styles.team} ${Styles.psmGrid}`}>
+          {(Object.keys(PRODUCTS) as TTitleOptions[]).map(key => {
+            const product = PRODUCTS[key];
 
-          {/* ===== БЕЗ НАПЛАВКИ ===== */}
-          <div className={Styles.row}>
-            {withoutOverlay.map(key => {
-              const product = PRODUCTS[key];
-              return (
-                <Cards
-                  key={product.id}
-                  title={product.title}
-                  price={Number(product.price.replace(/\s/g, ''))}
-                  onClick={() => handleClickCard(key)}
-                  onAddToCart={qty => handleAddToCart(key, qty)}
-                />
-              );
-            })}
-          </div>
-
-          {/* ===== С НАПЛАВКОЙ ===== */}
-          <div className={Styles.row}>
-            {withOverlay.map(key => {
-              const product = PRODUCTS[key];
-              return (
-                <Cards
-                  key={product.id}
-                  title={product.title}
-                  price={Number(product.price.replace(/\s/g, ''))}
-                  onClick={() => handleClickCard(key)}
-                  onAddToCart={qty => handleAddToCart(key, qty)}
-                />
-              );
-            })}
-          </div>
+            return (
+              <Cards
+                key={product.id}
+                title={product.title}
+                image={product.image}
+                price={Number(product.price.replace(/\s/g, ''))}
+                onClick={() => handleClickCard(key)}
+                onAddToCart={qty => handleAddToCart(key, qty)}
+              />
+            );
+          })}
         </div>
 
         <BackToTop />

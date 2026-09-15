@@ -16,20 +16,20 @@ type TProps = {
 };
 
 export const Shop_5 = ({ onBackProducts, title }: TProps) => {
-  
+
   // ✅ ЕДИНЫЙ источник товаров (Product!)
-    const PRODUCTS: Record<TKey, Product> = {
-      gudro_1: {
-        id: 101,
-        title: 'Гидропривод ГП-НТ НТ.3.00.00.00.000',
-        description: '',
-        price: '88 500',
-        nds: 'без НДС',
-        deliveryTime: 'по запросу',
-        image: ''
-      },
-    };
-  
+  const PRODUCTS: Record<TKey, Product> = {
+    gudro_1: {
+      id: 9041,
+      title: 'Гидропривод ГП-НТ НТ.3.00.00.00.000',
+      description: '',
+      price: '88 500',
+      nds: 'без НДС',
+      deliveryTime: 'по запросу',
+      image: '/images/shop/product_5.webp'
+    },
+  };
+
 
   const [selectedItem, setSelectedItem] = useState<TKey | null>(null);
 
@@ -57,9 +57,9 @@ export const Shop_5 = ({ onBackProducts, title }: TProps) => {
   };
 
   // ✅ ПРАВИЛЬНОЕ добавление в корзину
-    const handleAddToCart = (key: TKey, quantity: number) => {
-      addToCart(PRODUCTS[key], quantity);
-    };
+  const handleAddToCart = (key: TKey, quantity: number) => {
+    addToCart(PRODUCTS[key], quantity);
+  };
 
   if (selectedItem === 'gudro_1') {
     return <Gudro_1 onBackShop={onBackShop} title={PRODUCTS.gudro_1.title} />;
@@ -77,6 +77,7 @@ export const Shop_5 = ({ onBackProducts, title }: TProps) => {
               <Cards
                 key={product.id}
                 title={product.title}
+                image={product.image}
                 price={Number(product.price.replace(/\s/g, ''))}
                 onClick={() => handleClickCard(key)}
                 onAddToCart={(qty) => handleAddToCart(key, qty)}

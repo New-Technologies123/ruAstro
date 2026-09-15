@@ -1,105 +1,202 @@
 .title {
-  flex: 1;
-  text-align: center;
-  font-size: 30px;
-  margin: 0 0 13px;
-  padding-top: 10px;
-  font-weight: 700;
-  color: #111;
-  letter-spacing: -0.03em;
-  line-height: 1.3;
   position: relative;
-  
-  // Оптимизированная тень (убрана лишняя для производительности)
-  text-shadow: 
-    1px 1px 0 #e5e7eb,
-    2px 2px 0 #d1d5db,
-    3px 3px 0 #9ca3af,
-    4px 4px 6px rgba(0, 0, 0, 0.2);
+
+  width: 100%;
+  max-width: 100%;
+
+  box-sizing: border-box;
+
+  margin: 0 0 13px;
+  padding: 10px 16px 10px;
+
+  text-align: center;
+
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: -0.03em;
+
+  color: #111827;
+
+  overflow: hidden;
+
+  // Более современная мягкая тень
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.04);
 
   // Декоративная линия
   &::after {
     content: '';
+
     position: absolute;
-    bottom: -5px;
+
     left: 50%;
+    bottom: 0;
+
     transform: translateX(-50%);
-    width: 1000px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #2e53f8, #080197, transparent);
-    opacity: 0.9;
-    border-radius: 2px;
-    transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+
+    width: min(420px, 72%);
+    height: 2px;
+
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(46, 83, 248, 0.35) 15%,
+        #2e53f8 35%,
+        #080197 50%,
+        #2e53f8 65%,
+        rgba(46, 83, 248, 0.35) 85%,
+        transparent 100%);
+
+    border-radius: 999px;
+
+    opacity: 0.85;
+
+    pointer-events: none;
+
+    animation: titleLineIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 
-  // Анимация при появлении
-  animation: fadeInDown 0.6s ease both;
-  
+  animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+
+
+  // =========================================================
+  // 1400
+  // =========================================================
+
   @media (max-width: 1400px) {
     font-size: 28px;
+
     &::after {
-      width: 800px;
+      width: min(400px, 70%);
     }
   }
+
+
+  // =========================================================
+  // 1200
+  // =========================================================
 
   @media (max-width: 1200px) {
     font-size: 26px;
+
     margin-bottom: 10px;
-    
+
     &::after {
-      width: 700px;
-      height: 3px;
+      width: min(360px, 68%);
+      height: 2px;
     }
   }
+
+
+  // =========================================================
+  // 1030
+  // =========================================================
 
   @media (max-width: 1030px) {
     font-size: 24px;
+
     &::after {
-      width: 500px;
+      width: min(320px, 65%);
     }
   }
+
+
+  // =========================================================
+  // 770
+  // =========================================================
 
   @media (max-width: 770px) {
     font-size: 22px;
+
     margin-bottom: 7px;
-    padding-top: 6px;
-    
+    padding: 6px 12px 8px;
+
     &::after {
-      width: 400px;
+      width: min(280px, 65%);
       height: 2px;
-      bottom: -4px;
     }
   }
 
+
+  // =========================================================
+  // 550
+  // =========================================================
+
   @media (max-width: 550px) {
     font-size: 20px;
+
     margin-bottom: 6px;
-    padding-top: 4px;
-    
+    padding: 4px 10px 8px;
+
     &::after {
-      width: 300px;
+      width: min(240px, 68%);
       height: 2px;
-      bottom: -6px;
+      bottom: 0;
+    }
+  }
+
+
+  // =========================================================
+  // 380
+  // =========================================================
+
+  @media (max-width: 380px) {
+    font-size: 19px;
+
+    padding-left: 8px;
+    padding-right: 8px;
+
+    &::after {
+      width: 65%;
     }
   }
 }
 
-// Анимация появления
+
+// =========================================================
+// TITLE ANIMATION
+// =========================================================
+
 @keyframes fadeInDown {
   from {
     opacity: 0;
     transform: translateY(-15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-// Опционально: если нужно убрать анимацию для пользователей с motion-sickness
+
+// =========================================================
+// LINE ANIMATION
+// =========================================================
+
+@keyframes titleLineIn {
+  from {
+    opacity: 0;
+    width: 0;
+  }
+
+  to {
+    opacity: 0.85;
+  }
+}
+
+
+// =========================================================
+// REDUCED MOTION
+// =========================================================
+
 @media (prefers-reduced-motion: reduce) {
   .title {
     animation: none;
     opacity: 1;
+
+    &::after {
+      animation: none;
+    }
   }
 }

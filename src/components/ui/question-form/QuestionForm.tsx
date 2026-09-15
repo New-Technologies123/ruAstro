@@ -11,9 +11,17 @@ interface QuestionFormProps {
     agreement: boolean;
     privacyAgreement: boolean;
   };
+
   agreementError: boolean;
-  onChange: (field: string, value: string | boolean) => void;
-  onSubmit: (e: React.FormEvent) => void;
+
+  onChange: (
+    field: string,
+    value: string | boolean
+  ) => void;
+
+  onSubmit: (
+    e: React.FormEvent
+  ) => void;
 }
 
 export const QuestionForm: React.FC<QuestionFormProps> = ({
@@ -22,136 +30,350 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   onChange,
   onSubmit,
 }) => {
-  const [mask] = React.useState('+7 (999) 999-9999');
+  const mask = '+7 (999) 999-9999';
+
   const [errors, setErrors] = React.useState({
     agreement: false,
-    privacyAgreement: false
+    privacyAgreement: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
-    
+
     const newErrors = {
       agreement: !formData.agreement,
-      privacyAgreement: !formData.privacyAgreement
+      privacyAgreement: !formData.privacyAgreement,
     };
-    
+
     setErrors(newErrors);
-    
-    if (newErrors.agreement || newErrors.privacyAgreement) {
+
+    if (
+      newErrors.agreement ||
+      newErrors.privacyAgreement
+    ) {
       return;
     }
-    
+
     onSubmit(e);
   };
 
-  const handleCheckboxChange = (field: string, checked: boolean) => {
+  const handleCheckboxChange = (
+    field:
+      | 'agreement'
+      | 'privacyAgreement',
+    checked: boolean
+  ) => {
     onChange(field, checked);
+
     if (checked) {
-      setErrors(prev => ({ ...prev, [field]: false }));
+      setErrors(prev => ({
+        ...prev,
+        [field]: false,
+      }));
     }
   };
 
   return (
-    <form className={Styles.questionForm} onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Ваше имя"
-        value={formData.name}
-        onChange={e => onChange('name', e.target.value)}
-        required
-      />
+    <form
+      className={Styles.questionForm}
+      onSubmit={handleSubmit}
+    >
 
-      {/* Контейнер для email и телефона в одну строку */}
-      <div className={Styles.contactRow}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={e => onChange('email', e.target.value)}
-          required
-          className={Styles.contactInput}
-        />
+      {/* ИМЯ */}
 
-        <InputMask
-          mask={mask}
-          value={formData.phone}
-          onChange={e => onChange('phone', e.target.value)}
+      <div className={Styles.fieldGroup}>
+        <label
+          htmlFor="question-name"
+          className={Styles.fieldLabel}
         >
-          {(inputProps: any) => (
-            <input 
-              {...inputProps} 
-              type="tel" 
-              placeholder="Телефон" 
-              required 
-              className={Styles.contactInput}
-            />
-          )}
-        </InputMask>
+          Ваше имя
+        </label>
+
+        <input
+          id="question-name"
+          type="text"
+          placeholder="Введите ваше имя"
+          value={formData.name}
+          onChange={e =>
+            onChange(
+              'name',
+              e.target.value
+            )
+          }
+          required
+        />
       </div>
 
-      <textarea
-        placeholder="Ваш вопрос"
-        value={formData.message}
-        onChange={e => onChange('message', e.target.value)}
-        rows={4}
-        required
-      />
-      
-      <div>
-        {/* Первый чекбокс - согласие на обработку данных */}
+
+      {/* EMAIL + ТЕЛЕФОН */}
+
+      <div className={Styles.contactRow}>
+
+        <div className={Styles.fieldGroup}>
+          <label
+            htmlFor="question-email"
+            className={Styles.fieldLabel}
+          >
+            Email
+          </label>
+
+          <input
+            id="question-email"
+            type="email"
+            placeholder="name@email.ru"
+            value={formData.email}
+            onChange={e =>
+              onChange(
+                'email',
+                e.target.value
+              )
+            }
+            required
+            className={Styles.contactInput}
+          />
+        </div>
+
+
+        <div className={Styles.fieldGroup}>
+          <label
+            htmlFor="question-phone"
+            className={Styles.fieldLabel}
+          >
+            Телефон
+          </label>
+
+          <InputMask
+            mask={mask}
+            value={formData.phone}
+            onChange={e =>
+              onChange(
+                'phone',
+                e.target.value
+              )
+            }
+          >
+            {(inputProps: any) => (
+              <input
+                {...inputProps}
+                id="question-phone"
+                type="tel"
+                placeholder="+7 (___) ___-____"
+                required
+                className={
+                  Styles.contactInput
+                }
+              />
+            )}
+          </InputMask>
+        </div>
+
+      </div>
+
+
+      {/* ВОПРОС */}
+
+      <div className={Styles.fieldGroup}>
+
+        <label
+          htmlFor="question-message"
+          className={Styles.fieldLabel}
+        >
+          Ваш вопрос
+        </label>
+
+        <textarea
+          id="question-message"
+          placeholder="Коротко опишите ваш вопрос или задачу..."
+          value={formData.message}
+          onChange={e =>
+            onChange(
+              'message',
+              e.target.value
+            )
+          }
+          rows={4}
+          required
+        />
+
+      </div>
+
+
+      {/* СОГЛАСИЯ */}
+
+      <div className={Styles.agreements}>
+
+        {/* СОГЛАСИЕ 1 */}
+
         <div className={Styles.checkboxWrapper}>
-          <label className={`${Styles.checkbox} ${errors.agreement ? Styles.error : ''}`}>
+
+          <label
+            className={`${Styles.checkbox} ${
+              errors.agreement
+                ? Styles.error
+                : ''
+            }`}
+          >
+
             <input
               type="checkbox"
               checked={formData.agreement}
-              onChange={e => handleCheckboxChange('agreement', e.target.checked)}
+              onChange={e =>
+                handleCheckboxChange(
+                  'agreement',
+                  e.target.checked
+                )
+              }
             />
-            <span className={Styles.customCheckbox}></span>
-            <span className={Styles.checkboxText}>
-              Я даю согласие на
-              <a href="/file/personal_data_v1.pdf" target="_blank">
-                 обработку моих персональных данных
-              </a> 
+
+            <span
+              className={
+                Styles.customCheckbox
+              }
+            />
+
+            <span
+              className={
+                Styles.checkboxText
+              }
+            >
+              Я даю согласие на{' '}
+
+              <a
+                href="/file/personal_data_v1.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                обработку моих персональных данных
+              </a>{' '}
+
               в целях рассмотрения моего обращения.
             </span>
+
           </label>
+
           {errors.agreement && (
-            <div className={Styles.errorText}>
-              ⚠️ Необходимо дать согласие на обработку персональных данных
+            <div
+              className={
+                Styles.errorText
+              }
+            >
+              Необходимо дать согласие
+              на обработку персональных данных
             </div>
           )}
+
         </div>
 
-        {/* Второй чекбокс - согласие с политикой конфиденциальности */}
+
+        {/* СОГЛАСИЕ 2 */}
+
         <div className={Styles.checkboxWrapper}>
-          <label className={`${Styles.checkbox} ${errors.privacyAgreement ? Styles.error : ''}`}>
+
+          <label
+            className={`${Styles.checkbox} ${
+              errors.privacyAgreement
+                ? Styles.error
+                : ''
+            }`}
+          >
+
             <input
               type="checkbox"
-              checked={formData.privacyAgreement}
-              onChange={e => handleCheckboxChange('privacyAgreement', e.target.checked)}
+              checked={
+                formData.privacyAgreement
+              }
+              onChange={e =>
+                handleCheckboxChange(
+                  'privacyAgreement',
+                  e.target.checked
+                )
+              }
             />
-            <span className={Styles.customCheckbox}></span>
-            <span className={Styles.checkboxText}>
-              С <a href="/file/privacy_v1.pdf" target="_blank">политикой конфиденциальности</a> 
+
+            <span
+              className={
+                Styles.customCheckbox
+              }
+            />
+
+            <span
+              className={
+                Styles.checkboxText
+              }
+            >
+              С{' '}
+
+              <a
+                href="/file/privacy_v1.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                политикой конфиденциальности
+              </a>{' '}
+
               ознакомлен(а).
             </span>
+
           </label>
+
           {errors.privacyAgreement && (
-            <div className={Styles.errorText}>
-              ⚠️ Необходимо подтвердить ознакомление с политикой конфиденциальности
+            <div
+              className={
+                Styles.errorText
+              }
+            >
+              Необходимо подтвердить
+              ознакомление с политикой
+              конфиденциальности
             </div>
           )}
+
         </div>
+
       </div>
 
-      {agreementError && (errors.agreement || errors.privacyAgreement) && (
-        <div className={Styles.errorTextGeneral}>
-          Пожалуйста, отметьте все необходимые согласия
-        </div>
-      )}
 
-      <button type="submit">Отправить вопрос</button>
+      {/* ОБЩАЯ ОШИБКА */}
+
+      {agreementError &&
+        (errors.agreement ||
+          errors.privacyAgreement) && (
+          <div
+            className={
+              Styles.errorTextGeneral
+            }
+          >
+            Пожалуйста, отметьте
+            все необходимые согласия
+          </div>
+        )}
+
+
+      {/* ОТПРАВИТЬ */}
+
+      <button
+        type="submit"
+        className={Styles.submitButton}
+      >
+        <span>Отправить вопрос</span>
+
+        <svg
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M5 12h13M13 6l6 6-6 6"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </button>
+
     </form>
   );
 };

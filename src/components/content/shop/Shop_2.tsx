@@ -21,22 +21,22 @@ export const Shop_2 = ({ onBackProducts, title }: TProps) => {
   // ✅ ЕДИНЫЙ источник товаров (Product!)
   const PRODUCTS: Record<TKey, Product> = {
     urpd_1: {
-      id: 101,
+      id: 9011,
       title: 'Устройство для регулирования перепада давления УРПД-1.1 НТ.511.000.000.0',
       description: '',
       price: '19 500',
       nds: 'без НДС',
       deliveryTime: 'по запросу',
-      image: ''
+      image: '/images/shop/product_2.webp'
     },
     urpd_2: {
-      id: 102,
+      id: 9012,
       title: 'Устройство для регулирования перепада давления УРПД-3.1 НТ.531.000.000.0',
       description: '',
       price: '34 500',
       nds: 'без НДС',
       deliveryTime: 'по запросу',
-      image: ''
+      image: '/images/shop/product_2.webp'
     }
   };
 
@@ -106,6 +106,7 @@ export const Shop_2 = ({ onBackProducts, title }: TProps) => {
               <Cards
                 key={product.id}
                 title={product.title}
+                image={product.image}
                 price={Number(product.price.replace(/\s/g, ''))}
                 onClick={() => handleClickCard(key)}
                 onAddToCart={(qty) => handleAddToCart(key, qty)}

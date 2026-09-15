@@ -1,19 +1,459 @@
+/* =========================================================
+   ОСНОВНОЙ КОНТЕЙНЕР
+   ========================================================= */
 
-/* ===== СЕТКА ТОВАРОВ ===== */
-.products {
-  display: flex;
-  // grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  
-  gap: 35px;
-  margin: 20px 50px;
-  flex-wrap: wrap;
-  justify-content: center;
+.shopBase {
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* ===== АДАПТИВ ===== */
+
+/* =========================================================
+   ПОИСК
+   ========================================================= */
+
+.searchBlock {
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 10px auto 0;
+  padding: 0 30px;
+
+  box-sizing: border-box;
+}
+
+.searchBox {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  min-height: 56px;
+
+  background: #ffffff;
+
+  border: 1px solid #e1e8f0;
+  border-radius: 16px;
+
+  box-shadow:
+    0 2px 5px rgba(15, 23, 42, 0.025),
+    0 8px 25px rgba(15, 23, 42, 0.045);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.searchBox:focus-within {
+  border-color: #155eef;
+
+  box-shadow:
+    0 0 0 4px rgba(21, 94, 239, 0.08),
+    0 10px 30px rgba(15, 23, 42, 0.07);
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   ИКОНКА ПОИСКА
+   ========================================================= */
+
+.searchIcon {
+  width: 21px;
+  height: 21px;
+
+  margin-left: 19px;
+
+  flex-shrink: 0;
+
+  color: #64748b;
+}
+
+
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.searchBox input {
+  width: 100%;
+  height: 54px;
+
+  padding: 0 52px 0 13px;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  color: #0f172a;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+
+  box-sizing: border-box;
+}
+
+.searchBox input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.searchBox input::-webkit-search-cancel-button {
+  display: none;
+}
+
+
+/* =========================================================
+   КНОПКА ОЧИСТКИ
+   ========================================================= */
+
+.clearSearch {
+  position: absolute;
+
+  right: 13px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 31px;
+  height: 31px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: #f1f5f9;
+  color: #64748b;
+
+  font-family: Arial, sans-serif;
+  font-size: 22px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.clearSearch:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+
+  transform: scale(1.05);
+}
+
+.clearSearch:active {
+  transform: scale(0.95);
+}
+
+
+/* =========================================================
+   РЕЗУЛЬТАТ ПОИСКА
+   ========================================================= */
+
+.searchResult {
+  margin-top: 10px;
+  padding-left: 4px;
+
+  color: #64748b;
+
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.searchResult strong {
+  color: #155eef;
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   СЕТКА ТОВАРОВ
+   ========================================================= */
+
+.products {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 28px;
+
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 28px auto 60px;
+
+  padding: 0 30px;
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   КАРТОЧКА
+   ========================================================= */
+
+.products>* {
+  min-width: 0;
+  width: 100%;
+}
+
+
+/* =========================================================
+   ТОВАР НЕ НАЙДЕН
+   ========================================================= */
+
+.noResults {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: calc(100% - 60px);
+  max-width: 700px;
+
+  margin: 45px auto 70px;
+
+  padding: 55px 30px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e8edf3;
+  border-radius: 24px;
+
+  box-shadow:
+    0 8px 30px rgba(15, 23, 42, 0.05);
+
+  box-sizing: border-box;
+}
+
+
+/* =========================================================
+   ИКОНКА «НЕ НАЙДЕНО»
+   ========================================================= */
+
+.noResultsIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 62px;
+  height: 62px;
+
+  margin-bottom: 20px;
+
+  border-radius: 18px;
+
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.noResultsIcon svg {
+  width: 29px;
+  height: 29px;
+}
+
+
+/* =========================================================
+   ТЕКСТ
+   ========================================================= */
+
+.noResults h3 {
+  margin: 0 0 9px;
+
+  color: #0f172a;
+
+  font-size: 21px;
+  line-height: 1.3;
+  font-weight: 700;
+}
+
+.noResults p {
+  max-width: 460px;
+
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* =========================================================
+   СБРОС ПОИСКА
+   ========================================================= */
+
+.resetSearch {
+  margin-top: 23px;
+
+  padding: 11px 18px;
+
+  border: none;
+  border-radius: 11px;
+
+  background: #155eef;
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.resetSearch:hover {
+  background: #004ee8;
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 18px rgba(21, 94, 239, 0.2);
+}
+
+.resetSearch:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   ПЛАНШЕТ
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .products {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 24px;
+
+    padding: 0 24px;
+  }
+
+  .searchBlock {
+    padding: 0 24px;
+  }
+}
+
+
+/* =========================================================
+   МОБИЛЬНАЯ ВЕРСИЯ
+   ========================================================= */
+
 @media (max-width: 768px) {
-  .products{
-    margin: 15px 35px;
-    gap: 25px;
+
+  .searchBlock {
+    margin-top: 5px;
+    padding: 0 16px;
+  }
+
+  .searchBox {
+    min-height: 52px;
+
+    border-radius: 14px;
+  }
+
+  .searchBox input {
+    height: 50px;
+
+    font-size: 15px;
+  }
+
+  .searchIcon {
+    width: 19px;
+    height: 19px;
+
+    margin-left: 16px;
+  }
+
+  .products {
+    // grid-template-columns: 1fr;
+
+    gap: 22px;
+
+    margin-top: 24px;
+    margin-bottom: 40px;
+
+    padding: 0 16px;
+  }
+
+  .noResults {
+    width: calc(100% - 32px);
+
+    margin-top: 35px;
+
+    padding: 40px 20px;
+
+    border-radius: 20px;
+  }
+
+  .noResults h3 {
+    font-size: 19px;
+  }
+}
+
+
+/* =========================================================
+   МАЛЕНЬКИЕ ТЕЛЕФОНЫ
+   ========================================================= */
+
+@media (max-width: 500px) {
+
+  .searchBlock {
+    padding: 0 12px;
+  }
+
+  .searchBox {
+    min-height: 50px;
+
+    border-radius: 13px;
+  }
+
+  .searchBox input {
+    height: 48px;
+
+    padding-left: 11px;
+
+    font-size: 14px;
+  }
+
+  .searchIcon {
+    width: 18px;
+    height: 18px;
+
+    margin-left: 14px;
+  }
+
+  .clearSearch {
+    right: 11px;
+  }
+
+  .products {
+    grid-template-columns: 1fr;
+    padding: 0 12px;
+
+    gap: 18px;
+  }
+
+  .noResults {
+    width: calc(100% - 24px);
+
+    padding: 35px 18px;
   }
 }

@@ -1,119 +1,256 @@
-.bloc{
+.bloc {
+  width: 100%;
   display: block;
   justify-items: center;
+  box-sizing: border-box;
 }
 
+/* =========================================================
+   COMPANY INFO
+   ========================================================= */
+
 .companyInfo {
-  width: 1100px;
+  width: min(1100px, calc(100% - 40px));
+  min-height: 150px;
+
   display: grid;
   justify-content: center;
   align-items: center;
-  padding: 0 20px;
-  padding-bottom: 20px;  
+
+  padding: 30px 40px 28px;
+  box-sizing: border-box;
+
   text-align: center;
-  background-color: #f1f1f1;
-  margin: 25px 20px;
-  border-radius: 17px;
-  p{    
-    margin-top: 20px;
-    font-size: 20px;
-    animation: softFocus 1.2s ease-in-out both;
+
+  background: #f1f1f1;
+  border: 1px solid rgba(15, 45, 70, 0.07);
+  border-radius: 20px;
+
+  margin: 25px auto;
+
+  box-shadow:
+    0 8px 25px rgba(15, 45, 70, 0.05),
+    0 2px 6px rgba(15, 45, 70, 0.03);
+
+  transition:
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
+
+  box-sizing: border-box;
+
+  p {
+    max-width: 900px;
+    margin: 18px auto 0;
+
+    font-size: 19px;
+    line-height: 1.65;
+    color: #314657;
+
+    animation: softFocus 0.8s ease-in-out both;
   }
 }
 
+/* =========================================================
+   TEAM / CARDS
+   ========================================================= */
+
 .team {
+  width: 100%;
+  box-sizing: border-box;
+
   display: flex;
   justify-content: center;
-  gap: 120px;
-  padding: 50px;
-  background-color: #e6f7ff;
+  align-items: flex-start;
+
+  gap: 60px;
+
+  padding: 55px 40px;
+
+  background: #e6f7ff;
+
   flex-wrap: wrap;
 }
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
 
 @keyframes softFocus {
   from {
     opacity: 0;
     filter: blur(5px);
+    transform: translateY(8px);
   }
+
   to {
     opacity: 1;
     filter: blur(0);
+    transform: translateY(0);
   }
 }
 
-@media (max-width: 1400px){
-  .companyInfo{
-    width: 900px;
-    margin: 20px 15px;
-    p{
-      font-size: 19px;
-    }
-  }
-  .team{
-    padding: 35px 10px;
-    gap: 80px;
-  }
-}
+/* =========================================================
+   1400px
+   ========================================================= */
 
-@media (max-width: 1200px){
-  .companyInfo{
-    width: 800px;
-    padding: 0px 15px;
-    padding-bottom: 15px;
-    margin: 15px 10px;
-    p{
+@media (max-width: 1400px) {
+  .companyInfo {
+    width: min(900px, calc(100% - 40px));
+    padding: 28px 35px 26px;
+
+    p {
       font-size: 18px;
     }
   }
+
+  .team {
+    gap: 50px;
+    padding: 45px 30px;
+  }
 }
+
+/* =========================================================
+   1200px
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .companyInfo {
+    width: min(800px, calc(100% - 40px));
+
+    padding: 26px 30px 24px;
+
+    p {
+      font-size: 17px;
+      line-height: 1.6;
+    }
+  }
+
+  .team {
+    gap: 45px;
+    padding: 40px 25px;
+  }
+}
+
+/* =========================================================
+   1030px
+   ========================================================= */
 
 @media (max-width: 1030px) {
   .companyInfo {
-    width: 650px;
-    p{
+    width: min(650px, calc(100% - 32px));
+
+    padding: 24px 26px 22px;
+
+    p {
       margin-top: 15px;
-      font-size: 17px;
+      font-size: 16px;
     }
   }
+
   .team {
-    gap: 65px;
-    padding: 0;
+    gap: 35px;
+    padding: 35px 20px;
   }
 }
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
 
 @media (max-width: 790px) {
   .companyInfo {
-    width: 500px;
-    p{
+    width: calc(100% - 30px);
+
+    margin: 18px auto;
+
+    padding: 22px 20px 20px;
+
+    border-radius: 18px;
+
+    p {
+      max-width: 100%;
       font-size: 16px;
+      line-height: 1.6;
     }
   }
+
   .team {
     display: block !important;
-    padding: 0 !important;
+
     width: 100%;
+
+    padding: 0 !important;
+
     overflow: visible;
+
+    box-sizing: border-box;
   }
 }
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media (max-width: 550px) {
   .companyInfo {
-    width: 400px;
-    p{
-      margin-top: 15px;
-      font-size: 16px;
+    width: calc(100% - 24px);
+
+    margin: 15px auto;
+
+    padding: 20px 16px 18px;
+
+    border-radius: 17px;
+
+    p {
+      margin-top: 14px;
+      font-size: 15.5px;
+      line-height: 1.6;
     }
   }
 }
 
+/* =========================================================
+   SMALL IPHONE
+   ========================================================= */
+
 @media (max-width: 440px) {
   .companyInfo {
-    width: 320px;
-    padding: 0 10px;
-    padding-bottom: 10px;
+    width: calc(100% - 20px);
+
+    margin: 12px auto;
+
+    padding: 19px 14px 17px;
+
+    border-radius: 16px;
+
+    p {
+      margin-top: 13px;
+      font-size: 15px;
+      line-height: 1.58;
+    }
   }
+
   .team {
-    gap: 40px;
-    padding: 20px;
+    width: 100%;
+    gap: 30px;
+    padding: 20px 10px !important;
+  }
+}
+
+/* =========================================================
+   VERY SMALL DEVICES
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .companyInfo {
+    width: calc(100% - 16px);
+
+    padding: 17px 12px 16px;
+
+    border-radius: 15px;
+
+    p {
+      font-size: 14.5px;
+    }
   }
 }

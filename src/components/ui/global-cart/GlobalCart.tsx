@@ -1,74 +1,219 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+
 import { Basket } from '../../ui/basket/Basket';
 import { Order } from '../../ui/order/Order';
 import { CartButton } from '../../ui/cart-button/CartButton';
+
 import Styles from './global-cart.module.scss';
+
+
+type CartMode = 'cart' | 'order';
+
 
 export const GlobalCart = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [mode, setMode] = useState<'cart' | 'order'>('cart');
+  const [mode, setMode] = useState<CartMode>('cart');
 
-  // 🔹 слушаем глобальное событие toggleGlobalCart
+
+  /* =========================================================
+     GLOBAL CART EVENT
+     ========================================================= */
+
   useEffect(() => {
     const handler = () => {
-      setMode('cart'); // всегда открываем на корзине
+      setMode('cart');
       setIsOpen(prev => !prev);
     };
-    window.addEventListener('toggleGlobalCart', handler);
-    return () => window.removeEventListener('toggleGlobalCart', handler);
+
+    window.addEventListener(
+      'toggleGlobalCart',
+      handler
+    );
+
+    return () => {
+      window.removeEventListener(
+        'toggleGlobalCart',
+        handler
+      );
+    };
   }, []);
+
+
+  /* =========================================================
+     OPEN / CLOSE
+     ========================================================= */
 
   const openCart = () => {
     setMode('cart');
     setIsOpen(true);
   };
-  const closeCart = () => setIsOpen(false);
 
-  // 🔹 блокировка скролла при открытой корзине
+
+  const closeCart = () => {
+    setIsOpen(false);
+  };
+
+
+  /* =========================================================
+     ESC
+     ========================================================= */
+
   useEffect(() => {
-    if (isOpen) {
-      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-      document.body.style.overflow = 'hidden';
-      document.body.style.paddingRight = `${scrollBarWidth}px`;
-    } else {
+    if (!isOpen) {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeCart();
+      }
+    };
+
+    window.addEventListener(
+      'keydown',
+      handleKeyDown
+    );
+
+    return () => {
+      window.removeEventListener(
+        'keydown',
+        handleKeyDown
+      );
+    };
+  }, [isOpen]);
+
+
+  /* =========================================================
+     BODY SCROLL LOCK
+     ========================================================= */
+
+  useEffect(() => {
+    if (!isOpen) {
       document.body.style.overflow = '';
       document.body.style.paddingRight = '';
+
+      return;
     }
+
+    const scrollBarWidth =
+      window.innerWidth -
+      document.documentElement.clientWidth;
+
+    document.body.style.overflow = 'hidden';
+
+    if (scrollBarWidth > 0) {
+      document.body.style.paddingRight =
+        `${scrollBarWidth}px`;
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+    };
   }, [isOpen]);
+
 
   return (
     <>
-      {/* Кнопка глобальной корзины */}
-      <CartButton goToBasket={openCart} />
+      {/* =====================================================
+          GLOBAL CART BUTTON
+          ===================================================== */}
 
-      <AnimatePresence>
+      <CartButton
+        goToBasket={openCart}
+      />
+
+
+      <AnimatePresence mode="wait">
+
         {isOpen && (
           <>
-            {/* Backdrop */}
+
+            {/* =================================================
+                BACKDROP
+                ================================================= */}
+
             <motion.div
               className={Styles.backdrop}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              initial={{
+                opacity: 0,
+              }}
+              animate={{
+                opacity: 1,
+              }}
+              exit={{
+                opacity: 0,
+              }}
+              transition={{
+                duration: 0.25,
+                ease: 'easeOut',
+              }}
               onClick={closeCart}
+              aria-hidden="true"
             />
 
-            {/* Панель корзины / заказа */}
-            <motion.div
+
+            {/* =================================================
+                PANEL
+                ================================================= */}
+
+            <motion.aside
               className={Styles.panel}
-              initial={{ opacity: 0, y: 60, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 40, scale: 0.98 }}
-              transition={{ type: 'spring', stiffness: 180, damping: 20 }}
+              initial={{
+                x: '100%',
+              }}
+              animate={{
+                x: 0,
+              }}
+              exit={{
+                x: '100%',
+              }}
+              transition={{
+                type: 'spring',
+                stiffness: 300,
+                damping: 32,
+                mass: 0.8,
+              }}
+              role="dialog"
+              aria-modal="true"
+              aria-label={
+                mode === 'cart'
+                  ? 'Корзина'
+                  : 'Оформление заказа'
+              }
             >
-              {mode === 'cart' && (
-                <Basket onBack={closeCart} goToOrder={() => setMode('order')} />
-              )}
-              {mode === 'order' && <Order onBack={() => setMode('cart')} />}
-            </motion.div>
+
+              {/* ===============================================
+                  CONTENT
+                  =============================================== */}
+
+              <div className={Styles.panelContent}>
+
+                {mode === 'cart' && (
+                  <Basket
+                    onBack={closeCart}
+                    goToOrder={() =>
+                      setMode('order')
+                    }
+                  />
+                )}
+
+                {mode === 'order' && (
+                  <Order
+                    onBack={() =>
+                      setMode('cart')
+                    }
+                  />
+                )}
+
+              </div>
+
+            </motion.aside>
+
           </>
         )}
+
       </AnimatePresence>
     </>
   );

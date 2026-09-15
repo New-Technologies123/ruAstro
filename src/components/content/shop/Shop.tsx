@@ -12,6 +12,7 @@ import { Shop_5 } from './Shop_5';
 import { CartButton } from '../../ui/cart-button/CartButton';
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
 
+import product_1 from '../../../images/products/product_2.webp';
 import product_2 from '../../../images/products/product_2_1.webp';
 import product_3 from '../../../images/products/product_2_2.webp';
 import product_4 from '../../../images/products/product_2_3.webp';
@@ -39,7 +40,7 @@ export const Shop = () => {
   const [currentPage, setCurrentPage] = useState<Page>('shop');
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  
+
   const trackRef = useRef<HTMLDivElement>(null);
   const prevBtnRef = useRef<HTMLButtonElement>(null);
   const nextBtnRef = useRef<HTMLButtonElement>(null);
@@ -95,7 +96,7 @@ export const Shop = () => {
         prevBtn.classList.add('visible');
         prevBtn.style.visibility = 'visible';
       }
-      
+
       if (current >= cards.length - 1) {
         nextBtn.classList.remove('visible');
         nextBtn.style.visibility = 'hidden';
@@ -138,16 +139,16 @@ export const Shop = () => {
     const getTargetCardIndex = (): number => {
       // Проверяем, возвращаемся ли мы с детальной страницы товара
       const fromShop = sessionStorage.getItem(FROM_SHOP_KEY);
-      
+
       if (fromShop === 'true') {
         // Возвращаемся с детальной страницы - показываем карточку, с которой перешли
         const savedCardIndex = sessionStorage.getItem(SELECTED_CARD_KEY);
-        
+
         // Очищаем флаги после использования
         sessionStorage.removeItem(FROM_SHOP_KEY);
         sessionStorage.removeItem(SELECTED_CARD_KEY);
         sessionStorage.removeItem(SCROLL_POSITION_KEY);
-        
+
         if (savedCardIndex !== null) {
           const index = parseInt(savedCardIndex, 10);
           if (!isNaN(index) && index >= 0 && index < cards.length) {
@@ -163,7 +164,7 @@ export const Shop = () => {
       // Очищаем все сохраненные данные
       sessionStorage.removeItem(SELECTED_CARD_KEY);
       sessionStorage.removeItem(SCROLL_POSITION_KEY);
-      
+
       return 0;
     };
 
@@ -262,6 +263,7 @@ export const Shop = () => {
 
   // Массив товаров для отображения
   const products = [
+    { img: product_1.src, title: cardTitle.shop_1, type: 'shop_1' as TProducts },
     { img: product_2.src, title: cardTitle.shop_2, type: 'shop_2' as TProducts },
     { img: product_3.src, title: cardTitle.shop_3, type: 'shop_3' as TProducts },
     { img: product_4.src, title: cardTitle.shop_4, type: 'shop_4' as TProducts },
@@ -295,17 +297,17 @@ export const Shop = () => {
                   </div>
                 ))}
               </div>
-              
+
               <div className={styles.mobileNav}>
-                <button 
-                  className={`${styles.prevBtn}`} 
+                <button
+                  className={`${styles.prevBtn}`}
                   ref={prevBtnRef}
                   aria-label="Предыдущий товар"
                 >
                   ←
                 </button>
-                <button 
-                  className={`${styles.nextBtn}`} 
+                <button
+                  className={`${styles.nextBtn}`}
                   ref={nextBtnRef}
                   aria-label="Следующий товар"
                 >
@@ -320,7 +322,7 @@ export const Shop = () => {
                     const cards = trackRef.current?.querySelectorAll('.card');
                     const total = cards?.length || products.length;
                     if (index >= total) return null;
-                    
+
                     return (
                       <button
                         key={index}
@@ -329,7 +331,7 @@ export const Shop = () => {
                           const track = trackRef.current;
                           const cards = track?.querySelectorAll('.card');
                           if (!track || !cards) return;
-                          
+
                           const card = cards[index] as HTMLElement;
                           const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
                           track.scrollTo({ left, behavior: 'smooth' });

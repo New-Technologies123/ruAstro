@@ -36,8 +36,8 @@ export const NEWS_DATA: TNewsItem[] = [
     title: 'Участие в EGYPES 2026',
     description: 'Успешное участие в выставке Egypt Energy Show в Каире',
     photos: [
-      { id: 1, src: news_12.src, alt: 'EGYPES 2026' },
-      { id: 2, src: news_13.src, alt: 'EGYPES 2026' },
+      { id: 1, src: news_13.src, alt: 'EGYPES 2026' },
+      { id: 2, src: news_12.src, alt: 'EGYPES 2026' },
     ],
     content: [
       'Рады сообщить, что ООО ИПП "Новые Технологии" успешно приняла участие в выставке Egypt Energy Show (EGYPES) 2026, состоявшейся в Каире.',

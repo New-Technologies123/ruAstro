@@ -1,50 +1,140 @@
+/* =========================================================
+   КОНТЕЙНЕР ТОВАРОВ — ОБЩИЙ
+   НЕ МЕНЯЕМ, ЧТОБЫ SHOP_2 / SHOP_4 НЕ СБИЛИСЬ
+   ========================================================= */
+
 .team {
   display: flex;
   justify-content: center;
-  gap: 20px; /* Увеличиваем расстояние между карточками */
-  padding: 50px;
-  background-color: #e6f7ff;
-  margin: 20px 0;
+  align-items: stretch;
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 50px 30px;
   flex-wrap: wrap;
+  box-sizing: border-box;
 }
+
+
+/* =========================================================
+   ОБЩИЕ КАРТОЧКИ
+   ========================================================= */
+
+.team>* {
+  flex: 0 1 420px;
+  width: 420px;
+  max-width: 420px;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   ROW
+   ========================================================= */
 
 .row {
   display: flex;
   justify-content: center;
+  align-items: stretch;
   gap: 30px;
   margin-bottom: 50px;
   flex-wrap: wrap;
 }
 
-/* ===== Кнопка корзины ===== */
+.row>* {
+  flex: 0 1 420px;
+  width: 420px;
+  max-width: 420px;
+  min-width: 0;
+}
+
+
+/* =========================================================
+   PSM — ТОЛЬКО SHOP_3
+   3 КАРТОЧКИ В РЯД
+   ========================================================= */
+
+.psmGrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px !important;
+  width: 100%;
+  max-width: 1200px;
+  padding: 50px 30px;
+  box-sizing: border-box;
+}
+
+.psmGrid>* {
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  flex: none !important;
+}
+
+
+/* =========================================================
+   КНОПКА КОРЗИНЫ
+   ========================================================= */
+
 .topBar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   padding: 16px 24px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #e5ebf0;
+  background: #ffffff;
 }
+
+
+/* =========================================================
+   CART BUTTON
+   ========================================================= */
 
 .cartButton {
-  background: #000;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 6px;
-
-  text-decoration: none; // ← ВАЖНО
-  display: inline-flex;  // чтобы выглядело как кнопка
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 7px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 9px;
+  background: #155eef;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
 
-  &:hover {
-    opacity: 0.9;
-    text-decoration: none; // на hover тоже
-  }
+  box-shadow:
+    0 4px 12px rgba(21, 94, 239, 0.18);
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* ===== СЕТКА ТОВАРОВ ===== */
+.cartButton:hover {
+  background: #004ee8;
+  color: #ffffff;
+  text-decoration: none;
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 7px 16px rgba(21, 94, 239, 0.24);
+}
+
+.cartButton:active {
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   СЕТКА ТОВАРОВ
+   ========================================================= */
+
 .products {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -52,9 +142,124 @@
   margin: 20px 50px;
 }
 
-/* ===== АДАПТИВ ===== */
+
+/* =========================================================
+   АДАПТИВ
+   ========================================================= */
+
+@media (max-width: 1000px) {
+  .team {
+    max-width: 900px;
+    padding: 40px 24px;
+  }
+
+  /* Только PSM */
+  .psmGrid {
+    max-width: 900px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 40px 24px;
+  }
+
+  .team>*,
+  .row>* {
+    flex-basis: 380px;
+    width: 380px;
+    max-width: 380px;
+  }
+
+  /* Отменяем общие размеры карточек для PSM */
+  .psmGrid>* {
+    width: 100%;
+    max-width: none;
+    flex-basis: auto;
+  }
+}
+
+
+/* =========================================================
+   МОБИЛЬНАЯ ВЕРСИЯ
+   ========================================================= */
+
 @media (max-width: 768px) {
+  .team {
+    width: 100%;
+    padding: 30px 16px;
+    gap: 18px;
+    margin: 16px auto;
+  }
+
+  .team>*,
+  .row>* {
+    flex: 1 1 100%;
+    width: 100%;
+    max-width: 430px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .row {
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .row>* {
+    flex: 1 1 100%;
+  }
+
+  /* PSM */
+  .psmGrid {
+    width: 100%;
+    max-width: 100%;
+    grid-template-columns: 1fr;
+    gap: 20px !important;
+    padding: 30px 16px;
+  }
+
+  .psmGrid>* {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0;
+  }
+
+  .products {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin: 20px 16px;
+  }
+
   .search input {
     width: 100%;
+  }
+
+  .topBar {
+    padding: 14px 16px;
+  }
+
+  .cartButton {
+    padding: 10px 15px;
+  }
+}
+
+
+/* =========================================================
+   МАЛЕНЬКИЕ ТЕЛЕФОНЫ
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .team {
+    padding: 24px 12px;
+  }
+
+  .team>*,
+  .row>* {
+    max-width: 100%;
+  }
+
+  .psmGrid {
+    padding: 24px 12px;
+  }
+
+  .topBar {
+    padding: 12px;
   }
 }

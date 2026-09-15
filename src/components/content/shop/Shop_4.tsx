@@ -22,40 +22,40 @@ export const Shop_4 = ({ onBackProducts, title }: TProps) => {
   // ✅ ЕДИНЫЙ источник товаров (Product)
   const PRODUCTS: Record<TKey, Product> = {
     goods_1: {
-      id: 201,
+      id: 9031,
       title: 'Клапан магниторегулируемый КМР-2 Ж НТ.200.000.000.0',
       description: '',
       price: '98 600',
       nds: 'без НДС',
       deliveryTime: '60–90 календарных дней',
-      image: ''
+      image: '/images/shop/product_4.webp'
     },
     goods_2: {
-      id: 202,
+      id: 9032,
       title: 'Клапан магниторегулируемый КМР-2 М НТ.201.000.000.0',
       description: '',
       price: '105 100',
       nds: 'без НДС',
       deliveryTime: '60–90 календарных дней',
-      image: ''
+      image: '/images/shop/product_4.webp'
     },
     goods_3: {
-      id: 203,
+      id: 9033,
       title: 'Клапан магниторегулируемый КМР-3.1 Ех НТ.302.000.000.1',
       description: '',
       price: '105 300',
       nds: 'без НДС',
       deliveryTime: '60–90 календарных дней',
-      image: ''
+      image: '/images/shop/product_4.webp'
     },
     goods_4: {
-      id: 204,
+      id: 9034,
       title: 'Клапан магниторегулируемый КМР-2 Г НТ.250.000.000.0',
       description: '',
       price: '135 135',
       nds: 'без НДС',
       deliveryTime: '60–90 календарных дней',
-      image: ''
+      image: '/images/shop/product_4.webp'
     }
   };
 
@@ -106,6 +106,7 @@ export const Shop_4 = ({ onBackProducts, title }: TProps) => {
               <Cards
                 key={product.id}
                 title={product.title}
+                image={product.image}
                 price={Number(product.price.replace(/\s/g, ''))} // превращаем "98 600" → 98600 для Cards
                 onClick={() => handleClickCard(key)}
                 onAddToCart={(qty) => handleAddToCart(key, qty)}

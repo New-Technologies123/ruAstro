@@ -1,338 +1,2033 @@
-$order-accent: #5c3cfa;
-$error-color: #d81313;
-$card-bg: rgba(255, 255, 255, 0.8);
-$glass-shadow: 0 12px 24px rgba(0, 26, 255, 0.582);
+/* =========================================================
+   ORDER PAGE
+   ========================================================= */
 
 .orderPage {
-  // padding: 2rem;
-  // background: linear-gradient(135deg, #eef2ff, #fdf2f8);
-  min-height: 100vh;
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --surface-soft: #f8fafc;
+  --text: #172033;
+  --text-secondary: #667085;
+  --text-muted: #98a2b3;
+  --border: #e4e8ef;
+  --border-soft: #edf0f3;
+  --border-strong: #d6dce5;
+  --accent: #155eef;
+  --accent-hover: #0b4fd8;
+  --accent-soft: #edf4ff;
+  --success: #12b76a;
+  --success-soft: #ecfdf3;
+  --error: #d92d20;
+  --error-soft: #fff3f2;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  box-sizing: border-box;
 
-  .header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
+  color: var(--text);
 
-    .backButton {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      margin-right: 1rem;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
 
-      img {
-        width: 28px;
-        height: 28px;
-        transition: transform 0.2s ease;
-      }
-
-      &:hover img {
-        transform: translateX(-4px);
-      }
-    }
-  }
-
-  .content {
-    max-width: 700px;
-    width: 100%;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-
-    .successMessage {
-      padding: 1rem 2rem;
-      background: rgba(52, 199, 89, 0.15);
-      color: #34c759;
-      border-radius: 1rem;
-      text-align: center;
-      font-weight: 600;
-      font-size: 1.05rem;
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(52, 199, 89, 0.3);
-      box-shadow: $glass-shadow;
-    }
-
-    .summary {
-      background: $card-bg;
-      border-radius: 16px;
-      padding: 10px 15px;
-      backdrop-filter: blur(12px);
-      box-shadow: $glass-shadow;
-      display: flex;
-      flex-direction: column;
-      // gap: 1rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-      // &:hover {
-      //   transform: translateY(-2px);
-      //   box-shadow: 0 20px 40px rgba(1, 26, 255, 0.12);
-      // }
-
-      .product {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 12px 0;
-        font-weight: 500;
-        font-size: 16px;
-        border-bottom: 1px solid rgba(38, 34, 255, 0.281);
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        .title {
-          flex: 1;
-          color: #111827;
-          font-weight: 500;
-        }
-
-        .count {
-          margin: 0 0.5rem;
-          color: #6b7280;
-        }
-
-        .price {
-          color: #1f2937;
-          font-weight: 600;
-          min-width: 100px;
-          text-align: right;
-        }
-      }
-
-      .total {
-        display: flex;
-        justify-content: space-between;
-        font-weight: 700;
-        font-size: 20px;
-        border-top: 1px solid rgba(60, 60, 67, 0.2);
-        padding-top: 0.75rem;
-      }
-    }
-
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-      // margin: 20px 0;
-      margin-top: 30px;
-      margin-bottom: 20px;
-
-      .field {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-
-        input,
-        textarea {
-          width: 100%;
-          padding: 13px 15px;
-          border: none;
-          border-radius: 16px;
-          background: rgba(255, 255, 255, 0.75);
-          font-size: 16px;
-          font-weight: 500;
-          outline: none;
-          transition: all 0.25s ease;
-          backdrop-filter: blur(10px);
-          box-shadow: inset 1px 2px 4px rgb(0, 26, 143);
-
-          // &:focus {
-          //   box-shadow: 0 0 0 2px $order-accent, inset 0 1px 3px rgba(0, 0, 0, 0.06);
-          // }
-        }
-
-        label {
-          position: absolute;
-          left: 1rem;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #0404f1f5;
-          font-size: 16px;
-          pointer-events: none;
-          transition: all 0.2s ease;
-
-          &.filled {
-            top: -0.5rem;
-            font-size: 0.75rem;
-            background: #0e4af0;
-            padding: 0 0.25rem;
-            color: white;
-            border-radius: 6px 6px 0 0;
-          }
-        }
-
-        textarea {
-          padding-top: 1.25rem;
-          padding-bottom: 1rem;
-        }
-
-        .errorText {
-          color: $error-color;
-          font-size: 0.75rem;
-          margin-top: 0.25rem;
-          font-weight: 500;
-        }
-
-        &.fieldError input {
-          box-shadow: 0 0 0 2px $error-color, inset 0 1px 3px rgba(241, 3, 3, 0.877);
-        }
-      }
-
-      .submitButton {
-        padding: 0.85rem;
-        font-size: 1rem;
-        font-weight: 600;
-        color: white;
-        border: none;
-        border-radius: 16px;
-        cursor: pointer;
-        background: linear-gradient(135deg, #3c8efa, #1a29af);
-        box-shadow: 0 8px 20px rgba(92, 60, 250, 0.35);
-        transition: all 0.25s ease;
-        backdrop-filter: blur(6px);
-
-        &:hover {
-          transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 12px 28px rgba(92, 60, 250, 0.45);
-        }
-
-        &:active {
-          transform: scale(0.97);
-        }
-      }
-    }
-  }
+  background: var(--bg);
 }
 
-.checkboxContainer {
-  margin-top: 16px;
-}
+/* =========================================================
+   HEADER
+   ========================================================= */
 
-.checkboxLabel {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.4;
-  color: #333;
+.header {
   position: relative;
+  z-index: 10;
+  flex: 0 0 auto;
+
+  min-height: 70px;
+
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+
+  gap: 16px;
+  padding: 12px 22px;
+
+  box-sizing: border-box;
+
+  background: rgba(255, 255, 255, 0.96);
+  border-bottom: 1px solid var(--border-soft);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
-/* скрываем стандартный чекбокс */
-.checkboxLabel input {
-  display: none;
-}
+/* =========================================================
+   BACK
+   ========================================================= */
 
-/* кастомный */
-.customCheckbox {
-  min-width: 20px;
-  height: 20px;
-  border-radius: 6px;
-  border: 2px solid #d0d5dd;
-  transition: all 0.25s ease;
-  position: relative;
-}
+.backButton {
+  justify-self: start;
 
-/* галочка */
-.customCheckbox::after {
-  content: '';
-  position: absolute;
-  top: 4px;
-  left: 6px;
-  width: 5px;
-  height: 9px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  transform: rotate(45deg) scale(0);
-  transition: all 0.2s ease;
-}
+  min-height: 42px;
 
-/* checked */
-.checkboxLabel input:checked + .customCheckbox {
-  background: #1651be;
-  border-color: #0e12e7;
-}
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-.checkboxLabel input:checked + .customCheckbox::after {
-  transform: rotate(45deg) scale(1);
-}
+  gap: 8px;
+  padding: 0 13px 0 9px;
 
-/* hover */
-.checkboxLabel:hover .customCheckbox {
-  border-color: #000274;
-}
+  border: 1px solid var(--border);
+  border-radius: 12px;
 
-/* ошибка */
-.error {
-  color: #ff0606;
+  background: var(--surface);
+  color: var(--text-secondary);
+
+  font-family: inherit;
   font-size: 13px;
-  margin-top: 6px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.04);
+
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.backButton img {
+  width: 19px;
+  height: 19px;
+  display: block;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.backButton:hover {
+  background: var(--surface-soft);
+  border-color: var(--border-strong);
+  color: var(--text);
+
+  transform: translateX(-1px);
+
+  box-shadow:
+    0 5px 14px rgba(15, 23, 42, 0.07);
+}
+
+.backButton:hover img {
+  transform: translateX(-2px);
+}
+
+.backButton:active {
+  transform: scale(0.97);
+}
+
+.backButton:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 4px var(--accent-soft),
+    0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+/* =========================================================
+   HEADER CENTER
+   ========================================================= */
+
+.headerCenter {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+}
+
+.headerCenter h1 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 20px;
+  line-height: 1.25;
+  font-weight: 750;
+
+  letter-spacing: -0.025em;
+}
+
+.headerCenter span {
+  margin-top: 3px;
+
+  color: var(--text-muted);
+
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 600;
+
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   HEADER RIGHT
+   ========================================================= */
+
+.headerRight {
+  justify-self: end;
+
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+
+  color: var(--text-muted);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.headerRight svg {
+  width: 17px;
+  height: 17px;
+
+  color: var(--accent);
+}
+
+/* =========================================================
+   CHECKOUT STEPS
+   ========================================================= */
+
+.checkoutSteps {
+  width: 100%;
+  max-width: 1000px;
+
+  background: none;
+
+  flex: 0 0 auto;
+
+  margin: 0 auto;
+  padding: 15px 22px 10px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+}
+
+.checkoutStep {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  font-family: inherit;
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.checkoutStepCurrent {
+  cursor: default;
+}
+
+/* =========================================================
+   STEP NUMBER
+   ========================================================= */
+
+.stepNumber {
+  flex: 0 0 31px;
+
+  width: 31px;
+  height: 31px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  border-radius: 50%;
+
+  font-size: 9px;
+  font-weight: 800;
+
+  letter-spacing: 0.03em;
+}
+
+.stepNumber svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* COMPLETED */
+
+.stepNumberCompleted {
+  color: var(--accent);
+  background: var(--accent-soft);
+
+  border: 1px solid rgba(21, 94, 239, 0.22);
+}
+
+/* CURRENT */
+
+.stepNumberCurrent {
+  color: #fff;
+  background: var(--accent);
+
+  border: 1px solid var(--accent);
+
+  box-shadow:
+    0 0 0 4px rgba(21, 94, 239, 0.08),
+    0 4px 12px rgba(21, 94, 239, 0.16);
+}
+
+/* =========================================================
+   STEP TEXT
+   ========================================================= */
+
+.stepInfo {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 1px;
+}
+
+.stepLabel {
+  color: var(--text);
+
+  font-size: 11px;
+  line-height: 1.2;
   font-weight: 700;
 }
 
-.errorText {
-  color: #dc3545;
-  font-size: 12px;
-  margin-top: 8px;
-  margin-left: 32px;
+.stepDescription {
+  color: var(--text-muted);
+
+  font-size: 9px;
+  line-height: 1.2;
   font-weight: 500;
 }
 
-/* красная рамка при ошибке */
+/* =========================================================
+   CONNECTOR
+   ========================================================= */
+
+.stepConnector {
+  position: relative;
+
+  flex: 1 1 auto;
+
+  height: 2px;
+  min-width: 35px;
+
+  margin: 0 14px;
+
+  border-radius: 999px;
+
+  background: #e4e8ee;
+
+  overflow: hidden;
+}
+
+.stepConnector::after {
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background: var(--accent);
+}
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.content {
+  flex: 1 1 0;
+
+  min-width: 0;
+  min-height: 0;
+
+  width: 100%;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  padding: 10px 22px 34px;
+
+  box-sizing: border-box;
+
+  scrollbar-width: thin;
+  scrollbar-color: #d4d9e1 transparent;
+
+  -webkit-overflow-scrolling: touch;
+
+  overscroll-behavior-y: contain;
+}
+
+.content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+  background: #d4d9e1;
+  border-radius: 999px;
+}
+
+.content::-webkit-scrollbar-thumb:hover {
+  background: #c5cbd5;
+}
+
+/* =========================================================
+   MAIN TWO COLUMN LAYOUT
+   ========================================================= */
+
+.checkoutLayout {
+  width: 100%;
+  max-width: 1000px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr) 330px;
+
+  align-items: start;
+
+  gap: 18px;
+}
+
+/* =========================================================
+   FORM CARD
+   ========================================================= */
+
+.formCard {
+  min-width: 0;
+
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 20px;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.035);
+}
+
+/* =========================================================
+   FORM HEADER
+   ========================================================= */
+
+.formHeader {
+  padding-bottom: 2px;
+}
+
+.eyebrow {
+  display: block;
+
+  color: var(--text-muted);
+
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 750;
+
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+.formHeader h2 {
+  margin: 5px 0 6px;
+
+  color: var(--text);
+
+  font-size: 21px;
+  line-height: 1.25;
+  font-weight: 750;
+
+  letter-spacing: -0.025em;
+}
+
+.formHeader p {
+  max-width: 580px;
+
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+/* =========================================================
+   FIELDS
+   ========================================================= */
+
+.fields {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr) minmax(0, 1fr);
+
+  gap: 14px;
+}
+
+.field {
+  min-width: 0;
+  position: relative;
+}
+
+/* =========================================================
+   INPUT WRAPPER
+   ========================================================= */
+
+.inputWrapper {
+  position: relative;
+
+  width: 100%;
+}
+
+.inputWrapper input,
+.inputWrapper textarea {
+  width: 100%;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+
+  outline: none;
+
+  background: var(--surface);
+  color: var(--text);
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.025);
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.inputWrapper input {
+  height: 58px;
+
+  padding:
+    22px 14px 7px 44px;
+}
+
+.inputWrapper textarea {
+  min-height: 116px;
+
+  resize: vertical;
+
+  padding:
+    25px 14px 10px 44px;
+
+  line-height: 1.5;
+}
+
+/* =========================================================
+   FIELD ICON
+   ========================================================= */
+
+.fieldIcon {
+  position: absolute;
+
+  left: 15px;
+  top: 50%;
+
+  width: 18px;
+  height: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: #a1a9b6;
+
+  pointer-events: none;
+
+  transform: translateY(-50%);
+
+  z-index: 2;
+
+  transition:
+    color 0.18s ease;
+}
+
+.fieldIcon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.inputWrapper textarea ~ .fieldIcon {
+  top: 27px;
+  transform: none;
+}
+
+/* =========================================================
+   LABEL
+   ========================================================= */
+
+.inputWrapper label {
+  position: absolute;
+
+  left: 44px;
+  top: 50%;
+
+  color: var(--text-muted);
+
+  font-size: 14px;
+  font-weight: 500;
+
+  pointer-events: none;
+
+  transform: translateY(-50%);
+
+  transition:
+    top 0.18s ease,
+    transform 0.18s ease,
+    font-size 0.18s ease,
+    color 0.18s ease,
+    background 0.18s ease;
+}
+
+.inputWrapper textarea + label {
+  top: 25px;
+  transform: none;
+}
+
+/* =========================================================
+   FLOATING LABEL
+   ========================================================= */
+
+.inputWrapper input:focus + label,
+.inputWrapper input:not(:placeholder-shown) + label,
+.inputWrapper textarea:focus + label,
+.inputWrapper textarea:not(:placeholder-shown) + label {
+  top: 0;
+
+  transform: translateY(-50%);
+
+  padding: 0 5px;
+
+  color: var(--accent);
+
+  background: var(--surface);
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.inputWrapper textarea:focus + label,
+.inputWrapper textarea:not(:placeholder-shown) + label {
+  top: 0;
+  transform: translateY(-50%);
+}
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+.inputWrapper input:focus,
+.inputWrapper textarea:focus {
+  border-color: rgba(21, 94, 239, 0.62);
+
+  background: #fff;
+
+  box-shadow:
+    0 0 0 4px rgba(21, 94, 239, 0.085);
+}
+
+.inputWrapper input:focus ~ .fieldIcon,
+.inputWrapper textarea:focus ~ .fieldIcon {
+  color: var(--accent);
+}
+
+/* =========================================================
+   ERROR — VERY IMPORTANT
+   ========================================================= */
+
+.fieldError .inputWrapper input,
+.fieldError .inputWrapper textarea {
+  border-color: var(--error) !important;
+
+  background: #fffafa;
+
+  box-shadow:
+    0 0 0 3px rgba(217, 45, 32, 0.09) !important;
+}
+
+.fieldError .inputWrapper input:focus,
+.fieldError .inputWrapper textarea:focus {
+  border-color: var(--error) !important;
+
+  box-shadow:
+    0 0 0 4px rgba(217, 45, 32, 0.11) !important;
+}
+
+.fieldError .fieldIcon {
+  color: var(--error);
+}
+
+.fieldError .inputWrapper label {
+  color: var(--error);
+}
+
+.fieldError .inputWrapper input:not(:placeholder-shown) + label,
+.fieldError .inputWrapper textarea:not(:placeholder-shown) + label {
+  color: var(--error);
+}
+
+.errorText {
+  display: block;
+
+  margin-top: 6px;
+  padding-left: 3px;
+
+  color: var(--error);
+
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+/* =========================================================
+   AGREEMENTS
+   ========================================================= */
+
+.agreements {
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+
+  margin-top: 0;
+}
+
+.checkboxContainer {
+  position: relative;
+
+  padding: 11px 12px;
+
+  box-sizing: border-box;
+
+  border: 1px solid transparent;
+  border-radius: 12px;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.checkboxContainer:hover {
+  background: var(--surface-soft);
+  border-color: var(--border-soft);
+}
+
+/* =========================================================
+   CHECKBOX
+   ========================================================= */
+
+/*
+  ВАЖНО:
+  Не используем width: 1px + pointer-events: none.
+  На мобильных устройствах это может приводить к проблемам
+  с обработкой клика по label.
+
+  Сам input остаётся полностью рабочим, но прозрачным.
+*/
+
+.checkboxLabel {
+  position: relative;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 10px;
+
+  width: 100%;
+  min-width: 0;
+
+  cursor: pointer;
+
+  color: var(--text-secondary);
+
+  font-size: 12px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.checkboxLabel input {
+  position: absolute;
+
+  left: 0;
+  top: 1px;
+
+  width: 20px;
+  height: 20px;
+
+  margin: 0;
+  padding: 0;
+
+  opacity: 0;
+
+  cursor: pointer;
+
+  /*
+    Input остаётся кликабельным.
+    Это ключевое исправление.
+  */
+  pointer-events: auto;
+
+  z-index: 2;
+
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+/* =========================================================
+   CUSTOM CHECKBOX
+   ========================================================= */
+
+.customCheckbox {
+  position: relative;
+
+  z-index: 1;
+
+  flex: 0 0 20px;
+
+  width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 1px;
+
+  box-sizing: border-box;
+
+  border: 1.5px solid #cbd2dc;
+  border-radius: 6px;
+
+  background: #fff;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.customCheckbox svg {
+  width: 13px;
+  height: 13px;
+
+  color: #fff;
+
+  opacity: 0;
+
+  transform: scale(0.5);
+
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease;
+}
+
+.checkboxLabel input:checked + .customCheckbox {
+  border-color: var(--accent);
+
+  background: var(--accent);
+
+  box-shadow:
+    0 2px 7px rgba(21, 94, 239, 0.18);
+}
+
+.checkboxLabel input:checked + .customCheckbox svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.checkboxLabel:hover .customCheckbox {
+  border-color: var(--accent);
+}
+
+.checkboxLabel input:focus-visible + .customCheckbox {
+  box-shadow:
+    0 0 0 4px rgba(21, 94, 239, 0.11);
+}
+
+/* =========================================================
+   CHECKBOX TEXT
+   ========================================================= */
+
+.checkboxText {
+  min-width: 0;
+
+  flex: 1 1 auto;
+}
+
+.checkboxText a {
+  position: relative;
+  z-index: 3;
+
+  color: var(--accent);
+
+  font-weight: 600;
+
+  text-decoration: none;
+  text-underline-offset: 2px;
+
+  transition:
+    color 0.18s ease;
+}
+
+.checkboxText a:hover {
+  color: var(--accent-hover);
+
+  text-decoration: underline;
+}
+
+/* =========================================================
+   AGREEMENT ERROR
+   ========================================================= */
+
+.errorState {
+  background: var(--error-soft);
+
+  border-color:
+    rgba(217, 45, 32, 0.16);
+}
+
 .errorState .customCheckbox {
-  border-color: #ff0606;
-  animation: shake 0.3s;
+  border-color: var(--error);
 }
 
-/* shake-анимация 🔥 */
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  50% { transform: translateX(3px); }
-  75% { transform: translateX(-3px); }
-  100% { transform: translateX(0); }
+.checkboxError {
+  display: block;
+
+  margin-top: 6px;
+
+  padding-left: 30px;
+
+  color: var(--error);
+
+  font-size: 11px;
+  line-height: 1.35;
+  font-weight: 500;
 }
 
+/* =========================================================
+   SUBMIT
+   ========================================================= */
 
-@media (max-width: 900px){
-  .orderPage{
-    .content{
-      .summary{
-        .product{
-          font-size: 14px;
-        }
-        .total{
-          font-size: 18px;
-        }
-      }
-    }
+.submitButton {
+  width: 100%;
+
+  min-height: 54px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 10px;
+
+  padding: 0 18px;
+
+  box-sizing: border-box;
+
+  border: 0;
+  border-radius: 14px;
+
+  background: var(--accent);
+  color: #fff;
+
+  font-family: inherit;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 20px rgba(21, 94, 239, 0.19);
+
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+  background: var(--accent-hover);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 11px 24px rgba(21, 94, 239, 0.24);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.submitButton:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 4px rgba(21, 94, 239, 0.13),
+    0 8px 20px rgba(21, 94, 239, 0.19);
+}
+
+.submitButton:disabled {
+  cursor: not-allowed;
+
+  opacity: 0.7;
+
+  box-shadow: none;
+}
+
+/* =========================================================
+   SUBMIT ARROW
+   ========================================================= */
+
+.submitArrow {
+  width: 19px;
+  height: 19px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.submitArrow svg {
+  width: 19px;
+  height: 19px;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.submitButton:hover:not(:disabled) .submitArrow svg {
+  transform: translateX(3px);
+}
+
+/* =========================================================
+   SPINNER
+   ========================================================= */
+
+.spinner {
+  width: 16px;
+  height: 16px;
+
+  box-sizing: border-box;
+
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+
+  border-radius: 50%;
+
+  animation:
+    orderSpinner 0.7s linear infinite;
+}
+
+@keyframes orderSpinner {
+  to {
+    transform: rotate(360deg);
   }
 }
 
-@media (max-width: 530px){
-  .orderPage{
-    .content{
-      .summary{
-        .product{
-          font-size: 12px;
-        }
-        .total{
-          font-size: 15px;
-        }
-      }
-      .form{
-        .field{
-          label{
-            font-size: 12px;
-          }
-        }
-      }
-    }
+/* =========================================================
+   FORM NOTE
+   ========================================================= */
+
+.formNote {
+  margin: -9px 4px 0;
+
+  color: var(--text-muted);
+
+  font-size: 10px;
+  line-height: 1.45;
+
+  text-align: center;
+}
+
+/* =========================================================
+   SUMMARY COLUMN
+   ========================================================= */
+
+.summaryColumn {
+  min-width: 0;
+
+  position: sticky;
+  top: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+/* =========================================================
+   SUMMARY CARD
+   ========================================================= */
+
+.summaryCard {
+  min-width: 0;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.035);
+}
+
+/* =========================================================
+   SUMMARY HEADER
+   ========================================================= */
+
+.summaryHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 10px;
+}
+
+.summaryHeader h2 {
+  margin: 4px 0 0;
+
+  color: var(--text);
+
+  font-size: 17px;
+  line-height: 1.3;
+  font-weight: 700;
+
+  letter-spacing: -0.015em;
+}
+
+.itemCount {
+  flex: 0 0 auto;
+
+  padding: 6px 9px;
+
+  border-radius: 999px;
+
+  background: var(--accent-soft);
+  color: var(--accent);
+
+  font-size: 11px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+/* =========================================================
+   PRODUCTS
+   ========================================================= */
+
+.products {
+  display: flex;
+  flex-direction: column;
+}
+
+.product {
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    52px minmax(0, 1fr) auto;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.product:last-child {
+  border-bottom: 0;
+}
+
+/* =========================================================
+   PRODUCT IMAGE
+   ========================================================= */
+
+.productImage {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 5px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border-soft);
+  border-radius: 11px;
+
+  background: var(--surface-soft);
+
+  overflow: hidden;
+}
+
+.productImage img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+}
+
+/* =========================================================
+   PRODUCT INFO
+   ========================================================= */
+
+.productInfo {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.productTitle {
+  display: -webkit-box;
+
+  overflow: hidden;
+
+  color: var(--text);
+
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 600;
+
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.productMeta {
+  color: var(--text-muted);
+
+  font-size: 10px;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+.productPrice {
+  flex: 0 0 auto;
+
+  color: var(--text);
+
+  font-size: 12px;
+  line-height: 1.2;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+/* =========================================================
+   TOTAL
+   ========================================================= */
+
+.total {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-top: 5px;
+  padding-top: 15px;
+
+  border-top: 1px solid var(--border);
+
+  color: var(--text);
+
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 600;
+}
+
+.total strong {
+  font-size: 19px;
+  line-height: 1.2;
+  font-weight: 750;
+
+  letter-spacing: -0.02em;
+}
+
+.vat {
+  margin-top: 3px;
+
+  color: var(--text-muted);
+
+  font-size: 10px;
+  line-height: 1.3;
+
+  text-align: right;
+}
+
+/* =========================================================
+   SUMMARY INFO
+   ========================================================= */
+
+.summaryInfo {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 9px;
+
+  margin-top: 16px;
+  padding: 11px;
+
+  border-radius: 11px;
+
+  background: var(--surface-soft);
+  color: var(--text-secondary);
+
+  font-size: 10px;
+  line-height: 1.45;
+  font-weight: 500;
+}
+
+.infoIcon {
+  flex: 0 0 19px;
+
+  width: 19px;
+  height: 19px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.infoIcon svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* =========================================================
+   BACK TO CART
+   ========================================================= */
+
+.backToCart {
+  width: 100%;
+
+  min-height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 0 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 11px;
+
+  background: transparent;
+  color: var(--text-secondary);
+
+  font-family: inherit;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
+}
+
+.backToCart span {
+  font-size: 15px;
+}
+
+.backToCart:hover {
+  background: var(--surface);
+
+  border-color: var(--border-strong);
+
+  color: var(--text);
+}
+
+/* =========================================================
+   SUCCESS
+   ========================================================= */
+
+.successWrapper {
+  width: 100%;
+  max-width: 720px;
+
+  margin: 15px auto;
+}
+
+.successCard {
+  display: flex;
+  align-items: flex-start;
+
+  gap: 18px;
+
+  padding: 25px;
+
+  background: var(--surface);
+
+  border: 1px solid rgba(18, 183, 106, 0.16);
+  border-radius: var(--radius-lg);
+
+  box-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.035);
+}
+
+.successIcon {
+  flex: 0 0 48px;
+
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--success-soft);
+  color: var(--success);
+}
+
+.successIcon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.successContent {
+  min-width: 0;
+}
+
+.successEyebrow {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: var(--success);
+
+  font-size: 10px;
+  font-weight: 750;
+
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.successContent h2 {
+  margin: 0 0 6px;
+
+  color: var(--text);
+
+  font-size: 22px;
+  line-height: 1.25;
+  font-weight: 750;
+
+  letter-spacing: -0.025em;
+}
+
+.successContent p {
+  margin: 0;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.successButton {
+  margin-top: 18px;
+
+  min-height: 42px;
+
+  padding: 0 15px;
+
+  border: 1px solid var(--border);
+  border-radius: 11px;
+
+  background: var(--surface);
+  color: var(--text);
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 650;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.successButton:hover {
+  background: var(--surface-soft);
+  border-color: var(--border-strong);
+}
+
+/* =========================================================
+   EMPTY
+   ========================================================= */
+
+.emptyState {
+  width: 100%;
+  max-width: 540px;
+
+  margin: 35px auto;
+
+  padding: 40px 25px;
+
+  box-sizing: border-box;
+
+  text-align: center;
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.emptyIcon {
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0 auto 15px;
+
+  border-radius: 15px;
+
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.emptyIcon svg {
+  width: 25px;
+  height: 25px;
+}
+
+.emptyState h2 {
+  margin: 0 0 7px;
+
+  font-size: 20px;
+  font-weight: 750;
+
+  letter-spacing: -0.02em;
+}
+
+.emptyState p {
+  max-width: 380px;
+
+  margin: 0 auto;
+
+  color: var(--text-secondary);
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.emptyButton {
+  min-height: 43px;
+
+  margin-top: 18px;
+  padding: 0 17px;
+
+  border: 0;
+  border-radius: 11px;
+
+  background: var(--accent);
+  color: #fff;
+
+  font-family: inherit;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .checkoutLayout {
+    grid-template-columns:
+      minmax(0, 1fr) 300px;
+
+    gap: 14px;
+  }
+
+  .formCard {
+    padding: 19px;
+  }
+
+  .summaryCard {
+    padding: 16px;
+  }
+
+  .product {
+    grid-template-columns:
+      46px minmax(0, 1fr) auto;
+  }
+
+  .productImage {
+    width: 46px;
+    height: 46px;
+  }
+
+  .productTitle {
+    font-size: 11px;
+  }
+
+  .productPrice {
+    font-size: 11px;
+  }
+}
+
+/* =========================================================
+   MOBILE / ONE COLUMN
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .header {
+    min-height: 64px;
+
+    grid-template-columns:
+      auto minmax(0, 1fr) auto;
+
+    padding:
+      10px 15px;
+
+    gap: 10px;
+  }
+
+  .backButton {
+    min-height: 40px;
+
+    width: 40px;
+
+    padding: 0;
+
+    border-radius: 11px;
+  }
+
+  .backButton span {
+    display: none;
+  }
+
+  .headerCenter h1 {
+    font-size: 18px;
+  }
+
+  .headerCenter span {
+    font-size: 9px;
+  }
+
+  .headerRight span {
+    display: none;
+  }
+
+  .headerRight svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .checkoutSteps {
+    padding:
+      12px 15px 8px;
+  }
+
+  .checkoutLayout {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryColumn {
+    position: static;
+    order: -1;
+  }
+
+  .fields {
+    grid-template-columns: 1fr;
+  }
+
+  .formCard {
+    padding: 17px;
+
+    border-radius: 16px;
+  }
+
+  .summaryCard {
+    border-radius: 16px;
+  }
+
+  /*
+    Только исправление взаимодействия чекбокса
+    на мобильном. Остальная компоновка не меняется.
+  */
+  .checkboxContainer {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .checkboxLabel {
+    position: relative;
+
+    width: 100%;
+    min-width: 0;
+
+    align-items: flex-start;
+  }
+
+  .checkboxLabel input {
+    left: 0;
+    top: 1px;
+
+    width: 20px;
+    height: 20px;
+
+    opacity: 0;
+
+    pointer-events: auto;
+
+    z-index: 2;
+  }
+
+  .customCheckbox {
+    flex: 0 0 20px;
+
+    width: 20px;
+    height: 20px;
+
+    margin-top: 1px;
+
+    z-index: 1;
+  }
+
+  .checkboxText {
+    min-width: 0;
+    flex: 1 1 auto;
+
+    overflow-wrap: anywhere;
+  }
+
+  .checkboxError {
+    padding-left: 30px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .content {
+    padding:
+      9px 12px 25px;
+  }
+
+  .checkoutSteps {
+    padding:
+      11px 12px 7px;
+  }
+
+  .checkoutStep {
+    gap: 7px;
+  }
+
+  .stepNumber {
+    flex-basis: 28px;
+
+    width: 28px;
+    height: 28px;
+  }
+
+  .stepInfo {
+    gap: 0;
+  }
+
+  .stepLabel {
+    font-size: 10px;
+  }
+
+  .stepDescription {
+    display: none;
+  }
+
+  .stepConnector {
+    min-width: 24px;
+
+    margin:
+      0 8px;
+  }
+
+  .formHeader h2 {
+    font-size: 19px;
+  }
+
+  .formHeader p {
+    font-size: 12px;
+  }
+
+  .formCard {
+    gap: 17px;
+  }
+
+  .inputWrapper input {
+    height: 55px;
+  }
+
+  .inputWrapper textarea {
+    min-height: 105px;
+  }
+
+  .submitButton {
+    min-height: 52px;
+  }
+
+  .summaryHeader h2 {
+    font-size: 16px;
+  }
+
+  .product {
+    grid-template-columns:
+      50px minmax(0, 1fr) auto;
+
+    gap: 9px;
+  }
+
+  .productImage {
+    width: 50px;
+    height: 50px;
+  }
+
+  .productTitle {
+    font-size: 12px;
+  }
+
+  .total strong {
+    font-size: 18px;
+  }
+
+  .successCard {
+    padding: 19px;
+
+    gap: 13px;
+  }
+
+  .successIcon {
+    flex-basis: 40px;
+
+    width: 40px;
+    height: 40px;
+  }
+
+  .successIcon svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .successContent h2 {
+    font-size: 19px;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .header {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .headerCenter h1 {
+    font-size: 17px;
+  }
+
+  .checkoutSteps {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .stepInfo {
+    display: none;
+  }
+
+  .stepConnector {
+    min-width: 30px;
+  }
+
+  .formCard {
+    padding: 14px;
+  }
+
+  .summaryCard {
+    padding: 14px;
+  }
+
+  .checkboxContainer {
+    padding: 9px;
+  }
+
+  .checkboxLabel {
+    gap: 8px;
+
+    font-size: 11px;
+  }
+
+  .checkboxLabel input {
+    width: 20px;
+    height: 20px;
+  }
+
+  .customCheckbox {
+    flex-basis: 20px;
+
+    width: 20px;
+    height: 20px;
+  }
+
+  .checkboxText {
+    min-width: 0;
+
+    overflow-wrap: anywhere;
+  }
+
+  .checkboxError {
+    padding-left: 28px;
+
+    font-size: 10px;
+  }
+
+  .product {
+    grid-template-columns:
+      45px minmax(0, 1fr) auto;
+  }
+
+  .productImage {
+    width: 45px;
+    height: 45px;
+  }
+
+  .productPrice {
+    font-size: 10px;
+  }
+}
+
+/* =========================================================
+   SAFE AREA
+   ========================================================= */
+
+@supports (padding: env(safe-area-inset-bottom)) {
+  .content {
+    padding-bottom:
+      calc(25px + env(safe-area-inset-bottom));
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .orderPage *,
+  .orderPage *::before,
+  .orderPage *::after {
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+    transition-duration:
+      0.01ms !important;
+
+    scroll-behavior:
+      auto !important;
   }
 }

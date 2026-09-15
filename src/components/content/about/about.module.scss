@@ -1,6 +1,13 @@
 // about.module.scss
+
+// Глобальный сброс для страницы
 .aboutPage {
   overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 100vw;
+  min-height: 100vh;
+  position: relative;
 }
 
 // ============================================
@@ -11,7 +18,9 @@
   padding: 80px 20px 100px;
   background: linear-gradient(135deg, #0a1e3c 0%, #1a3a6a 50%, #2a5a8a 100%);
   overflow: hidden;
-  
+  width: 100%;
+  max-width: 100vw;
+
   &::before {
     content: '';
     position: absolute;
@@ -21,8 +30,9 @@
     height: 600px;
     background: radial-gradient(circle, rgba(42, 125, 225, 0.2) 0%, transparent 70%);
     border-radius: 50%;
+    pointer-events: none;
   }
-  
+
   &::after {
     content: '';
     position: absolute;
@@ -32,6 +42,7 @@
     height: 400px;
     background: radial-gradient(circle, rgba(42, 125, 225, 0.1) 0%, transparent 70%);
     border-radius: 50%;
+    pointer-events: none;
   }
 }
 
@@ -41,9 +52,10 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
+  background:
     radial-gradient(ellipse at 20% 50%, rgba(42, 125, 225, 0.15) 0%, transparent 60%),
     radial-gradient(ellipse at 80% 50%, rgba(42, 125, 225, 0.1) 0%, transparent 60%);
+  pointer-events: none;
 }
 
 .heroContent {
@@ -51,6 +63,8 @@
   max-width: 900px;
   margin: 0 auto;
   z-index: 1;
+  padding: 0 10px;
+  width: 100%;
 }
 
 .badge {
@@ -72,11 +86,11 @@
   color: #ffffff;
   line-height: 1.2;
   margin: 0 0 24px 0;
-  
+
   .highlight {
     color: #6db3ff;
     position: relative;
-    
+
     &::after {
       content: '';
       position: absolute;
@@ -105,6 +119,9 @@
   padding: 80px 20px 100px;
   background: linear-gradient(180deg, #f8faff 0%, #ffffff 100%);
   position: relative;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
 }
 
 .statsHeader {
@@ -126,70 +143,172 @@
   flex-wrap: wrap;
   max-width: 1300px;
   margin: 0 auto;
+  width: 100%;
 }
 
 // ============================================
 // ========== АДАПТИВНОСТЬ ==========
 // ============================================
 
+// Планшеты и маленькие ноутбуки
 @media (max-width: 1024px) {
   .heroTitle {
     font-size: 38px;
   }
+
+  .heroSection {
+    &::before {
+      width: 400px;
+      height: 400px;
+    }
+
+    &::after {
+      width: 300px;
+      height: 300px;
+    }
+  }
+
+  .numberAbout {
+    gap: 20px;
+  }
 }
 
+// Планшеты (вертикальная ориентация)
 @media (max-width: 768px) {
-  .statsHeader{
+  .statsHeader {
     margin-bottom: 45px;
   }
+
   .heroSection {
     padding: 60px 16px 80px;
+
+    &::before {
+      width: 300px;
+      height: 300px;
+      right: -30%;
+      top: -40%;
+    }
+
+    &::after {
+      width: 200px;
+      height: 200px;
+      left: -20%;
+      bottom: -20%;
+    }
   }
-  
+
   .heroTitle {
     font-size: 30px;
   }
-  
+
   .heroText {
     font-size: 17px;
   }
-  
+
   .numberAbout {
     gap: 16px;
     padding: 10px;
   }
+
+  .statsSubtitle {
+    font-size: 16px;
+  }
 }
 
-@media (max-width: 520px) {  
+// Мобильные телефоны (основная проблема решена)
+@media (max-width: 520px) {
   .heroSection {
     padding: 40px 16px 60px;
+
+    &::before {
+      width: 200px;
+      height: 200px;
+      right: -40%;
+      top: -30%;
+    }
+
+    &::after {
+      width: 150px;
+      height: 150px;
+      left: -30%;
+      bottom: -15%;
+    }
   }
-  
+
   .heroTitle {
     font-size: 24px;
   }
-  
+
   .heroText {
     font-size: 15px;
+    max-width: 100%;
   }
-  
+
   .badge {
     font-size: 12px;
     padding: 6px 14px;
   }
-  
-  .statsHeader{
+
+  .statsHeader {
     margin-bottom: 25px;
   }
+
   .statsSection {
     padding: 30px 16px 40px;
   }
-  
+
   .statsSubtitle {
     font-size: 15px;
   }
-  
-  .numberAbout{
+
+  .numberAbout {
     padding: 0;
+    gap: 12px;
+  }
+}
+
+// Очень маленькие экраны
+@media (max-width: 380px) {
+  .heroSection {
+    padding: 30px 12px 40px;
+
+    &::before {
+      width: 150px;
+      height: 150px;
+      right: -50%;
+    }
+
+    &::after {
+      width: 120px;
+      height: 120px;
+      left: -40%;
+    }
+  }
+
+  .heroTitle {
+    font-size: 20px;
+  }
+
+  .heroText {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .badge {
+    font-size: 11px;
+    padding: 4px 12px;
+    margin-bottom: 16px;
+  }
+
+  .statsSection {
+    padding: 20px 12px 30px;
+  }
+
+  .statsSubtitle {
+    font-size: 14px;
+  }
+
+  .numberAbout {
+    gap: 8px;
   }
 }

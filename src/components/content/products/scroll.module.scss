@@ -4,7 +4,9 @@
   justify-content: center;
 }
 
-.productsWrapper, .servicesWrapper, .shopWrapper {
+.productsWrapper,
+.servicesWrapper,
+.shopWrapper {
   position: relative;
   width: 100%;
   // max-width: 1400px;
@@ -33,7 +35,7 @@
 }
 
 /* Мобильные стили */
-@media (max-width: 535px) {
+@media (max-width: 630px) {
   .productsContainer {
     display: block;
   }
@@ -57,7 +59,7 @@
     padding-bottom: 15px;
     margin-bottom: 8px;
     width: 100%;
-    
+
     /* Скрываем скроллбар */
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -68,7 +70,7 @@
   }
 
   /* Каждая карточка занимает 100% ширины окна */
-  .cardsTrack > div {
+  .cardsTrack>div {
     flex: 0 0 100%;
     scroll-snap-align: center;
     min-width: 0;
@@ -78,7 +80,7 @@
   }
 
   /* Переопределяем стили карточки для мобильной версии */
-  .cardsTrack > div > div {
+  .cardsTrack>div>div {
     width: 100% !important;
     max-width: 400px !important;
     margin: 0 auto !important;
@@ -144,8 +146,7 @@
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin: 10px 0 20px;
-    padding: 0 20px;
+    padding: 15px 20px;
   }
 
   .dot {
@@ -188,7 +189,7 @@
 /* Для очень маленьких экранов */
 @media (max-width: 480px) {
   .cardsTrack {
-    padding: 20px 50px 30px;
+    padding: 20px 50px 10px;
   }
 
   .prevBtn,
@@ -210,7 +211,7 @@
   .dot {
     width: 8px;
     height: 8px;
-    
+
     &.active {
       width: 25px;
     }
