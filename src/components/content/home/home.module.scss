@@ -142,7 +142,7 @@
   max-width: 850px;
   margin: 25px 0 0;
 
-  font-size: clamp(43px, 5vw, 70px);
+  font-size: 42px;
   font-weight: 620;
   letter-spacing: -.065em;
   line-height: .98;
@@ -285,52 +285,6 @@
 
   box-shadow:
     0 20px 42px rgba(23, 105, 232, .25);
-}
-
-/* =========================================================
-   SECONDARY HERO CTA
-========================================================= */
-
-.secondaryButton {
-  min-height: 54px;
-
-  padding: 0 7px 0 20px;
-
-  border: 1px solid var(--line-dark);
-
-  background: rgba(255,255,255,.78);
-
-  color: var(--text);
-
-  backdrop-filter: blur(12px);
-}
-
-.secondaryButton b {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  width: 38px;
-  height: 38px;
-
-  border-radius: 50%;
-
-  background: var(--navy);
-  color: #fff;
-
-  font-weight: 400;
-}
-
-.secondaryButton:hover {
-  color: var(--accent);
-
-  border-color: rgba(23,105,232,.35);
-
-  transform: translateY(-3px);
-}
-
-.secondaryButton:hover b {
-  background: var(--accent);
 }
 
 /* =========================================================
@@ -787,18 +741,6 @@
   gap: clamp(70px, 11vw, 170px);
 }
 
-.overline {
-  display: block;
-
-  margin-bottom: 24px;
-
-  color: #9aa9b5;
-
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .15em;
-}
-
 .aboutMain {
   padding-top: 50px;
 }
@@ -833,11 +775,6 @@
 .aboutBottom {
   display: flex;
 
-  // grid-template-columns:
-  //   1fr
-  //   .06fr
-  //   .78fr;
-
   margin-top: 105px;
 
   border-top: 1px solid var(--line);
@@ -851,7 +788,7 @@
   padding: 28px 25px 0 0;
 }
 
-.experience > strong {
+.experience_number > strong {
   color: var(--accent);
 
   font-size: 74px;
@@ -892,6 +829,71 @@
   font-size: 11px;
   line-height: 1.6;
 }
+
+// .experienceBlock {
+//   position: relative;
+//   margin-top: 52px;
+//   padding-top: 4px;
+//   max-width: 560px;
+// }
+
+// .experienceLabel {
+//   margin-bottom: 4px;
+//   color: var(--muted);
+//   font-size: 15px;
+//   font-weight: 600;
+//   line-height: 1.2;
+//   letter-spacing: 0.04em;
+// }
+
+// .experienceMain {
+//   display: flex;
+//   align-items: flex-end;
+//   gap: 22px;
+// }
+
+// .experienceNumber {
+//   display: block;
+//   color: var(--navy);
+//   font-size: clamp(88px, 9vw, 138px);
+//   font-weight: 650;
+//   line-height: 0.78;
+//   letter-spacing: -0.075em;
+// }
+
+// .experienceCaption {
+//   display: flex;
+//   flex-direction: column;
+//   gap: 7px;
+//   padding-bottom: 5px;
+// }
+
+// .experienceCaption strong {
+//   color: var(--text);
+//   font-size: 22px;
+//   font-weight: 600;
+//   line-height: 1.1;
+//   letter-spacing: -0.025em;
+// }
+
+// .experienceCaption span {
+//   max-width: 180px;
+//   color: var(--muted);
+//   font-size: 10px;
+//   font-weight: 700;
+//   line-height: 1.35;
+//   letter-spacing: 0.12em;
+// }
+
+// .experienceText {
+//   max-width: 430px;
+//   margin: 28px 0 0;
+//   padding-top: 22px;
+//   border-top: 1px solid var(--line);
+//   color: var(--text-soft);
+//   font-size: 16px;
+//   line-height: 1.65;
+// }
 
 .career {
   width: 80%;
@@ -1211,26 +1213,6 @@
 
   box-shadow:
     0 25px 65px rgba(23,49,69,.07);
-}
-
-.mapLabel {
-  position: absolute;
-  z-index: 2;
-
-  top: 20px;
-  left: 22px;
-  right: 22px;
-
-  display: flex;
-  justify-content: space-between;
-
-  color: var(--navy);
-
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .14em;
-
-  pointer-events: none;
 }
 
 .map {
@@ -1777,9 +1759,6 @@
   position: relative;
 
   overflow: hidden;
-
-  border-top: 1px solid var(--line-dark);
-  border-bottom: 1px solid var(--line-dark);
 }
 
 .brands::before,
@@ -1837,14 +1816,10 @@
   width: 220px;
   height: 155px;
 
-  border-right: 1px solid var(--line);
+  // border-right: 1px solid var(--line);
 
   transition:
     background .25s ease;
-}
-
-.brand:hover {
-  background: rgba(255,255,255,.8);
 }
 
 .brand img {
@@ -2358,13 +2333,6 @@
   .aboutLayout {
     display: block;
   }
-
-  .overline {
-    margin-bottom: 15px;
-
-    font-size: 8px;
-  }
-
   .aboutMain {
     padding-top: 28px;
   }
@@ -2591,15 +2559,6 @@
 
   .map {
     min-height: 310px;
-  }
-
-  .mapLabel {
-    top: 13px;
-
-    left: 14px;
-    right: 14px;
-
-    font-size: 7px;
   }
 
   /* =======================================================

@@ -132,12 +132,9 @@ export const Home = memo(() => {
               <span className={Styles.liveDot} />
               <span>ООО ИПП «Новые Технологии»</span>
               <i />
-              <span>ENGINEERING</span>
             </div>
 
             <div className={Styles.heroHeading}>
-              {/* <span className={Styles.heroIndex}>01 / 06</span> */}
-
               <h1>
                 Инженерные
                 <br />
@@ -161,20 +158,11 @@ export const Home = memo(() => {
                 <span>Смотреть решения</span>
                 <b>↗</b>
               </button>
-
-              <button
-                type="button"
-                className={Styles.secondaryButton}
-                onClick={() => handleScrollTo('faq')}
-              >
-                <span>Обсудить проект</span>
-                <b>→</b>
-              </button>
             </div>
 
             <div className={Styles.heroStats}>
               <div>
-                <strong>15+</strong>
+                <strong>20+</strong>
                 <span>лет в отрасли</span>
               </div>
 
@@ -203,17 +191,17 @@ export const Home = memo(() => {
               <div className={Styles.heroImageShade} />
 
               <div className={Styles.heroCoordinates}>
-                <span>NT / 2026</span>
-                <span>UFA / RUSSIA</span>
+                <span>НТ/ 2026</span>
+                <span>Уфа / Россия</span>
               </div>
 
               <div className={Styles.heroImageLabel}>
                 <i />
-                <span>TECHNICAL SOLUTIONS</span>
+                <span>Технические решения</span>
               </div>
 
               <div className={Styles.heroFloatingCard}>
-                <span>FULL CYCLE</span>
+                <span>Полный цикл</span>
 
                 <strong>
                   От задачи
@@ -267,14 +255,8 @@ export const Home = memo(() => {
 
           <div className={Styles.aboutLayout}>
             <div>
-              <span className={Styles.overline}>
-                ENGINEERING / INDUSTRY
-              </span>
-
               <h2 className={Styles.sectionTitle}>
-                Технологии,
-                <br />
-                которые работают
+                Технологии, которые работают
                 <em>на результат.</em>
               </h2>
             </div>
@@ -306,7 +288,11 @@ export const Home = memo(() => {
 
           <div className={Styles.aboutBottom}>
             <div className={Styles.experience}>
-              <strong>15</strong>
+              <div className={Styles.experience_number}>
+                <span>Более</span>
+                <strong>20</strong>
+              </div>
+              
 
               <div>
                 <span>ПРАКТИЧЕСКИЙ ОПЫТ</span>
@@ -323,6 +309,23 @@ export const Home = memo(() => {
                 </p>
               </div>
             </div>
+            {/* <div className={Styles.experienceBlock}>
+              <div className={Styles.experienceLabel}>Более</div>
+
+              <div className={Styles.experienceMain}>
+                <span className={Styles.experienceNumber}>20</span>
+
+                <div className={Styles.experienceCaption}>
+                  <strong>лет работы</strong>
+                  <span>ПРАКТИЧЕСКИЙ ОПЫТ В ОТРАСЛИ</span>
+                </div>
+              </div>
+
+              <p className={Styles.experienceText}>
+                Работаем там, где важны точность, надёжность и предсказуемый результат.
+              </p>
+            </div> */}
+
 
             <button
               type="button"
@@ -355,10 +358,10 @@ export const Home = memo(() => {
 
             <div className={Styles.capabilityGrid}>
               {[
-                ['01', 'Добыча', 'Технические решения для производственных задач объектов добычи.'],
-                ['02', 'Подготовка', 'Оборудование и решения для технологических процессов подготовки.'],
-                ['03', 'Транспортировка', 'Решения для задач транспортировки углеводородов и работы объекта.'],
-                ['04', 'Сервис', 'Техническое сопровождение и поддержка на протяжении жизненного цикла.'],
+                ['01', 'Оборудование для добычи', 'Технические решения для производственных задач объектов добычи.'],
+                ['02', 'Оборудование для подготовки', 'Оборудование и решения для технологических процессов подготовки.'],
+                ['03', 'Оборудование для транспортировки', 'Решения для задач транспортировки углеводородов и работы объекта.'],
+                ['04', 'Сервисные услуги', 'Техническое сопровождение и поддержка на протяжении жизненного цикла.'],
               ].map(([number, title, text]) => (
                 <article
                   className={Styles.capability}
@@ -394,9 +397,7 @@ export const Home = memo(() => {
               </div>
 
               <h2 className={Styles.sectionTitle}>
-                Работаем там,
-                <br />
-                где нужны
+                Работаем там, где нужны
                 <em>решения.</em>
               </h2>
             </div>
@@ -422,7 +423,7 @@ export const Home = memo(() => {
                 </div>
 
                 <div>
-                  <strong>100+</strong>
+                  <strong>200+</strong>
                   <span>проектов</span>
                 </div>
               </div>
@@ -435,16 +436,9 @@ export const Home = memo(() => {
                 <span>Обсудить поставку</span>
                 <b>→</b>
               </button>
-
-              <small>RUSSIA + CIS / DELIVERY</small>
             </div>
 
             <div className={Styles.mapFrame}>
-              <div className={Styles.mapLabel}>
-                <span>DELIVERY MAP</span>
-                <span>LIVE / PROJECTS</span>
-              </div>
-
               <iframe
                 src="https://yandex.ru/map-widget/v1/?um=constructor%3A1b8f65f94a276e996aad834e0a7f72466019818dd5d59a5f194f1d391a7e68ac&source=constructor"
                 title="Карта географии поставок"
@@ -472,10 +466,8 @@ export const Home = memo(() => {
               </div>
 
               <h2 className={Styles.sectionTitle}>
-                От оборудования
-                <br />
-                до
-                <em>комплексного решения.</em>
+                От производства оборудования до
+                <em>реализации проекта.</em>
               </h2>
             </div>
 
@@ -507,14 +499,14 @@ export const Home = memo(() => {
 
                 <div className={Styles.solutionShade} />
 
-                <span>01 / PRODUCTS</span>
+                <span>01 / Продукция</span>
 
                 <b>↗</b>
               </div>
 
               <div className={Styles.solutionContent}>
                 <div>
-                  <small>PRODUCTS</small>
+                  <small>Продукция</small>
 
                   <h3>Оборудование</h3>
 
@@ -551,14 +543,14 @@ export const Home = memo(() => {
 
                 <div className={Styles.solutionShade} />
 
-                <span>02 / SERVICES</span>
+                <span>02 / Сервис</span>
 
                 <b>↗</b>
               </div>
 
               <div className={Styles.solutionContent}>
                 <div>
-                  <small>SERVICES</small>
+                  <small>Сервис</small>
 
                   <h3>Услуги</h3>
 
@@ -594,9 +586,7 @@ export const Home = memo(() => {
               </div>
 
               <h2 className={Styles.sectionTitle}>
-                Четыре принципа,
-                <br />
-                на которых держится
+                Четыре принципа, на которых держится
                 <em>работа.</em>
               </h2>
             </div>
@@ -644,9 +634,7 @@ export const Home = memo(() => {
               </div>
 
               <h2 className={Styles.sectionTitle}>
-                Важное —
-                <br />
-                коротко и
+                Важное — коротко и
                 <em>по делу.</em>
               </h2>
             </div>
@@ -681,7 +669,7 @@ export const Home = memo(() => {
                 <span>СОБЫТИЯ</span>
               </div>
 
-              <small>INDUSTRY / EVENT</small>
+              <small>Отрасль / Мероприятие</small>
 
               <h3>
                 ООО ИПП «Новые Технологии»
@@ -753,8 +741,8 @@ export const Home = memo(() => {
           </div>
 
           <div className={Styles.clientsBottom}>
-            <span>LONG-TERM PARTNERSHIPS</span>
-            <span>TRUST / QUALITY / EXPERTISE</span>
+            <span>Долгосрочное партнерство</span>
+            <span>Доверие / Качество / Экспертиза</span>
           </div>
         </div>
       </section>
@@ -772,7 +760,7 @@ export const Home = memo(() => {
             <div className={Styles.faqIntro}>
               <div className={Styles.kicker}>
                 <span>08</span>
-                <b>FAQ</b>
+                <b>Вопросы</b>
               </div>
 
               <h2 className={Styles.sectionTitle}>
