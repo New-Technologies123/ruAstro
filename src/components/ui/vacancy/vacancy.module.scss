@@ -1,138 +1,503 @@
+/* =========================================================
+   VACANCY CARD
+   ========================================================= */
+
 .employeeVacancy {
-  background-color: #44c1ff;
-  padding: 10px 15px;
-  width: 350px;
-  color: #000000;
-  text-align: center;
-  border-radius: 8px;
-  cursor: pointer;
   position: relative;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-height: 170px;
+
+  padding: 26px;
+
+  border: 1px solid #e4e9f0;
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #fbfcfe 100%
+    );
+
+  color: #101828;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  appearance: none;
+  -webkit-appearance: none;
+
+  font: inherit;
+
   overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.025);
+
   transform: translateY(0);
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  animation: fadeInUp 0.8s ease-out forwards;
-  h3{
-    font-size: 20px;
-    font-weight: bold;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-    position: relative;
-    z-index: 1;
-  }
-  p {
-    font-size: 18px;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-  }
-  
-  // Эффект "пульсации" при наведении
+
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+
+  /*
+   * Лёгкий декоративный свет
+   * появляется только при наведении.
+   */
   &::before {
     content: '';
+
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    transform: scale(0);
-    border-radius: 8px;
-    transition: transform 0.6s ease-out;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: 0;
+
+    background:
+      radial-gradient(
+        circle at 100% 0%,
+        rgba(20, 85, 217, 0.07),
+        transparent 42%
+      );
+
+    transition: opacity 0.35s ease;
   }
-  
-  &:hover {
-    transform: scale(1.06) translateY(-5px);
-    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);    
-    &::before {
-      transform: scale(1);
-    }    
-    h3 {
-      color: #ffffffde;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-    }
+
+  /*
+   * Тонкая синяя линия снизу.
+   * В обычном состоянии скрыта.
+   */
+  &::after {
+    content: '';
+
+    position: absolute;
+
+    left: 26px;
+    right: 26px;
+    bottom: 0;
+
+    height: 2px;
+
+    border-radius: 2px 2px 0 0;
+
+    background: #1455d9;
+
+    transform: scaleX(0);
+    transform-origin: left;
+
+    transition:
+      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgba(20, 85, 217, 0.16);
+    outline-offset: 3px;
   }
 }
 
-// Анимация появления
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@media (max-width: 1400px){
-  .employeeVacancy{
-    width: 320px;
-    h3{
-      font-size: 19px;
-    }
-    p{
-      font-size: 17px;
-    }
-  }
-}
+/* =========================================================
+   DESKTOP HOVER
+   ========================================================= */
 
-@media (max-width: 1020px) {
-  .employeeVacancy {
-    width: 300px;
-    animation: fadeInUp 0.6s ease-out forwards;
-    h3{
-      font-size: 18px;
-    }
-    p {
-      font-size: 16px;
-    }
-    &:hover {
-      transform: scale(1.05) translateY(-3px);
-    }
-  }
-}
+/*
+ * Очень важно:
+ * hover работает только на устройствах,
+ * где действительно есть мышь/трекпад.
+ *
+ * Это предотвращает "залипание" hover
+ * после возврата назад на мобильных.
+ */
 
-@media (max-width: 800px){
-  .employeeVacancy{
-    width: 260px;
-    h3{
-      font-size: 17px;
-    }
-    p{
-      font-size: 15px;
-    }
-  }
-}
+@media (hover: hover) and (pointer: fine) {
+  .employeeVacancy:hover {
+    transform: translateY(-4px);
 
-@media (max-width: 500px) {
-  .employeeVacancy {
-    // width: 245px;
-    h3{
-      font-size: 16px;
-    }
-    p {
-      font-size: 14px;
-    }
+    border-color: #d0dbea;
+
+    background:
+      linear-gradient(
+        145deg,
+        #ffffff 0%,
+        #f9fbff 100%
+      );
+
+    box-shadow:
+      0 18px 42px rgba(16, 35, 70, 0.075),
+      0 4px 12px rgba(16, 35, 70, 0.035);
+
     &::before {
-      background: none;
-      transform: none;
-      transition: none;
+      opacity: 1;
     }
-    &:hover {
-      transform: none;
-      box-shadow: none;    
-      &::before {
-        transform: none;
-      }    
-      h3 {
-        color: #000000;
-        text-shadow: none;
-      }
+
+    &::after {
+      transform: scaleX(1);
     }
+
+    .arrow {
+      color: #ffffff;
+
+      background: #1455d9;
+
+      border-color: #1455d9;
+
+      transform: translate(2px, -2px);
+
+      box-shadow:
+        0 8px 18px rgba(20, 85, 217, 0.18);
+    }
+
+    .header h3 {
+      color: #0d3f9e;
+    }
+
+    .details span {
+      color: #64748b;
+    }
+
+    .details span::before {
+      background: #6d95db;
+
+      transform: scale(1.15);
+    }
+  }
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  gap: 22px;
+
+  margin-bottom: 18px;
+}
+
+.header h3 {
+  margin: 0;
+
+  max-width: calc(100% - 58px);
+
+  color: #10213f;
+
+  font-size: 18px;
+  line-height: 1.32;
+
+  font-weight: 650;
+
+  letter-spacing: -0.025em;
+
+  transition:
+    color 0.25s ease;
+}
+
+
+/* =========================================================
+   ARROW
+   ========================================================= */
+
+.arrow {
+  position: relative;
+
+  display: grid;
+  place-items: center;
+
+  width: 38px;
+  height: 38px;
+
+  flex: 0 0 38px;
+
+  border: 1px solid #e1e7ef;
+  border-radius: 11px;
+
+  background: #f8fafc;
+
+  color: #68778e;
+
+  font-size: 17px;
+  font-weight: 500;
+
+  line-height: 1;
+
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    color 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+
+/* =========================================================
+   DETAILS
+   ========================================================= */
+
+.details {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.details span {
+  position: relative;
+
+  padding-left: 14px;
+
+  color: #718096;
+
+  font-size: 12px;
+  line-height: 1.45;
+
+  transition:
+    color 0.25s ease;
+}
+
+.details span::before {
+  content: '';
+
+  position: absolute;
+
+  left: 0;
+  top: 7px;
+
+  width: 4px;
+  height: 4px;
+
+  border-radius: 50%;
+
+  background: #b9c4d3;
+
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+
+/* =========================================================
+   TABLET / SMALL DESKTOP
+   ========================================================= */
+
+@media (max-width: 1200px) {
+  .employeeVacancy {
+    min-height: 160px;
+
+    padding: 23px;
+
+    border-radius: 18px;
+  }
+
+  .header {
+    margin-bottom: 15px;
+  }
+
+  .header h3 {
+    font-size: 17px;
+  }
+
+  .arrow {
+    width: 36px;
+    height: 36px;
+
+    flex-basis: 36px;
+  }
+
+  .employeeVacancy::after {
+    left: 23px;
+    right: 23px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .employeeVacancy {
+    min-height: 0;
+
+    padding: 20px;
+
+    border-radius: 17px;
+
+    /*
+     * Нейтральное состояние на мобильном.
+     *
+     * Нет постоянной синей рамки,
+     * нет постоянной синей полосы,
+     * нет усиленной тени.
+     */
+    box-shadow:
+      0 4px 16px rgba(16, 35, 70, 0.035);
+
+    &::before {
+      display: none;
+    }
+
+    &::after {
+      left: 20px;
+      right: 20px;
+
+      height: 2px;
+
+      transform: scaleX(0);
+    }
+
+    &:active {
+      transform: scale(0.99);
+
+      box-shadow:
+        0 5px 14px rgba(16, 35, 70, 0.05);
+    }
+  }
+
+  .header {
+    gap: 14px;
+    margin-bottom: 0;
+  }
+
+  .header h3 {
+    max-width: calc(100% - 48px);
+
+    font-size: 16px;
+    line-height: 1.35;
+  }
+
+  .arrow {
+    width: 33px;
+    height: 33px;
+
+    flex-basis: 33px;
+
+    border-radius: 9px;
+
+    font-size: 15px;
+  }
+
+  .details {
+    gap: 7px;
+  }
+
+  .details span {
+    padding-left: 13px;
+
+    color: #758398;
+
+    font-size: 11px;
+  }
+
+  .details span::before {
+    top: 6px;
+
+    width: 3px;
+    height: 3px;
+  }
+}
+
+
+/* =========================================================
+   MOBILE HOVER
+   ========================================================= */
+
+/*
+ * На устройствах с мышью hover уже обрабатывается
+ * в отдельном media-query выше.
+ *
+ * Здесь намеренно НЕ задаём :hover.
+ *
+ * Поэтому:
+ * - iPhone не получает "залипший" hover;
+ * - Android не получает "залипший" hover;
+ * - после возврата назад карточка спокойная;
+ * - настоящий desktop hover продолжает работать.
+ */
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+  .employeeVacancy {
+    padding: 18px;
+
+    border-radius: 16px;
+
+    box-shadow:
+      0 4px 15px rgba(16, 35, 70, 0.03);
+  }
+
+  .header {
+    gap: 12px;
+  }
+
+  .header h3 {
+    font-size: 15.5px;
+  }
+
+  .arrow {
+    width: 32px;
+    height: 32px;
+
+    flex-basis: 32px;
+
+    font-size: 14px;
+  }
+
+  .details span {
+    font-size: 10.5px;
+  }
+
+  .employeeVacancy::after {
+    left: 18px;
+    right: 18px;
+  }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .employeeVacancy,
+  .arrow,
+  .header h3,
+  .details span,
+  .details span::before {
+    transition: none;
+  }
+
+  .employeeVacancy::before,
+  .employeeVacancy::after {
+    transition: none;
   }
 }

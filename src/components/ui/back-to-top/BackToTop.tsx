@@ -1,62 +1,101 @@
-import { useEffect, useRef, useState } from "react";
-import Styles from "./back-to-top.module.scss";
-import up from "../../../images/arrow.svg";
+import { useEffect, useState } from 'react';
+import Styles from './back-to-top.module.scss';
+import up from '../../../images/arrow.svg';
 
 export const BackToTop = () => {
-  const btnRef = useRef<HTMLButtonElement>(null);
   const [visible, setVisible] = useState(false);
-  const rafRef = useRef<number | null>(null);
+  const [bottomOffset, setBottomOffset] = useState(24);
 
   useEffect(() => {
-    const footer = document.querySelector("footer");
-    if (!footer || !btnRef.current) return;
+    const updateButton = () => {
+      const footer = document.querySelector('footer');
 
-    const updatePosition = () => {
-      if (!btnRef.current) return;
-      const footerRect = footer.getBoundingClientRect();
-      const vh = window.innerHeight;
+      setVisible(window.scrollY > 400);
 
-      const baseOffset = parseFloat(
-        getComputedStyle(btnRef.current).getPropertyValue("offset") || "25"
-      );
-
-      let bottom = baseOffset;
-
-      if (footerRect.top < vh) {
-        bottom = vh - footerRect.top + baseOffset;
+      if (!footer) {
+        setBottomOffset(24);
+        return;
       }
 
-      btnRef.current.style.bottom = `${bottom}px`;
-      rafRef.current = requestAnimationFrame(updatePosition);
+      const footerRect = footer.getBoundingClientRect();
+      const buttonSize = window.innerWidth <= 500
+        ? 44
+        : window.innerWidth <= 850
+          ? 48
+          : 52;
+
+      const defaultOffset =
+        window.innerWidth <= 500
+          ? 16
+          : window.innerWidth <= 850
+            ? 20
+            : 24;
+
+      /*
+       * Пока футер ниже экрана — обычное положение.
+       *
+       * Когда футер начинает появляться,
+       * поднимаем кнопку так, чтобы она оставалась
+       * над футером.
+       */
+      const distanceToFooter =
+        window.innerHeight - footerRect.top;
+
+      if (distanceToFooter > 0) {
+        setBottomOffset(
+          Math.max(
+            defaultOffset,
+            distanceToFooter + defaultOffset
+          )
+        );
+      } else {
+        setBottomOffset(defaultOffset);
+      }
     };
 
-    const checkVisibility = () => {
-      setVisible(window.scrollY > 300);
-      rafRef.current = requestAnimationFrame(checkVisibility);
-    };
+    updateButton();
 
-    rafRef.current = requestAnimationFrame(updatePosition);
-    requestAnimationFrame(checkVisibility);
+    window.addEventListener('scroll', updateButton, {
+      passive: true,
+    });
+
+    window.addEventListener('resize', updateButton);
 
     return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
+      window.removeEventListener('scroll', updateButton);
+      window.removeEventListener('resize', updateButton);
     };
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   return (
     <button
-      ref={btnRef}
+      type="button"
       onClick={scrollToTop}
-      className={`${Styles.backToTop} ${visible ? Styles.visible : ""}`}
+      className={`${Styles.backToTop} ${
+        visible ? Styles.visible : ''
+      }`}
+      style={{
+        bottom: `${bottomOffset}px`,
+      }}
       aria-label="Наверх"
+      aria-hidden={!visible}
+      tabIndex={visible ? 0 : -1}
     >
-      <img src={up.src} alt="" className={Styles.icon} />
+      <span className={Styles.iconWrap}>
+        <img
+          src={up.src}
+          alt=""
+          className={Styles.icon}
+          aria-hidden="true"
+        />
+      </span>
     </button>
   );
 };

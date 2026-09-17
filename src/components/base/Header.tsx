@@ -1,8 +1,8 @@
 import Styles from './header.module.scss';
 import logoRu from '../../images/logo_ru.webp';
 
-import menuIcon from '../../images/header/menu.svg';
-import cross from '../../images/header/cross.svg';
+import menuIcon from '../../images/menu.svg';
+import cross from '../../images/cross.svg';
 import location from '../../images/location.svg';
 import email from '../../images/email.svg';
 import phone from '../../images/phone.svg';
@@ -25,7 +25,7 @@ const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId 
 
   // Create a unique ID for the menu item
   const itemId = item.url || item.title;
-  
+
   // Create full path for identification (for nested items)
   const fullId = parentId ? `${parentId}-${itemId}` : itemId;
 
@@ -38,16 +38,16 @@ const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId 
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    
+
     if (!isMobile) return; // Ignore on desktop
-    
+
     if (isOpen) {
       // If already open - close only this item
       setOpenItems((prev: string[]) => prev.filter((id: string) => id !== fullId));
     } else {
       // If closed - open this item and close all others at this level
       const newOpenItems: string[] = [];
-      
+
       // Add all parent items (if any)
       if (parentId) {
         const parentParts = parentId.split('-');
@@ -59,10 +59,10 @@ const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId 
           }
         }
       }
-      
+
       // Add the current item
       newOpenItems.push(fullId);
-      
+
       setOpenItems(newOpenItems);
     }
   };
@@ -70,7 +70,7 @@ const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId 
   // 🔹 Check if active: current item OR any child
   const isActive = (() => {
     if (item.pageType === pageType) return true;
-    
+
     if (item.children) {
       for (const child of item.children) {
         if (child.pageType === pageType) return true;
@@ -81,7 +81,7 @@ const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId 
         }
       }
     }
-    
+
     return false;
   })();
 
@@ -152,7 +152,7 @@ export const Header = ({ pageType }: { pageType: string }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   const onToggleMobileMenu = () => {
-     setIsActiveMobileMenu((prev: boolean) => {
+    setIsActiveMobileMenu((prev: boolean) => {
       const next = !prev;
 
       if (!next) {
@@ -170,7 +170,7 @@ export const Header = ({ pageType }: { pageType: string }) => {
     const checkMobile = () => {
       const mobile = window.innerWidth <= 1000;
       setIsMobile(mobile);
-      
+
       // If desktop - reset openItems
       if (!mobile) {
         setOpenItems([]);
@@ -292,14 +292,14 @@ export const Header = ({ pageType }: { pageType: string }) => {
           </li>
 
           {menuData.map((item, index) => (
-            <MenuItem 
-              key={index} 
-              item={item} 
+            <MenuItem
+              key={index}
+              item={item}
               pageType={pageType}
               isMobile={isMobile}
               openItems={openItems}
               setOpenItems={setOpenItems}
-              // parentId не передаем для корневых элементов
+            // parentId не передаем для корневых элементов
             />
           ))}
 

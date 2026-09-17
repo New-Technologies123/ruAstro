@@ -1,82 +1,175 @@
+/* =========================================================
+   BACK TO TOP — TECH-NEW 2026
+   ========================================================= */
+
 .backToTop {
-  offset: 25px;
+  --size: 52px;
+  --left-offset: 24px;
 
   position: fixed;
-  // right: 102px;
-  left: 25px;
-  bottom: var(offset);
+  left: var(--left-offset);
 
-  width: 56px;
-  height: 56px;
-  border-radius: 18px;
+  width: var(--size);
+  height: var(--size);
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: linear-gradient(
-    135deg,
-    rgb(65, 166, 248),
-    rgba(19, 61, 197, 0.9)
-  );
+  padding: 0;
 
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
 
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: #1455d9;
+
   box-shadow:
-    0 10px 30px rgba(9, 46, 255, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    0 10px 24px rgba(20, 85, 217, 0.24),
+    0 3px 8px rgba(11, 37, 91, 0.12);
 
   cursor: pointer;
-  z-index: 9;
+
+  z-index: 5;
 
   opacity: 0;
-  transform: translateY(12px) scale(0.9);
+  visibility: hidden;
   pointer-events: none;
 
+  transform: translateY(10px);
+
   transition:
-    opacity 0.35s ease,
+    opacity 0.3s ease,
+    visibility 0.3s ease,
     transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.3s ease,
-    background 0.3s ease;
+    background 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+
+  -webkit-tap-highlight-color: transparent;
 }
+
+/* =========================================================
+   SUBTLE INNER LIGHT
+   ========================================================= */
+
+.backToTop::before {
+  content: '';
+
+  position: absolute;
+  inset: 1px;
+
+  border-radius: 15px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255, 255, 255, 0.14),
+      rgba(255, 255, 255, 0) 48%
+    );
+
+  pointer-events: none;
+}
+
+/* =========================================================
+   VISIBLE
+   ========================================================= */
 
 .visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  visibility: visible;
   pointer-events: auto;
+
+  transform: translateY(0);
 }
 
-.backToTop:hover {
-  box-shadow:
-    0 14px 40px rgba(60, 90, 255, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  transform: translateY(-2px) scale(1.05);
-}
+/* =========================================================
+   ICON
+   ========================================================= */
 
-.backToTop:active {
-  transform: scale(0.96);
+.iconWrap {
+  position: relative;
+  z-index: 1;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: inherit;
 }
 
 .icon {
-  width: 22px;
-  height: 22px;
+  width: 19px;
+  height: 19px;
+
+  object-fit: contain;
+
   filter: brightness(0) invert(1);
-  transition: transform 0.3s ease;
+
+  transition:
+    transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.backToTop:hover .icon {
-  transform: translateY(-2px);
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+  .backToTop:hover {
+    background: #0f46bd;
+
+    border-color: rgba(255, 255, 255, 0.25);
+
+    box-shadow:
+      0 14px 32px rgba(20, 85, 217, 0.3),
+      0 5px 12px rgba(11, 37, 91, 0.14);
+
+    transform: translateY(-3px);
+  }
+
+  .backToTop:hover .icon {
+    transform: translateY(-2px);
+  }
 }
 
-/* mobile */
+/* =========================================================
+   ACTIVE
+   ========================================================= */
+
+.backToTop:active {
+  transform: translateY(0) scale(0.94);
+
+  box-shadow:
+    0 6px 14px rgba(20, 85, 217, 0.2);
+}
+
+/* =========================================================
+   FOCUS
+   ========================================================= */
+
+.backToTop:focus-visible {
+  outline: none;
+
+  box-shadow:
+    0 0 0 3px rgba(20, 85, 217, 0.18),
+    0 10px 24px rgba(20, 85, 217, 0.24);
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
 @media (max-width: 850px) {
   .backToTop {
-    offset: 15px;
-    left: 20px;
-    width: 48px;
-    height: 48px;
+    --size: 48px;
+    --left-offset: 20px;
+
+    border-radius: 15px;
+  }
+
+  .backToTop::before {
     border-radius: 14px;
   }
 
@@ -86,15 +179,61 @@
   }
 }
 
-@media (max-width: 500px){
-    .backToTop{
-        offset: 10px;
-        left: 15px;
-        width: 40px;
-        height: 40px;
-    }
-    .upIcon{
-        width: 14px;
-        height: 14px;
-    }
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 500px) {
+  .backToTop {
+    --size: 44px;
+    --left-offset: 16px;
+
+    border-radius: 14px;
+  }
+
+  .backToTop::before {
+    border-radius: 13px;
+  }
+
+  .icon {
+    width: 17px;
+    height: 17px;
+  }
+}
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 360px) {
+  .backToTop {
+    --size: 42px;
+    --left-offset: 14px;
+
+    border-radius: 13px;
+  }
+
+  .icon {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .backToTop,
+  .icon {
+    transition: none;
+  }
+
+  .backToTop {
+    transform: none;
+  }
+
+  .visible {
+    transform: none;
+  }
 }

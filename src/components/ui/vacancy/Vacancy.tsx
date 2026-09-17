@@ -8,14 +8,45 @@ type TVacancyProps = {
   onClick?: () => void;
 };
 
-export const Vacancy = ({ title, header, experience, employmentType, onClick,}: TVacancyProps) => {
+export const Vacancy = ({
+  title,
+  header,
+  experience,
+  employmentType,
+  onClick,
+}: TVacancyProps) => {
+  const handleClick = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+
+    onClick?.();
+  };
 
   return (
-    <div className={Styles.employeeVacancy} onClick={onClick}>
-      <h3>{header}</h3>
-      <p>{title}</p>
-      <p>{experience}</p>
-      <p>{employmentType}</p>
-    </div>
+    <button
+      type="button"
+      className={Styles.employeeVacancy}
+      onClick={handleClick}
+    >
+      <div className={Styles.header}>
+        <h3>{header}</h3>
+
+        <span
+          className={Styles.arrow}
+          aria-hidden="true"
+        >
+          ↗
+        </span>
+      </div>
+
+      <div className={Styles.details}>
+        {title && <span>{title}</span>}
+
+        {experience && <span>{experience}</span>}
+
+        {employmentType && <span>{employmentType}</span>}
+      </div>
+    </button>
   );
 };
