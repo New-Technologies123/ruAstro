@@ -11,6 +11,7 @@ import news_10 from '../../../images/news/news_10.webp';
 import news_11 from '../../../images/news/news_11.jpg';
 import news_12 from '../../../images/news/news_12.webp';
 import news_13 from '../../../images/news/news_13.webp';
+import news_14 from '../../../images/news/news_15.png';
 
 export type TPhoto = {
   id: number;
@@ -32,6 +33,21 @@ export const NEWS_DATA: TNewsItem[] = [
   {
     id: 1,
     category: 'Выставка',
+    date: 'Сентябрь 2026',
+    title: 'Приглашение в KIOGE 2026',
+    description: 'Приглашаем посетить наш стенд на выставке KIOGE 2026 в Казахстане',
+    photos: [
+      { id: 1, src: news_14.src, alt: 'KIOGE 2026' }
+    ],
+    content: [
+      'ООО ИПП «Новые Технологии» примет участие в международной выставке «Нефть и газ» KIOGE 2026, которая пройдет с 30 сентября по 2 октября 2026 года в Алматы. Приглашаем посетить наш стенд, чтобы обсудить решения для измерения, учета и подготовки продукции скважин, включая АГЗУ, мобильные замерные установки, оборудование и комплектующие для нефтегазовых объектов.',
+      'На стенде специалисты компании расскажут о выпускаемой продукции, вариантах комплектации и технических возможностях оборудования, а также представят новинку — мобильную замерную установку на прицепе. Будем рады обсудить ваши потребности и подобрать решение для конкретного проекта.',
+      'Ждем вас на стенде № 11-258/1, павильон № 11: КЦДС «Атакент», Алматы, ул. Тимирязева, 42. Получите бесплатный билет на сайте KIOGE по промокоду OILTJJ4NMX.'
+    ]
+  },
+  {
+    id: 2,
+    category: 'Выставка',
     date: 'Март 2026',
     title: 'Участие в EGYPES 2026',
     description: 'Успешное участие в выставке Egypt Energy Show в Каире',
@@ -51,7 +67,7 @@ export const NEWS_DATA: TNewsItem[] = [
     ]
   },
   {
-    id: 2,
+    id: 3,
     category: 'Партнерство',
     date: 'Декабрь 2025',
     title: 'Включение в список SOCAR',
@@ -66,7 +82,7 @@ export const NEWS_DATA: TNewsItem[] = [
     ]
   },
   {
-    id: 3,
+    id: 4,
     category: 'Выставка',
     date: 'Ноябрь 2025',
     title: 'Участие в ADIPEC-2025',
@@ -83,7 +99,7 @@ export const NEWS_DATA: TNewsItem[] = [
     ]
   },
   {
-    id: 4,
+    id: 5,
     category: 'Выставка',
     date: 'Июнь 2025',
     title: 'Caspian Oil & Gas 2025',
@@ -98,7 +114,7 @@ export const NEWS_DATA: TNewsItem[] = [
     ]
   },
   {
-    id: 5,
+    id: 6,
     category: 'Экология',
     date: 'Июнь 2025',
     title: 'Посадка деревьев в Баку',
@@ -113,7 +129,7 @@ export const NEWS_DATA: TNewsItem[] = [
     ]
   },
   {
-    id: 6,
+    id: 7,
     category: 'Награда',
     date: 'Март 2025',
     title: 'Награждение генерального директора',
@@ -126,7 +142,7 @@ export const NEWS_DATA: TNewsItem[] = [
     ]
   },
   {
-    id: 7,
+    id: 8,
     category: 'Выставка',
     date: 'Сентябрь 2024',
     title: 'Участие в KIOGE 2024',
@@ -140,7 +156,7 @@ export const NEWS_DATA: TNewsItem[] = [
     ]
   },
   {
-    id: 8,
+    id: 9,
     category: 'Награда',
     date: '2022',
     title: '2 место в конкурсе «Экспортер года»',

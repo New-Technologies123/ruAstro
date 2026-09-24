@@ -3,18 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 import { Basket } from '../../ui/basket/Basket';
 import { Order } from '../../ui/order/Order';
-import { CartButton } from '../../ui/cart-button/CartButton';
 
 import Styles from './global-cart.module.scss';
 
-
 type CartMode = 'cart' | 'order';
-
 
 export const GlobalCart = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<CartMode>('cart');
-
 
   /* =========================================================
      GLOBAL CART EVENT
@@ -23,37 +19,29 @@ export const GlobalCart = () => {
   useEffect(() => {
     const handler = () => {
       setMode('cart');
-      setIsOpen(prev => !prev);
+      setIsOpen(true);
     };
 
     window.addEventListener(
       'toggleGlobalCart',
-      handler
+      handler,
     );
 
     return () => {
       window.removeEventListener(
         'toggleGlobalCart',
-        handler
+        handler,
       );
     };
   }, []);
 
-
   /* =========================================================
-     OPEN / CLOSE
+     CLOSE
      ========================================================= */
-
-  const openCart = () => {
-    setMode('cart');
-    setIsOpen(true);
-  };
-
 
   const closeCart = () => {
     setIsOpen(false);
   };
-
 
   /* =========================================================
      ESC
@@ -64,7 +52,9 @@ export const GlobalCart = () => {
       return;
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (
+      event: KeyboardEvent,
+    ) => {
       if (event.key === 'Escape') {
         closeCart();
       }
@@ -72,17 +62,16 @@ export const GlobalCart = () => {
 
     window.addEventListener(
       'keydown',
-      handleKeyDown
+      handleKeyDown,
     );
 
     return () => {
       window.removeEventListener(
         'keydown',
-        handleKeyDown
+        handleKeyDown,
       );
     };
   }, [isOpen]);
-
 
   /* =========================================================
      BODY SCROLL LOCK
@@ -113,108 +102,83 @@ export const GlobalCart = () => {
     };
   }, [isOpen]);
 
-
   return (
-    <>
-      {/* =====================================================
-          GLOBAL CART BUTTON
-          ===================================================== */}
+    <AnimatePresence mode="wait">
+      {isOpen && (
+        <>
+          {/* =================================================
+              BACKDROP
+              ================================================= */}
 
-      <CartButton
-        goToBasket={openCart}
-      />
+          <motion.div
+            className={Styles.backdrop}
+            initial={{
+              opacity: 0,
+            }}
+            animate={{
+              opacity: 1,
+            }}
+            exit={{
+              opacity: 0,
+            }}
+            transition={{
+              duration: 0.25,
+              ease: 'easeOut',
+            }}
+            onClick={closeCart}
+            aria-hidden="true"
+          />
 
+          {/* =================================================
+              PANEL
+              ================================================= */}
 
-      <AnimatePresence mode="wait">
+          <motion.aside
+            className={Styles.panel}
+            initial={{
+              x: '100%',
+            }}
+            animate={{
+              x: 0,
+            }}
+            exit={{
+              x: '100%',
+            }}
+            transition={{
+              type: 'spring',
+              stiffness: 300,
+              damping: 32,
+              mass: 0.8,
+            }}
+            role="dialog"
+            aria-modal="true"
+            aria-label={
+              mode === 'cart'
+                ? 'Корзина'
+                : 'Оформление заказа'
+            }
+          >
+            <div className={Styles.panelContent}>
+              {mode === 'cart' && (
+                <Basket
+                  onBack={closeCart}
+                  goToOrder={() => {
+                    setMode('order');
+                  }}
+                />
+              )}
 
-        {isOpen && (
-          <>
-
-            {/* =================================================
-                BACKDROP
-                ================================================= */}
-
-            <motion.div
-              className={Styles.backdrop}
-              initial={{
-                opacity: 0,
-              }}
-              animate={{
-                opacity: 1,
-              }}
-              exit={{
-                opacity: 0,
-              }}
-              transition={{
-                duration: 0.25,
-                ease: 'easeOut',
-              }}
-              onClick={closeCart}
-              aria-hidden="true"
-            />
-
-
-            {/* =================================================
-                PANEL
-                ================================================= */}
-
-            <motion.aside
-              className={Styles.panel}
-              initial={{
-                x: '100%',
-              }}
-              animate={{
-                x: 0,
-              }}
-              exit={{
-                x: '100%',
-              }}
-              transition={{
-                type: 'spring',
-                stiffness: 300,
-                damping: 32,
-                mass: 0.8,
-              }}
-              role="dialog"
-              aria-modal="true"
-              aria-label={
-                mode === 'cart'
-                  ? 'Корзина'
-                  : 'Оформление заказа'
-              }
-            >
-
-              {/* ===============================================
-                  CONTENT
-                  =============================================== */}
-
-              <div className={Styles.panelContent}>
-
-                {mode === 'cart' && (
-                  <Basket
-                    onBack={closeCart}
-                    goToOrder={() =>
-                      setMode('order')
-                    }
-                  />
-                )}
-
-                {mode === 'order' && (
-                  <Order
-                    onBack={() =>
-                      setMode('cart')
-                    }
-                  />
-                )}
-
-              </div>
-
-            </motion.aside>
-
-          </>
-        )}
-
-      </AnimatePresence>
-    </>
+              {mode === 'order' && (
+                <Order
+                  onBack={() => {
+                    setMode('cart');
+                  }}
+                />
+              )}
+            </div>
+          </motion.aside>
+        </>
+      )}
+    </AnimatePresence>
   );
 };

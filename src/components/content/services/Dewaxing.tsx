@@ -1,11 +1,15 @@
-import Styles from './services.module.scss'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+
+import Styles from './service.module.scss'
+
 import back from '../../../images/back.svg'
 import serves_5 from '../../../images/services/serves_5.webp'
 
 import { BigPhoto } from '../../ui/big-photo/BigPhoto'
 import { BackToTop } from '../../ui/back-to-top/BackToTop'
+
+const ease = [0.22, 1, 0.36, 1] as const
 
 const fadeUp = {
   hidden: {
@@ -18,125 +22,173 @@ const fadeUp = {
   },
 }
 
-const listItems = (items: string[]) =>
-  items.map((item, index) => (
-    <motion.li
-      key={item}
-      variants={fadeUp}
-      transition={{
-        duration: 0.45,
-        delay: index * 0.04,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
-      <span className={Styles.listMarker} />
-      <span>{item}</span>
-    </motion.li>
-  ))
+/*
+ * Другие сервисные услуги.
+ *
+ * Текущая страница:
+ * /services/dewaxing/
+ *
+ * Поэтому здесь показываем остальные три страницы.
+ */
+const RELATED_ITEMS = [
+  {
+    number: '01',
+    title: 'Мобильный замер дебита',
+    text: 'Проведение замеров дебита скважин с использованием мобильного оборудования на промысловых объектах.',
+    href: '/services/metering/',
+  },
+  {
+    number: '02',
+    title: 'Обслуживание УОК-НКТ',
+    text: 'Комплексное техническое обслуживание устройства очистки колонны УОК-НКТ с проверкой основных узлов и систем.',
+    href: '/services/service/',
+  },
+  {
+    number: '03',
+    title: 'Ремонт и модернизация АГЗУ',
+    text: 'Диагностика, капитальный ремонт и модернизация оборудования для восстановления его работоспособности.',
+    href: '/services/repair/',
+  },
+]
 
-interface DewaxingBlock {
-  title: string
-  points: string[]
-}
+const SCRAPING_ITEMS = [
+  'Использование фрезерных и лезвийных скребков различного диаметра',
+  'Применение неметаллических скребков для НКТ с покрытием',
+  'Использование скребков-пробойников и парафинорезок при закупоривании',
+  'Работа на глубине спуска скребка до 2000–3000 м',
+]
+
+const EQUIPMENT_ITEMS = [
+  'Высокопроходимая специализированная техника для работы на скважинах',
+  'Установка электроцентробежного насоса (УЭЦН) для фонтанных скважин',
+  'Лома-утяжелители с покрытием для предотвращения повреждений НКТ',
+]
+
+const SAFETY_ITEMS = [
+  'Обученный персонал с опытом работы на нефтяных скважинах',
+  'Использование сертифицированного оборудования собственного производства',
+  'Соблюдение требований безопасности при проведении работ',
+  'Контроль состояния оборудования и рабочего инструмента',
+]
 
 export const Dewaxing = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
   const onBack = () => {
-    window.location.href = '/services'
+    window.location.href = '/services/'
   }
 
-  const blocks: DewaxingBlock[] = [
-    {
-      title: 'Скребкование и удаление АСПО',
-      points: [
-        'Использование фрезерных и лезвийных скребков различного диаметра.',
-        'Применение неметаллических скребков для НКТ с покрытием.',
-        'Скребки-пробойники и парафинорезки при закупоривании.',
-        'Глубина спуска скребка: 2000–3000 м.',
-      ],
-    },
-    {
-      title: 'Оборудование и техника',
-      points: [
-        'Высокопроходимая специализированная техника для работы на скважинах.',
-        'Установка электроцентробежного насоса (УЭЦН) для фонтанных скважин.',
-        'Лома-утяжелители с покрытием для предотвращения повреждений НКТ.',
-      ],
-    },
-    {
-      title: 'Персонал и безопасность',
-      points: [
-        'Обученный персонал с опытом работы на нефтяных скважинах.',
-        'Использование сертифицированного оборудования собственного производства.',
-        'Соблюдение всех правил безопасности в нефтяной и газовой промышленности.',
-      ],
-    },
-  ]
+  const openPhoto = () => {
+    setBigPhoto(serves_5.src)
+  }
+
+  const handleImageKeyDown = (
+    event: React.KeyboardEvent<HTMLDivElement>,
+  ) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      openPhoto()
+    }
+  }
 
   return (
-    <>
-      <main className={Styles.wrapper}>
+    <main className={Styles.wrapper}>
+
+      {/* =====================================================
+          TOP
+          ===================================================== */}
+
+      <div className={Styles.topBar}>
         <button
           className={Styles.backButton}
           onClick={onBack}
-          aria-label="Вернуться к услугам"
+          aria-label="Вернуться к сервисным услугам"
         >
           <img src={back.src} alt="" />
-          {/* <span>Назад к услугам</span> */}
         </button>
+      </div>
 
-        {/* HERO */}
-        <motion.section
-          className={Styles.hero}
+
+      {/* =====================================================
+          HERO
+          ===================================================== */}
+
+      <section className={Styles.hero}>
+
+        <motion.div
+          className={Styles.heroContent}
           initial="hidden"
           animate="visible"
           variants={fadeUp}
           transition={{
             duration: 0.7,
-            ease: [0.22, 1, 0.36, 1],
+            ease,
           }}
         >
-          <div className={Styles.heroText}>
-            <div className={Styles.eyebrow}>
-              Сервис нефтяных скважин
-            </div>
-
-            <h1>
-              Услуги <span>депарафинизации</span> нефтяных
-              скважин
-            </h1>
-
-            <p>
-              Полное удаление асфальтосмолопарафиновых отложений
-              и обеспечение прохода в скважинах с НКТ с помощью
-              специализированной техники и обученного персонала.
-            </p>
-
-            <div className={Styles.heroMeta}>
-              <div className={Styles.metaItem}>
-                <span className={Styles.metaDot} />
-                <span>Удаление АСПО</span>
-              </div>
-
-              <div className={Styles.metaItem}>
-                <span className={Styles.metaDot} />
-                <span>Работа с НКТ</span>
-              </div>
-            </div>
+          <div className={Styles.eyebrow}>
+            <span />
+            Сервис нефтяных скважин
           </div>
 
+          <span className={Styles.heroNumber}>
+            04
+          </span>
+
+          <h1>
+            Депарафинизация
+            нефтяных
+            <em> скважин</em>
+          </h1>
+
+          <p className={Styles.heroDescription}>
+            Удаление асфальтосмолопарафиновых отложений
+            и восстановление нормального прохода в скважине
+            с использованием специализированного оборудования,
+            техники и подготовленного персонала.
+          </p>
+
+          <div className={Styles.heroFacts}>
+            <div>
+              <strong>01</strong>
+              <span>Удаление АСПО</span>
+            </div>
+
+            <div>
+              <strong>02</strong>
+              <span>Работа с НКТ</span>
+            </div>
+
+            <div>
+              <strong>03</strong>
+              <span>Спецтехника</span>
+            </div>
+          </div>
+        </motion.div>
+
+
+        <motion.div
+          className={Styles.heroVisual}
+          initial={{
+            opacity: 0,
+            y: 30,
+          }}
+          animate={{
+            opacity: 1,
+            y: 0,
+          }}
+          transition={{
+            duration: 0.8,
+            delay: 0.1,
+            ease,
+          }}
+        >
           <div
             className={Styles.imageWrapper}
-            onClick={() => setBigPhoto(serves_5.src)}
+            onClick={openPhoto}
             role="button"
             tabIndex={0}
             aria-label="Открыть изображение оборудования для депарафинизации"
-            onKeyDown={(event) => {
-              if (event.key === 'Enter' || event.key === ' ') {
-                setBigPhoto(serves_5.src)
-              }
-            }}
+            onKeyDown={handleImageKeyDown}
           >
             <img
               src={serves_5.src}
@@ -144,17 +196,217 @@ export const Dewaxing = () => {
               className={Styles.serviceImage}
             />
 
+            <div className={Styles.imageOverlay} />
+
             <div className={Styles.imageHint}>
               <span>Увеличить</span>
-              <span className={Styles.imageArrow}>↗</span>
             </div>
           </div>
-        </motion.section>
+        </motion.div>
 
-        {/* SERVICES */}
-        <section className={Styles.servicesSection}>
+      </section>
+
+
+      {/* =====================================================
+          WORKS
+          ===================================================== */}
+
+      <section className={Styles.worksSection}>
+
+        <motion.div
+          className={Styles.sectionHeading}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          variants={fadeUp}
+          transition={{
+            duration: 0.65,
+            ease,
+          }}
+        >
+          <div>
+            <span className={Styles.sectionLabel}>
+              СОСТАВ РАБОТ
+            </span>
+
+            <h2>
+              Комплексный подход
+              к депарафинизации
+            </h2>
+          </div>
+
+          <p>
+            Выполняем комплекс работ по удалению
+            асфальтосмолопарафиновых отложений с учётом
+            состояния скважины, конструкции НКТ и условий
+            проведения работ.
+          </p>
+        </motion.div>
+
+
+        <div className={Styles.workList}>
+
+          {/* =================================================
+              СКРЕБКОВАНИЕ
+              ================================================= */}
+
           <motion.div
-            className={Styles.sectionHeader}
+            className={Styles.workRow}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
+            variants={fadeUp}
+            transition={{
+              duration: 0.6,
+              ease,
+            }}
+          >
+            <div className={Styles.workTitle}>
+              <span>01</span>
+
+              <h3>
+                Скребкование
+                и удаление АСПО
+              </h3>
+            </div>
+
+            <ul>
+              {SCRAPING_ITEMS.map((item) => (
+                <li key={item}>
+                  <span />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+
+          {/* =================================================
+              ОБОРУДОВАНИЕ
+              ================================================= */}
+
+          <motion.div
+            className={Styles.workRow}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
+            variants={fadeUp}
+            transition={{
+              duration: 0.6,
+              delay: 0.08,
+              ease,
+            }}
+          >
+            <div className={Styles.workTitle}>
+              <span>02</span>
+
+              <h3>
+                Оборудование
+                и техника
+              </h3>
+            </div>
+
+            <ul>
+              {EQUIPMENT_ITEMS.map((item) => (
+                <li key={item}>
+                  <span />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+
+          {/* =================================================
+              ПЕРСОНАЛ И БЕЗОПАСНОСТЬ
+              ================================================= */}
+
+          <motion.div
+            className={Styles.workRow}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.15,
+            }}
+            variants={fadeUp}
+            transition={{
+              duration: 0.6,
+              delay: 0.16,
+              ease,
+            }}
+          >
+            <div className={Styles.workTitle}>
+              <span>03</span>
+
+              <h3>
+                Персонал
+                и безопасность
+              </h3>
+            </div>
+
+            <ul>
+              {SAFETY_ITEMS.map((item) => (
+                <li key={item}>
+                  <span />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          RESULT
+          ===================================================== */}
+
+      <section className={Styles.resultSection}>
+
+        <motion.div
+          className={Styles.resultHeader}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          variants={fadeUp}
+          transition={{
+            duration: 0.65,
+            ease,
+          }}
+        >
+          <div>
+            <span className={Styles.sectionLabel}>
+              РЕЗУЛЬТАТ
+            </span>
+
+            <h2>
+              Восстановление
+              рабочего состояния скважины
+            </h2>
+          </div>
+          
+        </motion.div>
+
+
+        <div className={Styles.resultGrid}>
+
+          <motion.div
+            className={Styles.resultItem}
             initial="hidden"
             whileInView="visible"
             viewport={{
@@ -163,77 +415,223 @@ export const Dewaxing = () => {
             }}
             variants={fadeUp}
             transition={{
-              duration: 0.6,
-              ease: [0.22, 1, 0.36, 1],
+              duration: 0.55,
+              ease,
             }}
           >
-            <div>
-              <span className={Styles.sectionLabel}>
-                НАПРАВЛЕНИЯ РАБОТ
-              </span>
+            <span>01</span>
 
-              <h2>
-                Комплексный подход
-                <br />
-                к депарафинизации
-              </h2>
-            </div>
+            <h3>
+              Удаление отложений
+            </h3>
 
             <p>
-              Используем специализированное оборудование,
-              высокопроходимую технику и подготовленный персонал
-              для эффективного удаления АСПО и безопасного
-              проведения работ на нефтяных скважинах.
+              Удаляем асфальтосмолопарафиновые отложения,
+              препятствующие нормальной эксплуатации скважины.
             </p>
           </motion.div>
 
-          <div className={Styles.grid}>
-            {blocks.map((block, index) => (
-              <motion.article
-                key={block.title}
-                className={Styles.card}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{
-                  once: true,
-                  amount: 0.15,
-                }}
-                variants={fadeUp}
-                transition={{
-                  duration: 0.65,
-                  delay: index * 0.08,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <div className={Styles.cardTop}>
-                  <span className={Styles.cardNumber}>
-                    {String(index + 1).padStart(2, '0')}
-                  </span>
 
-                  <span className={Styles.cardLine} />
-                </div>
+          <motion.div
+            className={Styles.resultItem}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            variants={fadeUp}
+            transition={{
+              duration: 0.55,
+              delay: 0.08,
+              ease,
+            }}
+          >
+            <span>02</span>
 
-                <div className={Styles.cardContent}>
-                  <h3>{block.title}</h3>
+            <h3>
+              Восстановление прохода
+            </h3>
 
-                  <ul>
-                    {listItems(block.points)}
-                  </ul>
-                </div>
-              </motion.article>
-            ))}
+            <p>
+              Обеспечиваем необходимый проход инструмента
+              и восстановление рабочего состояния НКТ.
+            </p>
+          </motion.div>
+
+
+          <motion.div
+            className={Styles.resultItem}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{
+              once: true,
+              amount: 0.2,
+            }}
+            variants={fadeUp}
+            transition={{
+              duration: 0.55,
+              delay: 0.16,
+              ease,
+            }}
+          >
+            <span>03</span>
+
+            <h3>
+              Безопасное проведение работ
+            </h3>
+
+            <p>
+              Работы выполняются подготовленным персоналом
+              с применением специализированного оборудования
+              и техники.
+            </p>
+          </motion.div>
+
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          RELATED SERVICES
+          ===================================================== */}
+
+      <section className={Styles.relatedSection}>
+
+        <motion.div
+          className={Styles.sectionHeading}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{
+            once: true,
+            amount: 0.2,
+          }}
+          variants={fadeUp}
+          transition={{
+            duration: 0.65,
+            ease,
+          }}
+        >
+
+          <div>
+            <span className={Styles.sectionLabel}>
+              СМОТРИТЕ ТАКЖЕ
+            </span>
+
+            <h2>
+              Другие сервисные
+              услуги
+            </h2>
           </div>
-        </section>
 
-        <BackToTop />
+          <p>
+            Другие виды сервисного обслуживания
+            и технической поддержки оборудования.
+          </p>
 
-        {bigPhoto && (
-          <BigPhoto
-            src={bigPhoto}
-            onClose={() => setBigPhoto(null)}
-          />
-        )}
-      </main>
-    </>
+        </motion.div>
+
+
+        <div className={Styles.relatedList}>
+
+          {RELATED_ITEMS.map((item, index) => (
+
+            <motion.a
+              key={item.number}
+              href={item.href}
+              className={Styles.relatedItem}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{
+                once: true,
+                amount: 0.15,
+              }}
+              variants={fadeUp}
+              transition={{
+                duration: 0.55,
+                delay: index * 0.07,
+                ease,
+              }}
+            >
+              <span className={Styles.relatedNumber}>
+                {item.number}
+              </span>
+
+              <div className={Styles.relatedContent}>
+                <h3>
+                  {item.title}
+                </h3>
+
+                <p>
+                  {item.text}
+                </p>
+              </div>
+            </motion.a>
+
+          ))}
+
+        </div>
+
+      </section>
+
+
+      {/* =====================================================
+          CTA
+          ===================================================== */}
+
+      <motion.section
+        className={Styles.cta}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{
+          once: true,
+          amount: 0.2,
+        }}
+        variants={fadeUp}
+        transition={{
+          duration: 0.7,
+          ease,
+        }}
+      >
+
+        <div>
+          <span className={Styles.ctaLabel}>
+            СЕРВИС И ТЕХНИЧЕСКАЯ ПОДДЕРЖКА
+          </span>
+
+          <h2>
+            Нужна депарафинизация
+            <br />
+            нефтяной скважины?
+          </h2>
+
+          <p>
+            Опишите задачу — специалисты ИПП «Новые Технологии»
+            помогут определить необходимый состав работ
+            и оборудование для их проведения.
+          </p>
+        </div>
+
+        <a
+          href="/contact/"
+          className={Styles.ctaButton}
+        >
+          Обсудить задачу
+        </a>
+
+      </motion.section>
+
+
+      <BackToTop />
+
+      {bigPhoto && (
+        <BigPhoto
+          src={bigPhoto}
+          onClose={() => setBigPhoto(null)}
+        />
+      )}
+
+    </main>
   )
 }

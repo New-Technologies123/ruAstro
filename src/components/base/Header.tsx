@@ -1,113 +1,587 @@
+import { useEffect, useMemo, useState, type Dispatch, type MouseEvent, type SetStateAction, } from 'react';
 import Styles from './header.module.scss';
-import logoRu from '../../images/logo_ru.webp';
-
-import menuIcon from '../../images/menu.svg';
-import cross from '../../images/cross.svg';
-import location from '../../images/location.svg';
-import email from '../../images/email.svg';
-import phone from '../../images/phone.svg';
+import logoRu from '../../images/logo_fut_ru.webp';
 import { menuData } from './menuData';
+import { CartButton } from '../ui/cart-button/CartButton';
 
-import { useState, useEffect } from 'react';
-
-/* ===== RECURSIVE MENU ITEM ===== */
-interface MenuItemProps {
-  item: any;
-  pageType: any;
-  isMobile: boolean;
-  openItems: any[];
-  setOpenItems: any;
-  parentId?: string; // ← Made optional
+interface MenuItem {
+  title: string;
+  url?: string;
+  pageType?: string;
+  children?: MenuItem[];
 }
 
-const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId }: MenuItemProps) => {
-  const [open, setOpen] = useState(false);
+interface HeaderProps {
+  pageType?: string;
+}
 
-  // Create a unique ID for the menu item
-  const itemId = item.url || item.title;
+/* =========================================================
+   HELPERS
+========================================================= */
 
-  // Create full path for identification (for nested items)
-  const fullId = parentId ? `${parentId}-${itemId}` : itemId;
+const normalizePath = (path: string): string => {
+  if (!path) return '/';
 
-  // Check if this item is open (mobile only)
-  const isOpen = isMobile ? openItems.includes(fullId) : open;
+  const clean = path.split('?')[0].split('#')[0];
 
-  const hasChildren = item.children && item.children.length > 0;
+  if (clean === '/') return '/';
 
-  // Click handler for the arrow (mobile only)
-  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
+  return clean.replace(/\/+$/, '') + '/';
+};
 
-    if (!isMobile) return; // Ignore on desktop
+const isPathActive = (
+  itemUrl?: string,
+  currentPath?: string,
+): boolean => {
+  if (!itemUrl || !currentPath) return false;
 
-    if (isOpen) {
-      // If already open - close only this item
-      setOpenItems((prev: string[]) => prev.filter((id: string) => id !== fullId));
-    } else {
-      // If closed - open this item and close all others at this level
-      const newOpenItems: string[] = [];
+  const itemPath = normalizePath(itemUrl);
+  const current = normalizePath(currentPath);
 
-      // Add all parent items (if any)
-      if (parentId) {
-        const parentParts = parentId.split('-');
-        let currentPath = '';
-        for (const part of parentParts) {
-          currentPath = currentPath ? `${currentPath}-${part}` : part;
-          if (!newOpenItems.includes(currentPath)) {
-            newOpenItems.push(currentPath);
-          }
-        }
-      }
+  if (itemPath === '/') {
+    return current === '/';
+  }
 
-      // Add the current item
-      newOpenItems.push(fullId);
+  return (
+    current === itemPath ||
+    current.startsWith(itemPath)
+  );
+};
 
-      setOpenItems(newOpenItems);
-    }
-  };
+const itemHasActiveChild = (
+  item: MenuItem,
+  currentPath: string,
+  pageType?: string,
+): boolean => {
+  if (
+    isPathActive(item.url, currentPath) ||
+    (!!item.pageType && item.pageType === pageType)
+  ) {
+    return true;
+  }
 
-  // 🔹 Check if active: current item OR any child
-  const isActive = (() => {
-    if (item.pageType === pageType) return true;
-
-    if (item.children) {
-      for (const child of item.children) {
-        if (child.pageType === pageType) return true;
-        if (child.children) {
-          for (const grandchild of child.children) {
-            if (grandchild.pageType === pageType) return true;
-          }
-        }
-      }
-    }
-
+  if (!item.children?.length) {
     return false;
-  })();
+  }
 
-  // For desktop use hover
-  const handleMouseEnter = () => {
-    if (!isMobile && hasChildren) {
-      setOpen(true);
-    }
-  };
+  return item.children.some((child) =>
+    itemHasActiveChild(
+      child,
+      currentPath,
+      pageType,
+    ),
+  );
+};
 
-  const handleMouseLeave = () => {
-    if (!isMobile && hasChildren) {
-      setOpen(false);
-    }
+/* =========================================================
+   ICONS
+========================================================= */
+
+const ChevronDown = ({
+  className = '',
+}: {
+  className?: string;
+}) => (
+  <svg
+    className={className}
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M6 9l6 6 6-6"
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const ArrowRight = ({
+  className = '',
+}: {
+  className?: string;
+}) => (
+  <svg
+    className={className}
+    width="14"
+    height="14"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M5 12h13M13 6l6 6-6 6"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const LocationIcon = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M12 21s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"
+      stroke="currentColor"
+      strokeWidth="1.7"
+    />
+    <circle
+      cx="12"
+      cy="9"
+      r="2.3"
+      stroke="currentColor"
+      strokeWidth="1.5"
+    />
+  </svg>
+);
+
+const MailIcon = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <rect
+      x="3"
+      y="5"
+      width="18"
+      height="14"
+      rx="2"
+      stroke="currentColor"
+      strokeWidth="1.6"
+    />
+    <path
+      d="m4 7 8 6 8-6"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const PhoneIcon = () => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path
+      d="M7.2 3.8 9.8 3a1.5 1.5 0 0 1 1.8.8l1.1 2.7a1.5 1.5 0 0 1-.3 1.6l-1.7 1.7a14 14 0 0 0 3.5 3.5l1.7-1.7a1.5 1.5 0 0 1 1.6-.3l2.7 1.1a1.5 1.5 0 0 1 .8 1.8l-.8 2.6a2 2 0 0 1-2 1.4C10.6 18.2 5.8 13.4 5.8 6.8a2 2 0 0 1 1.4-2Z"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+/* =========================================================
+   LANGUAGE SWITCHER
+========================================================= */
+
+interface LanguageSwitcherProps {
+  lang: 'ru' | 'en';
+  onChange: (language: 'ru' | 'en') => void;
+  className?: string;
+}
+
+const LanguageSwitcher = ({
+  lang,
+  onChange,
+  className = '',
+}: LanguageSwitcherProps) => (
+  <div
+    className={[
+      Styles.languageSwitcher,
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ')}
+    aria-label="Выбор языка"
+  >
+    <div className={Styles.langToggle}>
+      <div
+        className={[
+          Styles.langSlider,
+          lang === 'en'
+            ? Styles.langSliderEn
+            : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        aria-hidden="true"
+      />
+
+      <button
+        type="button"
+        onClick={() => onChange('ru')}
+        className={
+          lang === 'ru'
+            ? Styles.languageActive
+            : ''
+        }
+        aria-pressed={lang === 'ru'}
+        aria-label="Русский язык"
+      >
+        RU
+      </button>
+
+      <button
+        type="button"
+        onClick={() => onChange('en')}
+        className={
+          lang === 'en'
+            ? Styles.languageActive
+            : ''
+        }
+        aria-pressed={lang === 'en'}
+        aria-label="English language"
+      >
+        EN
+      </button>
+    </div>
+  </div>
+);
+
+/* =========================================================
+   DESKTOP MEGA MENU ITEM
+========================================================= */
+
+interface DesktopMenuItemProps {
+  item: MenuItem;
+  currentPath: string;
+  pageType?: string;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+const DesktopMenuItem = ({
+  item,
+  currentPath,
+  pageType,
+  isOpen,
+  onOpen,
+  onClose,
+}: DesktopMenuItemProps) => {
+  const hasChildren = Boolean(
+    item.children && item.children.length,
+  );
+
+  const active = itemHasActiveChild(
+    item,
+    currentPath,
+    pageType,
+  );
+
+  return (
+    <div
+      className={[
+        Styles.desktopNavItem,
+        active
+          ? Styles.desktopNavItemActive
+          : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      onMouseEnter={onOpen}
+      onMouseLeave={onClose}
+    >
+      <a
+        href={item.url || '#'}
+        className={[
+          Styles.navLink,
+          active
+            ? Styles.navLinkActive
+            : '',
+          isOpen
+            ? Styles.navLinkOpen
+            : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        aria-current={
+          active && !hasChildren
+            ? 'page'
+            : undefined
+        }
+      >
+        <span>{item.title}</span>
+
+        {hasChildren && (
+          <ChevronDown
+            className={[
+              Styles.arrowDown,
+              isOpen
+                ? Styles.arrowOpen
+                : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          />
+        )}
+      </a>
+
+      {hasChildren && isOpen && (
+        <div className={Styles.megaMenu}>
+          <div className={Styles.megaInner}>
+            <div className={Styles.megaIntro}>
+              <div
+                className={
+                  Styles.megaEyebrow
+                }
+              >
+                ИНЖЕНЕРНЫЕ РЕШЕНИЯ
+              </div>
+
+              <h3>{item.title}</h3>
+
+              <p>
+                Комплексные решения и
+                оборудование для предприятий
+                ТЭК.
+              </p>
+
+              {item.url && (
+                <a
+                  href={item.url}
+                  className={
+                    Styles.megaAllLink
+                  }
+                >
+                  Открыть раздел
+
+                  <ArrowRight
+                    className={
+                      Styles.arrowRight
+                    }
+                  />
+                </a>
+              )}
+            </div>
+
+            <div
+              className={Styles.megaColumns}
+            >
+              {item.children?.map(
+                (child, index) => {
+                  const childActive =
+                    itemHasActiveChild(
+                      child,
+                      currentPath,
+                      pageType,
+                    );
+
+                  return (
+                    <div
+                      className={
+                        Styles.megaColumn
+                      }
+                      key={`${child.title}-${index}`}
+                    >
+                      <a
+                        href={
+                          child.url || '#'
+                        }
+                        className={[
+                          Styles.megaColumnTitle,
+                          childActive
+                            ? Styles.megaColumnActive
+                            : '',
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                      >
+                        <span
+                          className={
+                            Styles.megaNumber
+                          }
+                        >
+                          {String(
+                            index + 1,
+                          ).padStart(2, '0')}
+                        </span>
+
+                        <span>
+                          {child.title}
+                        </span>
+
+                        <ArrowRight
+                          className={
+                            Styles.arrowRight
+                          }
+                        />
+                      </a>
+
+                      {child.children
+                        ?.length ? (
+                        <div
+                          className={
+                            Styles.desktopChildren
+                          }
+                        >
+                          {child.children.map(
+                            (
+                              grandchild,
+                              childIndex,
+                            ) => {
+                              const grandchildActive =
+                                itemHasActiveChild(
+                                  grandchild,
+                                  currentPath,
+                                  pageType,
+                                );
+
+                              return (
+                                <a
+                                  key={`${grandchild.title}-${childIndex}`}
+                                  href={
+                                    grandchild.url ||
+                                    '#'
+                                  }
+                                  className={[
+                                    Styles.desktopChildLink,
+                                    grandchildActive
+                                      ? Styles.desktopChildActive
+                                      : '',
+                                  ]
+                                    .filter(
+                                      Boolean,
+                                    )
+                                    .join(' ')}
+                                >
+                                  <span>
+                                    {
+                                      grandchild.title
+                                    }
+                                  </span>
+
+                                  <ArrowRight
+                                    className={
+                                      Styles.arrowRight
+                                    }
+                                  />
+                                </a>
+                              );
+                            },
+                          )}
+                        </div>
+                      ) : null}
+                    </div>
+                  );
+                },
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* =========================================================
+   MOBILE MENU ITEM
+========================================================= */
+
+interface MobileMenuItemProps {
+  item: MenuItem;
+  currentPath: string;
+  pageType?: string;
+  level?: number;
+  openItems: string[];
+  setOpenItems: Dispatch<
+    SetStateAction<string[]>
+  >;
+  parentId?: string;
+}
+
+const MobileMenuItem = ({
+  item,
+  currentPath,
+  pageType,
+  level = 0,
+  openItems,
+  setOpenItems,
+  parentId = '',
+}: MobileMenuItemProps) => {
+  const itemId =
+    parentId +
+    (parentId ? '-' : '') +
+    (item.url || item.title);
+
+  const hasChildren = Boolean(
+    item.children && item.children.length,
+  );
+
+  const isOpen =
+    openItems.includes(itemId);
+
+  const active = itemHasActiveChild(
+    item,
+    currentPath,
+    pageType,
+  );
+
+  const toggleItem = (
+    event: MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!hasChildren) return;
+
+    setOpenItems((previous) => {
+      if (previous.includes(itemId)) {
+        return previous.filter(
+          (id) => id !== itemId,
+        );
+      }
+
+      return [...previous, itemId];
+    });
   };
 
   return (
-    <li
-      className={Styles.menuItem}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+    <div
+      className={[
+        Styles.mobileItem,
+        active
+          ? Styles.mobileItemActive
+          : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      data-level={level}
     >
-      <div className={Styles.menuRow}>
+      <div
+        className={Styles.mobileItemRow}
+      >
         <a
-          href={item.url}
-          className={`${Styles.menuLink} ${isActive ? Styles.active : ''}`}
+          href={item.url || '#'}
+          className={
+            Styles.mobileItemLink
+          }
+          aria-current={
+            active && !hasChildren
+              ? 'page'
+              : undefined
+          }
         >
           {item.title}
         </a>
@@ -115,226 +589,838 @@ const MenuItem = ({ item, pageType, isMobile, openItems, setOpenItems, parentId 
         {hasChildren && (
           <button
             type="button"
-            className={`${Styles.arrow} ${isOpen ? Styles.arrowOpen : ''}`}
-            onClick={handleToggle}
+            className={[
+              Styles.mobileArrowButton,
+              isOpen
+                ? Styles.mobileArrowButtonOpen
+                : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            onClick={toggleItem}
+            aria-label={
+              isOpen
+                ? `Свернуть ${item.title}`
+                : `Открыть ${item.title}`
+            }
+            aria-expanded={isOpen}
           >
-            ▸
+            <ChevronDown
+              className={
+                isOpen
+                  ? Styles.mobileArrowOpen
+                  : ''
+              }
+            />
           </button>
         )}
       </div>
 
-      {hasChildren && (
-        <ul className={`${Styles.subMenu} ${isOpen ? Styles.open : ''}`}>
-          {item.children.map((child: any, index: number) => (
-            <MenuItem
-              key={index}
-              item={child}
-              pageType={pageType}
-              isMobile={isMobile}
-              openItems={openItems}
-              setOpenItems={setOpenItems}
-              parentId={fullId} // Pass parent ID for child items
-            />
-          ))}
-        </ul>
+      {hasChildren && isOpen && (
+        <div
+          className={
+            Styles.mobileChildren
+          }
+        >
+          {item.children?.map(
+            (child, index) => (
+              <MobileMenuItem
+                key={`${child.title}-${index}`}
+                item={child}
+                currentPath={
+                  currentPath
+                }
+                pageType={pageType}
+                level={level + 1}
+                openItems={openItems}
+                setOpenItems={
+                  setOpenItems
+                }
+                parentId={itemId}
+              />
+            ),
+          )}
+        </div>
       )}
-    </li>
+    </div>
   );
 };
 
-export default MenuItem;
+/* =========================================================
+   HEADER
+========================================================= */
 
-/* ===== MAIN HEADER ===== */
-export const Header = ({ pageType }: { pageType: string }) => {
-  const [isActiveMobileMenu, setIsActiveMobileMenu] = useState(false);
-  const [closeAllSubMenus, setCloseAllSubMenus] = useState(false);
-  const [openItems, setOpenItems] = useState<string[]>([]); // Array of open items (mobile only)
-  const [isMobile, setIsMobile] = useState(false);
+export const Header = ({
+  pageType,
+}: HeaderProps) => {
+  const [mobileOpen, setMobileOpen] =
+    useState(false);
 
-  const onToggleMobileMenu = () => {
-    setIsActiveMobileMenu((prev: boolean) => {
-      const next = !prev;
+  const [openDesktopMenu, setOpenDesktopMenu] =
+    useState<string | null>(null);
 
-      if (!next) {
-        setCloseAllSubMenus((prev: boolean) => !prev);
-        setOpenItems([]); // Close all submenus when burger is closed
-      }
+  const [openItems, setOpenItems] =
+    useState<string[]>([]);
 
-      return next;
-    });
-  };
+  const [isScrolled, setIsScrolled] =
+    useState(false);
 
-  // Detect mobile version
+  const [currentPath, setCurrentPath] =
+    useState('/');
+
+  const [lang, setLang] =
+    useState<'ru' | 'en'>('ru');
+
+  /* =====================================================
+     CURRENT PAGE
+  ===================================================== */
+
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const checkMobile = () => {
-      const mobile = window.innerWidth <= 1000;
-      setIsMobile(mobile);
+    if (typeof window === 'undefined') {
+      return;
+    }
 
-      // If desktop - reset openItems
-      if (!mobile) {
-        setOpenItems([]);
-      }
+    const updatePath = () => {
+      setCurrentPath(
+        normalizePath(
+          window.location.pathname,
+        ),
+      );
     };
 
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    updatePath();
+
+    window.addEventListener(
+      'popstate',
+      updatePath,
+    );
+
+    return () => {
+      window.removeEventListener(
+        'popstate',
+        updatePath,
+      );
+    };
   }, []);
 
-  const [lang, setLang] = useState('ru');
+  /* =====================================================
+     SCROLL
+  ===================================================== */
 
-  // Добавляем тип для параметра newLang
-  const changeLanguage = (newLang: string) => {
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const handleScroll = () => {
+      setIsScrolled(
+        window.scrollY > 8,
+      );
+    };
+
+    handleScroll();
+
+    window.addEventListener(
+      'scroll',
+      handleScroll,
+      {
+        passive: true,
+      },
+    );
+
+    return () => {
+      window.removeEventListener(
+        'scroll',
+        handleScroll,
+      );
+    };
+  }, []);
+
+  /* =====================================================
+     LANGUAGE
+  ===================================================== */
+
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const hostname =
+      window.location.hostname.toLowerCase();
+
+    setLang(
+      hostname.startsWith('eng.')
+        ? 'en'
+        : 'ru',
+    );
+  }, []);
+
+  const changeLanguage = (
+    newLang: 'ru' | 'en',
+  ) => {
     setLang(newLang);
 
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     if (newLang === 'en') {
-      window.location.href = 'https://eng.tech-new.ru';
+      window.location.href =
+        'https://eng.tech-new.ru';
     } else {
-      window.location.href = 'https://tech-new.ru';
+      window.location.href =
+        'https://tech-new.ru';
     }
   };
 
-  /* Close menu when clicking outside */
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const nav = document.querySelector(`.${Styles.navMenu}`);
-      const toggle = document.querySelector(`.${Styles.menuToggle}`);
+  /* =====================================================
+     CLOSE MOBILE MENU
+  ===================================================== */
 
-      if (
-        isActiveMobileMenu &&
-        nav &&
-        !nav.contains(event.target as Node) &&
-        toggle &&
-        !toggle.contains(event.target as Node)
-      ) {
-        setIsActiveMobileMenu(false);
-        setOpenItems([]); // Close all submenus
+  const closeMobileMenu = () => {
+    setMobileOpen(false);
+    setOpenItems([]);
+  };
+
+  /* =====================================================
+     CART
+  ===================================================== */
+
+  const goToBasket = () => {
+    closeMobileMenu();
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.dispatchEvent(
+      new CustomEvent(
+        'toggleGlobalCart',
+      ),
+    );
+  };
+
+  /* =====================================================
+     ESCAPE
+  ===================================================== */
+
+  useEffect(() => {
+    if (!mobileOpen) {
+      return;
+    }
+
+    const handleEscape = (
+      event: KeyboardEvent,
+    ) => {
+      if (event.key === 'Escape') {
+        closeMobileMenu();
       }
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
-  }, [isActiveMobileMenu]);
+    document.addEventListener(
+      'keydown',
+      handleEscape,
+    );
+
+    return () => {
+      document.removeEventListener(
+        'keydown',
+        handleEscape,
+      );
+    };
+  }, [mobileOpen]);
+
+  /* =====================================================
+     BODY LOCK
+  ===================================================== */
+
+  useEffect(() => {
+    if (!mobileOpen) {
+      return;
+    }
+
+    const previousOverflow =
+      document.body.style.overflow;
+
+    document.body.style.overflow =
+      'hidden';
+
+    return () => {
+      document.body.style.overflow =
+        previousOverflow;
+    };
+  }, [mobileOpen]);
+
+  /* =====================================================
+     MAIN LINKS
+  ===================================================== */
+
+  const mainLinks = useMemo(
+    () => [
+      {
+        title: 'Главная',
+        url: '/home/',
+        pageType: 'home',
+      },
+      {
+        title: 'О компании',
+        url: '/about/',
+        pageType: 'about',
+      },
+    ],
+    [],
+  );
+
+  /* =====================================================
+     SECONDARY LINKS
+  ===================================================== */
+
+  const secondaryLinks = useMemo(
+    () => [
+      {
+        title: 'Документы',
+        url: '/documents/',
+        pageType: 'documents',
+      },
+      {
+        title: 'Новости',
+        url: '/news/',
+        pageType: 'news',
+      },
+      {
+        title: 'Закупки',
+        url: '/procurement/',
+        pageType: 'procurement',
+      },
+      {
+        title: 'Карьера',
+        url: '/careers/',
+        pageType: 'careers',
+      },
+      {
+        title: 'Онлайн магазин',
+        url: '/shop/',
+        pageType: 'shop',
+      },
+      {
+        title: 'Контакты',
+        url: '/contact/',
+        pageType: 'contact',
+      },
+    ],
+    [],
+  );
+
+  const isMainLinkActive = (
+    url: string,
+    type: string,
+  ) => {
+    return (
+      isPathActive(
+        url,
+        currentPath,
+      ) ||
+      pageType === type
+    );
+  };
 
   return (
     <>
-      <header>
-        <div className={Styles.headerContainer}>
-          <img src={logoRu.src} alt="New Technologies" />
+      <header
+        className={[
+          Styles.header,
+          isScrolled
+            ? Styles.headerScrolled
+            : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
+        {/* =================================================
+            TOP CONTACT BAR
+        ================================================= */}
 
-          <div className={Styles.contactBloc}>
-            <div className={Styles.contactInfo}>
-              <p>
-                <img src={location.src} alt="" />
-                Адрес: 450076, г. Уфа, ул Заки Валиди 32/2
-              </p>
-              <p>
-                <img src={email.src} alt="" />
-                Email: nt@tech-new.ru
-              </p>
-              <p>
-                <img src={phone.src} alt="" />
-                Телефон: +7 (347) 293-93-33
-              </p>
+        <div className={Styles.topBar}>
+          <div
+            className={
+              Styles.topBarInner
+            }
+          >
+            <div
+              className={
+                Styles.topBarLeft
+              }
+            >
+              <span
+                className={
+                  Styles.topBarLabel
+                }
+              >
+                ООО ИПП «Новые Технологии»
+              </span>
             </div>
 
-            <div className={Styles.languageSwitch}>
-              <div className={Styles.langToggle}>
-                <div
-                  className={Styles.langSlider}
-                  style={{
-                    transform:
-                      lang === 'ru'
-                        ? 'translateX(0%)'
-                        : 'translateX(100%)'
-                  }}
-                />
-
-                <button
-                  onClick={() => changeLanguage('ru')}
-                  className={lang === 'ru' ? Styles.active : ''}
+            <div
+              className={
+                Styles.topBarContacts
+              }
+            >
+              <a
+                href="#"
+                className={
+                  Styles.topContact
+                }
+                onClick={(event) =>
+                  event.preventDefault()
+                }
+              >
+                <span
+                  className={
+                    Styles.contactIcon
+                  }
                 >
-                  RU
-                </button>
+                  <LocationIcon />
+                </span>
 
-                <button
-                  onClick={() => changeLanguage('en')}
-                  className={lang === 'en' ? Styles.active : ''}
+                Уфа, ул. Заки Валиди 32/2
+              </a>
+
+              <a
+                href="mailto:nt@tech-new.ru"
+                className={
+                  Styles.topContact
+                }
+              >
+                <span
+                  className={
+                    Styles.contactIcon
+                  }
                 >
-                  EN
-                </button>
+                  <MailIcon />
+                </span>
 
-              </div>
+                nt@tech-new.ru
+              </a>
+
+              <a
+                href="tel:+73472939333"
+                className={
+                  Styles.topContact
+                }
+              >
+                <span
+                  className={
+                    Styles.contactIcon
+                  }
+                >
+                  <PhoneIcon />
+                </span>
+
+                +7 (347) 293-93-33
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* =================================================
+            MAIN HEADER
+        ================================================= */}
+
+        <div className={Styles.headerMain}>
+          <div
+            className={
+              Styles.headerInner
+            }
+          >
+            <a
+              href="/home/"
+              className={Styles.logo}
+              aria-label="ИПП «Новые Технологии»"
+            >
+              <img
+                src={logoRu.src}
+                alt="ИПП «Новые Технологии»"
+              />
+            </a>
+
+            {/* =========================================
+                DESKTOP NAV
+            ========================================= */}
+
+            <nav
+              className={
+                Styles.desktopNav
+              }
+              aria-label="Основная навигация"
+            >
+              {mainLinks.map((link) => {
+                const active =
+                  isMainLinkActive(
+                    link.url,
+                    link.pageType,
+                  );
+
+                return (
+                  <div
+                    key={link.url}
+                    className={
+                      Styles.desktopNavItem
+                    }
+                  >
+                    <a
+                      href={link.url}
+                      className={[
+                        Styles.navLink,
+                        active
+                          ? Styles.navLinkActive
+                          : '',
+                      ]
+                        .filter(Boolean)
+                        .join(' ')}
+                      aria-current={
+                        active
+                          ? 'page'
+                          : undefined
+                      }
+                    >
+                      {link.title}
+                    </a>
+                  </div>
+                );
+              })}
+
+              {menuData.map(
+                (item, index) => {
+                  const menuKey =
+                    item.url ||
+                    item.title ||
+                    String(index);
+
+                  return (
+                    <DesktopMenuItem
+                      key={menuKey}
+                      item={
+                        item as MenuItem
+                      }
+                      currentPath={
+                        currentPath
+                      }
+                      pageType={
+                        pageType
+                      }
+                      isOpen={
+                        openDesktopMenu ===
+                        menuKey
+                      }
+                      onOpen={() =>
+                        setOpenDesktopMenu(
+                          menuKey,
+                        )
+                      }
+                      onClose={() =>
+                        setOpenDesktopMenu(
+                          null,
+                        )
+                      }
+                    />
+                  );
+                },
+              )}
+
+              {secondaryLinks.map(
+                (link) => {
+                  const active =
+                    isMainLinkActive(
+                      link.url,
+                      link.pageType,
+                    );
+
+                  return (
+                    <div
+                      key={link.url}
+                      className={
+                        Styles.desktopNavItem
+                      }
+                    >
+                      <a
+                        href={link.url}
+                        className={[
+                          Styles.navLink,
+                          active
+                            ? Styles.navLinkActive
+                            : '',
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                        aria-current={
+                          active
+                            ? 'page'
+                            : undefined
+                        }
+                      >
+                        {link.title}
+                      </a>
+                    </div>
+                  );
+                },
+              )}
+            </nav>
+
+            {/* =========================================
+                ACTIONS
+            ========================================= */}
+
+            <div
+              className={
+                Styles.headerActions
+              }
+            >
+              {/* DESKTOP LANGUAGE */}
+
+              <LanguageSwitcher
+                lang={lang}
+                onChange={
+                  changeLanguage
+                }
+              />
+
+              {/* CART */}
+
+              <CartButton
+                goToBasket={
+                  goToBasket
+                }
+              />
+
+              {/* MOBILE LANGUAGE */}
+
+              <LanguageSwitcher
+                lang={lang}
+                onChange={
+                  changeLanguage
+                }
+                className={
+                  Styles.languageSwitcherHeaderMobile
+                }
+              />
+
+              {/* PROJECT BUTTON */}
+
+              <a
+                href="/contact/"
+                className={
+                  Styles.projectButton
+                }
+              >
+                Обсудить проект
+
+                <ArrowRight />
+              </a>
+
+              {/* BURGER */}
+
+              <button
+                type="button"
+                className={[
+                  Styles.burger,
+                  mobileOpen
+                    ? Styles.burgerOpen
+                    : '',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+                onClick={() =>
+                  setMobileOpen(
+                    (previous) =>
+                      !previous,
+                  )
+                }
+                aria-label={
+                  mobileOpen
+                    ? 'Закрыть меню'
+                    : 'Открыть меню'
+                }
+                aria-expanded={
+                  mobileOpen
+                }
+              >
+                <span />
+                <span />
+                <span />
+              </button>
             </div>
           </div>
         </div>
       </header>
+      {/* =====================================================
+    MOBILE OVERLAY
+===================================================== */}
 
-      <nav className={`${Styles.navSticky} ${isActiveMobileMenu ? Styles.active : ''}`}>
-        <div className={Styles.menuToggle} onClick={onToggleMobileMenu}>
-          <img
-            src={isActiveMobileMenu ? cross.src : menuIcon.src}
-            alt=""
-          />
+      <div
+        className={[
+          Styles.mobileOverlay,
+          mobileOpen ? Styles.mobileOverlayVisible : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        onClick={closeMobileMenu}
+        aria-hidden="true"
+      />
+
+      {/* =====================================================
+    MOBILE PANEL
+===================================================== */}
+
+      <aside
+        className={[
+          Styles.mobilePanel,
+          mobileOpen ? Styles.mobilePanelVisible : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        aria-hidden={!mobileOpen}
+      >
+        <div className={Styles.mobilePanelHeader}>
+          <div>
+            <span className={Styles.mobileMenuLabel}>
+              МЕНЮ
+            </span>
+
+            <span className={Styles.mobileMenuSub}>
+              ИПП «Новые Технологии»
+            </span>
+          </div>
+
+          <button
+            type="button"
+            className={Styles.mobileClose}
+            onClick={closeMobileMenu}
+            aria-label="Закрыть меню"
+          >
+            <span />
+            <span />
+          </button>
         </div>
 
-        <ul className={`${Styles.navMenu} ${isActiveMobileMenu ? Styles.active : ''}`}>
-          <li>
-            <a href="/home/" className={pageType === 'home' ? Styles.active : ''}>
-              Главная
+        <nav
+          className={Styles.mobileNav}
+          aria-label="Мобильная навигация"
+        >
+          {mainLinks.map((item) => (
+            <a
+              key={item.title}
+              href={item.url}
+              className={[
+                Styles.mobileMainLink,
+                isMainLinkActive(
+                  item.url,
+                  item.pageType
+                )
+                  ? Styles.mobileMainLinkActive
+                  : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              {item.title}
             </a>
-          </li>
-          <li>
-            <a href="/about/" className={pageType === 'about' ? Styles.active : ''}>
-              О компании
-            </a>
-          </li>
-
-          {menuData.map((item, index) => (
-            <MenuItem
-              key={index}
-              item={item}
-              pageType={pageType}
-              isMobile={isMobile}
-              openItems={openItems}
-              setOpenItems={setOpenItems}
-            // parentId не передаем для корневых элементов
-            />
           ))}
 
-          <li>
-            <a href="/documents/" className={pageType === 'documents' ? Styles.active : ''}>
-              Документы
+          {menuData.map(
+            (item: MenuItem, index: number) => (
+              <MobileMenuItem
+                key={`${item.title}-${index}`}
+                item={item}
+                currentPath={currentPath}
+                pageType={pageType}
+                openItems={openItems}
+                setOpenItems={setOpenItems}
+              />
+            )
+          )}
+
+          {secondaryLinks.map((item) => (
+            <a
+              key={item.title}
+              href={item.url}
+              className={[
+                Styles.mobileMainLink,
+                isMainLinkActive(
+                  item.url,
+                  item.pageType
+                )
+                  ? Styles.mobileMainLinkActive
+                  : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              {item.title}
             </a>
-          </li>
-          <li>
-            <a href="/news/" className={pageType === 'news' ? Styles.active : ''}>
-              Новости
+          ))}
+
+          {/* =================================================
+        ТОЛЬКО <= 900px
+
+        В 901–1340px этот блок полностью скрыт.
+        Он находится ВНУТРИ mobileNav,
+        поэтому не фиксируется снизу.
+    ================================================= */}
+
+          <div className={Styles.mobileExtra}>
+            <div className={Styles.mobileContacts}>
+              <span className={Styles.mobileContactsTitle}>
+                КОНТАКТЫ
+              </span>
+
+              <a
+                href="https://yandex.ru/maps/?text=Уфа%2C%20ул.%20Заки%20Валиди%2032%2F2"
+                target="_blank"
+                rel="noreferrer"
+                className={Styles.mobileAddress}
+              >
+                <span className={Styles.mobileContactIcon}>
+                  <LocationIcon />
+                </span>
+
+                <span>
+                  Уфа, ул. Заки Валиди 32/2
+                </span>
+              </a>
+
+              <a href="mailto:nt@tech-new.ru">
+                <span className={Styles.mobileContactIcon}>
+                  <MailIcon />
+                </span>
+
+                <span>
+                  nt@tech-new.ru
+                </span>
+              </a>
+
+              <a href="tel:+73472939333">
+                <span className={Styles.mobileContactIcon}>
+                  <PhoneIcon />
+                </span>
+
+                <span>
+                  +7 (347) 293-93-33
+                </span>
+              </a>
+            </div>
+
+            <a
+              href="/contact/"
+              className={Styles.mobileProjectButton}
+            >
+              <span>Обсудить проект</span>
+              <ArrowRight />
             </a>
-          </li>
-          <li>
-            <a href="/procurement/" className={pageType === 'procurement' ? Styles.active : ''}>
-              Закупки
-            </a>
-          </li>
-          <li>
-            <a href="/careers/" className={pageType === 'careers' ? Styles.active : ''}>
-              Карьера
-            </a>
-          </li>
-          <li>
-            <a href="/shop/" className={pageType === 'shop' ? Styles.active : ''}>
-              Онлайн магазин
-            </a>
-          </li>
-          <li>
-            <a href="/contact/" className={pageType === 'contact' ? Styles.active : ''}>
-              Контакты
-            </a>
-          </li>
-        </ul>
-      </nav>
+          </div>
+        </nav>
+      </aside>
     </>
   );
 };
+
+export default Header;
