@@ -140,8 +140,11 @@ export const Contact = () => {
                 return (
                   <div
                     key={contact.type}
-                    className={`${Styles.contactCard} ${isPrimary ? Styles.primaryCard : ''
-                      }`}
+                    className={[
+                      Styles.contactCard,
+                      isPrimary && Styles.primaryCard,
+                      contact.type === 'legal' && Styles.legalCard,
+                    ].filter(Boolean).join(' ')}
                     style={
                       {
                         '--delay': `${index * 65}ms`,

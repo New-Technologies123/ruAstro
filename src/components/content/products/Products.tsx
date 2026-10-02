@@ -1,316 +1,494 @@
-import { Layout } from '../../layout/Layout';
-import { Card } from '../../ui/card/Card';
-import { useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+import Styles from './scroll.module.scss';
+
+import { BackToTop } from '../../ui/back-to-top/BackToTop';
 import { AccountingSystem } from './AccountingSystem';
 import { Accessories } from './Accessories';
 import { MeasuringSystem } from './MeasuringSystem';
 import { PreparationSystems } from './PreparationSystems';
 import { PumpingStations } from './PumpingStations';
+import {
+  ProductCategoryCard,
+  type ProductCategory,
+  type ProductId,
+} from '../../ui/product-category-card/ProductCategoryCard';
 
 import product_1 from '../../../images/products/product_1.webp';
 import product_2 from '../../../images/products/product_2.0.webp';
 import product_3 from '../../../images/products/product_3.webp';
 import product_4 from '../../../images/products/product_4.webp';
 import product_5 from '../../../images/products/product_5.webp';
-import { BackToTop } from '../../ui/back-to-top/BackToTop'
-import styles from './scroll.module.scss';
 
-type TProducts = | 'accounting-system' | 'accessories' | 'measuring-system' | 'preparation-systems' | 'pumping-stations';
+const products: ProductCategory[] = [
+  {
+    id: 'accounting-system',
+    number: '01',
+    label: 'Учёт и замер',
+    title: 'Автоматизированные групповые замерные установки',
+    description:
+      'Стационарные и мобильные установки для измерения продукции скважин.',
+    image: product_1.src,
+    tag: 'АГЗУ',
+  },
+  {
+    id: 'accessories',
+    number: '02',
+    label: 'Комплектующие',
+    title: 'Комплектующие для АГЗУ',
+    description:
+      'Расходомеры, переключатели, клапаны и другие узлы для замерных установок.',
+    image: product_2.src,
+    tag: 'АГЗУ',
+  },
+  {
+    id: 'measuring-system',
+    number: '03',
+    label: 'Измерительные системы',
+    title: 'Системы учёта углеводородов и пластовой жидкости',
+    description:
+      'Решения для измерения количества и показателей качества нефти, газа и воды.',
+    image: product_3.src,
+    tag: 'Измерение',
+  },
+  {
+    id: 'preparation-systems',
+    number: '04',
+    label: 'Подготовка',
+    title: 'Системы подготовки нефти, газа и воды',
+    description:
+      'Оборудование для подготовки, очистки и дозирования на промысловых объектах.',
+    image: product_4.src,
+    tag: 'Подготовка',
+  },
+  {
+    id: 'pumping-stations',
+    number: '05',
+    label: 'Перекачка',
+    title: 'Насосные станции перекачки',
+    description:
+      'Блочные станции для перекачки нефти, нефтепродуктов и воды.',
+    image: product_5.src,
+    tag: 'Перекачка',
+  },
+];
 
-const pathnameToProduct = (pathname: string): TProducts | null => {
-  const parts = pathname.split('/').filter(Boolean);
-
-  if (parts.length === 2 && parts[0] === 'products') {
-    return parts[1] as TProducts;
-  }
-
-  return null;
-};
-
-// Ключи для хранения данных в sessionStorage
-const SCROLL_POSITION_KEY = 'products_scroll_position';
 const SELECTED_CARD_KEY = 'products_selected_card';
 const FROM_PRODUCT_KEY = 'from_product_page';
 
+function categoryFromPath(pathname: string): ProductId | null {
+  const match = pathname.match(
+    /^\/products\/(accounting-system|accessories|measuring-system|preparation-systems|pumping-stations)\/?$/
+  );
+
+  return match ? (match[1] as ProductId) : null;
+}
+
+function currentCategory(): ProductId | null {
+  return typeof window === 'undefined'
+    ? null
+    : categoryFromPath(window.location.pathname);
+}
+
 export const Products = () => {
-  const [currentPage, setCurrentPage] = useState<TProducts | null>(null);
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  
-  const trackRef = useRef<HTMLDivElement>(null);
-  const prevBtnRef = useRef<HTMLButtonElement>(null);
-  const nextBtnRef = useRef<HTMLButtonElement>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [category, setCategory] = useState<ProductId | null>(currentCategory);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  // Проверка мобильного устройства
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 720);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const goTo = (path: string, cardIndex?: number) => {
-    if (cardIndex !== undefined) {
-      sessionStorage.setItem(SELECTED_CARD_KEY, String(cardIndex));
-      sessionStorage.setItem(FROM_PRODUCT_KEY, 'true');
-    }
-    if (trackRef.current) {
-      sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
-    }
-    window.history.pushState({}, '', path);
-    setCurrentPage(pathnameToProduct(path));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  const trackRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const track = trackRef.current;
-    const cards = track?.querySelectorAll('.card');
-    const prevBtn = prevBtnRef.current;
-    const nextBtn = nextBtnRef.current;
-
-    if (!track || !cards?.length || !prevBtn || !nextBtn) return;
-
-    let current = 0;
-
-    const updateArrows = () => {
-      if (current <= 0) {
-        prevBtn.classList.remove('visible');
-        prevBtn.style.visibility = 'hidden';
-      } else {
-        prevBtn.classList.add('visible');
-        prevBtn.style.visibility = 'visible';
-      }
-      
-      if (current >= cards.length - 1) {
-        nextBtn.classList.remove('visible');
-        nextBtn.style.visibility = 'hidden';
-      } else {
-        nextBtn.classList.add('visible');
-        nextBtn.style.visibility = 'visible';
-      }
+    const onLocationChange = () => {
+      setCategory(currentCategory());
     };
 
-    const updateDots = (index: number) => {
-      setCurrentCardIndex(index);
-    };
-
-    const cardStep = () => {
-      return cards.length > 1
-        ? (cards[1] as HTMLElement).offsetLeft - (cards[0] as HTMLElement).offsetLeft
-        : (cards[0] as HTMLElement).offsetWidth;
-    };
-
-    const goToCard = (index: number, smooth: boolean = true) => {
-      current = Math.max(0, Math.min(cards.length - 1, index));
-      const card = cards[current] as HTMLElement;
-      const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
-      track.scrollTo({ left, behavior: smooth ? 'smooth' : 'auto' });
-      updateArrows();
-      updateDots(current);
-    };
-
-    const handleScroll = () => {
-      const step = cardStep();
-      if (step > 0) {
-        current = Math.round(track.scrollLeft / step);
-        current = Math.max(0, Math.min(cards.length - 1, current));
-        updateArrows();
-        updateDots(current);
-      }
-    };
-
-    const getTargetCardIndex = (): number => {
-      const fromProduct = sessionStorage.getItem(FROM_PRODUCT_KEY);
-      
-      if (fromProduct === 'true') {
-        const savedCardIndex = sessionStorage.getItem(SELECTED_CARD_KEY);
-        sessionStorage.removeItem(FROM_PRODUCT_KEY);
-        sessionStorage.removeItem(SELECTED_CARD_KEY);
-        sessionStorage.removeItem(SCROLL_POSITION_KEY);
-        
-        if (savedCardIndex !== null) {
-          const index = parseInt(savedCardIndex, 10);
-          if (!isNaN(index) && index >= 0 && index < cards.length) {
-            return index;
-          }
-        }
-        return 0;
-      }
-
-      sessionStorage.removeItem(SELECTED_CARD_KEY);
-      sessionStorage.removeItem(SCROLL_POSITION_KEY);
-      return 0;
-    };
-
-    const targetIndex = getTargetCardIndex();
-    goToCard(targetIndex, false);
-
-    setIsInitialized(true);
-
-    // Сохраняем ссылки на обработчики для правильного удаления
-    const handleNextClick = () => {
-      goToCard(current + 1);
-      setTimeout(() => {
-        if (trackRef.current) {
-          sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
-        }
-      }, 100);
-    };
-    
-    const handlePrevClick = () => {
-      goToCard(current - 1);
-      setTimeout(() => {
-        if (trackRef.current) {
-          sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
-        }
-      }, 100);
-    };
-
-    const handleScrollEvent = () => {
-      handleScroll();
-      if (trackRef.current) {
-        sessionStorage.setItem(SCROLL_POSITION_KEY, String(trackRef.current.scrollLeft));
-      }
-    };
-
-    nextBtn.addEventListener('click', handleNextClick);
-    prevBtn.addEventListener('click', handlePrevClick);
-    track.addEventListener('scroll', handleScrollEvent, { passive: true });
+    window.addEventListener('popstate', onLocationChange);
 
     return () => {
-      nextBtn.removeEventListener('click', handleNextClick);
-      prevBtn.removeEventListener('click', handlePrevClick);
-      track.removeEventListener('scroll', handleScrollEvent);
+      window.removeEventListener('popstate', onLocationChange);
     };
   }, []);
 
-  useEffect(() => {
-    const sync = () => setCurrentPage(pathnameToProduct(window.location.pathname));
-    sync();
-    window.addEventListener('popstate', sync);
-    return () => window.removeEventListener('popstate', sync);
+  const scrollToCard = useCallback(
+    (index: number, behavior: ScrollBehavior = 'smooth') => {
+      const track = trackRef.current;
+      const card = track?.querySelector<HTMLElement>(
+        `[data-product-card="${index}"]`
+      );
+
+      if (!track || !card) return;
+
+      const left =
+        card.getBoundingClientRect().left -
+        track.getBoundingClientRect().left +
+        track.scrollLeft -
+        parseFloat(getComputedStyle(track).paddingLeft);
+
+      track.scrollTo({
+        left,
+        behavior,
+      });
+    },
+    []
+  );
+
+  const handleCarouselScroll = useCallback(() => {
+    const track = trackRef.current;
+
+    if (!track) return;
+
+    const targetLeft =
+      track.getBoundingClientRect().left +
+      parseFloat(getComputedStyle(track).paddingLeft);
+
+    const cards = track.querySelectorAll<HTMLElement>('[data-product-card]');
+
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    cards.forEach((card, index) => {
+      const distance = Math.abs(
+        card.getBoundingClientRect().left - targetLeft
+      );
+
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    setActiveIndex(closestIndex);
   }, []);
 
-  if (currentPage === 'accounting-system') {
-    return <AccountingSystem/>;
+  useEffect(() => {
+    if (
+      category !== null ||
+      sessionStorage.getItem(FROM_PRODUCT_KEY) !== 'true'
+    ) {
+      return;
+    }
+
+    const savedIndex = Number(
+      sessionStorage.getItem(SELECTED_CARD_KEY)
+    );
+
+    sessionStorage.removeItem(FROM_PRODUCT_KEY);
+    sessionStorage.removeItem(SELECTED_CARD_KEY);
+
+    if (
+      !Number.isInteger(savedIndex) ||
+      savedIndex < 0 ||
+      savedIndex >= products.length
+    ) {
+      return;
+    }
+
+    const frame = requestAnimationFrame(() => {
+      scrollToCard(savedIndex, 'auto');
+    });
+
+    return () => cancelAnimationFrame(frame);
+  }, [category, scrollToCard]);
+
+  if (category === 'accounting-system') {
+    return <AccountingSystem />;
   }
 
-  if (currentPage === 'accessories') {
-    return <Accessories/>;
+  if (category === 'accessories') {
+    return <Accessories />;
   }
 
-  if (currentPage === 'measuring-system') {
-    return <MeasuringSystem/>;
+  if (category === 'measuring-system') {
+    return <MeasuringSystem />;
   }
 
-  if (currentPage === 'preparation-systems') {
-    return <PreparationSystems/>;
+  if (category === 'preparation-systems') {
+    return <PreparationSystems />;
   }
 
-  if (currentPage === 'pumping-stations') {
-    return <PumpingStations/>;
+  if (category === 'pumping-stations') {
+    return <PumpingStations />;
   }
 
   return (
-    <Layout title="Продукция" 
-      description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области 
-      безопасности и качества, что подтверждено соответствующими российскими сертификатами и сертификатами 
-      Таможенного союза. На предприятии разработана, внедрена и успешно работает Интегрированная система 
-      менеджмента качества, сертифицированная на соответствие с требованиями ГОСТ ISO 9001-2015 (ISO 9001:2015), 
-      ГОСТ Р ИСО 14001-2016 (ISO 14001:2016), ГОСТ Р 45001-2020 (ISO 45001:2018), ГОСТ Р ИСО 29001-2023 (ISO 29001:2020).">
-      <>
-        <div className={styles.productsWrapper}>
-          <div className={styles.cardsTrack} ref={trackRef}>
-            <div className="card">
-              <Card
-                imgSrc={product_1.src} 
-                title="Автоматизированная групповая замерная установка (АГЗУ)"
-                onClick={() => goTo('/products/accounting-system', 0)}
-              />
+    <main className={Styles.products}>
+      {/* HERO */}
+
+      <section
+        className={Styles.hero}
+        aria-labelledby="products-title"
+      >
+        <div className={Styles.heroGrid} />
+
+        <div className={Styles.heroContent}>
+          <div className={Styles.heroTopline}>
+            <span className={Styles.eyebrow}>
+              Продукция · Собственное производство
+            </span>
+
+            {/* <span className={Styles.heroCode}>
+              NT / PRODUCT SYSTEM
+            </span> */}
+          </div>
+
+          <div className={Styles.heroMain}>
+            <div className={Styles.heroCopy}>
+              <h1 id="products-title">
+                Оборудование
+                <span>для нефтегазовой отрасли</span>
+              </h1>
+
+              <p>
+                Проектируем и производим оборудование для добычи,
+                измерения, подготовки и транспортировки углеводородов.
+              </p>
+
+              <div className={Styles.heroActions}>
+                <a
+                  className={Styles.primaryLink}
+                  href="#catalog"
+                >
+                  <span>Смотреть оборудование</span>
+                  <span aria-hidden="true">↗</span>
+                </a>
+
+                <a
+                  className={Styles.secondaryLink}
+                  href="/contact/"
+                >
+                  <span>Обсудить задачу</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
             </div>
-            <div className="card">
-              <Card
-                imgSrc={product_2.src} 
-                title="Комплектующие для автоматизированной групповой замерной установки"
-                onClick={() => goTo('/products/accessories', 1)}
-              />
+
+          </div>
+
+          <div className={Styles.heroBottom}>
+            <div className={Styles.heroFacts}>
+              <div className={Styles.heroFact}>
+                <strong>05</strong>
+                <span>направлений продукции</span>
+              </div>
+
+              <div className={Styles.heroFact}>
+                <strong>2005</strong>
+                <span>год основания</span>
+              </div>
+
+              <div className={Styles.heroFact}>
+                <strong>Уфа</strong>
+                <span>собственное производство</span>
+              </div>
             </div>
-            <div className="card">
-              <Card
-                imgSrc={product_3.src} 
-                title="Система учёта углеводородов и пластовой жидкости"
-                onClick={() => goTo('/products/measuring-system', 2)}
-              />
-            </div>
-            <div className="card">
-              <Card
-                imgSrc={product_4.src} 
-                title="Системы подготовки нефти, газа и воды"
-                onClick={() => goTo('/products/preparation-systems', 3)}
-              />
-            </div>
-            <div className="card">
-              <Card
-                imgSrc={product_5.src} 
-                title="Насосные станции перекачки нефти, нефтепродуктов и воды"
-                onClick={() => goTo('/products/pumping-stations', 4)}
-              />
+
+            <div className={Styles.heroMeta}>
+              <span>НЕФТЬ</span>
+              <span>ГАЗ</span>
+              <span>ВОДА</span>
             </div>
           </div>
-          
-          <div className={styles.mobileNav}>
-            <button 
-              className={`${styles.prevBtn}`} 
-              ref={prevBtnRef}
-              aria-label="Предыдущий продукт"
+        </div>
+      </section>
+
+      {/* CATALOG */}
+
+      <section
+        className={Styles.catalog}
+        id="catalog"
+        aria-labelledby="catalog-title"
+      >
+        <div className={Styles.sectionHeading}>
+          <div className={Styles.sectionTitle}>
+            <span className={Styles.eyebrow}>
+              01 / Направления продукции
+            </span>
+
+            <h2 id="catalog-title">
+              Оборудование
+              <span>под задачи промысла</span>
+            </h2>
+          </div>
+
+          <div className={Styles.sectionIntro}>
+            <span className={Styles.sectionLine} />
+
+            <p>
+              Выберите направление, чтобы посмотреть оборудование,
+              характеристики и доступную техническую документацию.
+            </p>
+          </div>
+        </div>
+
+        <div
+          ref={trackRef}
+          className={Styles.productsGrid}
+          role="region"
+          aria-label="Направления продукции"
+          tabIndex={0}
+          onScroll={handleCarouselScroll}
+        >
+          {products.map((product, index) => (
+            <ProductCategoryCard
+              key={product.id}
+              product={product}
+              index={index}
+              onSelect={(selectedIndex) => {
+                sessionStorage.setItem(SELECTED_CARD_KEY, String(selectedIndex));
+                sessionStorage.setItem(FROM_PRODUCT_KEY, 'true');
+              }}
+            />
+          ))}
+        </div>
+
+        <div className={Styles.catalogFooter}>
+          <div
+            className={Styles.carouselDots}
+            role="group"
+            aria-label="Выбрать направление продукции"
+          >
+            {products.map((product, index) => (
+              <button
+                key={product.id}
+                type="button"
+                aria-label={`Показать направление ${index + 1}: ${product.label}`}
+                aria-current={activeIndex === index ? 'true' : undefined}
+                onClick={() => scrollToCard(index)}
+              />
+            ))}
+          </div>
+
+          <div className={Styles.carouselNavigation}>
+            <button
+              type="button"
+              aria-label="Предыдущее направление"
+              disabled={activeIndex === 0}
+              onClick={() =>
+                scrollToCard(activeIndex - 1)
+              }
             >
               ←
             </button>
-            <button 
-              className={`${styles.nextBtn}`} 
-              ref={nextBtnRef}
-              aria-label="Следующий продукт"
+
+            <button
+              type="button"
+              aria-label="Следующее направление"
+              disabled={
+                activeIndex === products.length - 1
+              }
+              onClick={() =>
+                scrollToCard(activeIndex + 1)
+              }
             >
               →
             </button>
           </div>
-
-          {/* Индикаторы пагинации (только на мобильных) */}
-          {isMobile && (
-            <div className={styles.paginationDots} role="tablist" aria-label="Навигация по продуктам">
-              {Array.from({ length: 5 }).map((_, index) => {
-                const cards = trackRef.current?.querySelectorAll('.card');
-                const total = cards?.length || 5;
-                if (index >= total) return null;
-                
-                return (
-                  <button
-                    key={index}
-                    className={`${styles.dot} ${currentCardIndex === index ? styles.active : ''}`}
-                    onClick={() => {
-                      const track = trackRef.current;
-                      const cards = track?.querySelectorAll('.card');
-                      if (!track || !cards) return;
-                      
-                      const card = cards[index] as HTMLElement;
-                      const left = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
-                      track.scrollTo({ left, behavior: 'smooth' });
-                      setCurrentCardIndex(index);
-                    }}
-                    role="tab"
-                    aria-selected={currentCardIndex === index}
-                    aria-label={`Перейти к продукту ${index + 1}`}
-                  />
-                );
-              })}
-            </div>
-          )}
         </div>
-      </>
+      </section>
+
+      {/* PROCESS */}
+
+      <section
+        className={Styles.approach}
+        aria-labelledby="approach-title"
+      >
+        <div className={Styles.approachHeading}>
+          <span className={Styles.eyebrow}>
+            02 / Как мы работаем
+          </span>
+
+          <h2 id="approach-title">
+            От параметров объекта
+            <span>до готового решения</span>
+          </h2>
+
+          <p>
+            Подбираем конфигурацию оборудования с учётом
+            условий эксплуатации и технических требований
+            проекта.
+          </p>
+        </div>
+
+        <div className={Styles.approachSteps}>
+          <div className={Styles.approachStep}>
+            <span className={Styles.stepNumber}>01</span>
+
+            <div>
+              <strong>Анализ задачи</strong>
+
+              <p>
+                Изучаем параметры объекта и требования
+                к оборудованию.
+              </p>
+            </div>
+
+            <span className={Styles.stepArrow}>↗</span>
+          </div>
+
+          <div className={Styles.approachStep}>
+            <span className={Styles.stepNumber}>02</span>
+
+            <div>
+              <strong>Проектирование</strong>
+
+              <p>
+                Определяем состав и исполнение
+                технического решения.
+              </p>
+            </div>
+
+            <span className={Styles.stepArrow}>↗</span>
+          </div>
+
+          <div className={Styles.approachStep}>
+            <span className={Styles.stepNumber}>03</span>
+
+            <div>
+              <strong>Производство и поставка</strong>
+
+              <p>
+                Изготавливаем оборудование и готовим
+                его к отгрузке.
+              </p>
+            </div>
+
+            <span className={Styles.stepArrow}>↗</span>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+
+      <section
+        className={Styles.projectCta}
+        aria-labelledby="project-title"
+      >
+        <div className={Styles.ctaMark}>
+          <span>NT</span>
+        </div>
+
+        <div className={Styles.ctaContent}>
+          <span className={Styles.eyebrow}>
+            03 / Техническая задача
+          </span>
+
+          <h2 id="project-title">
+            Обсудим оборудование
+            <span>для вашего проекта</span>
+          </h2>
+
+          <p>
+            Опишите условия эксплуатации — специалисты
+            помогут подобрать решение.
+          </p>
+        </div>
+
+        <a href="/contact/">
+          <span>Связаться с нами</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      </section>
+
       <BackToTop />
-    </Layout>
+    </main>
   );
 };

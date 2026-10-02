@@ -1,111 +1,490 @@
-// pumping-stations.tsx
-import { useState } from 'react';
-import { Card } from '../../ui/card/Card';
-import { LayoutBack } from '../../layout/LayoutBack';
+import { useEffect, useRef, useState } from 'react';
+
 import Styles from './accounting.module.scss';
-
-import product_5_1 from '../../../images/products/product_5.webp';
-import product_5_2 from '../../../images/products/product_5_1.webp';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { EquipmentCard } from '../../ui/equipment-card/EquipmentCard';
 
-type TPumping = 'internal' | 'multiphase';
+import transferImage from '../../../images/products/product_5.webp';
+import multiphaseImage from '../../../images/products/product_5_1.webp';
+
+const stations = [
+  {
+    id: 'internal',
+    number: '01',
+    label: 'Перекачка нефти',
+    title:
+      'Блочная насосная станция внутренней и внешней перекачки нефти',
+    description:
+      'Решение для технологической и межобъектовой перекачки нефти с контролем рабочих параметров.',
+    image: transferImage.src,
+    href: '/products/pumping-stations/internal/',
+  },
+  {
+    id: 'multiphase',
+    number: '02',
+    label: 'Мультифазная перекачка',
+    title: 'Блочная мультифазная насосная станция',
+    description:
+      'Установка для перекачки многофазной продукции скважин в промысловых условиях.',
+    image: multiphaseImage.src,
+    href: '/products/pumping-stations/multiphase/',
+  },
+] as const;
 
 export const PumpingStations = () => {
-  const [activeTab, setActiveTab] = useState<'info' | 'specs'>('info');
+  const trackRef = useRef<HTMLDivElement | null>(null);
 
-  const cardTitle: Record<TPumping, string> = {
-    internal: 'Блочная насосная станция внутренней и внешней перекачки нефти',
-    multiphase: 'Блочная мультифазная насосная станция',
+  /**
+   * Во время программного smooth-scroll
+   * onScroll не должен менять activeIndex.
+   */
+  const isProgrammaticScroll = useRef(false);
+
+  /**
+   * Таймер завершения программного перехода.
+   */
+  const scrollTimerRef = useRef<number | null>(null);
+
+  /**
+   * Ограничиваем количество пересчётов
+   * activeIndex во время ручного свайпа.
+   */
+  const rafRef = useRef<number | null>(null);
+
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  /**
+   * Очистка таймеров при размонтировании.
+   */
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current !== null) {
+        window.clearTimeout(scrollTimerRef.current);
+      }
+
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
+  /**
+   * Определяем ближайшую карточку к текущей позиции
+   * горизонтального скролла.
+   *
+   * Во время программного перехода функция заблокирована.
+   */
+  const updateActiveIndex = () => {
+    if (isProgrammaticScroll.current) return;
+
+    const track = trackRef.current;
+
+    if (!track) return;
+
+    if (rafRef.current !== null) {
+      window.cancelAnimationFrame(rafRef.current);
+    }
+
+    rafRef.current = window.requestAnimationFrame(() => {
+      const currentTrack = trackRef.current;
+
+      if (!currentTrack || isProgrammaticScroll.current) {
+        return;
+      }
+
+      const cards = Array.from(
+        currentTrack.children,
+      ) as HTMLElement[];
+
+      if (!cards.length) return;
+
+      const currentScrollLeft =
+        currentTrack.scrollLeft;
+
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const distance = Math.abs(
+          card.offsetLeft - currentScrollLeft,
+        );
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      /**
+       * Не вызываем setState, если индекс уже тот же.
+       */
+      setActiveIndex((previousIndex) =>
+        previousIndex === closestIndex
+          ? previousIndex
+          : closestIndex,
+      );
+    });
   };
 
-  const goToPumping = (item: TPumping) => {
-    window.location.href = `/products/pumping-stations/${item}`;
-  };
+  /**
+   * Переход к выбранной станции.
+   */
+  const scrollToStation = (index: number) => {
+    const track = trackRef.current;
 
-  const onBackProducts = () => {
-    window.location.href = '/products';
+    if (!track) return;
+
+    /**
+     * Защита от выхода за границы.
+     */
+    const safeIndex = Math.max(
+      0,
+      Math.min(index, stations.length - 1),
+    );
+
+    const card = track.children.item(
+      safeIndex,
+    ) as HTMLElement | null;
+
+    if (!card) return;
+
+    /**
+     * Отменяем предыдущий таймер.
+     */
+    if (scrollTimerRef.current !== null) {
+      window.clearTimeout(scrollTimerRef.current);
+    }
+
+    /**
+     * Отменяем ожидающий RAF.
+     */
+    if (rafRef.current !== null) {
+      window.cancelAnimationFrame(rafRef.current);
+    }
+
+    /**
+     * Блокируем onScroll.
+     */
+    isProgrammaticScroll.current = true;
+
+    /**
+     * Сразу устанавливаем нужную станцию.
+     *
+     * Поэтому номер 01 / 02 не будет прыгать
+     * во время smooth-анимации.
+     */
+    setActiveIndex(safeIndex);
+
+    const computedStyle = getComputedStyle(track);
+
+    const paddingLeft =
+      parseFloat(computedStyle.paddingLeft) || 0;
+
+    /**
+     * Рассчитываем точную позицию карточки
+     * внутри scroll-контейнера.
+     */
+    const targetLeft = Math.max(
+      0,
+      card.offsetLeft - paddingLeft,
+    );
+
+    track.scrollTo({
+      left: targetLeft,
+      behavior: 'smooth',
+    });
+
+    /**
+     * После окончания анимации снова разрешаем
+     * обычную синхронизацию с ручным свайпом.
+     */
+    scrollTimerRef.current = window.setTimeout(() => {
+      isProgrammaticScroll.current = false;
+
+      const currentTrack = trackRef.current;
+
+      if (!currentTrack) return;
+
+      const cards = Array.from(
+        currentTrack.children,
+      ) as HTMLElement[];
+
+      if (!cards.length) return;
+
+      const currentScrollLeft =
+        currentTrack.scrollLeft;
+
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((item, itemIndex) => {
+        const distance = Math.abs(
+          item.offsetLeft -
+            paddingLeft -
+            currentScrollLeft,
+        );
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = itemIndex;
+        }
+      });
+
+      setActiveIndex((previousIndex) =>
+        previousIndex === closestIndex
+          ? previousIndex
+          : closestIndex,
+      );
+    }, 500);
   };
 
   return (
-    <LayoutBack onBack={onBackProducts} title="Насосные станции перекачки нефти, нефтепродуктов и воды">
-      <div className={Styles.container}>
-        <div className={Styles.textColumn}>
+    <div className={Styles.page}>
+      <main>
+        <section
+          className={Styles.hero}
+          aria-labelledby="pumping-title"
+        >
+          <div
+            className={Styles.heroPattern}
+            aria-hidden="true"
+          />
 
-          <div className={Styles.contentWrapper}>
-            <div className={Styles.fadeIn}>
+          <div className={Styles.container}>
+            <nav
+              className={Styles.breadcrumbs}
+              aria-label="Хлебные крошки"
+            >
+              <a href="/products/">Продукция</a>
+
+              <span aria-hidden="true">›</span>
+
+              <span aria-current="page">
+                Насосные станции
+              </span>
+            </nav>
+
+            <h1 id="pumping-title">
+              Насосные станции{' '}
+              <em>для нефтегазовых объектов</em>
+            </h1>
+
+            <p className={Styles.heroDescription}>
+              Блочные решения для перекачки нефти и
+              многофазной продукции скважин. Конфигурацию
+              подбирают под параметры объекта.
+            </p>
+
+            <div className={Styles.heroActions}>
+              <a
+                className={Styles.primaryButton}
+                href="#equipment"
+              >
+                Смотреть станции{' '}
+                <span aria-hidden="true">↗</span>
+              </a>
+
+              <a
+                className={Styles.secondaryButton}
+                href="/contact/"
+              >
+                Обсудить задачу{' '}
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            <div className={Styles.heroFacts}>
+              <span>
+                <strong>2</strong> типа станций
+              </span>
+
+              <span>
+                Перекачка нефти и многофазной продукции
+              </span>
+
+              <span>Производство в Уфе</span>
+            </div>
+          </div>
+        </section>
+
+        <section
+          className={Styles.collection}
+          id="equipment"
+          aria-labelledby="equipment-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>
+                  01 / Оборудование
+                </span>
+
+                <h2 id="equipment-title">
+                  Выберите насосную станцию
+                </h2>
+              </div>
+
               <p>
-                Для надёжной перекачки нефти, нефтепродуктов и воды мы предлагаем блочные насосные станции, разработанные с учётом требований 
-                промышленной безопасности и энергоэффективности. В данном разделе представлены блочные насосные станции внутренней и внешней 
-                перекачки нефти, а также блочные мультифазные насосные станции — готовые решения для магистральных и технологических трубопроводов.
+                Откройте исполнение, чтобы посмотреть
+                назначение и технические материалы.
               </p>
+            </div>
 
-              <div className={Styles.featureGrid}>
-                <div className={Styles.featureItem}>
-                  <div className={Styles.iconWrapper}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2">
-                      <path d="M12 2v4M12 22v-4M4 12H2M6 12H4M20 12h-2M22 12h-2M19.07 4.93l-2.83 2.83M4.93 19.07l2.83-2.83M19.07 19.07l-2.83-2.83M4.93 4.93l2.83 2.83"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4>Энергоэффективность</h4>
-                    <p>Оптимизированные режимы работы для снижения энергопотребления</p>
-                  </div>
-                </div>
-                <div className={Styles.featureItem}>
-                  <div className={Styles.iconWrapper}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                      <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4>Надёжность</h4>
-                    <p>Бесперебойная работа в экстремальных условиях эксплуатации</p>
-                  </div>
-                </div>
-                <div className={Styles.featureItem}>
-                  <div className={Styles.iconWrapper}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2">
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4>Автоматизация</h4>
-                    <p>Полностью автоматизированные системы контроля и управления</p>
-                  </div>
-                </div>
-                <div className={Styles.featureItem}>
-                  <div className={Styles.iconWrapper}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2">
-                      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                      <polyline points="14 2 14 8 20 8"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4>Модульность</h4>
-                    <p>Блочное исполнение для быстрого монтажа и масштабирования</p>
-                  </div>
-                </div>
+            <div
+              ref={trackRef}
+              className={`${Styles.cards} ${Styles.cardsTwo}`}
+              role="region"
+              aria-label="Насосные станции"
+              tabIndex={0}
+              onScroll={updateActiveIndex}
+            >
+              {stations.map((station) => (
+                <EquipmentCard
+                  key={station.id}
+                  item={station}
+                />
+              ))}
+            </div>
+
+            <div className={Styles.carouselControls}>
+              <span className={Styles.carouselHint}>
+                Листайте карточки свайпом
+              </span>
+
+              <div className={Styles.carouselButtons}>
+                <span
+                  className={Styles.carouselCount}
+                  aria-live="polite"
+                >
+                  {String(activeIndex + 1).padStart(2, '0')}
+                  {' / '}
+                  {String(stations.length).padStart(2, '0')}
+                </span>
+
+                <button
+                  type="button"
+                  aria-label="Предыдущая станция"
+                  disabled={activeIndex === 0}
+                  onClick={() =>
+                    scrollToStation(activeIndex - 1)
+                  }
+                >
+                  ←
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Следующая станция"
+                  disabled={
+                    activeIndex === stations.length - 1
+                  }
+                  onClick={() =>
+                    scrollToStation(activeIndex + 1)
+                  }
+                >
+                  →
+                </button>
+              </div>
+            </div>
+
+            <div
+              className={Styles.carouselProgress}
+              aria-hidden="true"
+            >
+              <span
+                style={{
+                  width: `${
+                    ((activeIndex + 1) /
+                      stations.length) *
+                    100
+                  }%`,
+                }}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section
+          className={Styles.details}
+          aria-labelledby="details-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.detailsIntro}>
+              <span className={Styles.eyebrow}>
+                02 / Применение
+              </span>
+
+              <h2 id="details-title">
+                Станция под технологическую задачу
+              </h2>
+
+              <p>
+                Состав, исполнение и рабочие параметры станции
+                определяют по условиям эксплуатации и
+                требованиям объекта.
+              </p>
+            </div>
+
+            <div className={Styles.detailsList}>
+              <div>
+                <span>01</span>
+                <strong>Перекачка</strong>
+                <p>
+                  Выбор насосного решения под рабочую среду
+                  и режим объекта.
+                </p>
+              </div>
+
+              <div>
+                <span>02</span>
+                <strong>Блочное исполнение</strong>
+                <p>
+                  Компоновка оборудования в составе готовой
+                  станции.
+                </p>
+              </div>
+
+              <div>
+                <span>03</span>
+                <strong>Контроль</strong>
+                <p>
+                  Отслеживание рабочих параметров в
+                  технологическом процессе.
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className={Styles.cardsColumn}>
-          <Card
-            imgSrc={product_5_1.src}
-            title={cardTitle.internal}
-            onClick={() => goToPumping('internal')}
-          />
-          <Card
-            imgSrc={product_5_2.src}
-            title={cardTitle.multiphase}
-            onClick={() => goToPumping('multiphase')}
-          />
-        </div>
-      </div>
+        <section
+          className={Styles.contactCta}
+          aria-labelledby="contact-title"
+        >
+          <div className={Styles.container}>
+            <div>
+              <span className={Styles.eyebrow}>
+                Подбор под объект
+              </span>
+
+              <h2 id="contact-title">
+                Подберём станцию под параметры проекта
+              </h2>
+
+              <p>
+                Расскажите о среде, производительности и
+                условиях эксплуатации.
+              </p>
+            </div>
+
+            <a href="/contact/">
+              Обсудить проект{' '}
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
 
       <BackToTop />
-    </LayoutBack>
+    </div>
   );
 };

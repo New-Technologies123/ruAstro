@@ -443,27 +443,16 @@
 
 .introTitle {
   min-width: 0;
-
   max-width: 760px;
-
   margin: 0;
-
   color: var(--navy);
-
-  font-size:
-    clamp(38px, 4.4vw, 58px);
-
+  font-size: clamp(38px, 4.4vw, 58px);
   font-weight: 600;
-
   line-height: 1.03;
-
-  letter-spacing: -0.05em;
-
+  letter-spacing: -0.02em;
   overflow-wrap: break-word;
-
   em {
     color: var(--blue);
-
     font-style: normal;
   }
 }

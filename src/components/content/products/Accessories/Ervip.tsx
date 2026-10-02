@@ -1,239 +1,299 @@
-import { useEffect, useRef, useState } from "react";
-import Styles from "../products.module.scss";
-import back from '../../../../images/back.svg';
-import product from "../../../../images/products/product_2.webp";
+import { useRef, useState } from 'react';
 
-import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
-import { BackToTop } from "../../../ui/back-to-top/BackToTop";
+import Styles from '../products.module.scss';
+import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
+import { BackToTop } from '../../../ui/back-to-top/BackToTop';
+
+import ervipImage from '../../../../images/products/product_2.webp';
+import urpdImage from '../../../../images/products/urpd.webp';
+import psmImage from '../../../../images/products/product_2_2.webp';
+import kmrImage from '../../../../images/products/product_2_3.webp';
+import gidroprivodImage from '../../../../images/products/product_2_4.webp';
+import separationImage from '../../../../images/products/product_2_5.webp';
+
+type AccessoryId =
+  | 'ervip'
+  | 'urpd'
+  | 'psm'
+  | 'kmr'
+  | 'gidroprivod'
+  | 'separation';
+
+type Accessory = {
+  id: AccessoryId;
+  shortName: string;
+  title: string;
+  accent: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  features: readonly { title: string; text: string }[];
+  principle: string;
+  principlePoints: readonly { title: string; text: string }[];
+  survey?: string;
+};
+
+const item: Accessory = {
+    id: 'ervip',
+    shortName: 'ЭРВИП',
+    title: 'Вихревой расходомер',
+    accent: 'ЭРВИП',
+    description:
+      'Промышленный прибор для измерения расхода жидкостей и газов в автоматизированных установках типа «Спутник».',
+    image: ervipImage.src,
+    imageAlt: 'Вихревой расходомер ЭРВИП',
+    features: [
+      { title: 'Точность измерений', text: 'Стабильные показания расхода жидкостей и газов.' },
+      { title: 'Надёжность', text: 'Конструкция рассчитана на промышленную эксплуатацию.' },
+      { title: 'Срок службы', text: 'До 12 лет эксплуатации.' },
+      { title: 'Работа с загрязнениями', text: 'Предусмотрена работа в сложных условиях потока.' },
+      { title: 'Межповерочный интервал', text: 'До 4 лет между поверками.' },
+      { title: 'Настройка', text: 'Диапазон измерений можно настраивать под задачу.' },
+    ],
+    principle:
+      'При обтекании препятствия в потоке образуется вихревая дорожка Кармана. Частота образования вихрей связана со скоростью потока и используется для определения расхода.',
+    principlePoints: [
+      { title: 'Поток', text: 'Среда проходит через измерительный участок.' },
+      { title: 'Вихри', text: 'За препятствием возникает вихревая дорожка.' },
+      { title: 'Сигнал', text: 'Пьезоэлемент передаёт импульсы электронике расходомера.' },
+    ],
+    survey: '/survey/ervip.pdf',
+  };
+
+const related = [
+  { id: 'urpd', shortName: 'УРПД', image: urpdImage.src, imageAlt: 'Устройство для регулирования перепада давления УРПД' },
+  { id: 'psm', shortName: 'ПСМ', image: psmImage.src, imageAlt: 'Многоходовой переключатель скважин ПСМ' },
+  { id: 'kmr', shortName: 'КМР', image: kmrImage.src, imageAlt: 'Магниторегулируемый клапан КМР' },
+  { id: 'gidroprivod', shortName: 'Гидропривод', image: gidroprivodImage.src, imageAlt: 'Гидропривод ГП для переключателя скважин' },
+  { id: 'separation', shortName: 'Сепарационная ёмкость', image: separationImage.src, imageAlt: 'Сепарационная ёмкость АГЗУ' },
+] as const;
 
 export const Ervip = () => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
-  const heroImageRef = useRef<HTMLDivElement>(null);
+  const [bigPhoto, setBigPhoto] = useState(false);
+  const relatedRef = useRef<HTMLDivElement | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const onBack = () => {
-    window.location.href = "/products/accessories";
+  const updateActiveIndex = () => {
+    const track = relatedRef.current;
+    if (!track) return;
+
+    const start = track.getBoundingClientRect().left +
+      parseFloat(getComputedStyle(track).paddingLeft);
+    let nearest = 0;
+    let nearestDistance = Infinity;
+
+    Array.from(track.children).forEach((child, index) => {
+      const distance = Math.abs(child.getBoundingClientRect().left - start);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearest = index;
+      }
+    });
+    setActiveIndex(nearest);
   };
 
-  const onDoc = () => {
-    window.location.href = "/documents/?category=accessories";
+  const scrollToRelated = (index: number) => {
+    const track = relatedRef.current;
+    const card = track?.children.item(index) as HTMLElement | null;
+    if (!track || !card) return;
+
+    const left = card.getBoundingClientRect().left -
+      track.getBoundingClientRect().left + track.scrollLeft -
+      parseFloat(getComputedStyle(track).paddingLeft);
+    track.scrollTo({ left, behavior: 'smooth' });
+    setActiveIndex(index);
   };
-
-  /* ---------- 3D TILT EFFECT ---------- */
-
-  useEffect(() => {
-    const el = heroImageRef.current;
-    if (!el) return;
-
-    const move = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = -(y - centerY) / 20;
-      const rotateY = (x - centerX) / 20;
-
-      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    };
-
-    const leave = () => {
-      el.style.transform = "rotateX(0) rotateY(0)";
-    };
-
-    el.addEventListener("mousemove", move);
-    el.addEventListener("mouseleave", leave);
-
-    return () => {
-      el.removeEventListener("mousemove", move);
-      el.removeEventListener("mouseleave", leave);
-    };
-  }, []);
-
-  /* ---------- SCROLL REVEAL ---------- */
-
-  useEffect(() => {
-    const elements = document.querySelectorAll(`.${Styles.reveal}`);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(Styles.visible);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
-    <>
-      <div className={Styles.page}>
-        <button className={Styles.backButton} onClick={onBack}>
-          <img src={back.src} alt=""/>
-        </button>
+    <div className={Styles.page}>
+      <main>
+        <section className={Styles.hero} aria-labelledby="product-title">
+          <div className={Styles.container}>
+            <nav className={Styles.breadcrumbs} aria-label="Хлебные крошки">
+              <a href="/products/">Продукция</a>
+              <span aria-hidden="true">›</span>
+              <a href="/products/accessories/">Комплектующие АГЗУ</a>
+              <span aria-hidden="true">›</span>
+              <span aria-current="page">{item.shortName}</span>
+            </nav>
 
-        <section className={`${Styles.hero} ${Styles.reveal}`}>
-          <div className={Styles.heroText}>
-            <h1>
-              Вихревой расходомер <span>ЭРВИП</span>
-            </h1>
-
-            <p>
-              Высокоточный промышленный прибор для измерения расхода
-              жидкостей и газов в автоматизированных установках
-              типа «Спутник».
-            </p>
-
-            <div className={Styles.heroButtons}>
-              <button
-                className={Styles.primaryBtn}
-                onClick={() => setBigPhoto(product.src)}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <path d="M21 15L16 10L5 21" />
-                </svg>
-                Смотреть фото
-              </button>
-              <button className={Styles.secondaryBtn} onClick={onDoc}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                Документация
-              </button>
-            </div>
-          </div>
-
-          <div className={Styles.heroImageWrap}>
-            <div
-              className={Styles.imageCard}
-              ref={heroImageRef}
-              onClick={() => setBigPhoto(product.src)}
-            >
-              <div className={Styles.frame}>
-                <img src={product.src} alt="ЭРВИП" className={Styles.mainImage} />
+            <div className={Styles.heroGrid}>
+              <div className={Styles.heroContent}>
+                <span className={Styles.eyebrow}>Комплектующие для замерных установок</span>
+                <h1 id="product-title">{item.title} <em>{item.accent}</em></h1>
+                <p className={Styles.heroDescription}>{item.description}</p>
+                <div className={Styles.heroActions}>
+                  <a className={Styles.primaryButton} href="#features">
+                    Оборудование и назначение <span aria-hidden="true">↗</span>
+                  </a>
+                  <a
+                    className={Styles.secondaryButton}
+                    href="/documents/?category=accessories"
+                  >
+                    Документация <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+                <div className={Styles.heroNote}>
+                  <span className={Styles.noteDot} aria-hidden="true" />
+                  Компонент АГЗУ типа «Спутник»
+                </div>
               </div>
-              <div className={Styles.imageOverlay}>
-                <span className={Styles.zoomText}>
-                  Нажмите для увеличения
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
 
-        {/* FEATURES */}
-
-        <section className={`${Styles.features} ${Styles.reveal}`}>
-          <h2>Преимущества оборудования</h2>
-
-          <div className={Styles.featuresGrid}>
-            {[
-              ["Высокая точность", "Стабильные показания и высокая точность измерения расхода жидкостей и газов."],
-              ["Надежность", "Простая эксплуатация и высокая надежность промышленного уровня."],
-              ["Долговечность", "Срок службы прибора составляет до 12 лет эксплуатации."],
-              ["Устойчивость", "Нечувствительность к загрязнениям и стабильная работа в сложных условиях."],
-              ["Межповерочный интервал", "До 4 лет без необходимости поверки оборудования."],
-              ["Калибровка", "Гибкая настройка диапазона измерений."],              
-            ].map(([title, text], i) => (
-              <div key={i} className={Styles.featureCard}>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* TECHNOLOGY */}
-
-        <section className={`${Styles.tech} ${Styles.reveal}`}>
-          <div className={Styles.techImage}>
-            <img src={product.src} alt="" />
-          </div>
-          <div className={Styles.techText}>
-            <h2>Принцип работы</h2>
-
-            <p>
-              Измерение основано на образовании вихревых дорожек Кармана
-              за препятствием в потоке среды.
-            </p>
-
-            <p>
-              Частота образования вихрей пропорциональна скорости потока,
-              что позволяет точно определить расход жидкости или газа.
-            </p>
-
-            <p>
-              Пьезокристалл внутри барьера генерирует электрические
-              импульсы, которые обрабатываются электроникой расходомера.
-            </p>
-
-            {/* QUESTIONNAIRE */}
-            <div className={Styles.questionnaireBlock}>
-              <div className={Styles.questionnaireHeader}>
-                <div>
-                  <h3>Опросный лист</h3>
-                  <p className={Styles.questionnaireDesc}>
-                    Скачайте опросный лист для заполнения технических требований.
-                  </p>
-                </div>                
-              </div>
-              <div className={Styles.questionnaireActions}>
-                <button 
-                  className={Styles.viewBtn}
-                  onClick={() => window.open('/survey/agzu_stationary.pdf', '_blank')}
+              <div className={Styles.productVisual}>
+                <button
+                  className={Styles.photoButton}
+                  type="button"
+                  aria-label={`Открыть крупное фото: ${item.shortName}`}
+                  onClick={() => setBigPhoto(true)}
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
-                  Открыть
+                  <img src={item.image} alt={item.imageAlt} className={Styles.productImage} />
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
                 </button>
-                <a 
-                  href="/survey/ervip.pdf" 
-                  download 
-                  className={Styles.downloadBtn}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                  </svg>
-                  Скачать
-                </a>
+                <span className={Styles.visualCaption}>{item.shortName} · фото оборудования</span>
               </div>
             </div>
-
-            <section className={`${Styles.related} ${Styles.reveal}`}>
-              <h1>Смотрите также</h1>
-
-              <div className={Styles.relatedGrid}>
-                <a href="/products/accessories/urpd">УРПД</a>
-                <a href="/products/accessories/psm">ПСМ</a>
-                <a href="/products/accessories/kmr">КМР</a>
-                <a href="/products/accessories/gidroprivod">Гидропривод</a>
-                <a href="/products/accessories/separation">Сепарационная емкость</a>
-              </div>
-            </section>
           </div>
         </section>
 
-        <BackToTop />
+        <section className={Styles.purpose} id="features" aria-labelledby="features-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>01 / Особенности</span>
+                <h2 id="features-title">Назначение и особенности</h2>
+              </div>
+              <p>Ключевые свойства {item.shortName} в составе замерной установки.</p>
+            </div>
+            <div className={Styles.purposeGrid}>
+              {item.features.map((feature, index) => (
+                <article className={Styles.purposeCard} key={feature.title}>
+                  <span className={Styles.cardNumber}>{String(index + 1).padStart(2, '0')}</span>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
-      </div>
-    </>
+        <section className={Styles.principle} aria-labelledby="principle-title">
+          <div className={Styles.container}>
+            <div className={Styles.principleIntro}>
+              <span className={Styles.eyebrow}>02 / Работа оборудования</span>
+              <h2 id="principle-title">Принцип работы</h2>
+              <p>{item.principle}</p>
+            </div>
+            <div className={Styles.processList}>
+              {item.principlePoints.map((point, index) => (
+                <div key={point.title}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <strong>{point.title}</strong>
+                  <p>{point.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className={Styles.resources} aria-labelledby="resources-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>03 / Материалы</span>
+                <h2 id="resources-title">Документы по оборудованию</h2>
+              </div>
+              <p>Материалы для ознакомления и подбора компонента.</p>
+            </div>
+            <div className={Styles.documentsGrid}>
+              <a
+                className={Styles.materialCard}
+                href="/documents/?category=accessories"
+              >
+                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span><strong>Документация по комплектующим</strong><small>Открыть раздел документов</small></span>
+                <span className={Styles.materialArrow} aria-hidden="true">→</span>
+              </a>
+              {item.survey && (
+                <div className={Styles.documentCard}>
+                  <div className={Styles.documentIcon} aria-hidden="true">PDF</div>
+                  <div className={Styles.documentText}>
+                    <h3>Опросный лист {item.shortName}</h3>
+                    <p>PDF · технические требования</p>
+                  </div>
+                  <div className={Styles.documentActions}>
+                    <a href={item.survey} target="_blank" rel="noopener noreferrer">
+                      Открыть <span aria-hidden="true">↗</span>
+                    </a>
+                    <a className={Styles.downloadButton} href={item.survey} download>
+                      Скачать <span aria-hidden="true">↓</span>
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <section className={Styles.relatedSection} aria-labelledby="related-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>04 / Комплектующие</span>
+                <h2 id="related-title">Смотрите также</h2>
+              </div>
+              <p>Другие компоненты АГЗУ типа «Спутник».</p>
+            </div>
+            <div
+              className={Styles.relatedTrack}
+              ref={relatedRef}
+              onScroll={updateActiveIndex}
+              role="region"
+              aria-label="Другие комплектующие АГЗУ"
+              tabIndex={0}
+            >
+              {related.map((product) => (
+                <article className={Styles.relatedCard} key={product.id}>
+                  <a href={`/products/accessories/${product.id}/`}>
+                    <span className={Styles.relatedImage}>
+                      <img src={product.image} alt={product.imageAlt} loading="lazy" />
+                    </span>
+                    <span className={Styles.relatedInfo}>
+                      <strong>{product.shortName}</strong>
+                      <span aria-hidden="true">↗</span>
+                    </span>
+                  </a>
+                </article>
+              ))}
+            </div>
+            <div className={Styles.relatedControls}>
+              <span>Листайте карточки свайпом</span>
+              <div>
+                <span aria-live="polite">
+                  {String(activeIndex + 1).padStart(2, '0')} / {String(related.length).padStart(2, '0')}
+                </span>
+                <button type="button" aria-label="Предыдущий компонент" disabled={activeIndex === 0} onClick={() => scrollToRelated(activeIndex - 1)}>←</button>
+                <button type="button" aria-label="Следующий компонент" disabled={activeIndex === related.length - 1} onClick={() => scrollToRelated(activeIndex + 1)}>→</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className={Styles.bottomCta} aria-labelledby="next-title">
+          <div className={Styles.container}>
+            <div>
+              <span className={Styles.eyebrow}>Подбор оборудования</span>
+              <h2 id="next-title">Нужны комплектующие для АГЗУ?</h2>
+              <p>Посмотрите весь раздел оборудования.</p>
+            </div>
+            <a href="/products/accessories/">
+              Все комплектующие <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <BackToTop />
+      {bigPhoto && <BigPhoto src={item.image} onClose={() => setBigPhoto(false)} />}
+    </div>
   );
 };

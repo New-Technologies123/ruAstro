@@ -1,212 +1,422 @@
-import { useEffect, useRef, useState } from "react";
-import Styles from "../products.module.scss";
-import back from '../../../../images/back.svg'
-import product_1 from "../../../../images/products/product_1.webp";
+import { useRef, useState } from 'react';
 
-import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
-import { BackToTop } from "../../../ui/back-to-top/BackToTop";
+import Styles from '../products.module.scss';
+
+import productImage from '../../../../images/products/product_1.webp';
+import mobileImage from '../../../../images/products/product_1_2.webp';
+
+import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
+import { BackToTop } from '../../../ui/back-to-top/BackToTop';
+
+const purpose = [
+  {
+    number: '01',
+    title: 'Скважинная жидкость',
+    text: 'Измерение массы и массового расхода жидкости в составе нефтегазовой смеси.',
+  },
+  {
+    number: '02',
+    title: 'Сырая нефть',
+    text: 'Определение массы и массового расхода сырой нефти без учёта воды.',
+  },
+  {
+    number: '03',
+    title: 'Нефтяной газ',
+    text: 'Измерение объёма и расхода свободного нефтяного газа после сепарации.',
+  },
+] as const;
+
+const process = [
+  {
+    number: '01',
+    title: 'Поступление смеси',
+    text: 'Продукция скважины поступает в установку для последующего разделения и измерения.',
+  },
+  {
+    number: '02',
+    title: 'Сепарация',
+    text: 'Свободный нефтяной газ отделяется от жидкой фазы.',
+  },
+  {
+    number: '03',
+    title: 'Измерение',
+    text: 'Фиксируются параметры жидкой фазы и свободного нефтяного газа.',
+  },
+] as const;
 
 export const Stationary = () => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
-  const heroImageRef = useRef<HTMLDivElement>(null);
+  const [bigPhoto, setBigPhoto] = useState(false);
 
-  const onBack = () => {
-    window.location.href = "/products/accounting-system";
+  const relatedRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollRelated = (direction: 'prev' | 'next') => {
+    if (!relatedRef.current) return;
+
+    relatedRef.current.scrollBy({
+      left: direction === 'next' ? 320 : -320,
+      behavior: 'smooth',
+    });
   };
-
-  const onDoc = () => {
-    // Передаем параметр category=accounting-system для открытия категории АГЗУ
-    window.location.href = "/documents/?category=accounting-system";
-  };
-
-  /* 3D TILT */
-
-  useEffect(() => {
-    const el = heroImageRef.current;
-    if (!el) return;
-
-    const move = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = -(y - centerY) / 20;
-      const rotateY = (x - centerX) / 20;
-
-      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    };
-
-    const leave = () => {
-      el.style.transform = "rotateX(0) rotateY(0)";
-    };
-
-    el.addEventListener("mousemove", move);
-    el.addEventListener("mouseleave", leave);
-
-    return () => {
-      el.removeEventListener("mousemove", move);
-      el.removeEventListener("mouseleave", leave);
-    };
-  }, []);
 
   return (
-    <>
-      <div className={Styles.page}>
-        <button className={Styles.backButton} onClick={onBack}>
-          <img src={back.src} alt=""/>
-        </button>
-
-        <section className={Styles.hero}>
-          <div className={Styles.heroText}>
-            <h1>АГЗУ «Спутник — массомер НТ.1»
-              <span> стационарный</span>
-            </h1>
-
-            <p>
-              Стационарная установка для измерения массы и массового расхода
-              скважинной жидкости, а также объема свободного нефтяного газа
-              после сепарации.
-            </p>
-
-            <div className={Styles.heroButtons}>
-              <button
-                className={Styles.primaryBtn}
-                onClick={() => setBigPhoto(product_1.src)}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <path d="M21 15L16 10L5 21" />
-                </svg>
-                Смотреть фото
-              </button>
-              <button className={Styles.secondaryBtn} onClick={onDoc}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                Документация
-              </button>
-            </div>
-          </div>
-
-          <div className={Styles.heroImageWrap}>
-            <div
-              className={Styles.imageCard}
-              ref={heroImageRef}
-              onClick={() => setBigPhoto(product_1.src)}
+    <div className={Styles.page}>
+      <main>
+        {/* HERO */}
+        <section
+          className={Styles.hero}
+          aria-labelledby="product-title"
+        >
+          <div className={Styles.container}>
+            <nav
+              className={Styles.breadcrumbs}
+              aria-label="Хлебные крошки"
             >
-              <img src={product_1.src} alt="АГЗУ стационарная" className={Styles.mainImage} />
+              <a href="/products/">Продукция</a>
 
-              <div className={Styles.imageOverlay}>
-                <span className={Styles.zoomText}>
-                  Нажмите для увеличения
+              <span aria-hidden="true">/</span>
+
+              <a href="/products/accounting-system/">
+                АГЗУ
+              </a>
+
+              <span aria-hidden="true">/</span>
+
+              <span aria-current="page">
+                Стационарная
+              </span>
+            </nav>
+
+            <div className={Styles.heroGrid}>
+              {/* ТЕКСТ */}
+              <div className={Styles.heroContent}>
+                <span className={Styles.eyebrow}>
+                  Автоматизированная групповая замерная установка
+                </span>
+
+                <h1 id="product-title">
+                  АГЗУ «Спутник — массомер НТ.1»
+                  <em>стационарная</em>
+                </h1>
+
+                <p className={Styles.heroDescription}>
+                  Стационарная установка для измерения массы и массового
+                  расхода скважинной жидкости, а также объёма свободного
+                  нефтяного газа после сепарации.
+                </p>
+
+                <div className={Styles.heroActions}>
+                  <a
+                    className={Styles.primaryButton}
+                    href="#questionnaire"
+                  >
+                    Опросный лист
+                    <span aria-hidden="true">↗</span>
+                  </a>
+
+                  <a
+                    className={Styles.secondaryButton}
+                    href="/documents/?category=accounting-system"
+                  >
+                    Документация
+                    <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+
+                <div className={Styles.heroNote}>
+                  <span
+                    className={Styles.noteDot}
+                    aria-hidden="true"
+                  />
+
+                  Исполнение для стационарного размещения
+                  на объекте
+                </div>
+              </div>
+
+              {/* ФОТО */}
+              <div className={Styles.productVisual}>
+                <button
+                  className={Styles.photoButton}
+                  type="button"
+                  onClick={() => setBigPhoto(true)}
+                  aria-label="Открыть крупное фото стационарной АГЗУ"
+                >
+                  <img
+                    src={productImage.src}
+                    alt="Стационарная АГЗУ «Спутник — массомер НТ.1»"
+                    className={Styles.productImage}
+                  />
+
+                  <span
+                    className={Styles.zoomButton}
+                    aria-hidden="true"
+                  >
+                    Увеличить фото ↗
+                  </span>
+                </button>
+
+                <span className={Styles.visualCaption}>
+                  Стационарное исполнение
                 </span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FEATURES */}
+        {/* НАЗНАЧЕНИЕ */}
+        <section
+          className={Styles.purpose}
+          id="purpose"
+          aria-labelledby="purpose-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>
+                  01 / Назначение
+                </span>
 
-        <section className={Styles.features}>
-          <h2>Назначение установки</h2>
+                <h2 id="purpose-title">
+                  Что измеряет установка
+                </h2>
+              </div>
 
-          <div className={Styles.featuresGrid}>
-            <div className={Styles.featureCard}>
               <p>
-                Измерение массы и массового расхода скважинной жидкости
-                в составе нефтегазовой смеси.
+                Данные о жидкости, нефти и газе для учёта
+                продукции скважин.
               </p>
             </div>
 
-            <div className={Styles.featureCard}>
-              <p>
-                Определение массы и массового расхода сырой нефти
-                без учета воды.
-              </p>
-            </div>
+            <div className={Styles.purposeGrid}>
+              {purpose.map((item) => (
+                <article
+                  className={Styles.purposeCard}
+                  key={item.number}
+                >
+                  <span className={Styles.cardNumber}>
+                    {item.number}
+                  </span>
 
-            <div className={Styles.featureCard}>
-              <p>
-                Измерение объема и расхода свободного нефтяного газа
-                после сепарации.
-              </p>
+                  <h3>{item.title}</h3>
+
+                  <p>{item.text}</p>
+                </article>
+              ))}
             </div>
           </div>
         </section>
 
-        {/* TECHNOLOGY */}
+        {/* ПРИНЦИП РАБОТЫ */}
+        <section
+          className={Styles.principle}
+          aria-labelledby="principle-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.principleIntro}>
+              <span className={Styles.eyebrow}>
+                02 / Принцип работы
+              </span>
 
-        <section className={Styles.tech}>
-          <div className={Styles.techImage}>
-            <img src={product_1.src} alt="" />
+              <h2 id="principle-title">
+                Измерение после сепарации
+              </h2>
+
+              <p>
+                Нефтегазовая смесь разделяется, после чего
+                установка измеряет массу и массовый расход
+                жидкости и объём свободного нефтяного газа.
+                Результаты используются для учёта продукции
+                скважин.
+              </p>
+            </div>
+
+            <div className={Styles.processList}>
+              {process.map((item) => (
+                <div key={item.number}>
+                  <span>{item.number}</span>
+
+                  <strong>{item.title}</strong>
+
+                  <p>{item.text}</p>
+                </div>
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className={Styles.techText}>
-            <h2>Принцип работы</h2>
-            <p>
-              Работа установки основана на сепарации нефтегазовой смеси
-              с последующим измерением массы и массового расхода жидкости,
-              а также объема свободного нефтяного газа. Полученные данные
-              используются для учета продукции скважин.
-            </p>
+        {/* ОПРОСНЫЙ ЛИСТ */}
+        <section
+          className={Styles.resources}
+          id="questionnaire"
+          aria-labelledby="resources-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>
+                  03 / Материалы
+                </span>
 
-            {/* QUESTIONNAIRE */}
-            <div className={Styles.questionnaireBlock}>
-              <div className={Styles.questionnaireHeader}>
-                <div>
-                  <h3>Опросный лист</h3>
-                  <p className={Styles.questionnaireDesc}>
-                    Скачайте опросный лист для заполнения технических требований.
-                  </p>
-                </div>                
+                <h2 id="resources-title">
+                  Опросный лист
+                </h2>
               </div>
-              <div className={Styles.questionnaireActions}>
-                <button 
-                  className={Styles.viewBtn}
-                  onClick={() => window.open('/survey/agzu_stationary.pdf', '_blank')}
+
+              <p>
+                Заполните технические требования, чтобы
+                обсудить исполнение установки.
+              </p>
+            </div>
+
+            <div className={Styles.documentCard}>
+              <div
+                className={Styles.documentIcon}
+                aria-hidden="true"
+              >
+                PDF
+              </div>
+
+              <div className={Styles.documentText}>
+                <h3>Стационарная АГЗУ</h3>
+
+                <p>
+                  Опросный лист · PDF
+                </p>
+              </div>
+
+              <div className={Styles.documentActions}>
+                <a
+                  href="/survey/agzu_stationary.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                    <circle cx="12" cy="12" r="3" />
-                  </svg>
                   Открыть
-                </button>
-                <a 
-                  href="/survey/agzu_stationary.pdf" 
-                  download 
-                  className={Styles.downloadBtn}
+                  <span aria-hidden="true">↗</span>
+                </a>
+
+                <a
+                  className={Styles.downloadButton}
+                  href="/survey/agzu_stationary.pdf"
+                  download
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                    <polyline points="7 10 12 15 17 10" />
-                    <line x1="12" y1="15" x2="12" y2="3" />
-                  </svg>
                   Скачать
+                  <span aria-hidden="true">↓</span>
                 </a>
               </div>
             </div>
-
-            <section className={Styles.related}>
-              <h1>Смотрите также:</h1>
-              <div className={Styles.relatedGrid}>
-                <a href="/products/accounting-system/mobile/">Мобильная АГЗУ</a>
-              </div>
-            </section>
           </div>
         </section>
 
-        <BackToTop />
+        {/* ДРУГОЕ ИСПОЛНЕНИЕ */}
+        <section
+          className={Styles.relatedSection}
+          aria-labelledby="related-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>
+                  04 / Другое исполнение
+                </span>
 
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
-      </div>
-    </>
+                <h2 id="related-title">
+                  АГЗУ для мобильной эксплуатации
+                </h2>
+              </div>
+
+              <p>
+                Если оборудование необходимо перемещать
+                между объектами, обратите внимание на
+                мобильное исполнение.
+              </p>
+            </div>
+
+            <div
+              className={`${Styles.relatedTrack} ${Styles.relatedTrackSingle}`}
+              ref={relatedRef}
+            >
+              <article className={Styles.relatedCard}>
+                <a href="/products/accounting-system/mobile/">
+                  <div className={Styles.relatedImage}>
+                    <img
+                      src={mobileImage.src}
+                      alt="Мобильная АГЗУ «Спутник — массомер НТ.1»"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  <div className={Styles.relatedInfo}>
+                    <strong>
+                      Мобильная АГЗУ
+                    </strong>
+
+                    <span aria-hidden="true">
+                      ↗
+                    </span>
+                  </div>
+                </a>
+              </article>
+            </div>
+
+            <div className={Styles.relatedControls}>
+              <div>
+                <button
+                  type="button"
+                  onClick={() => scrollRelated('prev')}
+                  aria-label="Предыдущее исполнение"
+                >
+                  ←
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => scrollRelated('next')}
+                  aria-label="Следующее исполнение"
+                >
+                  →
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section
+          className={Styles.bottomCta}
+          aria-labelledby="next-title"
+        >
+          <div className={Styles.container}>
+            <div>
+              <span className={Styles.eyebrow}>
+                Подбор оборудования
+              </span>
+
+              <h2 id="next-title">
+                Нужна АГЗУ под условия объекта?
+              </h2>
+
+              <p>
+                Обсудим параметры объекта и подберём
+                подходящее исполнение оборудования.
+              </p>
+            </div>
+
+            <a href="/contact/">
+              Обсудить проект
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
+
+      <BackToTop />
+
+      {bigPhoto && (
+        <BigPhoto
+          src={productImage.src}
+          onClose={() => setBigPhoto(false)}
+        />
+      )}
+    </div>
   );
 };

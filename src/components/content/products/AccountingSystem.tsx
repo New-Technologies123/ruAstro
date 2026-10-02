@@ -1,113 +1,408 @@
-// accounting.tsx
-import { LayoutBack } from '../../layout/LayoutBack';
-import { Card } from '../../ui/card/Card';
-import Styles from './accounting.module.scss';
-import product_1_1 from '../../../images/products/product_1.webp';
-import product_1_2 from '../../../images/products/product_1_2.webp';
-import { BackToTop } from '../../ui/back-to-top/BackToTop';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-type TAccounting = 'stationary' | 'mobile' | 'calculator';
+import Styles from './accounting.module.scss';
+import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { EquipmentCard } from '../../ui/equipment-card/EquipmentCard';
+
+import stationaryImage from '../../../images/products/product_1.webp';
+import mobileImage from '../../../images/products/product_1_2.webp';
+
+const models = [
+  {
+    id: 'stationary',
+    number: '01',
+    label: 'Стационарное исполнение',
+    title: 'АГЗУ «Спутник — массомер НТ.1»',
+    description:
+      'Для постоянной эксплуатации на кустовых площадках и объектах нефтедобычи.',
+    features: ['Постоянное размещение', 'Учёт продукции скважин'],
+    image: stationaryImage.src,
+    href: '/products/accounting-system/stationary/',
+  },
+  {
+    id: 'mobile',
+    number: '02',
+    label: 'Мобильное исполнение',
+    title: 'АГЗУ «Спутник — массомер НТ.1»',
+    description:
+      'Для временного размещения и оперативного перемещения между объектами.',
+    features: ['Временное размещение', 'Перемещение между объектами'],
+    image: mobileImage.src,
+    href: '/products/accounting-system/mobile/',
+  },
+] as const;
 
 export const AccountingSystem = () => {
-  const title = 'Автоматизированная групповая замерная установка (АГЗУ)';
-  const [activeTab, setActiveTab] = useState<'info' | 'specs'>('info');
+  const trackRef = useRef<HTMLDivElement | null>(null);
 
-  const cardTitle: Record<TAccounting, string> = {
-    stationary: 'АГЗУ «Спутник — массомер НТ.1» (стационарный)',
-    mobile: 'АГЗУ «Спутник — массомер НТ.1» (мобильный)',
-    calculator: 'Калькулятор',
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Флаг программной прокрутки по кнопке.
+  // Пока карточка доезжает до позиции, onScroll не меняет activeIndex.
+  const isProgrammaticScroll = useRef(false);
+
+  // Таймер завершения программной прокрутки.
+  const scrollTimerRef = useRef<number | null>(null);
+
+  // requestAnimationFrame для ограничения количества setState.
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (scrollTimerRef.current !== null) {
+        window.clearTimeout(scrollTimerRef.current);
+      }
+
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
+  const updateActiveIndex = () => {
+    const track = trackRef.current;
+
+    if (!track) return;
+
+    // Во время программной прокрутки activeIndex уже установлен
+    // кнопкой и не должен прыгать вслед за промежуточными scroll-событиями.
+    if (isProgrammaticScroll.current) {
+      return;
+    }
+
+    if (rafRef.current !== null) {
+      window.cancelAnimationFrame(rafRef.current);
+    }
+
+    rafRef.current = window.requestAnimationFrame(() => {
+      const currentTrack = trackRef.current;
+
+      if (!currentTrack) return;
+
+      const cards = Array.from(
+        currentTrack.children
+      ) as HTMLElement[];
+
+      if (!cards.length) return;
+
+      const scrollLeft = currentTrack.scrollLeft;
+
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      cards.forEach((card, index) => {
+        const distance = Math.abs(card.offsetLeft - scrollLeft);
+
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      setActiveIndex((current) =>
+        current === closestIndex ? current : closestIndex
+      );
+    });
   };
 
-  const goToAccounting = (item: TAccounting) => {
-    window.location.href = `/products/accounting-system/${item}`;
-  };
+  const scrollToModel = (index: number) => {
+    const track = trackRef.current;
 
-  const onBackProducts = () => {
-    window.location.href = '/products';
+    if (!track) return;
+
+    const card = track.children.item(index) as HTMLElement | null;
+
+    if (!card) return;
+
+    // Защита от выхода за границы.
+    const safeIndex = Math.max(
+      0,
+      Math.min(index, models.length - 1)
+    );
+
+    const targetCard = track.children.item(
+      safeIndex
+    ) as HTMLElement | null;
+
+    if (!targetCard) return;
+
+    // Отменяем предыдущий таймер.
+    if (scrollTimerRef.current !== null) {
+      window.clearTimeout(scrollTimerRef.current);
+    }
+
+    // Блокируем обработку промежуточных scroll-событий.
+    isProgrammaticScroll.current = true;
+
+    // Сразу показываем правильный номер.
+    // Он больше не будет прыгать 01 → 02 → 01 во время smooth scroll.
+    setActiveIndex(safeIndex);
+
+    // offsetLeft уже учитывает положение элемента внутри scroll-контейнера.
+    // Это стабильнее, чем комбинация getBoundingClientRect() + scrollLeft.
+    const targetLeft = targetCard.offsetLeft;
+
+    track.scrollTo({
+      left: targetLeft,
+      behavior: 'smooth',
+    });
+
+    // После завершения анимации снова разрешаем
+    // определять activeIndex по свайпу.
+    scrollTimerRef.current = window.setTimeout(() => {
+      isProgrammaticScroll.current = false;
+
+      // Финально синхронизируем состояние с реальной позицией.
+      updateActiveIndex();
+    }, 450);
   };
 
   return (
-    <LayoutBack onBack={onBackProducts} title={title}>
-      <div className={Styles.container}>
-        <div className={Styles.textColumn}>
-          {/* Обновленная кнопка калькулятора */}
-          <div className={Styles.price}>
-            <button
-              className={Styles.buttonPrice}
-              onClick={() => goToAccounting('calculator')}
+    <div className={Styles.page}>
+      <main>
+        <section
+          className={Styles.hero}
+          aria-labelledby="agzu-title"
+        >
+          <div
+            className={Styles.heroPattern}
+            aria-hidden="true"
+          />
+
+          <div className={Styles.container}>
+            <nav
+              className={Styles.breadcrumbs}
+              aria-label="Хлебные крошки"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <rect x="4" y="2" width="16" height="20" rx="2"/>
-                <path d="M8 6h8M8 10h8M8 14h4M8 18h8"/>
-              </svg>
-              Рассчитать стоимость
-            </button>
+              <a href="/products/">Продукция</a>
+
+              <span aria-hidden="true">/</span>
+
+              <span aria-current="page">АГЗУ</span>
+            </nav>
+
+            <h1 id="agzu-title">
+              Автоматизированные групповые{' '}
+              <em>замерные установки</em>
+            </h1>
+
+            <p className={Styles.heroDescription}>
+              Оборудование для измерения продукции нефтяных
+              скважин и контроля технологических параметров.
+            </p>
+
+            <div className={Styles.heroActions}>
+              <a
+                className={Styles.primaryButton}
+                href="#equipment"
+              >
+                Смотреть исполнения{' '}
+                <span aria-hidden="true">↗</span>
+              </a>
+
+              <a
+                className={Styles.secondaryButton}
+                href="/products/accounting-system/calculator/"
+              >
+                Рассчитать стоимость{' '}
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            <div className={Styles.heroFacts}>
+              <span>
+                <strong>2</strong> исполнения
+              </span>
+
+              <span>
+                Стационарное и мобильное
+              </span>
+
+              <span>
+                Производство в Уфе
+              </span>
+            </div>
           </div>
+        </section>
 
-          <div className={Styles.contentWrapper}>
-            <div className={Styles.fadeIn}>
+        <section
+          className={Styles.collection}
+          id="equipment"
+          aria-labelledby="equipment-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>
+                  01 / Оборудование
+                </span>
+
+                <h2 id="equipment-title">
+                  Выберите исполнение АГЗУ
+                </h2>
+              </div>
+
               <p>
-                Измерительная установка (ИУ) предназначена для измерений массы и массового расхода скважинной жидкости в составе нефтегазовой смеси, массы и массового расхода скважинной жидкости за вычетом массы воды и попутного нефтяного газа, приведенных к стандартным условиям.
+                Откройте модель, чтобы посмотреть
+                характеристики, фото и документацию.
               </p>
+            </div>
 
-              <div className={Styles.featureGrid}>
-                <div className={Styles.featureItem}>
-                  <div className={Styles.iconWrapper}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2">
-                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                      <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4>Контроль количества</h4>
-                    <p>Скважинной жидкости и газа с выдачей результата в блок управления</p>
-                  </div>
-                </div>
-                <div className={Styles.featureItem}>
-                  <div className={Styles.iconWrapper}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <path d="M12 6v6l4 2"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4>Эксплуатационное назначение</h4>
-                    <p>Измерение массы жидкости, обезвоженной нефти и объема газа</p>
-                  </div>
-                </div>
-                <div className={Styles.featureItem}>
-                  <div className={Styles.iconWrapper}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#4F46E5" strokeWidth="2">
-                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                      <circle cx="12" cy="10" r="3"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h4>Область применения</h4>
-                    <p>Напорные системы сбора продукции и автоматизированные системы управления</p>
-                  </div>
-                </div>
+            <div
+              ref={trackRef}
+              className={`${Styles.cards} ${Styles.cardsTwo}`}
+              role="region"
+              aria-label="Исполнения АГЗУ"
+              tabIndex={0}
+              onScroll={updateActiveIndex}
+            >
+              {models.map((model) => (
+                <EquipmentCard
+                  key={model.id}
+                  item={model}
+                />
+              ))}
+            </div>
+
+            <div className={Styles.carouselControls}>
+              <span className={Styles.carouselHint}>
+                Листайте карточки свайпом
+              </span>
+
+              <div className={Styles.carouselButtons}>
+                <span
+                  className={Styles.carouselCount}
+                  aria-live="polite"
+                >
+                  {String(activeIndex + 1).padStart(2, '0')}
+                  {' / '}
+                  {String(models.length).padStart(2, '0')}
+                </span>
+
+                <button
+                  type="button"
+                  aria-label="Предыдущее исполнение"
+                  disabled={activeIndex === 0}
+                  onClick={() =>
+                    scrollToModel(activeIndex - 1)
+                  }
+                >
+                  ←
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Следующее исполнение"
+                  disabled={
+                    activeIndex === models.length - 1
+                  }
+                  onClick={() =>
+                    scrollToModel(activeIndex + 1)
+                  }
+                >
+                  →
+                </button>
+              </div>
+            </div>
+
+            <div
+              className={Styles.carouselProgress}
+              aria-hidden="true"
+            >
+              <span
+                style={{
+                  width: `${
+                    ((activeIndex + 1) /
+                      models.length) *
+                    100
+                  }%`,
+                }}
+              />
+            </div>
+          </div>
+        </section>
+
+        <section
+          className={Styles.details}
+          aria-labelledby="details-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.detailsIntro}>
+              <span className={Styles.eyebrow}>
+                02 / Назначение
+              </span>
+
+              <h2 id="details-title">
+                Измерение и учёт продукции скважин
+              </h2>
+
+              <p>
+                Установка измеряет массу и массовый расход
+                скважинной жидкости. Конфигурацию подбирают
+                под условия эксплуатации и требования объекта.
+              </p>
+            </div>
+
+            <div className={Styles.detailsList}>
+              <div>
+                <span>01</span>
+                <strong>Измерение</strong>
+                <p>
+                  Получение данных о массе и расходе
+                  скважинной жидкости.
+                </p>
+              </div>
+
+              <div>
+                <span>02</span>
+                <strong>Контроль</strong>
+                <p>
+                  Сбор технологических параметров
+                  в процессе работы установки.
+                </p>
+              </div>
+
+              <div>
+                <span>03</span>
+                <strong>Передача данных</strong>
+                <p>
+                  Подготовка измерительной информации
+                  для учёта и анализа.
+                </p>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className={Styles.cardsColumn}>
-          <Card
-            imgSrc={product_1_1.src}
-            title={cardTitle.stationary}
-            onClick={() => goToAccounting('stationary')}
-          />
-          <Card
-            imgSrc={product_1_2.src}
-            title={cardTitle.mobile}
-            onClick={() => goToAccounting('mobile')}
-          />
-        </div>
-      </div>
+        <section
+          className={Styles.contactCta}
+          aria-labelledby="contact-title"
+        >
+          <div className={Styles.container}>
+            <div>
+              <span className={Styles.eyebrow}>
+                Подбор под объект
+              </span>
+
+              <h2 id="contact-title">
+                Нужна конфигурация АГЗУ для вашего проекта?
+              </h2>
+
+              <p>
+                Передайте параметры объекта — специалисты
+                помогут выбрать исполнение.
+              </p>
+            </div>
+
+            <a href="/products/accounting-system/calculator/">
+              Рассчитать стоимость{' '}
+              <span aria-hidden="true">↗</span>
+            </a>
+          </div>
+        </section>
+      </main>
 
       <BackToTop />
-    </LayoutBack>
+    </div>
   );
 };

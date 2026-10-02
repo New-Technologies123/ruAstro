@@ -17,7 +17,7 @@ import product_3 from '../../../images/products/product_2_2.webp';
 import product_4 from '../../../images/products/product_2_3.webp';
 import product_5 from '../../../images/products/product_2_4.webp';
 
-import styles from '../products/scroll.module.scss';
+import styles from './scroll.module.scss';
 
 type TProducts =
   | 'shop_1'

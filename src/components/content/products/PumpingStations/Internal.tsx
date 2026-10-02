@@ -1,241 +1,138 @@
-import { useEffect, useRef, useState } from "react";
-import Styles from "../products.module.scss";
-import back from '../../../../images/back.svg'
-import product from "../../../../images/products/product_5.webp";
-import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
-import { BackToTop } from "../../../ui/back-to-top/BackToTop";
+import { useState } from 'react';
+
+import Styles from '../products.module.scss';
+import productImage from '../../../../images/products/product_5.webp';
+import relatedImage from '../../../../images/products/product_5_1.webp';
+import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
+import { BackToTop } from '../../../ui/back-to-top/BackToTop';
+
+const features = [
+  { title: "Перекачка", text: "Работа в системах сбора, подготовки и транспортировки нефти." },
+  { title: "Автоматизация", text: "Средства управления и КИП контролируют рабочие параметры." },
+  { title: "Безопасность", text: "Предусмотрены сигнализация, контроль загазованности и пожаротушение." },
+  { title: "Блочное исполнение", text: "Компоновка облегчает транспортировку и монтаж станции." },
+  { title: "Разные агрегаты", text: "Состав насосного оборудования подбирается под параметры объекта." },
+  { title: "Обслуживание", text: "Доступ к оборудованию для эксплуатации и ремонта." },
+] as const;
+
+const composition = [
+  { title: "Насосная часть", text: "Насосные агрегаты, приёмный и нагнетательный коллекторы, запорная арматура и дренажные трубопроводы." },
+  { title: "Безопасность", text: "Пожарная сигнализация, контроль загазованности и система пенного пожаротушения." },
+  { title: "Автоматизация", text: "КИП, управление подпорными насосами и передача информации на верхний уровень." },
+  { title: "Инфраструктура", text: "Электроснабжение, системы жизнеобеспечения блок-бокса и грузоподъёмные устройства." },
+] as const;
+
+const related = { id: 'multiphase', title: 'Мультифазная станция', image: relatedImage.src, alt: 'Блочная мультифазная насосная станция' };
 
 export const Internal = () => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
-  const heroImageRef = useRef<HTMLDivElement>(null);
-
-  const onBack = () => {
-    window.location.href = "/products/pumping-stations";
-  };
-
-  const onDoc = () => {
-    window.location.href = "/documents/?category=pumping-stations";
-  };
-
-  /* ---------- 3D TILT EFFECT ---------- */
-  useEffect(() => {
-    const el = heroImageRef.current;
-    if (!el) return;
-
-    const move = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = -(y - centerY) / 20;
-      const rotateY = (x - centerX) / 20;
-
-      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    };
-
-    const leave = () => {
-      el.style.transform = "rotateX(0) rotateY(0)";
-    };
-
-    el.addEventListener("mousemove", move);
-    el.addEventListener("mouseleave", leave);
-
-    return () => {
-      el.removeEventListener("mousemove", move);
-      el.removeEventListener("mouseleave", leave);
-    };
-  }, []);
-
-  /* ---------- SCROLL REVEAL ---------- */
-  useEffect(() => {
-    const elements = document.querySelectorAll(`.${Styles.reveal}`);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(Styles.visible);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  const [bigPhoto, setBigPhoto] = useState(false);
 
   return (
-    <>
-      <div className={Styles.page}>
-        <button className={Styles.backButton} onClick={onBack}>
-          <img src={back.src} alt=""/>
-        </button>
-
-        {/* HERO */}
-        <section className={`${Styles.hero} ${Styles.reveal}`}>
-          <div className={Styles.heroText}>
-            <h1>
-              Блочная насосная станция <span>внутренней и внешней </span> перекачки нефти
-            </h1>
-
-            <p>
-              Предназначена для транспортировки нефти, нефтепродуктов и конденсата в системах сбора и подготовки,
-              внутрипарковой и внешней перекачки.
-            </p>
-
-            <p>
-              Основана на центробежных насосных агрегатах и современном автоматизированном оборудовании.
-            </p>
-
-            <div className={Styles.heroButtons}>
-              <button
-                className={Styles.primaryBtn}
-                onClick={() => setBigPhoto(product.src)}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <path d="M21 15L16 10L5 21" />
-                </svg>
-                Смотреть фото
-              </button>
-              <button className={Styles.secondaryBtn} onClick={onDoc}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                Документация
-              </button>
-            </div>
-          </div>
-
-          <div className={Styles.heroImageWrap}>
-            <div
-              className={Styles.imageCard}
-              ref={heroImageRef}
-              onClick={() => setBigPhoto(product.src)}
-            >
-              <div className={Styles.frame}>
-                <img src={product.src} alt="Насосная станция" className={Styles.mainImage} />
+    <div className={Styles.page}>
+      <main>
+        <section className={Styles.hero} aria-labelledby="product-title">
+          <div className={Styles.container}>
+            <nav className={Styles.breadcrumbs} aria-label="Хлебные крошки">
+              <a href="/products/">Продукция</a><span aria-hidden="true">›</span>
+              <a href="/products/pumping-stations/">Насосные станции</a><span aria-hidden="true">›</span>
+              <span aria-current="page">Перекачка нефти</span>
+            </nav>
+            <div className={Styles.heroGrid}>
+              <div className={Styles.heroContent}>
+                <span className={Styles.eyebrow}>Внутренняя и внешняя перекачка</span>
+                <h1 id="product-title">Блочная насосная станция <em>перекачки нефти</em></h1>
+                <p className={Styles.heroDescription}>Транспортирует нефть, нефтепродукты и конденсат в системах сбора и подготовки, при внутрипарковой и внешней перекачке.</p>
+                <div className={Styles.heroActions}>
+                  <a className={Styles.primaryButton} href="#features">Возможности станции <span aria-hidden="true">↗</span></a>
+                  <a className={Styles.secondaryButton} href="/documents/?category=pumping-stations">Документация <span aria-hidden="true">→</span></a>
+                </div>
+                <div className={Styles.heroNote}><span className={Styles.noteDot} aria-hidden="true" />Центробежные насосы · блочное исполнение · автоматизация</div>
               </div>
-              <div className={Styles.imageOverlay}>
-                <span className={Styles.zoomText}>
-                  Нажмите для увеличения
-                </span>
+              <div className={Styles.productVisual}>
+                <button className={Styles.photoButton} type="button" onClick={() => setBigPhoto(true)} aria-label="Открыть крупное фото: Перекачка нефти">
+                  <img src={productImage.src} alt="Блочная насосная станция перекачки нефти" className={Styles.productImage} />
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                </button>
+                <span className={Styles.visualCaption}>Перекачка нефти · насосная станция</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FEATURES */}
-        <section className={`${Styles.features} ${Styles.reveal}`}>
-          <h2>Преимущества оборудования</h2>
-          <div className={Styles.featuresGrid}>
-            {[
-              ["Надежность", "Станция обеспечивает стабильную работу в системах сбора и перекачки нефти."],
-              ["Автоматизация", "Современные системы автоматизации и КИП минимизируют участие оператора."],
-              ["Безопасность", "Системы пожаротушения, сигнализации и контроля загазованности повышают безопасность."],
-              ["Универсальность", "Может работать с разными насосными агрегатами и в нескольких исполнениях."],
-              [
-                "Модульность",
-                "Блочное исполнение обеспечивает удобство транспортировки и монтажа.",
-              ],
-              [
-                "Обслуживаемость",
-                "Удобный доступ к оборудованию для ремонта и обслуживания.",
-              ],
-            ].map(([title, text], i) => (
-              <div key={i} className={Styles.featureCard}>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-            ))}
+        <section className={Styles.purpose} id="features" aria-labelledby="features-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div><span className={Styles.eyebrow}>01 / Назначение</span><h2 id="features-title">Возможности станции</h2></div>
+              <p>Блочное решение для технологической перекачки нефти.</p>
+            </div>
+            <div className={Styles.purposeGrid}>
+              {features.map((feature, index) => (
+                <article className={Styles.purposeCard} key={feature.title}>
+                  <span className={Styles.cardNumber}>{String(index + 1).padStart(2, '0')}</span>
+                  <h3>{feature.title}</h3><p>{feature.text}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* TECHNOLOGY */}
-        <section className={`${Styles.tech} ${Styles.reveal}`}>
-          <div className={Styles.techImage}>
-            <img src={product.src} alt="" />
-          </div>
-
-          <div className={Styles.techText}>
-            <h2>Типовой состав станции</h2>
-            <ul className={Styles.featuresList}>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Насосные агрегаты</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Приемный и нагнетательный коллекторы с запорной арматурой</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Трубопроводы дренажа и слива утечек</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Система пожарной сигнализации и контроля загазованности</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Система пенного пожаротушения</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Средства автоматизации и КИП</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Грузоподъемные устройства для монтажа и демонтажа арматуры</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Система управления подпорными насосами</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Система передачи информации на верхний уровень</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Система электроснабжения насосных агрегатов</p>
-                </div>
-              </li>
-              <li className={Styles.feature}>
-                <div className={Styles.featureText}>
-                  <p>Система жизнеобеспечения блок-бокса</p>
-                </div>
-              </li>
-            </ul>
-
-            <section className={`${Styles.related} ${Styles.reveal}`}>
-              <h1>Смотрите также</h1>
-              <div className={Styles.relatedGrid}>
-                <a href="/products/pumping-stations/multiphase">Блочная мультифазная насосная станция</a>
-              </div>
-            </section>
+        <section className={Styles.principle} aria-labelledby="composition-title">
+          <div className={Styles.container}>
+            <div className={Styles.principleIntro}>
+              <span className={Styles.eyebrow}>02 / Состав станции</span>
+              <h2 id="composition-title">Типовой состав станции</h2>
+              <p>Состав станции подбирают под рабочую среду, производительность и условия объекта.</p>
+            </div>
+            <div className={Styles.processList}>
+              {composition.map((part, index) => (
+                <div key={part.title}><span>{String(index + 1).padStart(2, '0')}</span><strong>{part.title}</strong><p>{part.text}</p></div>
+              ))}
+            </div>
           </div>
         </section>
 
-        <BackToTop />
-        {bigPhoto && <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />}
-      </div>
-    </>
+        <section className={Styles.resources} aria-labelledby="resources-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div><span className={Styles.eyebrow}>03 / Материалы</span><h2 id="resources-title">Документация</h2></div>
+              <p>Откройте материалы по насосным станциям.</p>
+            </div>
+            <div className={Styles.documentsGrid}>
+              <a className={Styles.materialCard} href="/documents/?category=pumping-stations">
+                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span><strong>Документация по насосным станциям</strong><small>Открыть раздел документов</small></span>
+                <span className={Styles.materialArrow} aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        <section className={Styles.relatedSection} aria-labelledby="related-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div><span className={Styles.eyebrow}>04 / Насосные станции</span><h2 id="related-title">Смотрите также</h2></div>
+              <p>Мультифазная станция для перекачки продукции скважин.</p>
+            </div>
+            <div className={`${Styles.relatedTrack} ${Styles.relatedTrackOne}`}>
+              <article className={Styles.relatedCard}>
+                <a href={`/products/pumping-stations/${related.id}/`}>
+                  <span className={Styles.relatedImage}><img src={related.image} alt={related.alt} loading="lazy" /></span>
+                  <span className={Styles.relatedInfo}><strong>{related.title}</strong><span aria-hidden="true">↗</span></span>
+                </a>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section className={Styles.bottomCta} aria-labelledby="next-title">
+          <div className={Styles.container}>
+            <div><span className={Styles.eyebrow}>Выбор станции</span><h2 id="next-title">Подберём станцию под вашу задачу</h2><p>Посмотрите оба исполнения насосных станций.</p></div>
+            <a href="/products/pumping-stations/">Все станции <span aria-hidden="true">↗</span></a>
+          </div>
+        </section>
+      </main>
+      <BackToTop />
+      {bigPhoto && <BigPhoto src={productImage.src} onClose={() => setBigPhoto(false)} />}
+    </div>
   );
 };

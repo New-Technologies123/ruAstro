@@ -1,202 +1,178 @@
-import { useEffect, useRef, useState } from "react";
-import Styles from "../products.module.scss";
-import back from '../../../../images/back.svg'
-import product from "../../../../images/products/product_3_1.webp";
-import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
-import { BackToTop } from "../../../ui/back-to-top/BackToTop";
+import { useRef, useState } from 'react';
+
+import Styles from '../products.module.scss';
+import productImage from '../../../../images/products/product_3_1.webp';
+import oilImage from '../../../../images/products/product_3.webp';
+import waterImage from '../../../../images/products/product_3_2.webp';
+import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
+import { BackToTop } from '../../../ui/back-to-top/BackToTop';
+
+const features = [
+  { title: 'Учёт газа', text: 'Автоматизированный учёт количества природного и нефтяного газа.' },
+  { title: 'Коммерческий учёт', text: 'Данные для расчётов между предприятиями.' },
+  { title: 'Контроль состава', text: 'Определение компонентного состава газа.' },
+  { title: 'Применение', text: 'Работа на УКПГ и границах газодобывающих и газотранспортных предприятий.' },
+  { title: 'Параметры потока', text: 'Измерение давления, температуры и других параметров газа.' },
+  { title: 'Передача данных', text: 'Передача информации в системы диспетчерского и технологического контроля.' },
+] as const;
+
+const composition = [
+  { title: 'Измерение расхода', text: 'Расходомеры газа и вычислители расхода.' },
+  { title: 'Контроль среды', text: 'Регуляторы давления и анализаторы состава газа.' },
+  { title: 'Обработка данных', text: 'Аппаратные и программные средства управления.' },
+] as const;
+
+const related = [
+  { id: 'oil', title: 'СИКН · Нефть', image: oilImage.src, alt: 'Система измерения нефти СИКН' },
+  { id: 'water', title: 'СИКВ · Вода', image: waterImage.src, alt: 'Система измерения воды СИКВ' },
+] as const;
 
 export const Gas = () => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
-  const heroImageRef = useRef<HTMLDivElement>(null);
+  const [bigPhoto, setBigPhoto] = useState(false);
+  const relatedRef = useRef<HTMLDivElement | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const onBack = () => {
-    window.location.href = "/products/measuring-system";
+  const updateActiveIndex = () => {
+    const track = relatedRef.current;
+    if (!track) return;
+    const start = track.getBoundingClientRect().left + parseFloat(getComputedStyle(track).paddingLeft);
+    let nearest = 0;
+    let distance = Infinity;
+    Array.from(track.children).forEach((child, index) => {
+      const delta = Math.abs(child.getBoundingClientRect().left - start);
+      if (delta < distance) { distance = delta; nearest = index; }
+    });
+    setActiveIndex(nearest);
   };
 
-  const onDoc = () => {
-    window.location.href = "/documents/?category=measuring-system";
+  const scrollToRelated = (index: number) => {
+    const track = relatedRef.current;
+    const card = track?.children.item(index) as HTMLElement | null;
+    if (!track || !card) return;
+    const left = card.getBoundingClientRect().left - track.getBoundingClientRect().left +
+      track.scrollLeft - parseFloat(getComputedStyle(track).paddingLeft);
+    track.scrollTo({ left, behavior: 'smooth' });
+    setActiveIndex(index);
   };
-
-  /* ---------- 3D TILT EFFECT ---------- */
-  useEffect(() => {
-    const el = heroImageRef.current;
-    if (!el) return;
-
-    const move = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = -(y - centerY) / 20;
-      const rotateY = (x - centerX) / 20;
-
-      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    };
-
-    const leave = () => {
-      el.style.transform = "rotateX(0) rotateY(0)";
-    };
-
-    el.addEventListener("mousemove", move);
-    el.addEventListener("mouseleave", leave);
-
-    return () => {
-      el.removeEventListener("mousemove", move);
-      el.removeEventListener("mouseleave", leave);
-    };
-  }, []);
-
-  /* ---------- SCROLL REVEAL ---------- */
-  useEffect(() => {
-    const elements = document.querySelectorAll(`.${Styles.reveal}`);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(Styles.visible);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
-    <>
-      <div className={Styles.page}>
-        <button className={Styles.backButton} onClick={onBack}>
-          <img src={back.src} alt=""/>
-        </button>
-
-        <section className={`${Styles.hero} ${Styles.reveal}`}>
-          <div className={Styles.heroText}>
-            <h1>
-              Система измерения количества газа<span> СИКГ</span>
-            </h1>
-
-            <p>
-              СИКГ предназначена для автоматизированного учета количества
-              природного и нефтяного газа, включая определение компонентного
-              состава при транспортировке, хранении и переработке.
-            </p>
-
-            <div className={Styles.heroButtons}>
-              <button
-                className={Styles.primaryBtn}
-                onClick={() => setBigPhoto(product.src)}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <path d="M21 15L16 10L5 21" />
-                </svg>
-                Смотреть фото
-              </button>
-              <button className={Styles.secondaryBtn} onClick={onDoc}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                Документация
-              </button>
-            </div>
-          </div>
-
-          <div className={Styles.heroImageWrap}>
-            <div
-              className={Styles.imageCard}
-              ref={heroImageRef}
-              onClick={() => setBigPhoto(product.src)}
-            >
-              <img src={product.src} alt="СИКГ" className={Styles.mainImage} />
-              
-              <div className={Styles.imageOverlay}>
-                <span className={Styles.zoomText}>
-                  Нажмите для увеличения
-                </span>
+    <div className={Styles.page}>
+      <main>
+        <section className={Styles.hero} aria-labelledby="product-title">
+          <div className={Styles.container}>
+            <nav className={Styles.breadcrumbs} aria-label="Хлебные крошки">
+              <a href="/products/">Продукция</a><span aria-hidden="true">›</span>
+              <a href="/products/measuring-system/">Измерительные системы</a><span aria-hidden="true">›</span>
+              <span aria-current="page">СИКГ</span>
+            </nav>
+            <div className={Styles.heroGrid}>
+              <div className={Styles.heroContent}>
+                <span className={Styles.eyebrow}>Измерение и учёт газа</span>
+                <h1 id="product-title">Система измерения количества газа <em>СИКГ</em></h1>
+                <p className={Styles.heroDescription}>
+                  Система для автоматизированного учёта количества природного и нефтяного газа,
+                  включая определение компонентного состава при транспортировке, хранении и переработке.
+                </p>
+                <div className={Styles.heroActions}>
+                  <a className={Styles.primaryButton} href="#features">Назначение системы <span aria-hidden="true">↗</span></a>
+                  <a className={Styles.secondaryButton} href="/documents/?category=measuring-system">Документация <span aria-hidden="true">→</span></a>
+                </div>
+                <div className={Styles.heroNote}><span className={Styles.noteDot} aria-hidden="true" />Учёт · контроль состава · передача данных</div>
+              </div>
+              <div className={Styles.productVisual}>
+                <button className={Styles.photoButton} type="button" onClick={() => setBigPhoto(true)} aria-label="Открыть крупное фото СИКГ">
+                  <img src={productImage.src} alt="Система измерения количества газа СИКГ" className={Styles.productImage} />
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                </button>
+                <span className={Styles.visualCaption}>СИКГ · система измерения газа</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FEATURES */}
-        <section className={`${Styles.features} ${Styles.reveal}`}>
-          <h2>Назначение системы</h2>
-
-          <div className={Styles.featuresGrid}>
-            {[
-              [
-                "Учет газа",
-                "Автоматизированный учет количества природного и нефтяного газа.",
-              ],
-              [
-                "Коммерческий учет",
-                "Используется при проведении расчетных операций между предприятиями.",
-              ],
-              [
-                "Контроль состава",
-                "Определение компонентного состава газа.",
-              ],
-              [
-                "Применение",
-                "Используется на УКПГ и на границах газодобывающих и газотранспортных предприятий.",
-              ],
-              [
-                "Контроль параметров",
-                "Измерение давления, температуры и других параметров газа.",
-              ],
-              [
-                "Передача данных",
-                "Передача информации в системы диспетчерского и технологического контроля.",
-              ],
-            ].map(([title, text], i) => (
-              <div key={i} className={Styles.featureCard}>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-            ))}
+        <section className={Styles.purpose} id="features" aria-labelledby="features-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div><span className={Styles.eyebrow}>01 / Назначение</span><h2 id="features-title">Возможности СИКГ</h2></div>
+              <p>Данные о количестве, составе и технологических параметрах газа.</p>
+            </div>
+            <div className={Styles.purposeGrid}>
+              {features.map((feature, index) => (
+                <article className={Styles.purposeCard} key={feature.title}>
+                  <span className={Styles.cardNumber}>{String(index + 1).padStart(2, '0')}</span>
+                  <h3>{feature.title}</h3><p>{feature.text}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* TECHNOLOGY */}
-        <section className={`${Styles.tech} ${Styles.reveal}`}>
-          <div className={Styles.techImage}>
-            <img src={product.src} alt="СИКГ оборудование" />
-          </div>
-
-          <div className={Styles.techText}>
-            <h2>Типовой состав системы</h2>
-
-            <p>
-              Система включает расходомеры газа, вычислители расхода,
-              регуляторы давления, анализаторы состава газа и
-              аппаратно-программные средства управления.
-            </p>
-
-            <section className={`${Styles.related} ${Styles.reveal}`}>
-              <h1>Смотрите также</h1>
-              <div className={Styles.relatedGrid}>
-                <a href="/products/measuring-system/oil">СИКН</a>
-                <a href="/products/measuring-system/water">СИКВ</a>
-              </div>
-            </section>
+        <section className={Styles.principle} aria-labelledby="composition-title">
+          <div className={Styles.container}>
+            <div className={Styles.principleIntro}>
+              <span className={Styles.eyebrow}>02 / Компоновка</span>
+              <h2 id="composition-title">Типовой состав системы</h2>
+              <p>Состав СИКГ подбирают под рабочую среду, технологическую схему и требования к учёту на объекте.</p>
+            </div>
+            <div className={Styles.processList}>
+              {composition.map((part, index) => (
+                <div key={part.title}><span>{String(index + 1).padStart(2, '0')}</span><strong>{part.title}</strong><p>{part.text}</p></div>
+              ))}
+            </div>
           </div>
         </section>
 
-        <BackToTop />
+        <section className={Styles.resources} aria-labelledby="resources-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div><span className={Styles.eyebrow}>03 / Материалы</span><h2 id="resources-title">Документация</h2></div>
+              <p>Откройте раздел материалов по измерительным системам.</p>
+            </div>
+            <div className={Styles.documentsGrid}>
+              <a className={Styles.materialCard} href="/documents/?category=measuring-system">
+                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span><strong>Документация по измерительным системам</strong><small>Открыть раздел документов</small></span>
+                <span className={Styles.materialArrow} aria-hidden="true">→</span>
+              </a>
+            </div>
+          </div>
+        </section>
 
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
-      </div>
-    </>
+        <section className={Styles.relatedSection} aria-labelledby="related-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div><span className={Styles.eyebrow}>04 / Измерительные системы</span><h2 id="related-title">Смотрите также</h2></div>
+              <p>Системы измерения нефти и воды.</p>
+            </div>
+            <div className={`${Styles.relatedTrack} ${Styles.relatedTrackTwo}`} ref={relatedRef} onScroll={updateActiveIndex} role="region" aria-label="Другие измерительные системы" tabIndex={0}>
+              {related.map((system) => (
+                <article className={Styles.relatedCard} key={system.id}>
+                  <a href={`/products/measuring-system/${system.id}/`}>
+                    <span className={Styles.relatedImage}><img src={system.image} alt={system.alt} loading="lazy" /></span>
+                    <span className={Styles.relatedInfo}><strong>{system.title}</strong><span aria-hidden="true">↗</span></span>
+                  </a>
+                </article>
+              ))}
+            </div>
+            <div className={Styles.relatedControls}>
+              <span>Листайте карточки свайпом</span>
+              <div><span aria-live="polite">{String(activeIndex + 1).padStart(2, '0')} / 02</span>
+                <button type="button" aria-label="Предыдущая система" disabled={activeIndex === 0} onClick={() => scrollToRelated(activeIndex - 1)}>←</button>
+                <button type="button" aria-label="Следующая система" disabled={activeIndex === related.length - 1} onClick={() => scrollToRelated(activeIndex + 1)}>→</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className={Styles.bottomCta} aria-labelledby="next-title">
+          <div className={Styles.container}>
+            <div><span className={Styles.eyebrow}>Выбор системы</span><h2 id="next-title">Нужна система для другого продукта?</h2><p>Посмотрите все измерительные системы.</p></div>
+            <a href="/products/measuring-system/">Все системы <span aria-hidden="true">↗</span></a>
+          </div>
+        </section>
+      </main>
+      <BackToTop />
+      {bigPhoto && <BigPhoto src={productImage.src} onClose={() => setBigPhoto(false)} />}
+    </div>
   );
 };

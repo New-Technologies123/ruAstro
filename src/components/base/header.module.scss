@@ -1160,20 +1160,28 @@
 }
 
 .mobileItemActive>.mobileItemRow>.mobileItemLink {
+  position: relative;
   color: #8eb5ff;
 }
 
 .mobileItemActive>.mobileItemRow>.mobileItemLink::before {
   content: '';
 
-  width: 3px;
-  height: 20px;
+  position: absolute;
 
-  margin-right: 9px;
+  left: -10px;
+  top: 50%;
+
+  width: 3px;
+  height: 22px;
+
+  margin: 0;
 
   border-radius: 999px;
 
   background: #4c8dff;
+
+  transform: translateY(-50%);
 }
 
 .mobileArrowButton {
@@ -1497,31 +1505,19 @@
 /* =========================================================
    BURGER BREAKPOINT
    1340px
-
-   Здесь:
-   - desktop nav исчезает;
-   - burger появляется;
-   - RU/EN появляется рядом с burger;
-   - контакты остаются сверху;
-   - "Обсудить проект" остаётся сверху;
-   - mobileExtra остаётся display:none.
    ========================================================= */
 
 @media (max-width: 1340px) {
   .topBarInner {
-    width:
-      calc(100% - 40px);
+    width: auto;
+    margin: 0 20px;
   }
 
   .headerInner {
-    width:
-      calc(100% - 40px);
-
+    width: auto;
+    margin: 0 20px;
     min-height: 72px;
-
-    justify-content:
-      space-between;
-
+    justify-content: space-between;
     gap: 16px;
   }
 
@@ -1607,6 +1603,8 @@
 
 @media (max-width: 980px) {
   .topBarInner {
+    margin-left: 20px;
+    margin-right: 20px;
     gap: 15px;
   }
 
@@ -1615,6 +1613,8 @@
   }
 
   .headerInner {
+    margin-left: 20px;
+    margin-right: 20px;
     min-height: 70px;
   }
 
@@ -1647,10 +1647,14 @@
   }
 
   .headerInner {
-    width:
-      calc(100% - 32px);
+    width: auto;
+
+    margin-left: 16px;
+    margin-right: 16px;
 
     min-height: 68px;
+
+    gap: 12px;
   }
 
   .logo {
@@ -1743,8 +1747,10 @@
 
 @media (max-width: 600px) {
   .headerInner {
-    width:
-      calc(100% - 24px);
+    width: auto;
+
+    margin-left: 12px;
+    margin-right: 12px;
 
     min-height: 64px;
 
@@ -1825,8 +1831,12 @@
 
 @media (max-width: 430px) {
   .headerInner {
-    width:
-      calc(100% - 20px);
+    width: auto;
+
+    margin-left: 10px;
+    margin-right: 10px;
+
+    gap: 6px;
   }
 
   .logo {
@@ -1948,6 +1958,7 @@
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+
   .header,
   .logo,
   .navLink,

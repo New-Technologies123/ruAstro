@@ -1,211 +1,298 @@
-import { useEffect, useRef, useState } from "react";
-import Styles from "../products.module.scss";
-import back from '../../../../images/back.svg'
-import product from "../../../../images/products/product_2_5.webp";
+import { useRef, useState } from 'react';
 
-import { BigPhoto } from "../../../ui/big-photo/BigPhoto";
-import { BackToTop } from "../../../ui/back-to-top/BackToTop";
+import Styles from '../products.module.scss';
+import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
+import { BackToTop } from '../../../ui/back-to-top/BackToTop';
+
+import ervipImage from '../../../../images/products/product_2.webp';
+import urpdImage from '../../../../images/products/urpd.webp';
+import psmImage from '../../../../images/products/product_2_2.webp';
+import kmrImage from '../../../../images/products/product_2_3.webp';
+import gidroprivodImage from '../../../../images/products/product_2_4.webp';
+import separationImage from '../../../../images/products/product_2_5.webp';
+
+type AccessoryId =
+  | 'ervip'
+  | 'urpd'
+  | 'psm'
+  | 'kmr'
+  | 'gidroprivod'
+  | 'separation';
+
+type Accessory = {
+  id: AccessoryId;
+  shortName: string;
+  title: string;
+  accent: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  features: readonly { title: string; text: string }[];
+  principle: string;
+  principlePoints: readonly { title: string; text: string }[];
+  survey?: string;
+};
+
+const item: Accessory = {
+    id: 'separation',
+    shortName: 'Сепарационная ёмкость',
+    title: 'Сепарационная',
+    accent: 'ёмкость',
+    description:
+      'Разделяет нефтегазовую смесь на жидкую и газовую фазы в составе замерных установок типа «Спутник».',
+    image: separationImage.src,
+    imageAlt: 'Сепарационная ёмкость АГЗУ',
+    features: [
+      { title: 'Разделение фаз', text: 'Выделяет жидкую и газовую фазы из нефтегазовой смеси.' },
+      { title: 'Работа в АГЗУ', text: 'Используется в замерных установках типа «Спутник».' },
+      { title: 'Гравитационный принцип', text: 'Разделение происходит при изменении скорости потока.' },
+      { title: 'Промышленное исполнение', text: 'Конструкция предназначена для технологических объектов.' },
+      { title: 'Измерительный процесс', text: 'Подготавливает фазы к последующему измерению.' },
+      { title: 'Обслуживание', text: 'Работает в составе системы замера продукции скважин.' },
+    ],
+    principle:
+      'При прохождении смеси через ёмкость скорость потока изменяется. Под действием гравитации жидкая и газовая фазы разделяются для дальнейшего измерения.',
+    principlePoints: [
+      { title: 'Поступление', text: 'Нефтегазовая смесь входит в ёмкость.' },
+      { title: 'Замедление', text: 'Скорость потока меняется внутри корпуса.' },
+      { title: 'Разделение', text: 'Жидкость и газ отделяются друг от друга.' },
+    ],
+  };
+
+const related = [
+  { id: 'ervip', shortName: 'ЭРВИП', image: ervipImage.src, imageAlt: 'Вихревой расходомер ЭРВИП' },
+  { id: 'urpd', shortName: 'УРПД', image: urpdImage.src, imageAlt: 'Устройство для регулирования перепада давления УРПД' },
+  { id: 'psm', shortName: 'ПСМ', image: psmImage.src, imageAlt: 'Многоходовой переключатель скважин ПСМ' },
+  { id: 'kmr', shortName: 'КМР', image: kmrImage.src, imageAlt: 'Магниторегулируемый клапан КМР' },
+  { id: 'gidroprivod', shortName: 'Гидропривод', image: gidroprivodImage.src, imageAlt: 'Гидропривод ГП для переключателя скважин' },
+] as const;
 
 export const Separation = () => {
-  const [bigPhoto, setBigPhoto] = useState<string | null>(null);
-  const heroImageRef = useRef<HTMLDivElement>(null);
+  const [bigPhoto, setBigPhoto] = useState(false);
+  const relatedRef = useRef<HTMLDivElement | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const onBack = () => {
-    window.location.href = "/products/accessories";
+  const updateActiveIndex = () => {
+    const track = relatedRef.current;
+    if (!track) return;
+
+    const start = track.getBoundingClientRect().left +
+      parseFloat(getComputedStyle(track).paddingLeft);
+    let nearest = 0;
+    let nearestDistance = Infinity;
+
+    Array.from(track.children).forEach((child, index) => {
+      const distance = Math.abs(child.getBoundingClientRect().left - start);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearest = index;
+      }
+    });
+    setActiveIndex(nearest);
   };
 
-  const onDoc = () => {
-    window.location.href = "/documents/?category=accessories";
+  const scrollToRelated = (index: number) => {
+    const track = relatedRef.current;
+    const card = track?.children.item(index) as HTMLElement | null;
+    if (!track || !card) return;
+
+    const left = card.getBoundingClientRect().left -
+      track.getBoundingClientRect().left + track.scrollLeft -
+      parseFloat(getComputedStyle(track).paddingLeft);
+    track.scrollTo({ left, behavior: 'smooth' });
+    setActiveIndex(index);
   };
-
-  /* ---------- 3D TILT EFFECT ---------- */
-
-  useEffect(() => {
-    const el = heroImageRef.current;
-    if (!el) return;
-
-    const move = (e: MouseEvent) => {
-      const rect = el.getBoundingClientRect();
-
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-
-      const centerX = rect.width / 2;
-      const centerY = rect.height / 2;
-
-      const rotateX = -(y - centerY) / 20;
-      const rotateY = (x - centerX) / 20;
-
-      el.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    };
-
-    const leave = () => {
-      el.style.transform = "rotateX(0) rotateY(0)";
-    };
-
-    el.addEventListener("mousemove", move);
-    el.addEventListener("mouseleave", leave);
-
-    return () => {
-      el.removeEventListener("mousemove", move);
-      el.removeEventListener("mouseleave", leave);
-    };
-  }, []);
-
-  /* ---------- SCROLL REVEAL ---------- */
-
-  useEffect(() => {
-    const elements = document.querySelectorAll(`.${Styles.reveal}`);
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add(Styles.visible);
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
-    <>
-      <div className={Styles.page}>
-        <button className={Styles.backButton} onClick={onBack}>
-          <img src={back.src} alt=""/>
-        </button>
+    <div className={Styles.page}>
+      <main>
+        <section className={Styles.hero} aria-labelledby="product-title">
+          <div className={Styles.container}>
+            <nav className={Styles.breadcrumbs} aria-label="Хлебные крошки">
+              <a href="/products/">Продукция</a>
+              <span aria-hidden="true">›</span>
+              <a href="/products/accessories/">Комплектующие АГЗУ</a>
+              <span aria-hidden="true">›</span>
+              <span aria-current="page">{item.shortName}</span>
+            </nav>
 
-        <section className={`${Styles.hero} ${Styles.reveal}`}>
-          <div className={Styles.heroText}>
-            <h1>
-              Сепарационная <span>ёмкость</span>
-            </h1>
+            <div className={Styles.heroGrid}>
+              <div className={Styles.heroContent}>
+                <span className={Styles.eyebrow}>Комплектующие для замерных установок</span>
+                <h1 id="product-title">{item.title} <em>{item.accent}</em></h1>
+                <p className={Styles.heroDescription}>{item.description}</p>
+                <div className={Styles.heroActions}>
+                  <a className={Styles.primaryButton} href="#features">
+                    Оборудование и назначение <span aria-hidden="true">↗</span>
+                  </a>
+                  <a
+                    className={Styles.secondaryButton}
+                    href="/documents/?category=accessories"
+                  >
+                    Документация <span aria-hidden="true">→</span>
+                  </a>
+                </div>
+                <div className={Styles.heroNote}>
+                  <span className={Styles.noteDot} aria-hidden="true" />
+                  Компонент АГЗУ типа «Спутник»
+                </div>
+              </div>
 
-            <p>
-              Оборудование для разделения нефтегазовых смесей на жидкость и газ
-              в составе замерных установок типа «Спутник».
-            </p>
+              <div className={Styles.productVisual}>
+                <button
+                  className={Styles.photoButton}
+                  type="button"
+                  aria-label={`Открыть крупное фото: ${item.shortName}`}
+                  onClick={() => setBigPhoto(true)}
+                >
+                  <img src={item.image} alt={item.imageAlt} className={Styles.productImage} />
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                </button>
+                <span className={Styles.visualCaption}>{item.shortName} · фото оборудования</span>
+              </div>
+            </div>
+          </div>
+        </section>
 
-            <div className={Styles.heroButtons}>
-              <button
-                className={Styles.primaryBtn}
-                onClick={() => setBigPhoto(product.src)}
+        <section className={Styles.purpose} id="features" aria-labelledby="features-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>01 / Особенности</span>
+                <h2 id="features-title">Назначение и особенности</h2>
+              </div>
+              <p>Ключевые свойства {item.shortName} в составе замерной установки.</p>
+            </div>
+            <div className={Styles.purposeGrid}>
+              {item.features.map((feature, index) => (
+                <article className={Styles.purposeCard} key={feature.title}>
+                  <span className={Styles.cardNumber}>{String(index + 1).padStart(2, '0')}</span>
+                  <h3>{feature.title}</h3>
+                  <p>{feature.text}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className={Styles.principle} aria-labelledby="principle-title">
+          <div className={Styles.container}>
+            <div className={Styles.principleIntro}>
+              <span className={Styles.eyebrow}>02 / Работа оборудования</span>
+              <h2 id="principle-title">Принцип работы</h2>
+              <p>{item.principle}</p>
+            </div>
+            <div className={Styles.processList}>
+              {item.principlePoints.map((point, index) => (
+                <div key={point.title}>
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <strong>{point.title}</strong>
+                  <p>{point.text}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className={Styles.resources} aria-labelledby="resources-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>03 / Материалы</span>
+                <h2 id="resources-title">Документы по оборудованию</h2>
+              </div>
+              <p>Материалы для ознакомления и подбора компонента.</p>
+            </div>
+            <div className={Styles.documentsGrid}>
+              <a
+                className={Styles.materialCard}
+                href="/documents/?category=accessories"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <rect x="3" y="3" width="18" height="18" rx="2" />
-                  <circle cx="8.5" cy="8.5" r="1.5" />
-                  <path d="M21 15L16 10L5 21" />
-                </svg>
-                Смотреть фото
-              </button>
-              <button className={Styles.secondaryBtn} onClick={onDoc}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                Документация
-              </button>
+                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span><strong>Документация по комплектующим</strong><small>Открыть раздел документов</small></span>
+                <span className={Styles.materialArrow} aria-hidden="true">→</span>
+              </a>
+              {item.survey && (
+                <div className={Styles.documentCard}>
+                  <div className={Styles.documentIcon} aria-hidden="true">PDF</div>
+                  <div className={Styles.documentText}>
+                    <h3>Опросный лист {item.shortName}</h3>
+                    <p>PDF · технические требования</p>
+                  </div>
+                  <div className={Styles.documentActions}>
+                    <a href={item.survey} target="_blank" rel="noopener noreferrer">
+                      Открыть <span aria-hidden="true">↗</span>
+                    </a>
+                    <a className={Styles.downloadButton} href={item.survey} download>
+                      Скачать <span aria-hidden="true">↓</span>
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
+        </section>
 
-          <div className={Styles.heroImageWrap}>
+        <section className={Styles.relatedSection} aria-labelledby="related-title">
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>04 / Комплектующие</span>
+                <h2 id="related-title">Смотрите также</h2>
+              </div>
+              <p>Другие компоненты АГЗУ типа «Спутник».</p>
+            </div>
             <div
-              className={Styles.imageCard}
-              ref={heroImageRef}
-              onClick={() => setBigPhoto(product.src)}
+              className={Styles.relatedTrack}
+              ref={relatedRef}
+              onScroll={updateActiveIndex}
+              role="region"
+              aria-label="Другие комплектующие АГЗУ"
+              tabIndex={0}
             >
-              <div className={Styles.frame}>
-                <img src={product.src} alt="Емкасть" className={Styles.mainImage} />
-              </div>
-              <div className={Styles.imageOverlay}>
-                <span className={Styles.zoomText}>
-                  Нажмите для увеличения
+              {related.map((product) => (
+                <article className={Styles.relatedCard} key={product.id}>
+                  <a href={`/products/accessories/${product.id}/`}>
+                    <span className={Styles.relatedImage}>
+                      <img src={product.image} alt={product.imageAlt} loading="lazy" />
+                    </span>
+                    <span className={Styles.relatedInfo}>
+                      <strong>{product.shortName}</strong>
+                      <span aria-hidden="true">↗</span>
+                    </span>
+                  </a>
+                </article>
+              ))}
+            </div>
+            <div className={Styles.relatedControls}>
+              <span>Листайте карточки свайпом</span>
+              <div>
+                <span aria-live="polite">
+                  {String(activeIndex + 1).padStart(2, '0')} / {String(related.length).padStart(2, '0')}
                 </span>
+                <button type="button" aria-label="Предыдущий компонент" disabled={activeIndex === 0} onClick={() => scrollToRelated(activeIndex - 1)}>←</button>
+                <button type="button" aria-label="Следующий компонент" disabled={activeIndex === related.length - 1} onClick={() => scrollToRelated(activeIndex + 1)}>→</button>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FEATURES */}
-
-        <section className={`${Styles.features} ${Styles.reveal}`}>
-          <h2>Преимущества оборудования</h2>
-
-          <div className={Styles.featuresGrid}>
-            {[
-              [
-                "Эффективное разделение",
-                "Надежное разделение газожидкостных смесей.",
-              ],
-              [
-                "Надежность",
-                "Стабильная работа в составе промышленных установок.",
-              ],
-              [
-                "Долговечность",
-                "Прочная конструкция рассчитана на длительную эксплуатацию.",
-              ],
-              [
-                "Устойчивость к нагрузкам",
-                "Работа в сложных условиях добычи нефти и газа.",
-              ],
-              [
-                "Простота обслуживания",
-                "Минимальные требования к техническому обслуживанию.",
-              ],
-              [
-                "Совместимость",
-                "Используется в установках типа «Спутник».",
-              ],
-            ].map(([title, text], i) => (
-              <div key={i} className={Styles.featureCard}>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </div>
-            ))}
+        <section className={Styles.bottomCta} aria-labelledby="next-title">
+          <div className={Styles.container}>
+            <div>
+              <span className={Styles.eyebrow}>Подбор оборудования</span>
+              <h2 id="next-title">Нужны комплектующие для АГЗУ?</h2>
+              <p>Посмотрите весь раздел оборудования.</p>
+            </div>
+            <a href="/products/accessories/">
+              Все комплектующие <span aria-hidden="true">↗</span>
+            </a>
           </div>
         </section>
+      </main>
 
-        {/* TECHNOLOGY */}
-
-        <section className={`${Styles.tech} ${Styles.reveal}`}>
-          <div className={Styles.techImage}>
-            <img src={product.src} alt="" />
-          </div>
-
-          <div className={Styles.techText}>
-            <h2>Принцип работы</h2>
-
-            <p>
-              Сепарационная емкость разделяет поток нефтегазовой смеси на
-              жидкую и газовую фазы за счет изменения скорости потока и
-              гравитационного отделения компонентов.
-            </p>
-
-            <section className={`${Styles.related} ${Styles.reveal}`}>
-              <h1>Смотрите также</h1>
-              <div className={Styles.relatedGrid}>
-                <a href="/products/accessories/ervip">ЭРВИП</a>
-                <a href="/products/accessories/urpd">УРПД</a>
-                <a href="/products/accessories/psm">ПСМ</a>
-                <a href="/products/accessories/kmr">КМР</a>
-                <a href="/products/accessories/gidroprivod">Гидропривод</a>
-              </div>
-            </section>
-          </div>
-        </section>
-
-        <BackToTop />
-
-        {bigPhoto && (
-          <BigPhoto src={bigPhoto} onClose={() => setBigPhoto(null)} />
-        )}
-      </div>
-    </>
+      <BackToTop />
+      {bigPhoto && <BigPhoto src={item.image} onClose={() => setBigPhoto(false)} />}
+    </div>
   );
 };

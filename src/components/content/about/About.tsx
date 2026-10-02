@@ -260,9 +260,9 @@ export const About = () => {
 
         <div className={Styles.heroInner}>
           <div className={Styles.heroTop}>
-            <span className={Styles.eyebrow}>
+            {/* <span className={Styles.eyebrow}>
               ООО ИПП «НОВЫЕ ТЕХНОЛОГИИ»
-            </span>
+            </span> */}
 
             <span className={Styles.heroTopMeta}>
               УФА · БАШКОРТОСТАН · РОССИЯ
