@@ -34,38 +34,90 @@ type Accessory = {
 };
 
 const item: Accessory = {
-    id: 'ervip',
-    shortName: 'ЭРВИП',
-    title: 'Вихревой расходомер',
-    accent: 'ЭРВИП',
-    description:
-      'Промышленный прибор для измерения расхода жидкостей и газов в автоматизированных установках типа «Спутник».',
-    image: ervipImage.src,
-    imageAlt: 'Вихревой расходомер ЭРВИП',
-    features: [
-      { title: 'Точность измерений', text: 'Стабильные показания расхода жидкостей и газов.' },
-      { title: 'Надёжность', text: 'Конструкция рассчитана на промышленную эксплуатацию.' },
-      { title: 'Срок службы', text: 'До 12 лет эксплуатации.' },
-      { title: 'Работа с загрязнениями', text: 'Предусмотрена работа в сложных условиях потока.' },
-      { title: 'Межповерочный интервал', text: 'До 4 лет между поверками.' },
-      { title: 'Настройка', text: 'Диапазон измерений можно настраивать под задачу.' },
-    ],
-    principle:
-      'При обтекании препятствия в потоке образуется вихревая дорожка Кармана. Частота образования вихрей связана со скоростью потока и используется для определения расхода.',
-    principlePoints: [
-      { title: 'Поток', text: 'Среда проходит через измерительный участок.' },
-      { title: 'Вихри', text: 'За препятствием возникает вихревая дорожка.' },
-      { title: 'Сигнал', text: 'Пьезоэлемент передаёт импульсы электронике расходомера.' },
-    ],
-    survey: '/survey/ervip.pdf',
-  };
+  id: 'ervip',
+  shortName: 'ЭРВИП',
+  title: 'Вихревой расходомер',
+  accent: 'ЭРВИП',
+  description:
+    'Промышленный прибор для измерения расхода жидкостей и газов в автоматизированных установках типа «Спутник».',
+  image: ervipImage.src,
+  imageAlt: 'Вихревой расходомер ЭРВИП',
+  features: [
+    {
+      title: 'Точность измерений',
+      text: 'Стабильные показания расхода жидкостей и газов.',
+    },
+    {
+      title: 'Надёжность',
+      text: 'Конструкция рассчитана на промышленную эксплуатацию.',
+    },
+    {
+      title: 'Срок службы',
+      text: 'До 12 лет эксплуатации.',
+    },
+    {
+      title: 'Работа с загрязнениями',
+      text: 'Предусмотрена работа в сложных условиях потока.',
+    },
+    {
+      title: 'Межповерочный интервал',
+      text: 'До 4 лет между поверками.',
+    },
+    {
+      title: 'Настройка',
+      text: 'Диапазон измерений можно настраивать под задачу.',
+    },
+  ],
+  principle:
+    'При обтекании препятствия в потоке образуется вихревая дорожка Кармана. Частота образования вихрей связана со скоростью потока и используется для определения расхода.',
+  principlePoints: [
+    {
+      title: 'Поток',
+      text: 'Среда проходит через измерительный участок.',
+    },
+    {
+      title: 'Вихри',
+      text: 'За препятствием возникает вихревая дорожка.',
+    },
+    {
+      title: 'Сигнал',
+      text: 'Пьезоэлемент передаёт импульсы электронике расходомера.',
+    },
+  ],
+  survey: '/survey/ervip.doc',
+};
 
 const related = [
-  { id: 'urpd', shortName: 'УРПД', image: urpdImage.src, imageAlt: 'Устройство для регулирования перепада давления УРПД' },
-  { id: 'psm', shortName: 'ПСМ', image: psmImage.src, imageAlt: 'Многоходовой переключатель скважин ПСМ' },
-  { id: 'kmr', shortName: 'КМР', image: kmrImage.src, imageAlt: 'Магниторегулируемый клапан КМР' },
-  { id: 'gidroprivod', shortName: 'Гидропривод', image: gidroprivodImage.src, imageAlt: 'Гидропривод ГП для переключателя скважин' },
-  { id: 'separation', shortName: 'Сепарационная ёмкость', image: separationImage.src, imageAlt: 'Сепарационная ёмкость АГЗУ' },
+  {
+    id: 'urpd',
+    shortName: 'УРПД',
+    image: urpdImage.src,
+    imageAlt: 'Устройство для регулирования перепада давления УРПД',
+  },
+  {
+    id: 'psm',
+    shortName: 'ПСМ',
+    image: psmImage.src,
+    imageAlt: 'Многоходовой переключатель скважин ПСМ',
+  },
+  {
+    id: 'kmr',
+    shortName: 'КМР',
+    image: kmrImage.src,
+    imageAlt: 'Магниторегулируемый клапан КМР',
+  },
+  {
+    id: 'gidroprivod',
+    shortName: 'Гидропривод',
+    image: gidroprivodImage.src,
+    imageAlt: 'Гидропривод ГП для переключателя скважин',
+  },
+  {
+    id: 'separation',
+    shortName: 'Сепарационная ёмкость',
+    image: separationImage.src,
+    imageAlt: 'Сепарационная ёмкость АГЗУ',
+  },
 ] as const;
 
 export const Ervip = () => {
@@ -73,43 +125,73 @@ export const Ervip = () => {
   const relatedRef = useRef<HTMLDivElement | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const documentUrl = item.survey
+    ? `https://tech-new.ru${item.survey}`
+    : '';
+
+  const officeViewerUrl = documentUrl
+    ? `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+        documentUrl,
+      )}`
+    : '';
+
   const updateActiveIndex = () => {
     const track = relatedRef.current;
     if (!track) return;
 
-    const start = track.getBoundingClientRect().left +
+    const start =
+      track.getBoundingClientRect().left +
       parseFloat(getComputedStyle(track).paddingLeft);
+
     let nearest = 0;
     let nearestDistance = Infinity;
 
     Array.from(track.children).forEach((child, index) => {
-      const distance = Math.abs(child.getBoundingClientRect().left - start);
+      const distance = Math.abs(
+        child.getBoundingClientRect().left - start,
+      );
+
       if (distance < nearestDistance) {
         nearestDistance = distance;
         nearest = index;
       }
     });
+
     setActiveIndex(nearest);
   };
 
   const scrollToRelated = (index: number) => {
     const track = relatedRef.current;
     const card = track?.children.item(index) as HTMLElement | null;
+
     if (!track || !card) return;
 
-    const left = card.getBoundingClientRect().left -
-      track.getBoundingClientRect().left + track.scrollLeft -
+    const left =
+      card.getBoundingClientRect().left -
+      track.getBoundingClientRect().left +
+      track.scrollLeft -
       parseFloat(getComputedStyle(track).paddingLeft);
-    track.scrollTo({ left, behavior: 'smooth' });
+
+    track.scrollTo({
+      left,
+      behavior: 'smooth',
+    });
+
     setActiveIndex(index);
   };
 
   return (
     <div className={Styles.page}>
       <main>
-        <section className={Styles.hero} aria-labelledby="product-title">
+        <section
+          className={Styles.hero}
+          aria-labelledby="product-title"
+        >
           <div className={Styles.container}>
-            <nav className={Styles.breadcrumbs} aria-label="Хлебные крошки">
+            <nav
+              className={Styles.breadcrumbs}
+              aria-label="Хлебные крошки"
+            >
               <a href="/products/">Продукция</a>
               <span aria-hidden="true">›</span>
               <a href="/products/accessories/">Комплектующие АГЗУ</a>
@@ -119,22 +201,41 @@ export const Ervip = () => {
 
             <div className={Styles.heroGrid}>
               <div className={Styles.heroContent}>
-                <span className={Styles.eyebrow}>Комплектующие для замерных установок</span>
-                <h1 id="product-title">{item.title} <em>{item.accent}</em></h1>
-                <p className={Styles.heroDescription}>{item.description}</p>
+                <span className={Styles.eyebrow}>
+                  Комплектующие для замерных установок
+                </span>
+
+                <h1 id="product-title">
+                  {item.title} <em>{item.accent}</em>
+                </h1>
+
+                <p className={Styles.heroDescription}>
+                  {item.description}
+                </p>
+
                 <div className={Styles.heroActions}>
-                  <a className={Styles.primaryButton} href="#features">
-                    Оборудование и назначение <span aria-hidden="true">↗</span>
+                  <a
+                    className={Styles.primaryButton}
+                    href="#features"
+                  >
+                    Оборудование и назначение{' '}
+                    <span aria-hidden="true">↗</span>
                   </a>
+
                   <a
                     className={Styles.secondaryButton}
                     href="/documents/?category=accessories"
                   >
-                    Документация <span aria-hidden="true">→</span>
+                    Документация{' '}
+                    <span aria-hidden="true">→</span>
                   </a>
                 </div>
+
                 <div className={Styles.heroNote}>
-                  <span className={Styles.noteDot} aria-hidden="true" />
+                  <span
+                    className={Styles.noteDot}
+                    aria-hidden="true"
+                  />
                   Компонент АГЗУ типа «Спутник»
                 </div>
               </div>
@@ -146,28 +247,61 @@ export const Ervip = () => {
                   aria-label={`Открыть крупное фото: ${item.shortName}`}
                   onClick={() => setBigPhoto(true)}
                 >
-                  <img src={item.image} alt={item.imageAlt} className={Styles.productImage} />
-                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                  <img
+                    src={item.image}
+                    alt={item.imageAlt}
+                    className={Styles.productImage}
+                  />
+
+                  <span
+                    className={Styles.zoomButton}
+                    aria-hidden="true"
+                  >
+                    Увеличить фото ↗
+                  </span>
                 </button>
-                <span className={Styles.visualCaption}>{item.shortName} · фото оборудования</span>
+
+                <span className={Styles.visualCaption}>
+                  {item.shortName} · фото оборудования
+                </span>
               </div>
             </div>
           </div>
         </section>
 
-        <section className={Styles.purpose} id="features" aria-labelledby="features-title">
+        <section
+          className={Styles.purpose}
+          id="features"
+          aria-labelledby="features-title"
+        >
           <div className={Styles.container}>
             <div className={Styles.sectionHeading}>
               <div>
-                <span className={Styles.eyebrow}>01 / Особенности</span>
-                <h2 id="features-title">Назначение и особенности</h2>
+                <span className={Styles.eyebrow}>
+                  01 / Особенности
+                </span>
+
+                <h2 id="features-title">
+                  Назначение и особенности
+                </h2>
               </div>
-              <p>Ключевые свойства {item.shortName} в составе замерной установки.</p>
+
+              <p>
+                Ключевые свойства {item.shortName} в составе замерной
+                установки.
+              </p>
             </div>
+
             <div className={Styles.purposeGrid}>
               {item.features.map((feature, index) => (
-                <article className={Styles.purposeCard} key={feature.title}>
-                  <span className={Styles.cardNumber}>{String(index + 1).padStart(2, '0')}</span>
+                <article
+                  className={Styles.purposeCard}
+                  key={feature.title}
+                >
+                  <span className={Styles.cardNumber}>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+
                   <h3>{feature.title}</h3>
                   <p>{feature.text}</p>
                 </article>
@@ -176,17 +310,27 @@ export const Ervip = () => {
           </div>
         </section>
 
-        <section className={Styles.principle} aria-labelledby="principle-title">
+        <section
+          className={Styles.principle}
+          aria-labelledby="principle-title"
+        >
           <div className={Styles.container}>
             <div className={Styles.principleIntro}>
-              <span className={Styles.eyebrow}>02 / Работа оборудования</span>
+              <span className={Styles.eyebrow}>
+                02 / Работа оборудования
+              </span>
+
               <h2 id="principle-title">Принцип работы</h2>
               <p>{item.principle}</p>
             </div>
+
             <div className={Styles.processList}>
               {item.principlePoints.map((point, index) => (
                 <div key={point.title}>
-                  <span>{String(index + 1).padStart(2, '0')}</span>
+                  <span>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+
                   <strong>{point.title}</strong>
                   <p>{point.text}</p>
                 </div>
@@ -195,54 +339,109 @@ export const Ervip = () => {
           </div>
         </section>
 
-        <section className={Styles.resources} aria-labelledby="resources-title">
+        <section
+          className={Styles.resources}
+          aria-labelledby="resources-title"
+        >
           <div className={Styles.container}>
             <div className={Styles.sectionHeading}>
               <div>
-                <span className={Styles.eyebrow}>03 / Материалы</span>
-                <h2 id="resources-title">Документы по оборудованию</h2>
+                <span className={Styles.eyebrow}>
+                  03 / Материалы
+                </span>
+
+                <h2 id="resources-title">
+                  Документы по оборудованию
+                </h2>
               </div>
-              <p>Материалы для ознакомления и подбора компонента.</p>
+
+              <p>
+                Материалы для ознакомления и подбора компонента.
+              </p>
             </div>
+
             <div className={Styles.documentsGrid}>
-              <a
-                className={Styles.materialCard}
-                href="/documents/?category=accessories"
-              >
-                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
-                <span><strong>Документация по комплектующим</strong><small>Открыть раздел документов</small></span>
-                <span className={Styles.materialArrow} aria-hidden="true">→</span>
-              </a>
               {item.survey && (
                 <div className={Styles.documentCard}>
-                  <div className={Styles.documentIcon} aria-hidden="true">PDF</div>
+                  <div
+                    className={Styles.documentIcon}
+                    aria-hidden="true"
+                  >
+                    DOC
+                  </div>
+
                   <div className={Styles.documentText}>
                     <h3>Опросный лист {item.shortName}</h3>
-                    <p>PDF · технические требования</p>
+                    <p>DOC · технические требования</p>
                   </div>
+
                   <div className={Styles.documentActions}>
-                    <a href={item.survey} target="_blank" rel="noopener noreferrer">
-                      Открыть <span aria-hidden="true">↗</span>
+                    <a
+                      href={officeViewerUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Открыть{' '}
+                      <span aria-hidden="true">↗</span>
                     </a>
-                    <a className={Styles.downloadButton} href={item.survey} download>
-                      Скачать <span aria-hidden="true">↓</span>
+
+                    <a
+                      className={Styles.downloadButton}
+                      href={item.survey}
+                      download="ervip.doc"
+                    >
+                      Скачать{' '}
+                      <span aria-hidden="true">↓</span>
                     </a>
                   </div>
                 </div>
               )}
+              <a
+                className={Styles.materialCard}
+                href="/documents/?category=accessories"
+              >
+                <span
+                  className={Styles.materialIcon}
+                  aria-hidden="true"
+                >
+                  ↗
+                </span>
+
+                <span>
+                  <strong>Документация по комплектующим</strong>
+                  <small>Открыть раздел документов</small>
+                </span>
+
+                <span
+                  className={Styles.materialArrow}
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              </a>
             </div>
           </div>
         </section>
 
-        <section className={Styles.relatedSection} aria-labelledby="related-title">
+        <section
+          className={Styles.relatedSection}
+          aria-labelledby="related-title"
+        >
           <div className={Styles.container}>
             <div className={Styles.sectionHeading}>
               <div>
-                <span className={Styles.eyebrow}>04 / Комплектующие</span>
+                <span className={Styles.eyebrow}>
+                  04 / Комплектующие
+                </span>
+
                 <h2 id="related-title">Смотрите также</h2>
               </div>
-              <p>Другие компоненты АГЗУ типа «Спутник».</p>
+
+              <p>
+                Другие компоненты АГЗУ типа «Спутник».
+              </p>
             </div>
+
             <div
               className={Styles.relatedTrack}
               ref={relatedRef}
@@ -252,11 +451,21 @@ export const Ervip = () => {
               tabIndex={0}
             >
               {related.map((product) => (
-                <article className={Styles.relatedCard} key={product.id}>
-                  <a href={`/products/accessories/${product.id}/`}>
+                <article
+                  className={Styles.relatedCard}
+                  key={product.id}
+                >
+                  <a
+                    href={`/products/accessories/${product.id}/`}
+                  >
                     <span className={Styles.relatedImage}>
-                      <img src={product.image} alt={product.imageAlt} loading="lazy" />
+                      <img
+                        src={product.image}
+                        alt={product.imageAlt}
+                        loading="lazy"
+                      />
                     </span>
+
                     <span className={Styles.relatedInfo}>
                       <strong>{product.shortName}</strong>
                       <span aria-hidden="true">↗</span>
@@ -265,35 +474,75 @@ export const Ervip = () => {
                 </article>
               ))}
             </div>
+
             <div className={Styles.relatedControls}>
               <span>Листайте карточки свайпом</span>
+
               <div>
                 <span aria-live="polite">
-                  {String(activeIndex + 1).padStart(2, '0')} / {String(related.length).padStart(2, '0')}
+                  {String(activeIndex + 1).padStart(2, '0')} /{' '}
+                  {String(related.length).padStart(2, '0')}
                 </span>
-                <button type="button" aria-label="Предыдущий компонент" disabled={activeIndex === 0} onClick={() => scrollToRelated(activeIndex - 1)}>←</button>
-                <button type="button" aria-label="Следующий компонент" disabled={activeIndex === related.length - 1} onClick={() => scrollToRelated(activeIndex + 1)}>→</button>
+
+                <button
+                  type="button"
+                  aria-label="Предыдущий компонент"
+                  disabled={activeIndex === 0}
+                  onClick={() =>
+                    scrollToRelated(activeIndex - 1)
+                  }
+                >
+                  ←
+                </button>
+
+                <button
+                  type="button"
+                  aria-label="Следующий компонент"
+                  disabled={activeIndex === related.length - 1}
+                  onClick={() =>
+                    scrollToRelated(activeIndex + 1)
+                  }
+                >
+                  →
+                </button>
               </div>
             </div>
           </div>
         </section>
 
-        <section className={Styles.bottomCta} aria-labelledby="next-title">
+        <section
+          className={Styles.bottomCta}
+          aria-labelledby="next-title"
+        >
           <div className={Styles.container}>
             <div>
-              <span className={Styles.eyebrow}>Подбор оборудования</span>
-              <h2 id="next-title">Нужны комплектующие для АГЗУ?</h2>
+              <span className={Styles.eyebrow}>
+                Подбор оборудования
+              </span>
+
+              <h2 id="next-title">
+                Нужны комплектующие для АГЗУ?
+              </h2>
+
               <p>Посмотрите весь раздел оборудования.</p>
             </div>
+
             <a href="/products/accessories/">
-              Все комплектующие <span aria-hidden="true">↗</span>
+              Все комплектующие{' '}
+              <span aria-hidden="true">↗</span>
             </a>
           </div>
         </section>
       </main>
 
       <BackToTop />
-      {bigPhoto && <BigPhoto src={item.image} onClose={() => setBigPhoto(false)} />}
+
+      {bigPhoto && (
+        <BigPhoto
+          src={item.image}
+          onClose={() => setBigPhoto(false)}
+        />
+      )}
     </div>
   );
 };

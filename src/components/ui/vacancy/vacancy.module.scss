@@ -4,97 +4,56 @@
 
 .employeeVacancy {
   position: relative;
-
   display: flex;
   flex-direction: column;
-
   width: 100%;
+  min-width: 0;
   min-height: 170px;
-
   padding: 26px;
-
   border: 1px solid #e4e9f0;
   border-radius: 20px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #ffffff 0%,
-      #fbfcfe 100%
-    );
-
+  background: linear-gradient(145deg, #ffffff 0%, #fbfcfe 100%);
   color: #101828;
-
   text-align: left;
-
   cursor: pointer;
-
   appearance: none;
   -webkit-appearance: none;
-
   font: inherit;
-
   overflow: hidden;
-
-  box-shadow:
-    0 1px 2px rgba(16, 24, 40, 0.025);
-
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.025);
   transform: translateY(0);
-
   transition:
     transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
     border-color 0.3s ease,
     box-shadow 0.3s ease,
     background 0.3s ease;
 
-  /*
-   * Лёгкий декоративный свет
-   * появляется только при наведении.
-   */
   &::before {
     content: '';
-
     position: absolute;
     inset: 0;
-
     pointer-events: none;
-
     opacity: 0;
-
-    background:
-      radial-gradient(
-        circle at 100% 0%,
-        rgba(20, 85, 217, 0.07),
-        transparent 42%
-      );
-
+    background: radial-gradient(
+      circle at 100% 0%,
+      rgba(20, 85, 217, 0.07),
+      transparent 42%
+    );
     transition: opacity 0.35s ease;
   }
 
-  /*
-   * Тонкая синяя линия снизу.
-   * В обычном состоянии скрыта.
-   */
   &::after {
     content: '';
-
     position: absolute;
-
     left: 26px;
     right: 26px;
     bottom: 0;
-
     height: 2px;
-
     border-radius: 2px 2px 0 0;
-
     background: #1455d9;
-
     transform: scaleX(0);
     transform-origin: left;
-
-    transition:
-      transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   &:active {
@@ -111,33 +70,15 @@
   }
 }
 
-
 /* =========================================================
    DESKTOP HOVER
    ========================================================= */
 
-/*
- * Очень важно:
- * hover работает только на устройствах,
- * где действительно есть мышь/трекпад.
- *
- * Это предотвращает "залипание" hover
- * после возврата назад на мобильных.
- */
-
 @media (hover: hover) and (pointer: fine) {
   .employeeVacancy:hover {
     transform: translateY(-4px);
-
     border-color: #d0dbea;
-
-    background:
-      linear-gradient(
-        145deg,
-        #ffffff 0%,
-        #f9fbff 100%
-      );
-
+    background: linear-gradient(145deg, #ffffff 0%, #f9fbff 100%);
     box-shadow:
       0 18px 42px rgba(16, 35, 70, 0.075),
       0 4px 12px rgba(16, 35, 70, 0.035);
@@ -152,15 +93,10 @@
 
     .arrow {
       color: #ffffff;
-
       background: #1455d9;
-
       border-color: #1455d9;
-
       transform: translate(2px, -2px);
-
-      box-shadow:
-        0 8px 18px rgba(20, 85, 217, 0.18);
+      box-shadow: 0 8px 18px rgba(20, 85, 217, 0.18);
     }
 
     .header h3 {
@@ -173,12 +109,10 @@
 
     .details span::before {
       background: #6d95db;
-
       transform: scale(1.15);
     }
   }
 }
-
 
 /* =========================================================
    HEADER
@@ -187,34 +121,27 @@
 .header {
   position: relative;
   z-index: 2;
-
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-
-  gap: 22px;
-
+  gap: 16px;
+  width: 100%;
+  min-width: 0;
   margin-bottom: 18px;
 }
 
 .header h3 {
+  flex: 1 1 auto;
+  min-width: 0;
   margin: 0;
-
-  max-width: calc(100% - 58px);
-
   color: #10213f;
-
   font-size: 18px;
   line-height: 1.32;
-
   font-weight: 650;
-
   letter-spacing: -0.025em;
-
-  transition:
-    color 0.25s ease;
+  overflow-wrap: anywhere;
+  transition: color 0.25s ease;
 }
-
 
 /* =========================================================
    ARROW
@@ -222,27 +149,20 @@
 
 .arrow {
   position: relative;
-
+  z-index: 3;
   display: grid;
   place-items: center;
-
   width: 38px;
   height: 38px;
-
   flex: 0 0 38px;
-
+  margin-left: auto;
   border: 1px solid #e1e7ef;
   border-radius: 11px;
-
   background: #f8fafc;
-
   color: #68778e;
-
   font-size: 17px;
   font-weight: 500;
-
   line-height: 1;
-
   transition:
     transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
     background-color 0.25s ease,
@@ -251,7 +171,6 @@
     box-shadow 0.3s ease;
 }
 
-
 /* =========================================================
    DETAILS
    ========================================================= */
@@ -259,47 +178,35 @@
 .details {
   position: relative;
   z-index: 2;
-
   display: flex;
   flex-direction: column;
-
   gap: 8px;
+  min-width: 0;
 }
 
 .details span {
   position: relative;
-
   padding-left: 14px;
-
   color: #718096;
-
   font-size: 12px;
   line-height: 1.45;
-
-  transition:
-    color 0.25s ease;
+  overflow-wrap: anywhere;
+  transition: color 0.25s ease;
 }
 
 .details span::before {
   content: '';
-
   position: absolute;
-
   left: 0;
   top: 7px;
-
   width: 4px;
   height: 4px;
-
   border-radius: 50%;
-
   background: #b9c4d3;
-
   transition:
     background-color 0.25s ease,
     transform 0.25s ease;
 }
-
 
 /* =========================================================
    TABLET / SMALL DESKTOP
@@ -308,9 +215,7 @@
 @media (max-width: 1200px) {
   .employeeVacancy {
     min-height: 160px;
-
     padding: 23px;
-
     border-radius: 18px;
   }
 
@@ -325,7 +230,6 @@
   .arrow {
     width: 36px;
     height: 36px;
-
     flex-basis: 36px;
   }
 
@@ -335,7 +239,6 @@
   }
 }
 
-
 /* =========================================================
    MOBILE
    ========================================================= */
@@ -343,20 +246,9 @@
 @media (max-width: 600px) {
   .employeeVacancy {
     min-height: 0;
-
     padding: 20px;
-
     border-radius: 17px;
-
-    /*
-     * Нейтральное состояние на мобильном.
-     *
-     * Нет постоянной синей рамки,
-     * нет постоянной синей полосы,
-     * нет усиленной тени.
-     */
-    box-shadow:
-      0 4px 16px rgba(16, 35, 70, 0.035);
+    box-shadow: 0 4px 16px rgba(16, 35, 70, 0.035);
 
     &::before {
       display: none;
@@ -365,40 +257,45 @@
     &::after {
       left: 20px;
       right: 20px;
-
       height: 2px;
-
       transform: scaleX(0);
     }
 
     &:active {
       transform: scale(0.99);
-
-      box-shadow:
-        0 5px 14px rgba(16, 35, 70, 0.05);
+      box-shadow: 0 5px 14px rgba(16, 35, 70, 0.05);
     }
   }
 
   .header {
-    gap: 14px;
-    margin-bottom: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 33px;
+    align-items: start;
+    column-gap: 12px;
+    width: 100%;
+    margin-bottom: 14px;
   }
 
   .header h3 {
-    max-width: calc(100% - 48px);
-
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    max-width: none;
     font-size: 16px;
     line-height: 1.35;
+    overflow-wrap: anywhere;
   }
 
   .arrow {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+    align-self: start;
     width: 33px;
     height: 33px;
-
-    flex-basis: 33px;
-
+    margin: 0;
+    flex: none;
     border-radius: 9px;
-
     font-size: 15px;
   }
 
@@ -408,38 +305,16 @@
 
   .details span {
     padding-left: 13px;
-
     color: #758398;
-
     font-size: 11px;
   }
 
   .details span::before {
     top: 6px;
-
     width: 3px;
     height: 3px;
   }
 }
-
-
-/* =========================================================
-   MOBILE HOVER
-   ========================================================= */
-
-/*
- * На устройствах с мышью hover уже обрабатывается
- * в отдельном media-query выше.
- *
- * Здесь намеренно НЕ задаём :hover.
- *
- * Поэтому:
- * - iPhone не получает "залипший" hover;
- * - Android не получает "залипший" hover;
- * - после возврата назад карточка спокойная;
- * - настоящий desktop hover продолжает работать.
- */
-
 
 /* =========================================================
    VERY SMALL MOBILE
@@ -448,15 +323,13 @@
 @media (max-width: 380px) {
   .employeeVacancy {
     padding: 18px;
-
     border-radius: 16px;
-
-    box-shadow:
-      0 4px 15px rgba(16, 35, 70, 0.03);
+    box-shadow: 0 4px 15px rgba(16, 35, 70, 0.03);
   }
 
   .header {
-    gap: 12px;
+    grid-template-columns: minmax(0, 1fr) 32px;
+    column-gap: 10px;
   }
 
   .header h3 {
@@ -466,9 +339,6 @@
   .arrow {
     width: 32px;
     height: 32px;
-
-    flex-basis: 32px;
-
     font-size: 14px;
   }
 
@@ -481,7 +351,6 @@
     right: 18px;
   }
 }
-
 
 /* =========================================================
    REDUCED MOTION

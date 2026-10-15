@@ -8,6 +8,14 @@ import mobileImage from '../../../../images/products/product_1_2.webp';
 import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
 import { BackToTop } from '../../../ui/back-to-top/BackToTop';
 
+const documentUrl =
+  'https://tech-new.ru/survey/agzu_stationary.doc';
+
+const officeViewerUrl =
+  `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+    documentUrl,
+  )}`;
+
 const purpose = [
   {
     number: '01',
@@ -46,13 +54,14 @@ const process = [
 
 export const Stationary = () => {
   const [bigPhoto, setBigPhoto] = useState(false);
-
   const relatedRef = useRef<HTMLDivElement | null>(null);
 
   const scrollRelated = (direction: 'prev' | 'next') => {
-    if (!relatedRef.current) return;
+    const track = relatedRef.current;
 
-    relatedRef.current.scrollBy({
+    if (!track) return;
+
+    track.scrollBy({
       left: direction === 'next' ? 320 : -320,
       behavior: 'smooth',
     });
@@ -245,7 +254,7 @@ export const Stationary = () => {
         </section>
 
         {/* ОПРОСНЫЙ ЛИСТ */}
-        <section
+        {/* <section
           className={Styles.resources}
           id="questionnaire"
           aria-labelledby="resources-title"
@@ -273,22 +282,23 @@ export const Stationary = () => {
                 className={Styles.documentIcon}
                 aria-hidden="true"
               >
-                PDF
+                DOC
               </div>
 
               <div className={Styles.documentText}>
                 <h3>Стационарная АГЗУ</h3>
 
                 <p>
-                  Опросный лист · PDF
+                  Опросный лист · DOC
                 </p>
               </div>
 
               <div className={Styles.documentActions}>
                 <a
-                  href="/survey/agzu_stationary.pdf"
+                  href={officeViewerUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Открыть опросный лист стационарной АГЗУ"
                 >
                   Открыть
                   <span aria-hidden="true">↗</span>
@@ -296,13 +306,100 @@ export const Stationary = () => {
 
                 <a
                   className={Styles.downloadButton}
-                  href="/survey/agzu_stationary.pdf"
-                  download
+                  href={documentUrl}
+                  download="agzu_stationary.doc"
+                  aria-label="Скачать опросный лист стационарной АГЗУ"
                 >
                   Скачать
                   <span aria-hidden="true">↓</span>
                 </a>
               </div>
+            </div>
+            <a
+                className={Styles.materialCard}
+                href="/documents/?category=preparation-systems"
+              >
+                <span className={Styles.materialIcon} aria-hidden="true">
+                  ↗
+                </span>
+
+                <span>
+                  <strong>Документация по системам подготовки</strong>
+                  <small>Открыть раздел документов</small>
+                </span>
+
+                <span className={Styles.materialArrow} aria-hidden="true">
+                  →
+                </span>
+              </a>
+          </div>
+        </section> */}
+
+        <section
+          className={Styles.resources}
+          id="questionnaire"
+          aria-labelledby="resources-title"
+        >
+          <div className={Styles.container}>
+            <div className={Styles.sectionHeading}>
+              <div>
+                <span className={Styles.eyebrow}>03 / Материалы</span>
+                <h2 id="resources-title">Документация</h2>
+              </div>
+
+              <p>
+                Откройте материалы по оборудованию
+              </p>
+            </div>
+
+            <div className={Styles.documentsGrid}>
+              <div className={Styles.documentCard}>
+                <div className={Styles.documentIcon} aria-hidden="true">
+                  DOC
+                </div>
+
+                <div className={Styles.documentText}>
+                  <h3>Опросный лист АГЗУ</h3>
+                  <p>DOC · технические требования</p>
+                </div>
+
+                <div className={Styles.documentActions}>
+                  <a
+                    href={officeViewerUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Открыть опросный лист АГЗУ в браузере"
+                  >
+                    Открыть <span aria-hidden="true">↗</span>
+                  </a>
+
+                  <a
+                    className={Styles.downloadButton}
+                    href={documentUrl}
+                    download="wok-nkt.doc"
+                    aria-label="Скачать опросный лист АГЗУ"
+                  >
+                    Скачать <span aria-hidden="true">↓</span>
+                  </a>
+                </div>
+              </div>
+              <a
+                className={Styles.materialCard}
+                href="/documents/?category=accounting-system"
+              >
+                <span className={Styles.materialIcon} aria-hidden="true">
+                  ↗
+                </span>
+
+                <span>
+                  <strong>Документация по АГЗУ</strong>
+                  <small>Открыть раздел документов</small>
+                </span>
+
+                <span className={Styles.materialArrow} aria-hidden="true">
+                  →
+                </span>
+              </a>
             </div>
           </div>
         </section>

@@ -8,6 +8,7 @@ import { Accessories } from './Accessories';
 import { MeasuringSystem } from './MeasuringSystem';
 import { PreparationSystems } from './PreparationSystems';
 import { PumpingStations } from './PumpingStations';
+
 import {
   ProductCategoryCard,
   type ProductCategory,
@@ -91,7 +92,10 @@ function currentCategory(): ProductId | null {
 }
 
 export const Products = () => {
-  const [category, setCategory] = useState<ProductId | null>(currentCategory);
+  const [category, setCategory] = useState<ProductId | null>(
+    currentCategory
+  );
+
   const [activeIndex, setActiveIndex] = useState(0);
 
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -111,6 +115,7 @@ export const Products = () => {
   const scrollToCard = useCallback(
     (index: number, behavior: ScrollBehavior = 'smooth') => {
       const track = trackRef.current;
+
       const card = track?.querySelector<HTMLElement>(
         `[data-product-card="${index}"]`
       );
@@ -140,7 +145,9 @@ export const Products = () => {
       track.getBoundingClientRect().left +
       parseFloat(getComputedStyle(track).paddingLeft);
 
-    const cards = track.querySelectorAll<HTMLElement>('[data-product-card]');
+    const cards = track.querySelectorAll<HTMLElement>(
+      '[data-product-card]'
+    );
 
     let closestIndex = 0;
     let closestDistance = Infinity;
@@ -224,17 +231,13 @@ export const Products = () => {
             <span className={Styles.eyebrow}>
               Продукция · Собственное производство
             </span>
-
-            {/* <span className={Styles.heroCode}>
-              NT / PRODUCT SYSTEM
-            </span> */}
           </div>
 
           <div className={Styles.heroMain}>
             <div className={Styles.heroCopy}>
               <h1 id="products-title">
-                Оборудование
-                <span>для нефтегазовой отрасли</span>
+                Оборудование для
+                <span> нефтегазовой отрасли</span>
               </h1>
 
               <p>
@@ -260,7 +263,6 @@ export const Products = () => {
                 </a>
               </div>
             </div>
-
           </div>
 
           <div className={Styles.heroBottom}>
@@ -304,8 +306,8 @@ export const Products = () => {
             </span>
 
             <h2 id="catalog-title">
-              Оборудование
-              <span>под задачи промысла</span>
+              Оборудование под
+              <span> задачи промысла</span>
             </h2>
           </div>
 
@@ -333,7 +335,11 @@ export const Products = () => {
               product={product}
               index={index}
               onSelect={(selectedIndex) => {
-                sessionStorage.setItem(SELECTED_CARD_KEY, String(selectedIndex));
+                sessionStorage.setItem(
+                  SELECTED_CARD_KEY,
+                  String(selectedIndex)
+                );
+
                 sessionStorage.setItem(FROM_PRODUCT_KEY, 'true');
               }}
             />
@@ -351,7 +357,9 @@ export const Products = () => {
                 key={product.id}
                 type="button"
                 aria-label={`Показать направление ${index + 1}: ${product.label}`}
-                aria-current={activeIndex === index ? 'true' : undefined}
+                aria-current={
+                  activeIndex === index ? 'true' : undefined
+                }
                 onClick={() => scrollToCard(index)}
               />
             ))}
@@ -362,9 +370,7 @@ export const Products = () => {
               type="button"
               aria-label="Предыдущее направление"
               disabled={activeIndex === 0}
-              onClick={() =>
-                scrollToCard(activeIndex - 1)
-              }
+              onClick={() => scrollToCard(activeIndex - 1)}
             >
               ←
             </button>
@@ -372,12 +378,8 @@ export const Products = () => {
             <button
               type="button"
               aria-label="Следующее направление"
-              disabled={
-                activeIndex === products.length - 1
-              }
-              onClick={() =>
-                scrollToCard(activeIndex + 1)
-              }
+              disabled={activeIndex === products.length - 1}
+              onClick={() => scrollToCard(activeIndex + 1)}
             >
               →
             </button>
@@ -397,8 +399,8 @@ export const Products = () => {
           </span>
 
           <h2 id="approach-title">
-            От параметров объекта
-            <span>до готового решения</span>
+            От параметров объекта до
+            <span> готового решения</span>
           </h2>
 
           <p>
@@ -421,7 +423,9 @@ export const Products = () => {
               </p>
             </div>
 
-            <span className={Styles.stepArrow}>↗</span>
+            <span className={Styles.stepArrow} aria-hidden="true">
+              ↗
+            </span>
           </div>
 
           <div className={Styles.approachStep}>
@@ -436,7 +440,9 @@ export const Products = () => {
               </p>
             </div>
 
-            <span className={Styles.stepArrow}>↗</span>
+            <span className={Styles.stepArrow} aria-hidden="true">
+              ↗
+            </span>
           </div>
 
           <div className={Styles.approachStep}>
@@ -451,29 +457,26 @@ export const Products = () => {
               </p>
             </div>
 
-            <span className={Styles.stepArrow}>↗</span>
+            <span className={Styles.stepArrow} aria-hidden="true">
+              ↗
+            </span>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA — БЕЗ ЗНАКА NT */}
 
       <section
         className={Styles.projectCta}
         aria-labelledby="project-title"
       >
-        <div className={Styles.ctaMark}>
-          <span>NT</span>
-        </div>
-
         <div className={Styles.ctaContent}>
           <span className={Styles.eyebrow}>
             03 / Техническая задача
           </span>
 
           <h2 id="project-title">
-            Обсудим оборудование
-            <span>для вашего проекта</span>
+            Обсудим оборудование для вашего проекта
           </h2>
 
           <p>

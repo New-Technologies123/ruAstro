@@ -46,15 +46,6 @@ const vacancies: VacancyData[] = [
     // =========================================================
 
     {
-        id: 'vacancy10',
-        title: 'Ведущий экономист',
-        experience: 'Опыт работы: 3–6 лет',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText: 'ведущий экономист уфа экономика',
-    },
-    {
         id: 'vacancy3',
         title: 'Инженер ПНР КИПиА',
         experience: 'Опыт работы: 3–6 лет',
@@ -62,6 +53,24 @@ const vacancies: VacancyData[] = [
         schedule: 'График: 5/2',
         type: 'ufa',
         searchText: 'инженер пнр кипиа уфа инженер',
+    },
+    {
+        id: 'vacancy6',
+        title: 'Ведущий инженер-проектировщик',
+        experience: 'Опыт работы: 1–3 года',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2',
+        type: 'ufa',
+        searchText: 'менеджер по экспорту уфа',
+    },
+    {
+        id: 'vacancy5',
+        title: 'Логист',
+        experience: 'Опыт работы: 1–3 года',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2',
+        type: 'ufa',
+        searchText: 'логист уфа',
     },
     {
         id: 'vacancy11',
@@ -73,16 +82,16 @@ const vacancies: VacancyData[] = [
         searchText: 'инженер технолог уфа производство',
     },
     {
-        id: 'vacancy15',
-        title: 'Разнорабочий на производство',
-        experience: 'Опыт работы: не требуется',
-        employment: 'Частичная занятость',
-        schedule: 'График: 5/2 и другие варианты',
+        id: 'vacancy4',
+        title: 'Руководитель проектов по сервису',
+        experience: 'Опыт работы: 3–6 лет',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2',
         type: 'ufa',
-        searchText: 'разнорабочий производство уфа рабочий',
+        searchText: 'руководитель проектов по сервису уфа',
     },
     {
-        id: 'vacancy22',
+        id: 'vacancy12',
         title: 'Инженер-конструктор',
         experience: 'Опыт работы: 1–3 года',
         employment: 'Полная занятость',
@@ -98,43 +107,7 @@ const vacancies: VacancyData[] = [
         schedule: 'График: 5/2',
         type: 'ufa',
         searchText: 'монтажник тт уфа монтаж',
-    },
-    {
-        id: 'vacancy13',
-        title: 'Токарь',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText: 'токарь уфа производство',
-    },
-    {
-        id: 'vacancy5',
-        title: 'Специалист по охране труда',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText: 'специалист охрана труда уфа от охрана',
-    },
-    {
-        id: 'vacancy17',
-        title: 'Маляр по металлу',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText: 'маляр металл уфа производство',
-    },
-    {
-        id: 'vacancy14',
-        title: 'Инженер-технолог',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText: 'инженер технолог уфа производство',
-    },
+    },    
     {
         id: 'vacancy16',
         title: 'Электрогазосварщик ТТ',
@@ -145,96 +118,84 @@ const vacancies: VacancyData[] = [
         searchText: 'электрогазосварщик сварщик тт уфа производство',
     },
     {
-        id: 'vacancy7',
-        title: 'Контролер ОТК металлургия',
+        id: 'vacancy9',
+        title: 'Изолировщик',
         experience: 'Опыт работы: 1–3 года',
         employment: 'Полная занятость',
-        schedule: 'График: 5/2',
+        schedule: '',
         type: 'ufa',
-        searchText: 'контролер отк металлургия уфа качество',
-    },
-    {
-        id: 'vacancy12',
-        title: 'Слесарь механосборочных работ',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText: 'слесарь механосборочных работ уфа производство',
-    },
-    {
-        id: 'vacancy21',
-        title: 'Оператор по депарафинизации скважин (ХАРАМПУР)',
-        experience: 'Опыт работы: 3–6 лет',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText:
-            'оператор депарафинизация скважин харампур уфа нефть',
-    },
-    {
-        id: 'vacancy2',
-        title: 'Инженер-сметчик в тендерный отдел',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText:
-            'инженер сметчик тендерный отдел уфа смета тендер',
-    },
-    {
-        id: 'vacancy18',
-        title: 'Бригада сварщиков и монтажников ТТ',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Полная занятость',
-        schedule: 'График: 5/2',
-        type: 'ufa',
-        searchText:
-            'бригада сварщиков монтажников тт уфа сварка монтаж',
+        searchText: 'изолировщик уфа производство',
     },
     {
         id: 'vacancy19',
-        title: 'Уборщик производственных помещений',
+        title: 'Разнорабочий на производство',
         experience: 'Опыт работы: не требуется',
-        employment: 'Частичная занятость',
-        schedule: 'График: 5/2 и другие варианты',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2',
         type: 'ufa',
-        searchText:
-            'уборщик производственных помещений уфа уборка',
+        searchText: 'разнорабочий уфа производство',
     },
     {
-        id: 'vacancy4',
-        title: 'Ведущий инженер-проектировщик',
+        id: 'vacancy10',
+        title: 'Обшивщики-сборщики',
+        experience: 'Опыт работы: не требуется',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2',
+        type: 'ufa',
+        searchText: 'обшивщики-сборщики уфа производство',
+    },
+    {
+        id: 'vacancy18',
+        title: 'Пескоструйщик-дробеструйщик',
+        experience: 'Опыт работы: 1–3 года',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2',
+        type: 'ufa',
+        searchText: 'пескоструйщик-дробеструйщик уфа производство',
+    },
+    {
+        id: 'vacancy13',
+        title: 'Уборщик производственных помещений',
+        experience: 'Опыт работы: не требуется',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2 и другие варианты',
+        type: 'ufa',
+        searchText: 'уборщик производственных помещений уфа производство',
+    },
+    {
+        id: 'vacancy2',
+        title: 'Инженер-проектировщик в тендерный отдел',
         experience: 'Опыт работы: 3–6 лет',
         employment: 'Полная занятость',
         schedule: 'График: 5/2',
         type: 'ufa',
-        searchText:
-            'ведущий инженер проектировщик уфа проектирование',
+        searchText: 'инженер-проектировщик в тендерный отдел уфа производство',
     },
+    {
+        id: 'vacancy14',
+        title: 'Инженер-технолог по проектированию технологических схем',
+        experience: 'Опыт работы: 1–3 года',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2',
+        type: 'ufa',
+        searchText: 'инженер технолог по проектированию технологических схем уфа производство',
+    },
+    {
+        id: 'vacancy7',
+        title: 'Слесарь-механик по ремонту металлообрабатывающего оборудования',
+        experience: 'Опыт работы: 1–3 года',
+        employment: 'Полная занятость',
+        schedule: 'График: 5/2',
+        type: 'ufa',
+        searchText: 'слесарь-механик по ремонту металлообрабатывающего оборудования уфа производство',
+    },
+
 
     // =========================================================
     // ВАХТА
     // =========================================================
 
-    {
-        id: 'vacancy20',
-        title: 'Мастер КИПиА (СургутНефтегаз)',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Вахта на 30 или 60 смен',
-        schedule: '',
-        type: 'shift',
-        searchText: 'мастер кипиа сургутнефтегаз вахта сургут',
-    },
-    {
-        id: 'vacancy9',
-        title: 'Водитель категории С (ХАРАМПУР)',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Вахта на 30 или 45 смен',
-        schedule: 'График: 5/2',
-        type: 'shift',
-        searchText: 'водитель категория с харампур вахта',
-    },
+
     {
         id: 'vacancy8',
         title: 'Слесарь КИПиА (Сургут)',
@@ -244,85 +205,34 @@ const vacancies: VacancyData[] = [
         type: 'shift',
         searchText: 'слесарь кипиа сургут вахта',
     },
-    {
-        id: 'vacancy6',
-        title: 'Водитель (категория С), ХМАО',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Вахта на 30 смен',
-        schedule: '',
-        type: 'shift',
-        searchText: 'водитель категория с хмао вахта',
-    },
-    {
-        id: 'vacancy23',
-        title: 'Водитель категории С (г. Губкинский)',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Вахта на 30 смен',
-        schedule: 'График: 6/1',
-        type: 'shift',
-        searchText: 'водитель категория с губкинский вахта',
-    },
-    {
-        id: 'vacancy24',
-        title: 'Оператор по исследованию скважин (Губкинский)',
-        experience: 'Опыт работы: 1–3 года',
-        employment: 'Вахта на 30 смен',
-        schedule: 'График: 6/1',
-        type: 'shift',
-        searchText:
-            'оператор исследование скважин губкинский вахта нефть',
-    },
+
 ];
 
 const vacancyLinks: Record<TCareers, string> = {
-    vacancy1:
-        'https://ufa.hh.ru/vacancy/136382290?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy2:
-        'https://ufa.hh.ru/vacancy/136726516?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy3:
-        'https://ufa.hh.ru/vacancy/136685420?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy4:
-        'https://ufa.hh.ru/vacancy/136602952?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy5:
-        'https://ufa.hh.ru/vacancy/136435976?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy6:
-        'https://ufa.hh.ru/vacancy/136257799?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy7:
-        'https://ufa.hh.ru/vacancy/136825067?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy8:
-        'https://ufa.hh.ru/vacancy/136384308?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy9:
-        'https://ufa.hh.ru/vacancy/136574447?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy10:
-        'https://ufa.hh.ru/vacancy/136428407?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy11:
-        'https://ufa.hh.ru/vacancy/135275235?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy12:
-        'https://ufa.hh.ru/vacancy/136211327?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy13:
-        'https://ufa.hh.ru/vacancy/136488489?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy14:
-        'https://ufa.hh.ru/vacancy/135275235?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy15:
-        'https://ufa.hh.ru/vacancy/136408407?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy16:
-        'https://ufa.hh.ru/vacancy/136365814?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy17:
-        'https://ufa.hh.ru/vacancy/135707059?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy18:
-        'https://ufa.hh.ru/vacancy/136384517?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy19:
-        'https://ufa.hh.ru/vacancy/136617297?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy20:
-        'https://ufa.hh.ru/vacancy/136239971?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy21:
-        'https://ufa.hh.ru/vacancy/136574407?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy22:
-        'https://ufa.hh.ru/vacancy/136238661?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy23:
-        'https://ufa.hh.ru/vacancy/136835771?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
-    vacancy24:
-        'https://ufa.hh.ru/vacancy/136835847?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy1: 'https://ufa.hh.ru/vacancy/137591937?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy2: 'https://ufa.hh.ru/vacancy/138433619?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy3: 'https://ufa.hh.ru/vacancy/136685420?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy4: 'https://ufa.hh.ru/vacancy/138414269?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy5: 'https://ufa.hh.ru/vacancy/138406621?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy6: 'https://ufa.hh.ru/vacancy/138196884?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy7: 'https://ufa.hh.ru/vacancy/138292942?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy8: 'https://ufa.hh.ru/vacancy/136384308?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy9: 'https://ufa.hh.ru/vacancy/137306407?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy10: 'https://ufa.hh.ru/vacancy/138108063?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy11: 'https://ufa.hh.ru/vacancy/138284982?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy12: 'https://ufa.hh.ru/vacancy/137791895?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy13: 'https://ufa.hh.ru/vacancy/138406486?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy14: 'https://ufa.hh.ru/vacancy/135275235?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy15: '',
+    vacancy16: 'https://ufa.hh.ru/vacancy/137564123?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy17: '',
+    vacancy18: 'https://ufa.hh.ru/vacancy/137285693?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy19: 'https://ufa.hh.ru/vacancy/138350726?hhtmFromLabel=employer_vacancy_tab&hhtmFrom=employer',
+    vacancy20: '',
+    vacancy21: '',
+    vacancy22: '',
+    vacancy23: '',
+    vacancy24: '',
 };
 
 export const Careers = () => {
@@ -491,7 +401,7 @@ export const Careers = () => {
                 </div>
 
                 <div className={Styles.stat}>
-                    <strong>100+</strong>
+                    <strong>200+</strong>
                     <span>
                         реализованных
                         <br />
@@ -509,7 +419,7 @@ export const Careers = () => {
                 </div>
 
                 <div className={Styles.stat}>
-                    <strong>24</strong>
+                    <strong>17</strong>
                     <span>
                         актуальные
                         <br />
@@ -532,8 +442,7 @@ export const Careers = () => {
 
                         <h2>
                             Найдите своё
-                            <br />
-                            <span>направление</span>
+                            <span> направление</span>
                         </h2>
                     </div>
 
@@ -744,8 +653,7 @@ export const Careers = () => {
 
                         <h2>
                             Возможно, мы ищем
-                            <br />
-                            <span>именно вас.</span>
+                            <span> именно вас.</span>
                         </h2>
 
                         <p>

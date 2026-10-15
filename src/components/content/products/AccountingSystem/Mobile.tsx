@@ -59,11 +59,22 @@ const process = [
   },
 ] as const;
 
-const questionnaires = [1, 2, 3, 4, 5, 6].map((number) => ({
-  number,
-  title: `АГЗУ мобильная · исполнение ${number}`,
-  href: `/survey/agzu_mobile_${number}.pdf`,
-}));
+const questionnaires = [1, 2, 3, 4, 5, 6].map((number) => {
+  const fileName = `agzu_mobile_${number}.doc`;
+  const href = `/survey/${fileName}`;
+  const documentUrl = `https://tech-new.ru${href}`;
+
+  return {
+    number,
+    title: `АГЗУ мобильная · исполнение ${number}`,
+    href,
+    documentUrl,
+    viewerUrl: `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
+      documentUrl,
+    )}`,
+    fileName,
+  };
+});
 
 export const Mobile = () => {
   const [bigPhoto, setBigPhoto] = useState(false);
@@ -71,9 +82,11 @@ export const Mobile = () => {
   const relatedRef = useRef<HTMLDivElement | null>(null);
 
   const scrollRelated = (direction: 'prev' | 'next') => {
-    if (!relatedRef.current) return;
+    const track = relatedRef.current;
 
-    relatedRef.current.scrollBy({
+    if (!track) return;
+
+    track.scrollBy({
       left: direction === 'next' ? 320 : -320,
       behavior: 'smooth',
     });
@@ -300,22 +313,21 @@ export const Mobile = () => {
                     className={Styles.documentIcon}
                     aria-hidden="true"
                   >
-                    PDF
+                    DOC
                   </div>
 
                   <div className={Styles.documentText}>
                     <h3>{document.title}</h3>
 
-                    <p>
-                      Опросный лист · PDF
-                    </p>
+                    <p>Опросный лист · DOC</p>
                   </div>
 
                   <div className={Styles.documentActions}>
                     <a
-                      href={document.href}
+                      href={document.viewerUrl}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`Открыть опросный лист, исполнение ${document.number}`}
                     >
                       Открыть
                       <span aria-hidden="true">↗</span>
@@ -324,7 +336,8 @@ export const Mobile = () => {
                     <a
                       className={Styles.downloadButton}
                       href={document.href}
-                      download
+                      download={document.fileName}
+                      aria-label={`Скачать опросный лист, исполнение ${document.number}`}
                     >
                       Скачать
                       <span aria-hidden="true">↓</span>
@@ -332,6 +345,23 @@ export const Mobile = () => {
                   </div>
                 </div>
               ))}
+              <a
+                className={Styles.materialCard}
+                href="/documents/?category=accounting-system"
+              >
+                <span className={Styles.materialIcon} aria-hidden="true">
+                  ↗
+                </span>
+
+                <span>
+                  <strong>Документация по АГЗУ</strong>
+                  <small>Открыть раздел документов</small>
+                </span>
+
+                <span className={Styles.materialArrow} aria-hidden="true">
+                  →
+                </span>
+              </a>
             </div>
           </div>
         </section>

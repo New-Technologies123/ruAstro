@@ -44,17 +44,13 @@
   overflow: hidden;
 
   background:
-    radial-gradient(
-      circle at 78% 20%,
+    radial-gradient(circle at 78% 20%,
       rgba(61, 120, 232, 0.18),
-      transparent 31%
-    ),
-    linear-gradient(
-      135deg,
+      transparent 31%),
+    linear-gradient(135deg,
       #f8faff 0%,
       #f0f5fc 52%,
-      #e8f0fb 100%
-    );
+      #e8f0fb 100%);
 }
 
 .hero::before {
@@ -68,15 +64,11 @@
   opacity: 0.42;
 
   background-image:
-    linear-gradient(
+    linear-gradient(rgba(20, 85, 217, 0.035) 1px,
+      transparent 1px),
+    linear-gradient(90deg,
       rgba(20, 85, 217, 0.035) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(20, 85, 217, 0.035) 1px,
-      transparent 1px
-    );
+      transparent 1px);
 
   background-size: 72px 72px;
 }
@@ -113,8 +105,7 @@
   display: grid;
 
   grid-template-columns:
-    minmax(0, 1.08fr)
-    minmax(360px, 0.92fr);
+    minmax(0, 1.08fr) minmax(360px, 0.92fr);
 
   align-items: center;
 
@@ -180,7 +171,7 @@
 }
 
 
-.heroContent > p {
+.heroContent>p {
   max-width: 600px;
 
   margin: 34px 0 0;
@@ -285,13 +276,11 @@
   border-radius: 50%;
 
   background:
-    radial-gradient(
-      circle at 35% 30%,
+    radial-gradient(circle at 35% 30%,
       rgba(255, 255, 255, 0.98),
       rgba(160, 194, 248, 0.4) 42%,
       rgba(20, 85, 217, 0.14) 70%,
-      transparent 72%
-    );
+      transparent 72%);
 
   box-shadow:
     inset 0 0 80px rgba(255, 255, 255, 0.75),
@@ -395,8 +384,7 @@
   padding: 140px 0 105px;
   display: grid;
   grid-template-columns:
-    minmax(0, 0.95fr)
-    minmax(0, 1fr);
+    minmax(0, 0.95fr) minmax(0, 1fr);
   gap: clamp(70px, 8vw, 120px);
 }
 
@@ -523,19 +511,13 @@
 
 .sectionHeader {
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr)
-    minmax(280px, 400px);
-
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 400px);
   gap: 80px;
-
   align-items: end;
-
-  margin-bottom: 65px;
+  margin-bottom: 35px;
 }
 
-.sectionHeader > p {
+.sectionHeader>p {
   margin: 0;
 
   color: #68778e;
@@ -556,8 +538,7 @@
   display: grid;
 
   grid-template-columns:
-    minmax(300px, 1fr)
-    auto;
+    minmax(300px, 1fr) auto;
 
   gap: 30px;
 
@@ -764,7 +745,7 @@
   gap: 30px;
 }
 
-.groupHeader > div {
+.groupHeader>div {
   display: flex;
   align-items: center;
 
@@ -927,16 +908,12 @@
   border-radius: 32px;
   color: #fff;
   background:
-    radial-gradient(
-      circle at 86% 15%,
+    radial-gradient(circle at 86% 15%,
       rgba(75, 130, 240, 0.46),
-      transparent 30%
-    ),
-    linear-gradient(
-      135deg,
+      transparent 30%),
+    linear-gradient(135deg,
       #081d40 0%,
-      #0d3774 100%
-    );
+      #0d3774 100%);
   box-shadow:
     0 30px 70px rgba(8, 29, 64, 0.12);
 }
@@ -948,15 +925,11 @@
   inset: 0;
 
   background-image:
-    linear-gradient(
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px),
+    linear-gradient(90deg,
       rgba(255, 255, 255, 0.035) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.035) 1px,
-      transparent 1px
-    );
+      transparent 1px);
 
   background-size: 70px 70px;
 
@@ -984,12 +957,11 @@
 
 .ctaContent {
   position: relative;
-  z-index: 3;
+  // z-index: 3;
   width: 100%;
   display: grid;
   grid-template-columns:
-    minmax(0, 1fr)
-    auto;
+    minmax(0, 1fr) auto;
   align-items: start;
   gap: clamp(40px, 7vw, 110px);
 }
@@ -1036,7 +1008,7 @@
 
 .ctaButton {
   position: relative;
-  z-index: 5;
+  // z-index: 5;
 
   width: 220px;
   min-height: 60px;
@@ -1170,7 +1142,7 @@
 
 .ctaDecor span {
   position: relative;
-  z-index: 2;
+  // z-index: 2;
 
   margin-top: -130px;
 
@@ -1191,19 +1163,21 @@
 @media (max-width: 1200px) {
   .heroInner {
     grid-template-columns:
-      minmax(0, 1fr)
-      minmax(300px, 0.8fr);
+      minmax(0, 1fr) minmax(300px, 0.8fr);
     gap: 40px;
   }
 
   .hero h1 {
     font-size: 52px;
   }
-  .introHeading h2, .sectionHeader h2, .cta h2{
+
+  .introHeading h2,
+  .sectionHeader h2,
+  .cta h2 {
     font-size: 43px;
   }
 
-  .visualLine{
+  .visualLine {
     margin: 18px 0;
   }
 
@@ -1242,7 +1216,7 @@
   .team {
     grid-template-columns:
       repeat(2, minmax(0, 1fr));
-    }
+  }
 
   .heroInner {
     width: calc(100% - 60px);
@@ -1299,26 +1273,24 @@
 
   .vacanciesSection {
     width: calc(100% - 60px);
-
     padding-bottom: 100px;
   }
 
   .sectionHeader {
     grid-template-columns: 1fr;
-
     gap: 30px;
   }
 
   .vacancyControls {
     grid-template-columns: 1fr;
-
     gap: 20px;
   }
 
   .filterWrapper {
     justify-content: space-between;
   }
-  .filters{
+
+  .filters {
     margin-left: auto;
   }
 
@@ -1333,19 +1305,24 @@
    ========================================================= */
 
 @media (max-width: 900px) {
-  .hero h1{
+  .hero h1 {
     font-size: 45px;
   }
-  .introHeading h2, .sectionHeader h2{
+
+  .introHeading h2,
+  .sectionHeader h2 {
     font-size: 40px;
   }
-  .cta h2{
+
+  .cta h2 {
     font-size: 40px;
   }
-  .heroVisual{
+
+  .heroVisual {
     min-height: auto;
   }
-  .visualLine{
+
+  .visualLine {
     margin: 16px 0;
   }
 
@@ -1381,7 +1358,7 @@
    700 PX
    ========================================================= */
 
-@media (max-width: 700px) {  
+@media (max-width: 700px) {
   .heroInner {
     width: calc(100% - 40px);
 
@@ -1392,7 +1369,7 @@
     font-size: 48px;
   }
 
-  .heroContent > p {
+  .heroContent>p {
     margin-top: 28px;
 
     font-size: 16px;
@@ -1462,7 +1439,7 @@
   }
 
   .sectionHeader {
-    margin-bottom: 45px;
+    margin-bottom: 25px;
   }
 
   .vacancyControls {
@@ -1507,18 +1484,17 @@
   .team {
     grid-template-columns: 1fr;
   }
-  .heroInner{
+
+  .heroInner {
     padding: 30px 0 40px;
   }
 
   .hero {
     background:
-      radial-gradient(
-        circle at 75% 15%,
+      radial-gradient(circle at 75% 15%,
         rgba(67, 125, 232, 0.13),
-        transparent 35%
-      ),
-      #f4f7fc;    
+        transparent 35%),
+      #f4f7fc;
   }
 
   .hero::before {
@@ -1546,7 +1522,7 @@
     letter-spacing: -0.06em;
   }
 
-  .heroContent > p {
+  .heroContent>p {
     margin-top: 24px;
     font-size: 15px;
     line-height: 1.6;
@@ -1616,7 +1592,7 @@
   /* =======================================================
      INTRO MOBILE
      ======================================================= */
-  .intro{
+  .intro {
     padding: 40px 0 25px;
     gap: 20px;
   }
@@ -1627,9 +1603,9 @@
     letter-spacing: 0.12em;
   }
 
-  .sectionHeader{
+  .sectionHeader {
     gap: 15px;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
   }
 
   .introHeading h2,
@@ -1748,7 +1724,7 @@
     gap: 12px;
   }
 
-  .groupHeader > div {
+  .groupHeader>div {
     gap: 13px;
   }
 
@@ -1885,7 +1861,7 @@
     font-size: 36px;
   }
 
-  .heroContent > p {
+  .heroContent>p {
     font-size: 14px;
   }
 
@@ -1958,6 +1934,7 @@
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
+
   .heroButton,
   .clearButton,
   .filters button,

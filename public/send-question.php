@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
     // Email получателя
-    $to = "nt@tech-new.ru";
+    $to = "tendernt@tech-new.ru";
     $subject = "=?UTF-8?B?" . base64_encode("📨 Новое обращение с сайта") . "?=";
 
     // Заголовки письма
