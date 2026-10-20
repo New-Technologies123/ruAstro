@@ -1,109 +1,72 @@
-// Gallery.tsx
+import { useRef, useState } from 'react';
 import Styles from './gallery.module.scss';
-import { useState, useEffect } from 'react';
 import { GalleryModal } from './GalleryModal';
-import { type TPhoto } from '../../content/news/newsData';
+import type { TPhoto } from '../../content/news/newsData';
 
 type TProps = {
   photos: TPhoto[];
+  photoId?: number;
+  onPhotoChange: (photoId: number) => void;
 };
 
-export const Gallery = ({ photos = [] }: TProps) => {
-  const [showPhotoId, setShowPhotoId] = useState<number>(1);
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
-  const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
+export const Gallery = ({ photos, photoId, onPhotoChange }: TProps) => {
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const imageButtonRef = useRef<HTMLButtonElement>(null);
 
-  // Определяем touch-устройство и добавляем класс на body
-  useEffect(() => {
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    setIsTouchDevice(isTouch);
-    
-    if (isTouch) {
-      document.body.classList.add('no-hover');
-    }
-    
-    return () => {
-      document.body.classList.remove('no-hover');
-    };
-  }, []);
+  if (photos.length === 0) return null;
 
-  const showPhoto = photos.find((photo) => photo.id === showPhotoId);
+  const currentIndex = Math.max(0, photos.findIndex((photo) => photo.id === photoId));
+  const currentPhoto = photos[currentIndex];
 
-  const nextSlide = () => {
-    setShowPhotoId((prev) => {
-      let nextValue = prev + 1;
-      return nextValue > photos.length ? 1 : nextValue;
-    });
-  };
-
-  const previousSlide = () => {
-    setShowPhotoId((prev) => {
-      let prevValue = prev - 1;
-      return prevValue === 0 ? photos.length : prevValue;
-    });
-  };
-
-  const handleCloseModal = (lastViewedPhotoId: number) => {
-    setShowPhotoId(lastViewedPhotoId);
-    setIsOpenModal(false);
-  };
-
-  // Предотвращаем всплытие клика к карточке новости
-  const handleGalleryClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-  };
-
-  // Открываем модалку с фото
-  const handlePhotoClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsOpenModal(true);
+  const move = (direction: -1 | 1) => {
+    const nextIndex = (currentIndex + direction + photos.length) % photos.length;
+    onPhotoChange(photos[nextIndex].id);
   };
 
   return (
-    <div className={Styles.slider} onClick={handleGalleryClick}>
-      <div 
-        className={Styles.item} 
-        onClick={handlePhotoClick}
+    <div className={Styles.slider} onClick={(event) => event.stopPropagation()}>
+      <button
+        ref={imageButtonRef}
+        type="button"
+        className={Styles.item}
+        onClick={() => setIsOpenModal(true)}
+        aria-label={`Увеличить фото: ${currentPhoto.alt || 'Новость'}`}
       >
-        <img 
-          className={Styles.thumbnail} 
-          src={showPhoto?.src} 
-          alt={showPhoto?.alt || 'Фото'} 
-        />
-        
-        <div className={Styles.imageOverlay}>
-          <span className={Styles.zoomText}>🔍 Увеличить</span>
-        </div>
-
+        <img className={Styles.thumbnail} src={currentPhoto.src} alt={currentPhoto.alt || ''} />
+        <span className={Styles.imageOverlay} aria-hidden="true">
+          <span className={Styles.zoomText}>Увеличить фото ↗</span>
+        </span>
         {photos.length > 1 && (
-          <div className={Styles.photoCounter}>
-            {showPhotoId} / {photos.length}
-          </div>
+          <span className={Styles.photoCounter}>{currentIndex + 1} / {photos.length}</span>
         )}
-      </div>
+      </button>
 
       {photos.length > 1 && (
         <>
-          <button 
-            className={`${Styles.previous} ${isTouchDevice ? Styles.touchDevice : ''}`} 
-            onClick={(e) => { e.stopPropagation(); previousSlide(); }}
-          >
-            ‹
-          </button>
-          <button 
-            className={`${Styles.next} ${isTouchDevice ? Styles.touchDevice : ''}`} 
-            onClick={(e) => { e.stopPropagation(); nextSlide(); }}
-          >
-            ›
-          </button>
+          <button
+            type="button"
+            className={Styles.previous}
+            onClick={() => move(-1)}
+            aria-label="Предыдущее фото"
+          >‹</button>
+          <button
+            type="button"
+            className={Styles.next}
+            onClick={() => move(1)}
+            aria-label="Следующее фото"
+          >›</button>
         </>
       )}
-      
+
       {isOpenModal && (
         <GalleryModal
-          openPhotoId={showPhotoId}
+          openPhotoId={currentPhoto.id}
           photos={photos}
-          onClose={handleCloseModal}
+          onClose={(lastViewedPhotoId) => {
+            onPhotoChange(lastViewedPhotoId);
+            setIsOpenModal(false);
+            requestAnimationFrame(() => imageButtonRef.current?.focus());
+          }}
         />
       )}
     </div>

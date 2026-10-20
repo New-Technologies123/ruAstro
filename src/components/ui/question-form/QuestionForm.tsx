@@ -1,379 +1,188 @@
-import React from 'react';
+import React, { useState } from 'react';
 import InputMask from 'react-input-mask';
 import Styles from './question-form.module.scss';
 
+export interface QuestionFormData {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+  agreement: boolean;
+  privacyAgreement: boolean;
+}
+
 interface QuestionFormProps {
-  formData: {
-    name: string;
-    email: string;
-    phone: string;
-    message: string;
-    agreement: boolean;
-    privacyAgreement: boolean;
-  };
-
-  agreementError: boolean;
-
-  onChange: (
-    field: string,
-    value: string | boolean
-  ) => void;
-
-  onSubmit: (
-    e: React.FormEvent
-  ) => void;
+  formData: QuestionFormData;
+  onChange: (field: keyof QuestionFormData, value: string | boolean) => void;
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  isSubmitting: boolean;
+  submitError: string;
 }
 
 export const QuestionForm: React.FC<QuestionFormProps> = ({
   formData,
-  agreementError,
   onChange,
   onSubmit,
+  isSubmitting,
+  submitError,
 }) => {
-  const mask = '+7 (999) 999-9999';
+  const [showConsentErrors, setShowConsentErrors] = useState(false);
+  const [showPhoneError, setShowPhoneError] = useState(false);
 
-  const [errors, setErrors] = React.useState({
-    agreement: false,
-    privacyAgreement: false,
-  });
+  const phoneIsValid = formData.phone.replace(/\D/g, '').length === 11;
 
-  const handleSubmit = (
-    e: React.FormEvent
-  ) => {
-    e.preventDefault();
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setShowConsentErrors(true);
+    setShowPhoneError(!phoneIsValid);
 
-    const newErrors = {
-      agreement: !formData.agreement,
-      privacyAgreement: !formData.privacyAgreement,
-    };
-
-    setErrors(newErrors);
-
-    if (
-      newErrors.agreement ||
-      newErrors.privacyAgreement
-    ) {
+    if (!phoneIsValid || !formData.agreement || !formData.privacyAgreement) {
       return;
     }
 
-    onSubmit(e);
-  };
-
-  const handleCheckboxChange = (
-    field:
-      | 'agreement'
-      | 'privacyAgreement',
-    checked: boolean
-  ) => {
-    onChange(field, checked);
-
-    if (checked) {
-      setErrors(prev => ({
-        ...prev,
-        [field]: false,
-      }));
-    }
+    onSubmit(event);
   };
 
   return (
-    <form
-      className={Styles.questionForm}
-      onSubmit={handleSubmit}
-    >
-
-      {/* ИМЯ */}
-
+    <form className={Styles.questionForm} onSubmit={handleSubmit}>
       <div className={Styles.fieldGroup}>
-        <label
-          htmlFor="question-name"
-          className={Styles.fieldLabel}
-        >
-          Ваше имя
-        </label>
-
+        <label htmlFor="question-name" className={Styles.fieldLabel}>Ваше имя</label>
         <input
           id="question-name"
+          name="name"
           type="text"
-          placeholder="Введите ваше имя"
+          autoComplete="name"
+          placeholder="Как к вам обращаться"
           value={formData.name}
-          onChange={e =>
-            onChange(
-              'name',
-              e.target.value
-            )
-          }
+          onChange={event => onChange('name', event.target.value)}
           required
         />
       </div>
 
-
-      {/* EMAIL + ТЕЛЕФОН */}
-
       <div className={Styles.contactRow}>
-
         <div className={Styles.fieldGroup}>
-          <label
-            htmlFor="question-email"
-            className={Styles.fieldLabel}
-          >
-            Email
-          </label>
-
+          <label htmlFor="question-email" className={Styles.fieldLabel}>Электронная почта</label>
           <input
             id="question-email"
+            name="email"
             type="email"
-            placeholder="name@email.ru"
+            autoComplete="email"
+            placeholder="name@example.ru"
             value={formData.email}
-            onChange={e =>
-              onChange(
-                'email',
-                e.target.value
-              )
-            }
+            onChange={event => onChange('email', event.target.value)}
             required
-            className={Styles.contactInput}
           />
         </div>
 
-
         <div className={Styles.fieldGroup}>
-          <label
-            htmlFor="question-phone"
-            className={Styles.fieldLabel}
-          >
-            Телефон
-          </label>
-
+          <label htmlFor="question-phone" className={Styles.fieldLabel}>Телефон</label>
           <InputMask
-            mask={mask}
+            mask="+7 (999) 999-99-99"
+            maskChar={null}
             value={formData.phone}
-            onChange={e =>
-              onChange(
-                'phone',
-                e.target.value
-              )
-            }
+            onChange={event => {
+              onChange('phone', event.target.value);
+              if (showPhoneError) setShowPhoneError(false);
+            }}
           >
             {(inputProps: any) => (
               <input
                 {...inputProps}
                 id="question-phone"
+                name="phone"
                 type="tel"
-                placeholder="+7 (___) ___-____"
+                inputMode="tel"
+                autoComplete="tel"
+                placeholder="+7 (999) 999-99-99"
+                aria-invalid={showPhoneError}
+                aria-describedby={showPhoneError ? 'question-phone-error' : undefined}
                 required
-                className={
-                  Styles.contactInput
-                }
               />
             )}
           </InputMask>
+          {showPhoneError && (
+            <span id="question-phone-error" className={Styles.errorText} role="alert">
+              Проверьте номер телефона
+            </span>
+          )}
         </div>
-
       </div>
-
-
-      {/* ВОПРОС */}
 
       <div className={Styles.fieldGroup}>
-
-        <label
-          htmlFor="question-message"
-          className={Styles.fieldLabel}
-        >
-          Ваш вопрос
-        </label>
-
+        <label htmlFor="question-message" className={Styles.fieldLabel}>Ваш вопрос</label>
         <textarea
           id="question-message"
-          placeholder="Коротко опишите ваш вопрос или задачу..."
+          name="message"
+          placeholder="Коротко опишите вопрос или задачу"
           value={formData.message}
-          onChange={e =>
-            onChange(
-              'message',
-              e.target.value
-            )
-          }
-          rows={4}
+          onChange={event => onChange('message', event.target.value)}
+          rows={3}
           required
         />
-
       </div>
 
-
-      {/* СОГЛАСИЯ */}
-
       <div className={Styles.agreements}>
-
-        {/* СОГЛАСИЕ 1 */}
-
         <div className={Styles.checkboxWrapper}>
-
-          <label
-            className={`${Styles.checkbox} ${
-              errors.agreement
-                ? Styles.error
-                : ''
-            }`}
-          >
-
+          <label className={Styles.checkbox}>
             <input
               type="checkbox"
               checked={formData.agreement}
-              onChange={e =>
-                handleCheckboxChange(
-                  'agreement',
-                  e.target.checked
-                )
-              }
+              onChange={event => onChange('agreement', event.target.checked)}
+              aria-invalid={showConsentErrors && !formData.agreement}
+              aria-describedby={showConsentErrors && !formData.agreement ? 'question-agreement-error' : undefined}
             />
-
-            <span
-              className={
-                Styles.customCheckbox
-              }
-            />
-
-            <span
-              className={
-                Styles.checkboxText
-              }
-            >
+            <span className={Styles.customCheckbox} aria-hidden="true" />
+            <span className={Styles.checkboxText}>
               Я даю согласие на{' '}
-
-              <a
-                href="/file/personal_data_v1.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">
                 обработку моих персональных данных
               </a>{' '}
-
               в целях рассмотрения моего обращения.
             </span>
-
           </label>
-
-          {errors.agreement && (
-            <div
-              className={
-                Styles.errorText
-              }
-            >
+          {showConsentErrors && !formData.agreement && (
+            <span id="question-agreement-error" className={Styles.errorText} role="alert">
               Необходимо дать согласие
-              на обработку персональных данных
-            </div>
+            </span>
           )}
-
         </div>
-
-
-        {/* СОГЛАСИЕ 2 */}
 
         <div className={Styles.checkboxWrapper}>
-
-          <label
-            className={`${Styles.checkbox} ${
-              errors.privacyAgreement
-                ? Styles.error
-                : ''
-            }`}
-          >
-
+          <label className={Styles.checkbox}>
             <input
               type="checkbox"
-              checked={
-                formData.privacyAgreement
-              }
-              onChange={e =>
-                handleCheckboxChange(
-                  'privacyAgreement',
-                  e.target.checked
-                )
-              }
+              checked={formData.privacyAgreement}
+              onChange={event => onChange('privacyAgreement', event.target.checked)}
+              aria-invalid={showConsentErrors && !formData.privacyAgreement}
+              aria-describedby={showConsentErrors && !formData.privacyAgreement ? 'question-privacy-error' : undefined}
             />
-
-            <span
-              className={
-                Styles.customCheckbox
-              }
-            />
-
-            <span
-              className={
-                Styles.checkboxText
-              }
-            >
+            <span className={Styles.customCheckbox} aria-hidden="true" />
+            <span className={Styles.checkboxText}>
               С{' '}
-
-              <a
-                href="/file/privacy_v1.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href="/file/privacy_v1.pdf" target="_blank" rel="noopener noreferrer">
                 политикой конфиденциальности
               </a>{' '}
-
               ознакомлен(а).
             </span>
-
           </label>
-
-          {errors.privacyAgreement && (
-            <div
-              className={
-                Styles.errorText
-              }
-            >
-              Необходимо подтвердить
-              ознакомление с политикой
-              конфиденциальности
-            </div>
+          {showConsentErrors && !formData.privacyAgreement && (
+            <span id="question-privacy-error" className={Styles.errorText} role="alert">
+              Подтвердите ознакомление с политикой
+            </span>
           )}
-
         </div>
-
       </div>
 
+      {submitError && <div className={Styles.submitError} role="alert">{submitError}</div>}
 
-      {/* ОБЩАЯ ОШИБКА */}
-
-      {agreementError &&
-        (errors.agreement ||
-          errors.privacyAgreement) && (
-          <div
-            className={
-              Styles.errorTextGeneral
-            }
-          >
-            Пожалуйста, отметьте
-            все необходимые согласия
-          </div>
+      <button type="submit" className={Styles.submitButton} disabled={isSubmitting}>
+        <span>{isSubmitting ? 'Отправляем…' : 'Отправить вопрос'}</span>
+        {!isSubmitting && (
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
         )}
-
-
-      {/* ОТПРАВИТЬ */}
-
-      <button
-        type="submit"
-        className={Styles.submitButton}
-      >
-        <span>Отправить вопрос</span>
-
-        <svg
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <path
-            d="M5 12h13M13 6l6 6-6 6"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
       </button>
-
     </form>
   );
 };

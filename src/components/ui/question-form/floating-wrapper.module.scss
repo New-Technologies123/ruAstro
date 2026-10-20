@@ -1,0 +1,5 @@
+/* The widget positions itself. Its parent must not create a fixed stacking context. */
+.floatingWrapper {
+  position: static;
+  z-index: auto;
+}

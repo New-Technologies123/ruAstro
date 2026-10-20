@@ -1,234 +1,118 @@
-// gallery.module.scss
-
 .slider {
   position: relative;
   width: 100%;
-  border-radius: 10px;
+  overflow: visible;
+  border-radius: inherit;
+  background: transparent;
+}
+
+.item {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
-  margin-bottom: 10px;
-  background: #e8ecf0;
-
-  .item {
-    position: relative;
-    display: block;
-    width: 100%;
-    aspect-ratio: 16/9;
-    overflow: hidden;
-    cursor: pointer;
-    background: #e8ecf0;
-    animation-name: fade;
-    animation-duration: 0.6s;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.4s ease;
-    }
-  }
+  padding: 0;
+  border: 0;
+  border-radius: 15px;
+  background: #eaf0f8;
+  cursor: zoom-in;
 }
 
 .thumbnail {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  transition: transform 0.35s ease;
 }
-
-// ===== ОВЕРЛЕЙ =====
 
 .imageOverlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(3px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-items: center;
+  background: rgba(4, 19, 41, 0.38);
   opacity: 0;
-  transition: opacity 0.3s ease;
-
-  .item:hover & {
-    opacity: 1;
-  }
-
-  .zoomText {
-    color: #fff;
-    font-size: 12px;
-    font-weight: 500;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 6px 14px;
-    border-radius: 50px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-  }
+  transition: opacity 0.25s ease;
+  pointer-events: none;
 }
 
-// ===== СЧЕТЧИК ФОТО =====
+.zoomText {
+  padding: 9px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  background: rgba(4, 19, 41, 0.65);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.item:hover .thumbnail { transform: scale(1.035); }
+.item:hover .imageOverlay,
+.item:focus-visible .imageOverlay { opacity: 1; }
 
 .photoCounter {
   position: absolute;
-  bottom: 8px;
-  right: 8px;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(8px);
+  right: 14px;
+  bottom: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(6, 21, 43, 0.72);
   color: #fff;
-  font-size: 10px;
-  font-weight: 500;
-  padding: 2px 8px;
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 12px;
+  font-weight: 700;
   pointer-events: none;
-  user-select: none;
-  z-index: 2;
 }
-
-// ===== КНОПКИ НАВИГАЦИИ =====
 
 .previous,
 .next {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
-  color: #0a1e3c;
-  font-size: 18px;
-  font-weight: 300;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
   z-index: 2;
-  opacity: 0.7;
+  top: 50%;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  transform: translateY(-50%);
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 16px rgba(5, 25, 55, 0.18);
+  color: #0b1e35;
+  font-size: 25px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.95);
-    opacity: 1;
-    transform: translateY(-50%) scale(1.05);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-  }
-
-  &:active {
-    transform: translateY(-50%) scale(0.95);
+    background: #f3f7ff;
+    transform: translateY(-50%) scale(1.07);
   }
 }
 
-.previous {
-  left: 10px;
+// Each arrow sits half outside the full-width image.
+.previous { left: -21px; }
+.next { right: -21px; }
+
+.item:focus-visible,
+.previous:focus-visible,
+.next:focus-visible {
+  outline: 3px solid #77a2ff;
+  outline-offset: -3px;
 }
 
-.next {
-  right: 10px;
-}
-
-@keyframes fade {
-  from {
-    opacity: 0.5;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-// ============================================
-// ===== ОТКЛЮЧАЕМ HOVER ДЛЯ TOUCH-УСТРОЙСТВ =====
-// ============================================
-
-:global(.no-hover) {
-  .previous:hover,
-  .next:hover {
-    background: rgba(255, 255, 255, 0.85) !important;
-    opacity: 0.7 !important;
-    transform: translateY(-50%) scale(1) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
-  }
-
-  .item:hover img {
-    transform: scale(1) !important;
-  }
-
-  .imageOverlay {
-    opacity: 0 !important;
-  }
-}
-
-// ============================================
-// ===== АДАПТИВНОСТЬ =====
-// ============================================
-
-@media (max-width: 835px) {
-  .slider .item {
-    aspect-ratio: 16/8;
-  }
-
-  .previous,
-  .next {
-    width: 36px;
-    height: 36px;
-    font-size: 20px;
-  }
-
-  .previous {
-    left: 8px;
-  }
-
-  .next {
-    right: 8px;
-  }
-
-  .photoCounter {
-    font-size: 10px;
-    padding: 2px 8px;
-    bottom: 6px;
-    right: 6px;
-  }
-
-  .zoomText {
-    font-size: 11px !important;
-    padding: 6px 12px !important;
-  }
+@media (hover: none) {
+  .item:hover .thumbnail { transform: none; }
+  .item:hover .imageOverlay { opacity: 0; }
 }
 
 @media (max-width: 500px) {
-  .slider .item {
-    aspect-ratio: 16/9;
-  }
+  .previous, .next { width: 40px; height: 40px; }
+  .previous { left: -16px; }
+  .next { right: -16px; }
+}
 
-  .previous,
-  .next {
-    width: 40px;
-    height: 40px;
-    font-size: 22px;
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-
-  .previous {
-    left: 6px;
-  }
-
-  .next {
-    right: 6px;
-  }
-
-  .photoCounter {
-    font-size: 10px;
-    padding: 3px 10px;
-    bottom: 6px;
-    right: 6px;
-  }
-
-  .zoomText {
-    font-size: 10px !important;
-    padding: 4px 10px !important;
-  }
+@media (prefers-reduced-motion: reduce) {
+  .thumbnail, .imageOverlay, .previous, .next { transition: none; }
 }

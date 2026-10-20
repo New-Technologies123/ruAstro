@@ -14,39 +14,25 @@ export const Vacancy = ({
   experience,
   employmentType,
   onClick,
-}: TVacancyProps) => {
-  const handleClick = () => {
-    if (document.activeElement instanceof HTMLElement) {
-      document.activeElement.blur();
-    }
+}: TVacancyProps) => (
+  <button
+    type="button"
+    className={Styles.employeeVacancy}
+    onClick={onClick}
+  >
+    <div className={Styles.header}>
+      <h3>{header}</h3>
+      <span className={Styles.arrow} aria-hidden="true">↗</span>
+    </div>
 
-    onClick?.();
-  };
+    <div className={Styles.details}>
+      {title && <span>{title}</span>}
+      {experience && <span>{experience}</span>}
+      {employmentType && <span>{employmentType}</span>}
+    </div>
 
-  return (
-    <button
-      type="button"
-      className={Styles.employeeVacancy}
-      onClick={handleClick}
-    >
-      <div className={Styles.header}>
-        <h3>{header}</h3>
-
-        <span
-          className={Styles.arrow}
-          aria-hidden="true"
-        >
-          ↗
-        </span>
-      </div>
-
-      <div className={Styles.details}>
-        {title && <span>{title}</span>}
-
-        {experience && <span>{experience}</span>}
-
-        {employmentType && <span>{employmentType}</span>}
-      </div>
-    </button>
-  );
-};
+    {/* <span className={Styles.cardFooter} aria-hidden="true">
+      Подробнее о вакансии
+    </span> */}
+  </button>
+);

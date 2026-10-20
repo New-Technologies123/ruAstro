@@ -1,13 +1,7 @@
-// GalleryModal.tsx - добавьте ленивую загрузку для полноразмерных изображений
-import Styles from './gallery-modal.module.scss';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
-
-type TPhoto = {
-  id: number;
-  src: string;
-  alt: string;
-};
+import Styles from './gallery-modal.module.scss';
+import type { TPhoto } from '../../content/news/newsData';
 
 type TProps = {
   openPhotoId: number;
@@ -17,138 +11,123 @@ type TProps = {
 
 export const GalleryModal = ({ openPhotoId, photos, onClose }: TProps) => {
   const [showPhotoId, setShowPhotoId] = useState(openPhotoId);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const [modalRoot, setModalRoot] = useState<HTMLElement | null>(null);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
-  const imgRef = useRef<HTMLImageElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const previousRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+
+  const currentIndex = Math.max(0, photos.findIndex((photo) => photo.id === showPhotoId));
+  const currentPhoto = photos[currentIndex];
 
   useEffect(() => {
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    setIsTouchDevice(isTouch);
-  }, []);
-
-  useEffect(() => {
-    const root = document.createElement('div');
-    root.id = 'modal-root';
-    document.body.appendChild(root);
-    setModalRoot(root);
+    const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
 
     return () => {
-      if (root.parentNode) {
-        document.body.removeChild(root);
-      }
-      document.body.style.overflow = '';
+      document.body.style.overflow = previousOverflow;
     };
   }, []);
 
-  // Сброс состояния загрузки при смене фото
-  useEffect(() => {
-    setIsImageLoaded(false);
-  }, [showPhotoId]);
-
-  const currentPhoto = photos.find(photo => photo.id === showPhotoId);
-  const currentIndex = photos.findIndex(photo => photo.id === showPhotoId) + 1;
-  const totalPhotos = photos.length;
-
-  const nextPhoto = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setShowPhotoId(prev => (prev % photos.length) + 1);
-    setTimeout(() => setIsTransitioning(false), 300);
-  };
-
-  const previousPhoto = () => {
-    if (isTransitioning) return;
-    setIsTransitioning(true);
-    setShowPhotoId(prev => (prev - 1 + photos.length) % photos.length || photos.length);
-    setTimeout(() => setIsTransitioning(false), 300);
-  };
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') onClose(showPhotoId);
-    if (e.key === 'ArrowRight') nextPhoto();
-    if (e.key === 'ArrowLeft') previousPhoto();
-  };
+  useEffect(() => setIsImageLoaded(false), [showPhotoId]);
 
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        onClose(showPhotoId);
+      } else if (event.key === 'ArrowRight' && photos.length > 1) {
+        event.preventDefault();
+        setShowPhotoId(photos[(currentIndex + 1) % photos.length].id);
+      } else if (event.key === 'ArrowLeft' && photos.length > 1) {
+        event.preventDefault();
+        setShowPhotoId(photos[(currentIndex - 1 + photos.length) % photos.length].id);
+      } else if (event.key === 'Tab') {
+        const controls = [closeRef.current, previousRef.current, nextRef.current]
+          .filter((element): element is HTMLButtonElement => Boolean(element));
+        const first = controls[0];
+        const last = controls[controls.length - 1];
+        if (!first || !last) return;
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [showPhotoId, isTransitioning]);
+  }, [currentIndex, onClose, photos, showPhotoId]);
 
-  const handleClose = () => {
-    onClose(showPhotoId);
+  if (!currentPhoto) return null;
+
+  const move = (direction: -1 | 1) => {
+    setShowPhotoId(photos[(currentIndex + direction + photos.length) % photos.length].id);
   };
-
-  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      handleClose();
-    }
-  };
-
-  const handleNavClick = (e: React.MouseEvent<HTMLButtonElement>, action: () => void) => {
-    e.stopPropagation();
-    action();
-  };
-
-  const handleCloseClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    handleClose();
-  };
-
-  const handleImageLoad = () => {
-    setIsImageLoaded(true);
-  };
-
-  if (!modalRoot) return null;
 
   return createPortal(
-    <div className={Styles.modalOverlay} onClick={handleOverlayClick}>
+    <div
+      className={Styles.modalOverlay}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Просмотр фотографий новости"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose(showPhotoId);
+      }}
+    >
       <div className={Styles.modalContent}>
         <button
-          className={`${Styles.close} ${isTouchDevice ? Styles.touchDevice : ''}`}
-          onClick={handleCloseClick}
-          aria-label="Закрыть"
+          ref={closeRef}
+          type="button"
+          className={Styles.close}
+          onClick={() => onClose(showPhotoId)}
+          aria-label="Закрыть фото"
         >
-          ✕
+          ×
         </button>
 
         <div className={Styles.imageWrapper}>
           {!isImageLoaded && (
-            <div className={Styles.modalPlaceholder}>
-              <div className={Styles.modalSpinner}></div>
+            <div className={Styles.modalPlaceholder} role="status" aria-label="Загрузка фотографии">
+              <div className={Styles.modalSpinner} />
             </div>
           )}
           <img
-            ref={imgRef}
-            src={currentPhoto?.src}
-            alt={currentPhoto?.alt || ''}
-            className={`${Styles.fullImage} ${isTransitioning ? Styles.transitioning : ''} ${isImageLoaded ? Styles.loaded : Styles.loading}`}
-            onLoad={handleImageLoad}
-            loading="lazy"
+            key={currentPhoto.id}
+            className={`${Styles.fullImage} ${isImageLoaded ? Styles.loaded : Styles.loading}`}
+            src={currentPhoto.src}
+            alt={currentPhoto.alt}
+            loading="eager"
             decoding="async"
+            onLoad={() => setIsImageLoaded(true)}
+            onClick={(event) => {
+              event.stopPropagation();
+              onClose(showPhotoId);
+            }}
           />
         </div>
 
         {photos.length > 1 && (
-          <div className={Styles.counter}>
-            {currentIndex} / {totalPhotos}
-          </div>
-        )}
-
-        {photos.length > 1 && (
           <>
+            <span className={Styles.counter} aria-live="polite">{currentIndex + 1} / {photos.length}</span>
             <button
-              className={`${Styles.navButton} ${Styles.previous} ${isTouchDevice ? Styles.touchDevice : ''}`}
-              onClick={(e) => handleNavClick(e, previousPhoto)}
+              ref={previousRef}
+              type="button"
+              className={`${Styles.navButton} ${Styles.previous}`}
+              onClick={() => move(-1)}
               aria-label="Предыдущее фото"
             >
               ‹
             </button>
             <button
-              className={`${Styles.navButton} ${Styles.next} ${isTouchDevice ? Styles.touchDevice : ''}`}
-              onClick={(e) => handleNavClick(e, nextPhoto)}
+              ref={nextRef}
+              type="button"
+              className={`${Styles.navButton} ${Styles.next}`}
+              onClick={() => move(1)}
               aria-label="Следующее фото"
             >
               ›
@@ -157,6 +136,6 @@ export const GalleryModal = ({ openPhotoId, photos, onClose }: TProps) => {
         )}
       </div>
     </div>,
-    modalRoot
+    document.body,
   );
 };
