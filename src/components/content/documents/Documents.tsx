@@ -1,213 +1,452 @@
-// Documents.tsx
-import { useMemo, useState, useRef, useEffect } from 'react';
-import { documentsData, type TDocument, type TDocumentCategory } from './documents.data';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
+
 import Styles from './documents.module.scss';
-import { Title } from '../../ui/title/Title';
 
-// ============================================================
-// Иконки
-// ============================================================
+import {
+  documentsData,
+  type TDocument,
+  type TDocumentCategory,
+} from './documents.data';
 
-const SearchIcon = () => (
-  <svg
-    width="19"
-    height="19"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="11" cy="11" r="7" />
-    <path d="m20 20-4-4" />
-  </svg>
-);
+import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
-const CloseIcon = () => (
-  <svg
-    width="17"
-    height="17"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M6 6l12 12" />
-    <path d="M18 6 6 18" />
-  </svg>
-);
-
-// ============================================================
-// Обновленная иконка "Назад" с улучшенным дизайном
-// ============================================================
-
-const BackIcon = () => (
-  <svg
-    width="18"
-    height="18"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M19 12H5" />
-    <path d="M12 19l-7-7 7-7" />
-  </svg>
-);
-
-const DownloadIcon = () => (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M12 3v12" />
-    <path d="m7 10 5 5 5-5" />
-    <path d="M5 21h14" />
-  </svg>
-);
-
-const OpenIcon = () => (
-  <svg
-    width="15"
-    height="15"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M14 5h5v5" />
-    <path d="M19 5 10 14" />
-    <path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
-  </svg>
-);
-
-const RightArrowIcon = () => (
-  <svg
-    width="20"
-    height="20"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="M5 12h14" />
-    <path d="m12 5 7 7-7 7" />
-  </svg>
-);
-
-// ============================================================
-// Обновленная кнопка "Все категории"
-// ============================================================
-
-const AllCategoriesButton = ({ onClick }: { onClick: () => void }) => {
-  return (
-    <button
-      className={Styles.allCategoriesButton}
-      onClick={onClick}
-      type="button"
-    >
-      <span className={Styles.allCategoriesIcon}>
-        <BackIcon />
-      </span>
-      <span className={Styles.allCategoriesText}>Все категории</span>
-    </button>
-  );
+type IndexedDocument = TDocument & {
+  categoryId: string;
+  categoryTitle: string;
 };
 
-// ============================================================
-// Карточка документа
-// ============================================================
+/* =========================================================
+   Все документы в едином массиве для поиска
+========================================================= */
 
-const DocumentCard = ({
-  doc,
-  index,
-  category,
-  categoryIndex,
+const allDocuments: IndexedDocument[] = documentsData.flatMap(
+  (category) =>
+    category.documents.map((document) => ({
+      ...document,
+      categoryId: category.id,
+      categoryTitle: category.title,
+    })),
+);
+
+/* =========================================================
+   Короткие названия категорий
+========================================================= */
+
+const shortNames: Record<string, string> = {
+  'accounting-system': 'АГЗУ',
+  accessories: 'Комплектующие',
+  'measuring-system': 'Измерительные системы',
+  'preparation-systems': 'Подготовка',
+  'pumping-stations': 'Перекачка',
+};
+
+/* =========================================================
+   Склонение слова "документ"
+========================================================= */
+
+function documentWord(count: number): string {
+  const lastTwo = count % 100;
+  const last = count % 10;
+
+  if (lastTwo >= 11 && lastTwo <= 14) {
+    return 'документов';
+  }
+
+  if (last === 1) {
+    return 'документ';
+  }
+
+  if (last >= 2 && last <= 4) {
+    return 'документа';
+  }
+
+  return 'документов';
+}
+
+/* =========================================================
+   Работа с URL
+========================================================= */
+
+function readLocation() {
+  if (typeof window === 'undefined') {
+    return {
+      categoryId: null as string | null,
+      query: '',
+    };
+  }
+
+  const params = new URLSearchParams(window.location.search);
+
+  const rawCategory = params.get('category');
+
+  return {
+    categoryId: documentsData.some(
+      (item) => item.id === rawCategory,
+    )
+      ? rawCategory
+      : null,
+
+    query: params.get('q') ?? '',
+  };
+}
+
+function updateLocation(
+  categoryId: string | null,
+  query: string,
+  mode: 'push' | 'replace',
+) {
+  const params = new URLSearchParams(window.location.search);
+
+  if (categoryId) {
+    params.set('category', categoryId);
+  } else {
+    params.delete('category');
+  }
+
+  if (query.trim()) {
+    params.set('q', query.trim());
+  } else {
+    params.delete('q');
+  }
+
+  const search = params.toString();
+
+  const url = `${window.location.pathname}${search ? `?${search}` : ''
+    }${window.location.hash}`;
+
+  window.history[
+    mode === 'push' ? 'pushState' : 'replaceState'
+  ]({}, '', url);
+}
+
+/* =========================================================
+   Подсветка найденного текста
+========================================================= */
+
+function highlightText(
+  text: string,
+  query: string,
+): ReactNode {
+  const term = query.trim();
+
+  if (!term) {
+    return text;
+  }
+
+  const escaped = term.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    '\\$&',
+  );
+
+  const parts = text.split(
+    new RegExp(`(${escaped})`, 'gi'),
+  );
+
+  return parts.map((part, index) =>
+    part.toLowerCase() === term.toLowerCase() ? (
+      <mark
+        key={index}
+        className={Styles.highlight}
+      >
+        {part}
+      </mark>
+    ) : (
+      <span key={index}>{part}</span>
+    ),
+  );
+}
+
+/* =========================================================
+   Иконка стрелки
+========================================================= */
+
+function ArrowIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M4 12h15m-6-6 6 6-6 6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/* =========================================================
+   Иконка назад
+========================================================= */
+
+function BackArrowIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M19 12H5m6-6-6 6 6 6"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/* =========================================================
+   Иконка поиска
+========================================================= */
+
+function SearchIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle
+        cx="10.5"
+        cy="10.5"
+        r="6.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+      />
+
+      <path
+        d="m16 16 4.5 4.5"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/* =========================================================
+   Иконка закрытия
+========================================================= */
+
+function CloseIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M6 6l12 12M18 6 6 18"
+        stroke="currentColor"
+        strokeWidth="1.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+/* =========================================================
+   Мобильное переключение карточек
+========================================================= */
+
+function MobileSlider({
+  children,
+  count,
+  className,
+  label,
 }: {
-  doc: TDocument;
-  index: number;
-  category?: TDocumentCategory;
-  categoryIndex?: number;
-}) => {
-  const handleOpen = () => {
-    window.open(doc.fileUrl, '_blank');
+  children: ReactNode;
+  count: number;
+  className: string;
+  label: string;
+}) {
+  const sliderRef = useRef<HTMLDivElement | null>(null);
+  const programmaticIndexRef = useRef<number | null>(null);
+  const releaseTimerRef = useRef<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const updateActiveIndex = useCallback(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+    if (programmaticIndexRef.current !== null) return;
+
+    const cards = Array.from(slider.children) as HTMLElement[];
+    if (!cards.length) {
+      setActiveIndex(0);
+      return;
+    }
+
+    const sliderLeft = slider.getBoundingClientRect().left;
+    let closestIndex = 0;
+    let closestDistance = Number.POSITIVE_INFINITY;
+
+    cards.forEach((card, index) => {
+      const distance = Math.abs(
+        card.getBoundingClientRect().left - sliderLeft,
+      );
+      if (distance < closestDistance) {
+        closestDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    setActiveIndex(closestIndex);
+  }, []);
+
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    let frame = 0;
+    const releaseProgrammaticScroll = () => {
+      if (releaseTimerRef.current !== null) {
+        window.clearTimeout(releaseTimerRef.current);
+        releaseTimerRef.current = null;
+      }
+      if (programmaticIndexRef.current === null) return;
+      programmaticIndexRef.current = null;
+      updateActiveIndex();
+    };
+
+    const handleScroll = () => {
+      window.cancelAnimationFrame(frame);
+      if (programmaticIndexRef.current !== null) {
+        if (releaseTimerRef.current !== null) {
+          window.clearTimeout(releaseTimerRef.current);
+        }
+        releaseTimerRef.current = window.setTimeout(
+          releaseProgrammaticScroll,
+          260,
+        );
+        return;
+      }
+      frame = window.requestAnimationFrame(updateActiveIndex);
+    };
+
+    slider.addEventListener('scroll', handleScroll, { passive: true });
+    slider.addEventListener('scrollend', releaseProgrammaticScroll);
+    window.addEventListener('resize', updateActiveIndex);
+    updateActiveIndex();
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      if (releaseTimerRef.current !== null) {
+        window.clearTimeout(releaseTimerRef.current);
+      }
+      slider.removeEventListener('scroll', handleScroll);
+      slider.removeEventListener('scrollend', releaseProgrammaticScroll);
+      window.removeEventListener('resize', updateActiveIndex);
+    };
+  }, [count, updateActiveIndex]);
+
+  const scrollToIndex = (index: number) => {
+    const slider = sliderRef.current;
+    const target = slider?.children[index] as HTMLElement | undefined;
+    if (!slider || !target) return;
+
+    const left =
+      slider.scrollLeft +
+      target.getBoundingClientRect().left -
+      slider.getBoundingClientRect().left;
+
+    programmaticIndexRef.current = index;
+    setActiveIndex(index);
+    if (releaseTimerRef.current !== null) {
+      window.clearTimeout(releaseTimerRef.current);
+    }
+    releaseTimerRef.current = window.setTimeout(() => {
+      programmaticIndexRef.current = null;
+      releaseTimerRef.current = null;
+      updateActiveIndex();
+    }, 2000);
+
+    slider.scrollTo({
+      left,
+      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        ? 'auto'
+        : 'smooth',
+    });
   };
-
-  const handleDownload = (e: React.MouseEvent) => {
-    e.stopPropagation();
-
-    const link = document.createElement('a');
-    link.href = doc.fileUrl;
-    link.download = doc.fileName;
-
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const extension = doc.fileName.split('.').pop()?.toUpperCase() || 'FILE';
 
   return (
-    <article
-      className={Styles.documentCard}
-      style={{ animationDelay: `${index * 0.045}s` }}
-    >
-      {category && categoryIndex !== undefined && (
-        <div className={Styles.documentCategory}>
-          <span className={Styles.documentCategoryNumber}>{categoryIndex}</span>
-          <span className={Styles.documentCategoryName}>{category.title}</span>
+    <div className={Styles.sliderWrapper}>
+      <div
+        ref={sliderRef}
+        className={className}
+        role="group"
+        aria-label={label}
+      >
+        {children}
+      </div>
+
+      {count > 1 && (
+        <div className={Styles.mobileSliderControls}>
+          <div className={Styles.sliderControlsRow}>
+            <button
+              type="button"
+              className={Styles.sliderArrow}
+              onClick={() => scrollToIndex(activeIndex === 0 ? count - 1 : activeIndex - 1)}
+              aria-label="Предыдущая карточка"
+            >
+              <BackArrowIcon />
+            </button>
+
+            {count <= 9 ? (
+              <div
+                className={Styles.sliderDots}
+                role="group"
+                aria-label={`Карточка ${activeIndex + 1} из ${count}`}
+              >
+                {Array.from({ length: count }, (_, index) => (
+                  <button
+                    key={index}
+                    type="button"
+                    className={`${Styles.sliderDot} ${index === activeIndex ? Styles.sliderDotActive : ''}`}
+                    onClick={() => scrollToIndex(index)}
+                    aria-label={`Перейти к карточке ${index + 1}`}
+                    aria-current={index === activeIndex ? 'true' : undefined}
+                  />
+                ))}
+              </div>
+            ) : (
+              <span className={Styles.sliderCounter} aria-live="polite">
+                {activeIndex + 1} / {count}
+              </span>
+            )}
+
+            <button
+              type="button"
+              className={Styles.sliderArrow}
+              onClick={() => scrollToIndex(activeIndex === count - 1 ? 0 : activeIndex + 1)}
+              aria-label="Следующая карточка"
+            >
+              <ArrowIcon />
+            </button>
+          </div>
+          <span className={Styles.sliderHint}>Листайте карточки свайпом</span>
         </div>
       )}
-
-      <div className={Styles.documentTop}>
-        <span className={Styles.fileType}>{extension}</span>
-        {doc.fileSize && <span className={Styles.fileSize}>{doc.fileSize}</span>}
-      </div>
-
-      <div className={Styles.documentMain}>
-        <h3 className={Styles.documentTitle}>{doc.title}</h3>
-        <div className={Styles.documentLine} />
-      </div>
-
-      <div className={Styles.documentActions}>
-        <button className={Styles.openButton} onClick={handleOpen} type="button">
-          <OpenIcon />
-          <span>Открыть</span>
-        </button>
-
-        <button
-          className={Styles.downloadButton}
-          onClick={handleDownload}
-          type="button"
-          aria-label={`Скачать ${doc.title}`}
-        >
-          <DownloadIcon />
-        </button>
-      </div>
-    </article>
+    </div>
   );
-};
+}
 
-// ============================================================
-// Карточка категории
-// ============================================================
+/* =========================================================
+   Карточка категории
+========================================================= */
 
-const CategoryCard = ({
+function CategoryCard({
   category,
   index,
   onClick,
@@ -215,461 +454,704 @@ const CategoryCard = ({
   category: TDocumentCategory;
   index: number;
   onClick: () => void;
-}) => {
-  const documentCount = category.documents.length;
-
+}) {
   return (
     <button
-      className={`${Styles.categoryCard} ${Styles[`category${index + 1}`]}`}
-      onClick={onClick}
       type="button"
+      className={Styles.categoryCard}
+      onClick={onClick}
     >
-      <div className={Styles.categoryGlow} />
+      <span className={Styles.categoryTop}>
+        <span className={Styles.categoryNumber}>
+          {String(index + 1).padStart(2, '0')}
+        </span>
+        <span className={Styles.categoryLabel}>
+          {shortNames[category.id] ?? category.title}
+        </span>
+      </span>
 
-      <div className={Styles.categoryNumber}>{index + 1}</div>
+      <span className={Styles.categoryMain}>
+        <span className={Styles.categoryTitle}>
+          {category.title}
+        </span>
 
-      <div className={Styles.categoryContent}>
-        <h2 className={Styles.categoryTitle}>{category.title}</h2>
-        <p className={Styles.categoryDescription}>{category.description}</p>
-
-        <div className={Styles.categoryBottom}>
-          <span className={Styles.categoryCount}>
-            {documentCount}{' '}
-            {documentCount === 1
-              ? 'документ'
-              : documentCount >= 2 && documentCount <= 4
-              ? 'документа'
-              : 'документов'}
+        {category.description && (
+          <span className={Styles.categoryDescription}>
+            {category.description}
           </span>
+        )}
+      </span>
 
-          <span className={Styles.categoryOpen}>
-            <RightArrowIcon />
-          </span>
-        </div>
-      </div>
+      <span className={Styles.categoryRight}>
+        <span className={Styles.categoryCount}>
+          {category.documents.length}{' '}
+          {documentWord(category.documents.length)}
+        </span>
+
+        <span className={Styles.categoryArrow}>
+          <ArrowIcon />
+        </span>
+      </span>
     </button>
   );
-};
+}
 
-// ============================================================
-// Основной компонент
-// ============================================================
+/* =========================================================
+   Карточка документа
+========================================================= */
 
-export const Documents = () => {
-  const [selectedCategory, setSelectedCategory] = useState<TDocumentCategory | null>(null);
-  const [search, setSearch] = useState('');
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+function DocumentCard({
+  document,
+  query = '',
+  categoryLabel,
+}: {
+  document: TDocument;
+  query?: string;
+  categoryLabel?: string;
+}) {
+  const title = document.title || document.fileName;
 
-  const categoriesSectionRef = useRef<HTMLDivElement>(null);
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const searchWrapperRef = useRef<HTMLDivElement>(null);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const fileType =
+    document.fileName
+      ?.split('.')
+      .pop()
+      ?.toUpperCase() || 'PDF';
 
-  const totalDocs = documentsData.reduce((acc, category) => acc + category.documents.length, 0);
-  const totalCategories = documentsData.length;
+  return (
+    <article className={Styles.documentCard}>
+      <div className={Styles.documentTop}>
+        <span className={Styles.fileType}>
+          {fileType}
+        </span>
 
-  // ============================================================
-  // Открытие поиска
-  // ============================================================
+        {document.fileSize && (
+          <span className={Styles.fileSize}>
+            {document.fileSize}
+          </span>
+        )}
+      </div>
 
-  const handleSearchOpen = () => {
-    setIsSearchOpen(true);
-    setTimeout(() => {
-      searchInputRef.current?.focus();
-    }, 100);
-  };
+      <div className={Styles.documentContent}>
+        {categoryLabel && (
+          <span className={Styles.documentCategory}>
+            Категория: {categoryLabel}
+          </span>
+        )}
 
-  // ============================================================
-  // Закрытие поиска
-  // ============================================================
+        <h3 className={Styles.documentTitle}>
+          {highlightText(title, query)}
+        </h3>
 
-  const handleSearchClose = () => {
-    if (!search) {
-      setSearch('');
-      setIsSearchOpen(false);
-    }
-  };
+        <p className={Styles.documentFile}>
+          {highlightText(
+            document.fileName,
+            query,
+          )}
+        </p>
+      </div>
 
-  // ============================================================
-  // Закрытие поиска при клике вне поля (только если нет текста)
-  // ============================================================
+      <div className={Styles.documentActions}>
+        <a
+          className={Styles.openButton}
+          href={document.fileUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`Открыть ${title} в новой вкладке`}
+        >
+          <span>Открыть документ</span>
+          <ArrowIcon />
+        </a>
+
+        <a
+          className={Styles.downloadButton}
+          href={document.fileUrl}
+          download
+          aria-label={`Скачать ${title}`}
+          title="Скачать документ"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M12 3v12m-4-4 4 4 4-4M4 19h16"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </a>
+      </div>
+    </article>
+  );
+}
+
+/* =========================================================
+   Основная страница
+========================================================= */
+
+export function Documents() {
+  const [searchQuery, setSearchQuery] =
+    useState('');
+
+  const [
+    selectedCategoryId,
+    setSelectedCategoryId,
+  ] = useState<string | null>(null);
+
+  /* =======================================================
+     Синхронизация с URL
+  ======================================================= */
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
-      // Закрываем только если поиск открыт и нет текста
-      if (!isSearchOpen || search) return;
+    const handlePopState = () => {
+      const state = readLocation();
 
-      const target = event.target as HTMLElement;
-      
-      // Проверяем, был ли клик внутри поиска
-      const isClickInsideSearch = 
-        searchWrapperRef.current?.contains(target) ||
-        target.closest(`.${Styles.searchWrapper}`) ||
-        target.closest(`.${Styles.searchBox}`) ||
-        target.closest(`.${Styles.mobileSearchButton}`);
-
-      // Если клик был вне поиска - закрываем
-      if (!isClickInsideSearch) {
-        setIsSearchOpen(false);
-      }
+      setSearchQuery(state.query);
+      setSelectedCategoryId(
+        state.categoryId,
+      );
     };
 
-    // Добавляем обработчики только на мобильных устройствах
-    if (window.innerWidth <= 720) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('touchstart', handleClickOutside);
-    }
+    handlePopState();
+
+    window.addEventListener(
+      'popstate',
+      handlePopState,
+    );
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
+      window.removeEventListener(
+        'popstate',
+        handlePopState,
+      );
     };
-  }, [isSearchOpen, search]);
-
-  // ============================================================
-  // Закрытие поиска при изменении размера окна (если стало десктоп)
-  // ============================================================
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth > 720 && isSearchOpen) {
-        setIsSearchOpen(false);
-        setSearch('');
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [isSearchOpen]);
-
-  // ============================================================
-  // URL category
-  // ============================================================
-
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const categoryParam = params.get('category');
-
-    if (categoryParam) {
-      const foundCategory = documentsData.find((cat) => cat.id === categoryParam);
-
-      if (foundCategory) {
-        setSelectedCategory(foundCategory);
-        setSearch('');
-
-        setTimeout(() => {
-          const header = document.querySelector(`.${Styles.selectedCategoryHeader}`);
-
-          if (header) {
-            const headerHeight = 100;
-            const rect = header.getBoundingClientRect();
-            const absoluteTop = rect.top + window.pageYOffset - headerHeight;
-
-            window.scrollTo({
-              top: absoluteTop,
-              behavior: 'smooth',
-            });
-          }
-        }, 200);
-      }
-    }
-
-    setIsInitialLoad(false);
   }, []);
 
-  // ============================================================
-  // Поиск по файлам
-  // ============================================================
+  /* =======================================================
+     Выбранная категория
+  ======================================================= */
+
+  const selectedCategory =
+    documentsData.find(
+      (category) =>
+        category.id === selectedCategoryId,
+    );
+
+  /* =======================================================
+     Поисковый запрос
+  ======================================================= */
+
+  const normalizedSearch =
+    searchQuery.trim().toLowerCase();
+
+  /* =======================================================
+     Результаты поиска
+  ======================================================= */
 
   const searchResults = useMemo(() => {
-    const query = search.trim().toLowerCase();
-
-    if (!query) {
+    if (!normalizedSearch) {
       return [];
     }
 
-    const results: {
-      doc: TDocument;
-      category: TDocumentCategory;
-      categoryIndex: number;
-    }[] = [];
+    return allDocuments.filter(
+      (document) =>
+        [
+          document.title,
+          document.fileName,
+          document.categoryTitle,
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .toLowerCase()
+          .includes(normalizedSearch),
+    );
+  }, [normalizedSearch]);
 
-    documentsData.forEach((category, categoryIndex) => {
-      category.documents.forEach((doc) => {
-        const titleMatch = doc.title.toLowerCase().includes(query);
-        const fileMatch = doc.fileName.toLowerCase().includes(query);
-        const categoryMatch = category.title.toLowerCase().includes(query);
-        const descriptionMatch = category.description.toLowerCase().includes(query);
+  /* =======================================================
+     Изменение поиска
 
-        if (titleMatch || fileMatch || categoryMatch || descriptionMatch) {
-          results.push({
-            doc,
-            category,
-            categoryIndex: categoryIndex + 1,
-          });
-        }
-      });
-    });
+     ВАЖНО:
+     поле поиска НЕ скрывается после ввода символа.
+  ======================================================= */
 
-    return results;
-  }, [search]);
+  const changeSearch = (value: string) => {
+    setSearchQuery(value);
 
-  // ============================================================
-  // Открытие категории
-  // ============================================================
+    setSelectedCategoryId(null);
 
-  const handleCategoryOpen = (category: TDocumentCategory) => {
-    setSearch('');
-    setIsSearchOpen(false);
-    setSelectedCategory(category);
-
-    const url = new URL(window.location.href);
-    url.searchParams.set('category', category.id);
-    window.history.pushState({}, '', url.toString());
-
-    if (categoriesSectionRef.current) {
-      const headerHeight = 120;
-      const rect = categoriesSectionRef.current.getBoundingClientRect();
-      const absoluteTop = rect.top + window.pageYOffset - headerHeight;
-
-      window.scrollTo({
-        top: absoluteTop,
-        behavior: 'smooth',
-      });
-    } else {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    }
+    updateLocation(
+      null,
+      value,
+      'replace',
+    );
   };
 
-  // ============================================================
-  // Назад
-  // ============================================================
+  /* =======================================================
+     Очистка поиска
+  ======================================================= */
 
-  const handleBack = () => {
-    setSelectedCategory(null);
-    setSearch('');
-    setIsSearchOpen(false);
+  const clearSearch = () => {
+    changeSearch('');
+  };
 
-    const url = new URL(window.location.href);
-    url.searchParams.delete('category');
-    window.history.pushState({}, '', url.toString());
+  /* =======================================================
+     Открытие категории
+  ======================================================= */
 
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
+  const openCategory = (
+    categoryId: string,
+  ) => {
+    setSelectedCategoryId(
+      categoryId,
+    );
+
+    setSearchQuery('');
+
+    updateLocation(
+      categoryId,
+      '',
+      'push',
+    );
+
+    requestAnimationFrame(() => {
+      document
+        .getElementById(
+          'documents-back',
+        )
+        ?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
     });
   };
 
-  // ============================================================
-  // Обработчик изменения поиска
-  // ============================================================
+  /* =======================================================
+     Закрытие категории
+  ======================================================= */
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
+  const closeCategory = () => {
+    setSelectedCategoryId(null);
+
+    updateLocation(
+      null,
+      '',
+      'push',
+    );
+
+    requestAnimationFrame(() => {
+      document
+        .getElementById(
+          'documents-content',
+        )
+        ?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+    });
   };
 
-  // ============================================================
-  // Обработчик клавиши Escape для закрытия поиска
-  // ============================================================
+  /* =======================================================
+     Состояние поиска
+  ======================================================= */
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isSearchOpen) {
-        if (!search) {
-          setIsSearchOpen(false);
-        }
-      }
-    };
+  const showSearch =
+    Boolean(normalizedSearch);
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isSearchOpen, search]);
+  /* =======================================================
+     Заголовок
+  ======================================================= */
 
-  // ============================================================
-  // JSX
-  // ============================================================
+  const viewTitle = showSearch
+    ? 'Найденные документы'
+    : selectedCategory?.title ??
+    'Категории документов';
+
+  /* =======================================================
+     Количество результатов
+  ======================================================= */
+
+  const resultCount = showSearch
+    ? searchResults.length
+    : selectedCategory
+      ? selectedCategory.documents.length
+      : documentsData.length;
 
   return (
-    <main className={Styles.wrapper}>
-      <Title text="Документы" />
+    <div className={Styles.page}>
+      {/* ===================================================
+          HERO
+      =================================================== */}
 
-      <header className={Styles.header}>
-        <div className={Styles.headerTop}>
-          <div className={Styles.brand}>
-            <div className={Styles.brandMark}>
-              <span />
-              <span />
-              <span />
-            </div>
-            <span className={Styles.brandText}>Центр документации</span>
-          </div>
+      <header className={Styles.hero}>
+        <div className={Styles.heroInner}>
+          <div className={Styles.heroMain}>
+            <span
+              className={
+                Styles.eyebrow
+              }
+            >
+              <span
+                className={
+                  Styles.eyebrowDot
+                }
+                aria-hidden="true"
+              />
 
-          <div className={Styles.headerStats}>
-            <span>{totalDocs} файлов</span>
-            <i />
-            <span>{totalCategories} категорий</span>
-          </div>
-        </div>
+              Документальный центр
+            </span>
 
-        {/* ====================================================
-            SEARCH + HERO (объединены в один контейнер)
-        ==================================================== */}
+            <h1
+              className={
+                Styles.heroTitle
+              }
+            >
+              Документы
+              {/* <span>.</span> */}
+            </h1>
 
-        <div
-          ref={searchWrapperRef}
-          className={`${Styles.searchWrapper} ${
-            isSearchOpen ? Styles.searchWrapperOpen : ''
-          }`}
-        >
-          {/* Кнопка поиска слева */}
-          <button
-            className={Styles.mobileSearchButton}
-            onClick={handleSearchOpen}
-            type="button"
-            aria-label="Открыть поиск"
-            aria-expanded={isSearchOpen}
-          >
-            <SearchIcon />
-            {/* <span>Поиск</span> */}
-          </button>
-
-          {/* Поле поиска (появляется при открытии) */}
-          <div
-            className={`${Styles.searchBox} ${isSearchOpen ? Styles.searchBoxOpen : ''}`}
-          >
-            <SearchIcon />
-            <input
-              ref={searchInputRef}
-              type="text"
-              value={search}
-              onChange={handleSearchChange}
-              placeholder="Поиск документов..."
-              aria-label="Поиск документов"
-            />
-            {(search || isSearchOpen) && (
-              <button
-                className={Styles.clearSearch}
-                onClick={() => {
-                  if (search) {
-                    setSearch('');
-                  } else {
-                    setIsSearchOpen(false);
-                  }
-                }}
-                type="button"
-                aria-label={search ? 'Очистить поиск' : 'Закрыть поиск'}
-              >
-                <CloseIcon />
-              </button>
-            )}
-          </div>
-
-          {/* Текст справа */}
-          <div className={Styles.heroText}>
-            <p className={Styles.pageDescription}>
-              Все необходимые документы собраны в одном удобном пространстве.
+            <p
+              className={
+                Styles.heroDescription
+              }
+            >
+              Сертификаты, паспорта,
+              техническая и
+              эксплуатационная
+              документация «Новых
+              Технологий».
             </p>
+          </div>
+
+          <div
+            className={
+              Styles.heroStats
+            }
+            aria-label="Состав библиотеки"
+          >
+            <div
+              className={
+                Styles.stat
+              }
+            >
+              <strong>
+                {documentsData.length}
+              </strong>
+
+              <span>
+                категорий
+              </span>
+            </div>
+
+            <span
+              className={
+                Styles.statDivider
+              }
+              aria-hidden="true"
+            />
+
+            <div
+              className={
+                Styles.stat
+              }
+            >
+              <strong>
+                {allDocuments.length}
+              </strong>
+
+              <span>
+                {documentWord(
+                  allDocuments.length,
+                )}
+              </span>
+            </div>
           </div>
         </div>
       </header>
 
-      {/* ====================================================
-          SEARCH RESULTS
-      ==================================================== */}
+      {selectedCategory && !showSearch && (
+        <nav
+          id="documents-back"
+          className={Styles.backBar}
+          aria-label="Навигация по документам"
+        >
+          <button
+            type="button"
+            className={Styles.backButton}
+            onClick={closeCategory}
+          >
+            <span className={Styles.backButtonIcon}>
+              <BackArrowIcon />
+            </span>
+            <span>Все категории</span>
+          </button>
+        </nav>
+      )}
 
-      {search && (
-        <section className={Styles.searchResults}>
-          <div className={Styles.sectionHeader}>
-            <div>
-              <span className={Styles.sectionEyebrow}>Результаты поиска</span>
-              <h2 className={Styles.sectionTitle}>
-                Найденные документы ({searchResults.length})
+      {/* ===================================================
+          CONTENT
+      =================================================== */}
+
+      <main
+        id="documents-content"
+        className={
+          Styles.content
+        }
+      >
+        <section
+          aria-labelledby="documents-heading"
+        >
+          {/* ===============================================
+              HEADER
+          =============================================== */}
+
+          <div
+            className={
+              Styles.sectionHeader
+            }
+          >
+            <div
+              className={
+                Styles.sectionHeading
+              }
+            >
+              <span
+                className={
+                  Styles.sectionEyebrow
+                }
+              >
+                {showSearch
+                  ? 'Результаты поиска'
+                  : selectedCategory
+                    ? 'Категория'
+                    : 'Библиотека'}
+              </span>
+
+              <h2
+                id="documents-heading"
+                className={
+                  Styles.sectionTitle
+                }
+              >
+                {viewTitle}
               </h2>
-            </div>
-          </div>
 
-          {searchResults.length > 0 ? (
-            <div className={Styles.documentsGrid}>
-              {searchResults.map(({ doc, category, categoryIndex }, index) => (
-                <DocumentCard
-                  key={`${category.id}-${doc.id}`}
-                  doc={doc}
-                  index={index}
-                  category={category}
-                  categoryIndex={categoryIndex}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className={Styles.noResults}>
-              <div className={Styles.noResultsIcon}>🔍</div>
-              <h3>Ничего не найдено</h3>
-              <p>Попробуйте изменить поисковый запрос.</p>
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* ====================================================
-          CATEGORY VIEW
-      ==================================================== */}
-
-      {!search && !selectedCategory && (
-        <section className={Styles.categoriesSection} ref={categoriesSectionRef}>
-          <div className={Styles.sectionHeader}>
-            <div>
-              <span className={Styles.sectionEyebrow}>Библиотека</span>
-              <h2 className={Styles.sectionTitle}>Категории документов</h2>
-            </div>
-            <span className={Styles.sectionCount}>{totalCategories}</span>
-          </div>
-
-          <div className={Styles.categoriesGrid}>
-            {documentsData.map((category, index) => (
-              <CategoryCard
-                key={category.id}
-                category={category}
-                index={index}
-                onClick={() => handleCategoryOpen(category)}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* ====================================================
-          DOCUMENTS OF CATEGORY
-      ==================================================== */}
-
-      {!search && selectedCategory && (
-        <section className={Styles.categoryView}>
-          <AllCategoriesButton onClick={handleBack} />
-
-          <div className={Styles.selectedCategoryHeader}>
-            <div>
-              <span className={Styles.sectionEyebrow}>Категория</span>
-              <h2 className={Styles.selectedCategoryTitle}>{selectedCategory.title}</h2>
-              <p className={Styles.selectedCategoryDescription}>
-                {selectedCategory.description}
+              <p
+                className={
+                  Styles.sectionLead
+                }
+              >
+                {showSearch
+                  ? `По запросу «${searchQuery}» найдено ${searchResults.length} ${documentWord(searchResults.length)}.`
+                  : selectedCategory
+                    ? selectedCategory.description ||
+                    'Документы выбранной категории.'
+                    : 'Выберите направление, чтобы открыть техническую и эксплуатационную документацию.'}
               </p>
             </div>
 
-            <div className={Styles.selectedCategoryCount}>
-              <strong>{selectedCategory.documents.length}</strong>
-              <span>файлов</span>
+            <div className={Styles.sectionTools}>
+              <div className={Styles.categorySearch}>
+                <label htmlFor="documents-search" className={Styles.searchLabel}>
+                  Найти документ
+                </label>
+                <div className={Styles.searchBox}>
+                  <SearchIcon />
+                  <input
+                    id="documents-search"
+                    type="search"
+                    value={searchQuery}
+                    onChange={(event) => changeSearch(event.target.value)}
+                    placeholder="Название, номер или категория"
+                    autoComplete="off"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      className={Styles.clearButton}
+                      onClick={clearSearch}
+                      aria-label="Очистить поиск"
+                    >
+                      <CloseIcon />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <span
+                className={Styles.resultCount}
+                aria-label={`Всего: ${resultCount}`}
+              >
+                {resultCount}
+              </span>
             </div>
           </div>
 
-          <div className={Styles.documentsGrid}>
-            {selectedCategory.documents.map((doc, index) => (
-              <DocumentCard key={doc.id} doc={doc} index={index} />
-            ))}
-          </div>
+          {/* =================================================
+              ПОИСК
+          ================================================= */}
+
+          {showSearch ? (
+            searchResults.length >
+              0 ? (
+              <MobileSlider
+                key={`search-${normalizedSearch}`}
+                count={searchResults.length}
+                className={Styles.documentsGrid}
+                label="Результаты поиска"
+              >
+                {searchResults.map(
+                  (document) => (
+                    <DocumentCard
+                      key={`${document.categoryId}-${document.id}`}
+                      document={
+                        document
+                      }
+                      query={
+                        searchQuery
+                      }
+                      categoryLabel={
+                        document.categoryTitle
+                      }
+                    />
+                  ),
+                )}
+              </MobileSlider>
+            ) : (
+              <div
+                className={
+                  Styles.emptyState
+                }
+              >
+                <span
+                  className={
+                    Styles.emptyIcon
+                  }
+                  aria-hidden="true"
+                >
+                  ⌕
+                </span>
+
+                <h3>
+                  Ничего не найдено
+                </h3>
+
+                <p>
+                  Попробуйте другой
+                  запрос или
+                  посмотрите документы
+                  по категориям.
+                </p>
+
+                <button
+                  type="button"
+                  className={
+                    Styles.emptyButton
+                  }
+                  onClick={
+                    clearSearch
+                  }
+                >
+                  Показать все
+                  категории
+                </button>
+              </div>
+            )
+          ) : selectedCategory ? (
+            /* ===============================================
+               ДОКУМЕНТЫ КАТЕГОРИИ
+            =============================================== */
+
+            selectedCategory.documents
+              .length > 0 ? (
+              <MobileSlider
+                key={`category-${selectedCategory.id}`}
+                count={selectedCategory.documents.length}
+                className={Styles.documentsGrid}
+                label={`Документы: ${selectedCategory.title}`}
+              >
+                {selectedCategory.documents.map(
+                  (document) => (
+                    <DocumentCard
+                      key={
+                        document.id
+                      }
+                      document={
+                        document
+                      }
+                    />
+                  ),
+                )}
+              </MobileSlider>
+            ) : (
+              <div
+                className={
+                  Styles.emptyState
+                }
+              >
+                <h3>
+                  В этой категории
+                  пока нет
+                  документов
+                </h3>
+
+                <button
+                  type="button"
+                  className={
+                    Styles.emptyButton
+                  }
+                  onClick={
+                    closeCategory
+                  }
+                >
+                  Вернуться к
+                  категориям
+                </button>
+              </div>
+            )
+          ) : (
+            /* ===============================================
+               КАТЕГОРИИ
+            =============================================== */
+
+            <MobileSlider
+              count={documentsData.length}
+              className={Styles.categoriesList}
+              label="Категории документов"
+            >
+              {documentsData.map(
+                (
+                  category,
+                  index,
+                ) => (
+                  <CategoryCard
+                    key={
+                      category.id
+                    }
+                    category={
+                      category
+                    }
+                    index={
+                      index
+                    }
+                    onClick={() =>
+                      openCategory(
+                        category.id,
+                      )
+                    }
+                  />
+                ),
+              )}
+            </MobileSlider>
+          )}
         </section>
-      )}
-    </main>
+      </main>
+
+      <BackToTop />
+    </div>
   );
-};
+}
+
+export default Documents;

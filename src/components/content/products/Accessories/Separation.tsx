@@ -4,7 +4,7 @@ import Styles from '../products.module.scss';
 import { BigPhoto } from '../../../ui/big-photo/BigPhoto';
 import { BackToTop } from '../../../ui/back-to-top/BackToTop';
 
-import ervipImage from '../../../../images/products/product_2.webp';
+import ervipImage from '../../../../images/products/product_2.png';
 import urpdImage from '../../../../images/products/urpd.webp';
 import psmImage from '../../../../images/products/product_2_2.webp';
 import kmrImage from '../../../../images/products/product_2_3.webp';

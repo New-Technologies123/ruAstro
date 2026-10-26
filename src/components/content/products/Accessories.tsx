@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, CategoryCarouselControls, useCategoryCarousel } from './CategoryCarousel';
 
 import Styles from './accounting.module.scss';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
 import { EquipmentCard } from '../../ui/equipment-card/EquipmentCard';
 
-import ervipImage from '../../../images/products/product_2.webp';
+import ervipImage from '../../../images/products/product_2.png';
 import urpdImage from '../../../images/products/urpd.webp';
 import psmImage from '../../../images/products/product_2_2.webp';
 import kmrImage from '../../../images/products/product_2_3.webp';
@@ -75,200 +75,7 @@ const accessories = [
 ] as const;
 
 export const Accessories = () => {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  /*
-   * true только во время программной прокрутки
-   * по нажатию на стрелку.
-   *
-   * Пока карточка плавно едет к нужной позиции,
-   * onScroll не будет менять activeIndex.
-   */
-  const isProgrammaticScroll = useRef(false);
-
-  /*
-   * Таймер окончания smooth scroll.
-   */
-  const scrollTimerRef = useRef<number | null>(null);
-
-  /*
-   * requestAnimationFrame для ограничения количества
-   * перерасчётов activeIndex во время свайпа.
-   */
-  const rafRef = useRef<number | null>(null);
-
-  /*
-   * Очистка таймеров и animation frame
-   * при размонтировании компонента.
-   */
-  useEffect(() => {
-    return () => {
-      if (scrollTimerRef.current !== null) {
-        window.clearTimeout(scrollTimerRef.current);
-      }
-
-      if (rafRef.current !== null) {
-        window.cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
-
-  /*
-   * Определяем карточку, которая сейчас находится
-   * ближе всего к началу scroll-контейнера.
-   *
-   * Эта функция используется именно при обычном
-   * свайпе пальцем.
-   */
-  const updateActiveIndex = () => {
-    const track = trackRef.current;
-
-    if (!track) return;
-
-    /*
-     * Если сейчас выполняется программная прокрутка
-     * по стрелке, не трогаем activeIndex.
-     */
-    if (isProgrammaticScroll.current) {
-      return;
-    }
-
-    /*
-     * Не запускаем множество перерасчётов на каждый
-     * scroll event.
-     */
-    if (rafRef.current !== null) {
-      window.cancelAnimationFrame(rafRef.current);
-    }
-
-    rafRef.current = window.requestAnimationFrame(() => {
-      const currentTrack = trackRef.current;
-
-      if (!currentTrack) return;
-
-      const cards = Array.from(
-        currentTrack.children
-      ) as HTMLElement[];
-
-      if (!cards.length) return;
-
-      const currentScrollLeft = currentTrack.scrollLeft;
-
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((card, index) => {
-        /*
-         * offsetLeft работает стабильнее,
-         * чем getBoundingClientRect() при мобильном
-         * horizontal carousel.
-         */
-        const distance = Math.abs(
-          card.offsetLeft - currentScrollLeft
-        );
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      /*
-       * Не вызываем setState, если индекс уже тот же.
-       */
-      setActiveIndex((current) =>
-        current === closestIndex
-          ? current
-          : closestIndex
-      );
-    });
-  };
-
-  /*
-   * Переход к конкретной карточке.
-   */
-  const scrollToAccessory = (index: number) => {
-    const track = trackRef.current;
-
-    if (!track) return;
-
-    /*
-     * Защита от выхода за пределы массива.
-     */
-    const safeIndex = Math.max(
-      0,
-      Math.min(
-        index,
-        accessories.length - 1
-      )
-    );
-
-    const card = track.children.item(
-      safeIndex
-    ) as HTMLElement | null;
-
-    if (!card) return;
-
-    /*
-     * Отменяем предыдущий таймер,
-     * если пользователь быстро нажал стрелку повторно.
-     */
-    if (scrollTimerRef.current !== null) {
-      window.clearTimeout(
-        scrollTimerRef.current
-      );
-    }
-
-    /*
-     * Блокируем onScroll.
-     */
-    isProgrammaticScroll.current = true;
-
-    /*
-     * Сразу показываем нужный номер.
-     *
-     * Например:
-     *
-     * 01 / 06
-     *     ↓
-     * 02 / 06
-     *
-     * Номер больше не будет прыгать обратно
-     * во время smooth scroll.
-     */
-    setActiveIndex(safeIndex);
-
-    /*
-     * offsetLeft даёт стабильную координату
-     * карточки внутри горизонтального контейнера.
-     */
-    const targetLeft = card.offsetLeft;
-
-    /*
-     * Плавно перемещаем carousel.
-     */
-    track.scrollTo({
-      left: targetLeft,
-      behavior: 'smooth',
-    });
-
-    /*
-     * После завершения анимации снова разрешаем
-     * onScroll определять активную карточку.
-     *
-     * 450ms достаточно для мобильной smooth-прокрутки.
-     */
-    scrollTimerRef.current = window.setTimeout(() => {
-      isProgrammaticScroll.current = false;
-
-      /*
-       * Финальная синхронизация.
-       */
-      updateActiveIndex();
-    }, 450);
-  };
+  const { trackRef, activeIndex, scrollToCard } = useCategoryCarousel(accessories.length);
 
   return (
     <div className={Styles.page}>
@@ -324,9 +131,7 @@ export const Accessories = () => {
                 href="#equipment"
               >
                 Смотреть комплектующие{' '}
-                <span aria-hidden="true">
-                  ↗
-                </span>
+                <ArrowUpRight />
               </a>
 
               <a
@@ -397,7 +202,6 @@ export const Accessories = () => {
               role="region"
               aria-label="Комплектующие для АГЗУ"
               tabIndex={0}
-              onScroll={updateActiveIndex}
             >
               {accessories.map((accessory) => (
                 <EquipmentCard
@@ -407,88 +211,11 @@ export const Accessories = () => {
               ))}
             </div>
 
-
-            {/* =================================================
-                CAROUSEL CONTROLS
-                ================================================= */}
-
-            <div className={Styles.carouselControls}>
-
-              <span className={Styles.carouselHint}>
-                Листайте карточки свайпом
-              </span>
-
-              <div className={Styles.carouselButtons}>
-
-                <span
-                  className={Styles.carouselCount}
-                  aria-live="polite"
-                >
-                  {String(
-                    activeIndex + 1
-                  ).padStart(2, '0')}
-
-                  {' / '}
-
-                  {String(
-                    accessories.length
-                  ).padStart(2, '0')}
-                </span>
-
-
-                <button
-                  type="button"
-                  aria-label="Предыдущее изделие"
-                  disabled={activeIndex === 0}
-                  onClick={() =>
-                    scrollToAccessory(
-                      activeIndex - 1
-                    )
-                  }
-                >
-                  ←
-                </button>
-
-
-                <button
-                  type="button"
-                  aria-label="Следующее изделие"
-                  disabled={
-                    activeIndex ===
-                    accessories.length - 1
-                  }
-                  onClick={() =>
-                    scrollToAccessory(
-                      activeIndex + 1
-                    )
-                  }
-                >
-                  →
-                </button>
-
-              </div>
-            </div>
-
-
-            {/* =================================================
-                PROGRESS
-                ================================================= */}
-
-            <div
-              className={Styles.carouselProgress}
-              aria-hidden="true"
-            >
-              <span
-                style={{
-                  width: `${
-                    (
-                      (activeIndex + 1) /
-                      accessories.length
-                    ) * 100
-                  }%`,
-                }}
-              />
-            </div>
+            <CategoryCarouselControls
+              labels={accessories.map((item) => item.label)}
+              activeIndex={activeIndex}
+              onSelect={scrollToCard}
+            />
 
           </div>
         </section>
@@ -606,9 +333,7 @@ export const Accessories = () => {
 
             <a href="/contact/">
               Обсудить комплектацию{' '}
-              <span aria-hidden="true">
-                ↗
-              </span>
+              <ArrowUpRight />
             </a>
 
           </div>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, CategoryCarouselControls, useCategoryCarousel } from './CategoryCarousel';
 
 import Styles from './accounting.module.scss';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
@@ -32,211 +32,7 @@ const stations = [
 ] as const;
 
 export const PumpingStations = () => {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-
-  /**
-   * Во время программного smooth-scroll
-   * onScroll не должен менять activeIndex.
-   */
-  const isProgrammaticScroll = useRef(false);
-
-  /**
-   * Таймер завершения программного перехода.
-   */
-  const scrollTimerRef = useRef<number | null>(null);
-
-  /**
-   * Ограничиваем количество пересчётов
-   * activeIndex во время ручного свайпа.
-   */
-  const rafRef = useRef<number | null>(null);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  /**
-   * Очистка таймеров при размонтировании.
-   */
-  useEffect(() => {
-    return () => {
-      if (scrollTimerRef.current !== null) {
-        window.clearTimeout(scrollTimerRef.current);
-      }
-
-      if (rafRef.current !== null) {
-        window.cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
-
-  /**
-   * Определяем ближайшую карточку к текущей позиции
-   * горизонтального скролла.
-   *
-   * Во время программного перехода функция заблокирована.
-   */
-  const updateActiveIndex = () => {
-    if (isProgrammaticScroll.current) return;
-
-    const track = trackRef.current;
-
-    if (!track) return;
-
-    if (rafRef.current !== null) {
-      window.cancelAnimationFrame(rafRef.current);
-    }
-
-    rafRef.current = window.requestAnimationFrame(() => {
-      const currentTrack = trackRef.current;
-
-      if (!currentTrack || isProgrammaticScroll.current) {
-        return;
-      }
-
-      const cards = Array.from(
-        currentTrack.children,
-      ) as HTMLElement[];
-
-      if (!cards.length) return;
-
-      const currentScrollLeft =
-        currentTrack.scrollLeft;
-
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((card, index) => {
-        const distance = Math.abs(
-          card.offsetLeft - currentScrollLeft,
-        );
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      /**
-       * Не вызываем setState, если индекс уже тот же.
-       */
-      setActiveIndex((previousIndex) =>
-        previousIndex === closestIndex
-          ? previousIndex
-          : closestIndex,
-      );
-    });
-  };
-
-  /**
-   * Переход к выбранной станции.
-   */
-  const scrollToStation = (index: number) => {
-    const track = trackRef.current;
-
-    if (!track) return;
-
-    /**
-     * Защита от выхода за границы.
-     */
-    const safeIndex = Math.max(
-      0,
-      Math.min(index, stations.length - 1),
-    );
-
-    const card = track.children.item(
-      safeIndex,
-    ) as HTMLElement | null;
-
-    if (!card) return;
-
-    /**
-     * Отменяем предыдущий таймер.
-     */
-    if (scrollTimerRef.current !== null) {
-      window.clearTimeout(scrollTimerRef.current);
-    }
-
-    /**
-     * Отменяем ожидающий RAF.
-     */
-    if (rafRef.current !== null) {
-      window.cancelAnimationFrame(rafRef.current);
-    }
-
-    /**
-     * Блокируем onScroll.
-     */
-    isProgrammaticScroll.current = true;
-
-    /**
-     * Сразу устанавливаем нужную станцию.
-     *
-     * Поэтому номер 01 / 02 не будет прыгать
-     * во время smooth-анимации.
-     */
-    setActiveIndex(safeIndex);
-
-    const computedStyle = getComputedStyle(track);
-
-    const paddingLeft =
-      parseFloat(computedStyle.paddingLeft) || 0;
-
-    /**
-     * Рассчитываем точную позицию карточки
-     * внутри scroll-контейнера.
-     */
-    const targetLeft = Math.max(
-      0,
-      card.offsetLeft - paddingLeft,
-    );
-
-    track.scrollTo({
-      left: targetLeft,
-      behavior: 'smooth',
-    });
-
-    /**
-     * После окончания анимации снова разрешаем
-     * обычную синхронизацию с ручным свайпом.
-     */
-    scrollTimerRef.current = window.setTimeout(() => {
-      isProgrammaticScroll.current = false;
-
-      const currentTrack = trackRef.current;
-
-      if (!currentTrack) return;
-
-      const cards = Array.from(
-        currentTrack.children,
-      ) as HTMLElement[];
-
-      if (!cards.length) return;
-
-      const currentScrollLeft =
-        currentTrack.scrollLeft;
-
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((item, itemIndex) => {
-        const distance = Math.abs(
-          item.offsetLeft -
-            paddingLeft -
-            currentScrollLeft,
-        );
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = itemIndex;
-        }
-      });
-
-      setActiveIndex((previousIndex) =>
-        previousIndex === closestIndex
-          ? previousIndex
-          : closestIndex,
-      );
-    }, 500);
-  };
+  const { trackRef, activeIndex, scrollToCard } = useCategoryCarousel(stations.length);
 
   return (
     <div className={Styles.page}>
@@ -281,7 +77,7 @@ export const PumpingStations = () => {
                 href="#equipment"
               >
                 Смотреть станции{' '}
-                <span aria-hidden="true">↗</span>
+                <ArrowUpRight />
               </a>
 
               <a
@@ -336,7 +132,6 @@ export const PumpingStations = () => {
               role="region"
               aria-label="Насосные станции"
               tabIndex={0}
-              onScroll={updateActiveIndex}
             >
               {stations.map((station) => (
                 <EquipmentCard
@@ -346,61 +141,11 @@ export const PumpingStations = () => {
               ))}
             </div>
 
-            <div className={Styles.carouselControls}>
-              <span className={Styles.carouselHint}>
-                Листайте карточки свайпом
-              </span>
-
-              <div className={Styles.carouselButtons}>
-                <span
-                  className={Styles.carouselCount}
-                  aria-live="polite"
-                >
-                  {String(activeIndex + 1).padStart(2, '0')}
-                  {' / '}
-                  {String(stations.length).padStart(2, '0')}
-                </span>
-
-                <button
-                  type="button"
-                  aria-label="Предыдущая станция"
-                  disabled={activeIndex === 0}
-                  onClick={() =>
-                    scrollToStation(activeIndex - 1)
-                  }
-                >
-                  ←
-                </button>
-
-                <button
-                  type="button"
-                  aria-label="Следующая станция"
-                  disabled={
-                    activeIndex === stations.length - 1
-                  }
-                  onClick={() =>
-                    scrollToStation(activeIndex + 1)
-                  }
-                >
-                  →
-                </button>
-              </div>
-            </div>
-
-            <div
-              className={Styles.carouselProgress}
-              aria-hidden="true"
-            >
-              <span
-                style={{
-                  width: `${
-                    ((activeIndex + 1) /
-                      stations.length) *
-                    100
-                  }%`,
-                }}
-              />
-            </div>
+            <CategoryCarouselControls
+              labels={stations.map((item) => item.label)}
+              activeIndex={activeIndex}
+              onSelect={scrollToCard}
+            />
           </div>
         </section>
 
@@ -478,7 +223,7 @@ export const PumpingStations = () => {
 
             <a href="/contact/">
               Обсудить проект{' '}
-              <span aria-hidden="true">↗</span>
+              <ArrowUpRight />
             </a>
           </div>
         </section>

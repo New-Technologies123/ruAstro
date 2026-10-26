@@ -29,6 +29,8 @@ const related = [
   { id: 'dosing', title: 'БДР', image: dosingImage.src, alt: 'Установка дозирования химического реагента' },
 ] as const;
 
+const documentUrl = '/survey/uzpz-uzpp.pdf';
+
 export const Launch = () => {
   const [bigPhoto, setBigPhoto] = useState(false);
   const relatedRef = useRef<HTMLDivElement | null>(null);
@@ -128,6 +130,17 @@ export const Launch = () => {
               <p>Откройте материалы по оборудованию для подготовки нефти, газа и воды.</p>
             </div>
             <div className={Styles.documentsGrid}>
+              <article className={Styles.documentCard}>
+                <span className={Styles.documentIcon} aria-hidden="true">PDF</span>
+                <div className={Styles.documentText}>
+                  <h3>Каталог УЗПЗ и УЗПП</h3>
+                  <p>PDF · устройства запуска и приёма внутритрубных средств</p>
+                </div>
+                <div className={Styles.documentActions}>
+                  <a href={documentUrl} target="_blank" rel="noopener noreferrer" aria-label="Открыть PDF по УЗПЗ и УЗПП в новой вкладке">Открыть ↗</a>
+                  <a className={Styles.downloadButton} href={documentUrl} download="uzpz-uzpp.pdf" aria-label="Скачать PDF по УЗПЗ и УЗПП">Скачать ↓</a>
+                </div>
+              </article>
               <a className={Styles.materialCard} href="/documents/?category=preparation-systems">
                 <span className={Styles.materialIcon} aria-hidden="true">↗</span>
                 <span><strong>Документация по системам подготовки</strong><small>Открыть раздел документов</small></span>

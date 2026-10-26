@@ -103,12 +103,6 @@
 
 .breadcrumbs a:first-child {
   gap: 8px;
-  // background: rgba(255, 255, 255, 0.12);
-}
-
-.breadcrumbs a:first-child::before {
-  color: #a9cfff;
-  content: '←';
 }
 
 .breadcrumbs a:hover {

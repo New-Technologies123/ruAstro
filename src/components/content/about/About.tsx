@@ -259,16 +259,6 @@ export const About = () => {
         <div className={Styles.heroGrid} />
 
         <div className={Styles.heroInner}>
-          <div className={Styles.heroTop}>
-            {/* <span className={Styles.eyebrow}>
-              ООО ИПП «НОВЫЕ ТЕХНОЛОГИИ»
-            </span> */}
-
-            <span className={Styles.heroTopMeta}>
-              УФА · БАШКОРТОСТАН · РОССИЯ
-            </span>
-          </div>
-
           <div className={Styles.heroMain}>
             <div className={Styles.heroCopy}>
               <div className={Styles.heroBadge}>
@@ -316,16 +306,6 @@ export const About = () => {
                 <strong>Россия · СНГ</strong>
               </div>
             </div>
-          </div>
-
-          <div className={Styles.heroBottom}>
-            <span>ИНЖЕНЕРИЯ</span>
-            <span>ПРОИЗВОДСТВО</span>
-            <span>КОМПЛЕКСНЫЕ РЕШЕНИЯ</span>
-
-            <span className={Styles.heroBottomYear}>
-              2005 — 2026
-            </span>
           </div>
         </div>
       </section>

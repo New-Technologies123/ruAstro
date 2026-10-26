@@ -465,19 +465,9 @@
   align-items: center;
   gap: 12px;
   flex: 0 0 auto;
-  padding: 20px 22px 18px;
+  padding: 15px 18px 14px;
   border-bottom: 1px solid #e8edf2;
-  background: #fff;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #123a68, #39a2d3);
-  }
+  background: linear-gradient(90deg, #123a68, #39a2d3);
 }
 
 .headerIcon {
@@ -503,14 +493,14 @@
     font-weight: 700;
     line-height: 1.25;
     letter-spacing: -.02em;
-    color: var(--question-text);
+    color: white;
   }
 
   p {
     margin: 4px 0 0;
     font-size: 13px;
     line-height: 1.35;
-    color: var(--question-muted);
+    color: white;
   }
 }
 

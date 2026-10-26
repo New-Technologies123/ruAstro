@@ -582,10 +582,13 @@
     .cardGallery > div > button:first-child { height: auto; aspect-ratio: 16 / 9; }
     .cardBody { padding: 26px 22px 30px; }
     .cardBody { border-radius: 0 0 17px 17px; }
-    .newsTitle { margin-top: 18px; font-size: clamp(27px, 7vw, 36px); }
+    .newsTitle { margin: 12px 0 7px; font-size: 21px; }
     .newsDescription { margin-bottom: 24px; font-size: 15px; }
   }
-  .featuredLabel { margin-bottom: 20px; }
+  .newsTitle{
+    margin: 12px 0 7px;
+  }
+  .featuredLabel { margin-bottom: 13px; }
   .controlsContainer { flex-wrap: wrap; margin-top: 32px; }
   .newsModalOverlay {
     display: flex;

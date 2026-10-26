@@ -319,7 +319,7 @@ export const Cleaning = () => {
                 </span>
 
                 <span>
-                  <strong>Документация по системам подготовки</strong>
+                  <strong>Документация по УОК-НКТ</strong>
                   <small>Открыть раздел документов</small>
                 </span>
 

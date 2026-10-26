@@ -1,5 +1,43 @@
 import { memo, useCallback, useEffect } from 'react';
 import Styles from './home.module.scss';
+import { NEWS_DATA } from '../news/newsData';
+
+function ArrowUpRight() {
+  return (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      width="1em"
+      height="1em"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.7"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ verticalAlign: '-0.1em' }}
+    >
+      <path d="M5 15 15 5M6 5h9v9" />
+    </svg>
+  );
+const ArrowUpRight = () => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ flexShrink: 0 }}
+  >
+    <path d="M5 15 15 5M6 5h9v9" />
+  </svg>
+);
+}
 
 const LOGOS = [
   '/images/home/ros.webp',
@@ -14,43 +52,20 @@ const LOGOS = [
   '/images/home/luc_ysb.webp',
 ];
 
-const ADVANTAGES = [
-  {
-    number: '01',
-    title: 'Инженерная экспертиза',
-    text: 'Разрабатываем решения с учётом реальных условий эксплуатации и требований отрасли.',
-  },
-  {
-    number: '02',
-    title: 'Полный цикл',
-    text: 'Проектирование, производство, поставка и сопровождение объединены в единую систему.',
-  },
-  {
-    number: '03',
-    title: 'География',
-    text: 'Работаем с заказчиками по России и в странах СНГ, организуя поставки в сложные регионы.',
-  },
-  {
-    number: '04',
-    title: 'Ответственность',
-    text: 'Контролируем качество на каждом этапе — от технического задания до ввода решения в эксплуатацию.',
-  },
-];
-
 const FAQ = [
   {
-    question: 'Какие решения мы поставляем?',
+    question: 'Где найти техническую документацию?',
     answer:
-      'Оборудование и комплексные технические решения для нефтегазовой отрасли. Подбираем конфигурацию под конкретную задачу, условия эксплуатации и требования заказчика.',
-    link: '/products',
-    linkText: 'Перейти к продукции',
+      'Каталоги и технические материалы собраны в разделе документов. Если нужного файла нет, отправьте запрос через контакты.',
+    link: '/documents',
+    linkText: 'Перейти к документам',
   },
   {
-    question: 'Какие услуги доступны заказчикам?',
+    question: 'Как подобрать оборудование для моего объекта?',
     answer:
-      'Проектирование, техническая консультация, поставка, сервисное сопровождение и другие работы, связанные с эксплуатацией оборудования.',
-    link: '/services',
-    linkText: 'Посмотреть услуги',
+      'Опишите технологическую задачу и условия эксплуатации. По этим данным можно обсудить подходящее исполнение оборудования.',
+    link: '/contact',
+    linkText: 'Отправить запрос',
   },
   {
     question: 'В какие регионы осуществляется поставка?',
@@ -60,15 +75,18 @@ const FAQ = [
     linkText: 'Обсудить проект',
   },
   {
-    question: 'Где найти техническую документацию?',
+    question: 'Можно ли обсудить нестандартное решение?',
     answer:
-      'Основные документы, каталоги и материалы доступны в специальном разделе сайта.',
-    link: '/documents',
-    linkText: 'Открыть документы',
+      'Да. Опишите особенности объекта и требования к оборудованию через страницу контактов — это поможет начать техническое обсуждение.',
+    link: '/contact',
+    linkText: 'Связаться с нами',
   },
 ];
 
 export const Home = memo(() => {
+  const latestNews = NEWS_DATA[0];
+  const latestNewsPhoto = latestNews?.photos[0];
+
   const handleNavigation = useCallback((path: string) => {
     window.location.href = path;
   }, []);
@@ -156,8 +174,12 @@ export const Home = memo(() => {
                 onClick={() => handleScrollTo('directions')}
               >
                 <span>Смотреть решения</span>
-                <b>↗</b>
+                <b><ArrowUpRight /></b>
               </button>
+
+              <a className={Styles.heroSecondary} href="/contact">
+                Обсудить проект <span aria-hidden="true"><ArrowUpRight /></span>
+              </a>
             </div>
 
             <div className={Styles.heroStats}>
@@ -257,7 +279,7 @@ export const Home = memo(() => {
             <div>
               <h2 className={Styles.sectionTitle}>
                 Технологии, которые работают
-                <em>на результат.</em>
+                <em> на результат.</em>
               </h2>
             </div>
 
@@ -269,10 +291,9 @@ export const Home = memo(() => {
               </p>
 
               <p>
-                Мы объединяем инженерную компетенцию, производство,
-                комплектацию и сервис, чтобы заказчик получал
-                не отдельный продукт, а готовое решение под
-                конкретные производственные задачи.
+                Разрабатываем в том числе автоматизированные групповые
+                замерные установки и решения для учёта продукции скважин.
+                Подбираем оборудование под параметры конкретного объекта.
               </p>
 
               <button
@@ -281,51 +302,19 @@ export const Home = memo(() => {
                 onClick={() => handleNavigation('/about')}
               >
                 <span>Подробнее о компании</span>
-                <b>↗</b>
+                <b><ArrowUpRight /></b>
               </button>
             </div>
           </div>
 
           <div className={Styles.aboutBottom}>
-            <div className={Styles.experience}>
-              <div className={Styles.experience_number}>
-                <span>Более</span>
-                <strong>20</strong>
-              </div>
-              
-
-              <div>
-                <span>ПРАКТИЧЕСКИЙ ОПЫТ</span>
-
-                <b>
-                  лет работы
-                  <br />
-                  в отрасли
-                </b>
-
-                <p>
-                  Работаем там, где важны точность,
-                  надёжность и предсказуемый результат.
-                </p>
-              </div>
-            </div>
-            {/* <div className={Styles.experienceBlock}>
-              <div className={Styles.experienceLabel}>Более</div>
-
-              <div className={Styles.experienceMain}>
-                <span className={Styles.experienceNumber}>20</span>
-
-                <div className={Styles.experienceCaption}>
-                  <strong>лет работы</strong>
-                  <span>ПРАКТИЧЕСКИЙ ОПЫТ В ОТРАСЛИ</span>
-                </div>
-              </div>
-
-              <p className={Styles.experienceText}>
-                Работаем там, где важны точность, надёжность и предсказуемый результат.
+            <div className={Styles.aboutSideText}>
+              <span>ПРАКТИЧЕСКИЙ ОПЫТ</span>
+              <p>
+                Работаем там, где важны точность, надёжность
+                и предсказуемый результат.
               </p>
-            </div> */}
-
+            </div>
 
             <button
               type="button"
@@ -341,41 +330,53 @@ export const Home = memo(() => {
                 </strong>
               </div>
 
-              <b>↗</b>
+              <b><ArrowUpRight /></b>
             </button>
           </div>
 
-          <div className={Styles.capabilities}>
+          <div id="directions" className={Styles.capabilities}>
             <div className={Styles.capabilitiesHeader}>
               <span>ЧЕМ МЫ ЗАНИМАЕМСЯ</span>
 
               <p>
-                Объединяем инженерную разработку,
-                производство и сопровождение в одном
-                рабочем цикле.
+                Выберите направление, чтобы перейти
+                к продукции или сервисным услугам.
               </p>
             </div>
 
             <div className={Styles.capabilityGrid}>
               {[
-                ['01', 'Оборудование для добычи', 'Технические решения для производственных задач объектов добычи.'],
-                ['02', 'Оборудование для подготовки', 'Оборудование и решения для технологических процессов подготовки.'],
-                ['03', 'Оборудование для транспортировки', 'Решения для задач транспортировки углеводородов и работы объекта.'],
-                ['04', 'Сервисные услуги', 'Техническое сопровождение и поддержка на протяжении жизненного цикла.'],
-              ].map(([number, title, text]) => (
-                <article
+                {
+                  number: '01',
+                  title: 'Продукция',
+                  text: 'Оборудование для добычи, подготовки и транспортировки углеводородов.',
+                  href: '/products',
+                  image: '/images/home/product.webp',
+                },
+                {
+                  number: '02',
+                  title: 'Сервисные услуги',
+                  text: 'Техническое сопровождение и поддержка оборудования на протяжении жизненного цикла.',
+                  href: '/services',
+                  image: '/images/home/services.png',
+                },
+              ].map(({ number, title, text, href, image }) => (
+                <a
                   className={Styles.capability}
                   key={number}
+                  href={href}
                 >
-                  <span>{number}</span>
+                  <div className={Styles.capabilityMedia}>
+                    <img src={image} alt="" loading="lazy" />
+                    <span>{number}</span>
+                    <b aria-hidden="true"><ArrowUpRight /></b>
+                  </div>
 
-                  <div>
+                  <div className={Styles.capabilityBody}>
                     <strong>{title}</strong>
                     <p>{text}</p>
                   </div>
-
-                  <b>↗</b>
-                </article>
+                </a>
               ))}
             </div>
           </div>
@@ -398,7 +399,7 @@ export const Home = memo(() => {
 
               <h2 className={Styles.sectionTitle}>
                 Работаем там, где нужны
-                <em>решения.</em>
+                <em> решения.</em>
               </h2>
             </div>
 
@@ -412,16 +413,6 @@ export const Home = memo(() => {
             <div className={Styles.mapSide}>
 
               <div className={Styles.mapStats}>
-                <div>
-                  <strong>80+</strong>
-                  <span>городов</span>
-                </div>
-
-                <div>
-                  <strong>12+</strong>
-                  <span>стран</span>
-                </div>
-
                 <div>
                   <strong>200+</strong>
                   <span>проектов</span>
@@ -450,175 +441,6 @@ export const Home = memo(() => {
         </div>
       </section>
 
-      {/* DIRECTIONS */}
-
-      <section
-        id="directions"
-        className={`${Styles.section} ${Styles.solutionsSection} ${Styles.animateOnScroll}`}
-      >
-        <div className={Styles.container}>
-
-          <div className={Styles.solutionsHeader}>
-            <div>
-              <div className={Styles.kicker}>
-                <span>04</span>
-                <b>Направления</b>
-              </div>
-
-              <h2 className={Styles.sectionTitle}>
-                От производства оборудования до
-                <em>реализации проекта.</em>
-              </h2>
-            </div>
-
-            <p>
-              Подбираем конфигурацию под технологическую
-              задачу, условия эксплуатации и требования объекта.
-            </p>
-          </div>
-
-          <div className={Styles.solutionsGrid}>
-
-            <article
-              className={Styles.solutionCard}
-              onClick={() => handleNavigation('/products')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  handleNavigation('/products');
-                }
-              }}
-            >
-              <div className={Styles.solutionImage}>
-                <img
-                  src="/images/home/product.webp"
-                  alt="Продукция"
-                  loading="lazy"
-                />
-
-                <div className={Styles.solutionShade} />
-
-                <span>01 / Продукция</span>
-
-                <b>↗</b>
-              </div>
-
-              <div className={Styles.solutionContent}>
-                <div>
-                  <small>Продукция</small>
-
-                  <h3>Оборудование</h3>
-
-                  <p>
-                    Технические решения и оборудование
-                    для нефтегазовых объектов.
-                  </p>
-                </div>
-
-                <button type="button">
-                  Подробнее
-                  <span>↗</span>
-                </button>
-              </div>
-            </article>
-
-            <article
-              className={Styles.solutionCard}
-              onClick={() => handleNavigation('/services')}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter' || event.key === ' ') {
-                  handleNavigation('/services');
-                }
-              }}
-            >
-              <div className={Styles.solutionImage}>
-                <img
-                  src="/images/home/services.png"
-                  alt="Услуги"
-                  loading="lazy"
-                />
-
-                <div className={Styles.solutionShade} />
-
-                <span>02 / Сервис</span>
-
-                <b>↗</b>
-              </div>
-
-              <div className={Styles.solutionContent}>
-                <div>
-                  <small>Сервис</small>
-
-                  <h3>Услуги</h3>
-
-                  <p>
-                    Сервис, сопровождение и инженерная
-                    поддержка на протяжении жизненного цикла.
-                  </p>
-                </div>
-
-                <button type="button">
-                  Подробнее
-                  <span>↗</span>
-                </button>
-              </div>
-            </article>
-
-          </div>
-        </div>
-      </section>
-
-      {/* ADVANTAGES */}
-
-      <section
-        className={`${Styles.section} ${Styles.advantagesSection} ${Styles.animateOnScroll}`}
-      >
-        <div className={Styles.container}>
-
-          <div className={Styles.advantagesHeader}>
-            <div>
-              <div className={Styles.kicker}>
-                <span>05</span>
-                <b>Наш подход</b>
-              </div>
-
-              <h2 className={Styles.sectionTitle}>
-                Четыре принципа, на которых держится
-                <em>работа.</em>
-              </h2>
-            </div>
-
-            <p>
-              Мы строим долгосрочные отношения с заказчиками
-              и отвечаем не только за поставку, но и за результат.
-            </p>
-          </div>
-
-          <div className={Styles.advantages}>
-            {ADVANTAGES.map((item) => (
-              <article
-                className={Styles.advantage}
-                key={item.number}
-              >
-                <div>
-                  <span>{item.number}</span>
-                  <b>↗</b>
-                </div>
-
-                <h3>{item.title}</h3>
-
-                <p>{item.text}</p>
-
-                <i />
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* NEWS */}
 
       <section
@@ -629,70 +451,61 @@ export const Home = memo(() => {
           <div className={Styles.newsHeader}>
             <div>
               <div className={Styles.kicker}>
-                <span>06</span>
+                <span>04</span>
                 <b>Новости</b>
               </div>
 
               <h2 className={Styles.sectionTitle}>
-                Важное — коротко и
-                <em>по делу.</em>
+                Новости компании
+                <em> и отрасли.</em>
               </h2>
             </div>
 
-            <button
-              type="button"
-              className={Styles.modernButton}
-              onClick={() => handleNavigation('/news')}
-            >
-              <span>Все новости</span>
-              <b>↗</b>
-            </button>
           </div>
 
-          <article className={Styles.newsCard}>
-            <div className={Styles.newsImage}>
-              <img
-                src="/images/home/news.webp"
-                alt="EGYPES 2026"
-                loading="lazy"
-              />
-
-              <div className={Styles.newsShade} />
-
-              <span>NEWS / 2026</span>
-            </div>
-
-            <div className={Styles.newsContent}>
-              <div className={Styles.newsMeta}>
-                <span>МАРТ 2026</span>
-                <i />
-                <span>СОБЫТИЯ</span>
+          {latestNews && (
+            <a
+              className={Styles.newsTeaser}
+              href={`/news/?news=${latestNews.id}`}
+              aria-label={`Читать новость: ${latestNews.title}`}
+            >
+              <span className={Styles.newsTeaserEyebrow}>АКТУАЛЬНАЯ НОВОСТЬ</span>
+              <div className={`${Styles.newsTeaserContent} ${latestNewsPhoto ? Styles.newsTeaserWithImage : ''}`}>
+                {latestNewsPhoto && (
+                  <div className={Styles.newsTeaserImage}>
+                    <img
+                      src={latestNewsPhoto.src}
+                      alt={latestNewsPhoto.alt}
+                      loading="lazy"
+                    />
+                  </div>
+                )}
+                <div className={Styles.newsTeaserText}>
+                  <div className={Styles.newsMeta}>
+                    <span>{latestNews.date}</span>
+                    <i />
+                    <span>{latestNews.category}</span>
+                  </div>
+                  <h3>{latestNews.title}</h3>
+                  <p>{latestNews.description}</p>
+                </div>
+                <span className={Styles.newsTeaserAction}>
+                  Читать эту новость <b aria-hidden="true"><ArrowUpRight /></b>
+                </span>
               </div>
+            </a>
+          )}
 
-              <small>Отрасль / Мероприятие</small>
-
-              <h3>
-                ООО ИПП «Новые Технологии»
-                <br />
-                на EGYPES 2026
-              </h3>
-
-              <p>
-                Рассказываем о ключевых событиях отраслевой
-                выставки, новых контактах и направлениях
-                развития компании.
-              </p>
-
-              <button
-                type="button"
-                className={Styles.modernButton}
-                onClick={() => handleNavigation('/news')}
-              >
-                <span>Читать новость</span>
-                <b>↗</b>
-              </button>
+          <div className={Styles.newsFooter}>
+            <div>
+              <span>БОЛЬШЕ СОБЫТИЙ</span>
+              <p>Проекты, выставки и новости компании — в общем архиве.</p>
             </div>
-          </article>
+            <a className={Styles.newsAllButton} href="/news/">
+              <span>Смотреть все новости</span>
+              <b aria-hidden="true">→</b>
+            </a>
+          </div>
 
         </div>
       </section>
@@ -707,13 +520,13 @@ export const Home = memo(() => {
           <div className={Styles.clientsHeader}>
             <div>
               <div className={Styles.kicker}>
-                <span>07</span>
+                <span>05</span>
                 <b>Клиенты</b>
               </div>
 
               <h2 className={Styles.sectionTitle}>
                 Нам доверяют
-                <em>отраслевые компании.</em>
+                <em> отраслевые компании.</em>
               </h2>
             </div>
 
@@ -740,10 +553,6 @@ export const Home = memo(() => {
             </div>
           </div>
 
-          <div className={Styles.clientsBottom}>
-            <span>Долгосрочное партнерство</span>
-            <span>Доверие / Качество / Экспертиза</span>
-          </div>
         </div>
       </section>
 
@@ -759,13 +568,13 @@ export const Home = memo(() => {
 
             <div className={Styles.faqIntro}>
               <div className={Styles.kicker}>
-                <span>08</span>
+                <span>06</span>
                 <b>Вопросы</b>
               </div>
 
               <h2 className={Styles.sectionTitle}>
-                Остались
-                <em>вопросы?</em>
+                Частые
+                <em> вопросы.</em>
               </h2>
 
               <p>
@@ -780,20 +589,23 @@ export const Home = memo(() => {
                 onClick={() => handleNavigation('/contact')}
               >
                 <span>Связаться с нами</span>
-                <b>↗</b>
+                <b><ArrowUpRight /></b>
               </button>
             </div>
 
             <div className={Styles.faqList}>
-              {FAQ.map((item) => (
+              {FAQ.map((item, index) => (
                 <details
                   className={Styles.faqItem}
                   key={item.question}
                 >
                   <summary>
-                    <span>{item.question}</span>
+                    <span className={Styles.faqNumber}>
+                      {String(index + 1).padStart(2, '0')}
+                    </span>
+                    <span className={Styles.faqQuestion}>{item.question}</span>
 
-                    <b>+</b>
+                    <b aria-hidden="true">+</b>
                   </summary>
 
                   <div className={Styles.faqAnswer}>
@@ -801,7 +613,7 @@ export const Home = memo(() => {
 
                     <a href={item.link}>
                       {item.linkText}
-                      <span>↗</span>
+                      <span><ArrowUpRight /></span>
                     </a>
                   </div>
                 </details>

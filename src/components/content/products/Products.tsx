@@ -91,6 +91,36 @@ function currentCategory(): ProductId | null {
     : categoryFromPath(window.location.pathname);
 }
 
+const ArrowUpRight = () => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ flexShrink: 0 }}
+  >
+    <path d="M5 15 15 5M6 5h9v9" />
+  </svg>
+);
+
+const CarouselArrow = ({ direction }: { direction: 'left' | 'right' }) => (
+  <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false">
+    <path
+      d={direction === 'left' ? 'M19 12H5m6-6-6 6 6 6' : 'M4 12h15m-6-6 6 6-6 6'}
+      stroke="currentColor"
+      strokeWidth="1.8"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
 export const Products = () => {
   const [category, setCategory] = useState<ProductId | null>(
     currentCategory
@@ -99,6 +129,8 @@ export const Products = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const trackRef = useRef<HTMLDivElement | null>(null);
+  const programmaticIndexRef = useRef<number | null>(null);
+  const releaseTimerRef = useRef<number | null>(null);
 
   useEffect(() => {
     const onLocationChange = () => {
@@ -112,34 +144,11 @@ export const Products = () => {
     };
   }, []);
 
-  const scrollToCard = useCallback(
-    (index: number, behavior: ScrollBehavior = 'smooth') => {
-      const track = trackRef.current;
-
-      const card = track?.querySelector<HTMLElement>(
-        `[data-product-card="${index}"]`
-      );
-
-      if (!track || !card) return;
-
-      const left =
-        card.getBoundingClientRect().left -
-        track.getBoundingClientRect().left +
-        track.scrollLeft -
-        parseFloat(getComputedStyle(track).paddingLeft);
-
-      track.scrollTo({
-        left,
-        behavior,
-      });
-    },
-    []
-  );
-
   const handleCarouselScroll = useCallback(() => {
     const track = trackRef.current;
 
     if (!track) return;
+    if (programmaticIndexRef.current !== null) return;
 
     const targetLeft =
       track.getBoundingClientRect().left +
@@ -165,6 +174,95 @@ export const Products = () => {
 
     setActiveIndex(closestIndex);
   }, []);
+
+  const scrollToCard = useCallback(
+    (index: number, behavior: ScrollBehavior = 'smooth') => {
+      const track = trackRef.current;
+      const card = track?.querySelector<HTMLElement>(
+        `[data-product-card="${index}"]`
+      );
+
+      if (!track || !card) return;
+
+      const left =
+        card.getBoundingClientRect().left -
+        track.getBoundingClientRect().left +
+        track.scrollLeft -
+        parseFloat(getComputedStyle(track).paddingLeft);
+
+      programmaticIndexRef.current = index;
+      setActiveIndex(index);
+
+      if (releaseTimerRef.current !== null) {
+        window.clearTimeout(releaseTimerRef.current);
+      }
+
+      releaseTimerRef.current = window.setTimeout(() => {
+        programmaticIndexRef.current = null;
+        releaseTimerRef.current = null;
+        handleCarouselScroll();
+      }, 2000);
+
+      track.scrollTo({
+        left,
+        behavior:
+          behavior === 'smooth' &&
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'auto'
+            : behavior,
+      });
+    },
+    [handleCarouselScroll]
+  );
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    let frame = 0;
+
+    const releaseProgrammaticScroll = () => {
+      if (releaseTimerRef.current !== null) {
+        window.clearTimeout(releaseTimerRef.current);
+        releaseTimerRef.current = null;
+      }
+      if (programmaticIndexRef.current === null) return;
+      programmaticIndexRef.current = null;
+      handleCarouselScroll();
+    };
+
+    const onScroll = () => {
+      window.cancelAnimationFrame(frame);
+      if (programmaticIndexRef.current !== null) {
+        if (releaseTimerRef.current !== null) {
+          window.clearTimeout(releaseTimerRef.current);
+        }
+        releaseTimerRef.current = window.setTimeout(
+          releaseProgrammaticScroll,
+          260
+        );
+        return;
+      }
+      frame = window.requestAnimationFrame(handleCarouselScroll);
+    };
+
+    track.addEventListener('scroll', onScroll, { passive: true });
+    track.addEventListener('scrollend', releaseProgrammaticScroll);
+    window.addEventListener('resize', handleCarouselScroll);
+    handleCarouselScroll();
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      if (releaseTimerRef.current !== null) {
+        window.clearTimeout(releaseTimerRef.current);
+        releaseTimerRef.current = null;
+      }
+      programmaticIndexRef.current = null;
+      track.removeEventListener('scroll', onScroll);
+      track.removeEventListener('scrollend', releaseProgrammaticScroll);
+      window.removeEventListener('resize', handleCarouselScroll);
+    };
+  }, [category, handleCarouselScroll]);
 
   useEffect(() => {
     if (
@@ -251,7 +349,7 @@ export const Products = () => {
                   href="#catalog"
                 >
                   <span>Смотреть оборудование</span>
-                  <span aria-hidden="true">↗</span>
+                  <ArrowUpRight />
                 </a>
 
                 <a
@@ -327,7 +425,6 @@ export const Products = () => {
           role="region"
           aria-label="Направления продукции"
           tabIndex={0}
-          onScroll={handleCarouselScroll}
         >
           {products.map((product, index) => (
             <ProductCategoryCard
@@ -369,21 +466,25 @@ export const Products = () => {
             <button
               type="button"
               aria-label="Предыдущее направление"
-              disabled={activeIndex === 0}
-              onClick={() => scrollToCard(activeIndex - 1)}
+              onClick={() =>
+                scrollToCard(activeIndex === 0 ? products.length - 1 : activeIndex - 1)
+              }
             >
-              ←
+              <CarouselArrow direction="left" />
             </button>
 
             <button
               type="button"
               aria-label="Следующее направление"
-              disabled={activeIndex === products.length - 1}
-              onClick={() => scrollToCard(activeIndex + 1)}
+              onClick={() =>
+                scrollToCard(activeIndex === products.length - 1 ? 0 : activeIndex + 1)
+              }
             >
-              →
+              <CarouselArrow direction="right" />
             </button>
           </div>
+
+          <span className={Styles.carouselHint}>Листайте карточки свайпом</span>
         </div>
       </section>
 
@@ -399,8 +500,8 @@ export const Products = () => {
           </span>
 
           <h2 id="approach-title">
-            От параметров объекта до
-            <span> готового решения</span>
+            От параметров объекта
+            <span> до готового решения</span>
           </h2>
 
           <p>
@@ -423,9 +524,9 @@ export const Products = () => {
               </p>
             </div>
 
-            <span className={Styles.stepArrow} aria-hidden="true">
+            {/* <span className={Styles.stepArrow} aria-hidden="true">
               ↗
-            </span>
+            </span> */}
           </div>
 
           <div className={Styles.approachStep}>
@@ -440,9 +541,9 @@ export const Products = () => {
               </p>
             </div>
 
-            <span className={Styles.stepArrow} aria-hidden="true">
+            {/* <span className={Styles.stepArrow} aria-hidden="true">
               ↗
-            </span>
+            </span> */}
           </div>
 
           <div className={Styles.approachStep}>
@@ -457,9 +558,9 @@ export const Products = () => {
               </p>
             </div>
 
-            <span className={Styles.stepArrow} aria-hidden="true">
+            {/* <span className={Styles.stepArrow} aria-hidden="true">
               ↗
-            </span>
+            </span> */}
           </div>
         </div>
       </section>
@@ -487,7 +588,7 @@ export const Products = () => {
 
         <a href="/contact/">
           <span>Связаться с нами</span>
-          <span aria-hidden="true">↗</span>
+          <ArrowUpRight />
         </a>
       </section>
 

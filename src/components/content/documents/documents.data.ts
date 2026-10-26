@@ -16,7 +16,7 @@ export type TDocumentCategory = {
 export const documentsData: TDocumentCategory[] = [
   {
     id: 'accounting-system',
-    title: 'Автоматизированная групповая замерная установка (АГЗУ)',
+    title: 'Автоматизированная групповая замерная установка',
     description: 'Документация для систем АГЗУ',
     documents: [
       {

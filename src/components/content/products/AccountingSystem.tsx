@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, CategoryCarouselControls, useCategoryCarousel } from './CategoryCarousel';
 
 import Styles from './accounting.module.scss';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
@@ -33,129 +33,7 @@ const models = [
 ] as const;
 
 export const AccountingSystem = () => {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // Флаг программной прокрутки по кнопке.
-  // Пока карточка доезжает до позиции, onScroll не меняет activeIndex.
-  const isProgrammaticScroll = useRef(false);
-
-  // Таймер завершения программной прокрутки.
-  const scrollTimerRef = useRef<number | null>(null);
-
-  // requestAnimationFrame для ограничения количества setState.
-  const rafRef = useRef<number | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (scrollTimerRef.current !== null) {
-        window.clearTimeout(scrollTimerRef.current);
-      }
-
-      if (rafRef.current !== null) {
-        window.cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
-
-  const updateActiveIndex = () => {
-    const track = trackRef.current;
-
-    if (!track) return;
-
-    // Во время программной прокрутки activeIndex уже установлен
-    // кнопкой и не должен прыгать вслед за промежуточными scroll-событиями.
-    if (isProgrammaticScroll.current) {
-      return;
-    }
-
-    if (rafRef.current !== null) {
-      window.cancelAnimationFrame(rafRef.current);
-    }
-
-    rafRef.current = window.requestAnimationFrame(() => {
-      const currentTrack = trackRef.current;
-
-      if (!currentTrack) return;
-
-      const cards = Array.from(
-        currentTrack.children
-      ) as HTMLElement[];
-
-      if (!cards.length) return;
-
-      const scrollLeft = currentTrack.scrollLeft;
-
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((card, index) => {
-        const distance = Math.abs(card.offsetLeft - scrollLeft);
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      setActiveIndex((current) =>
-        current === closestIndex ? current : closestIndex
-      );
-    });
-  };
-
-  const scrollToModel = (index: number) => {
-    const track = trackRef.current;
-
-    if (!track) return;
-
-    const card = track.children.item(index) as HTMLElement | null;
-
-    if (!card) return;
-
-    // Защита от выхода за границы.
-    const safeIndex = Math.max(
-      0,
-      Math.min(index, models.length - 1)
-    );
-
-    const targetCard = track.children.item(
-      safeIndex
-    ) as HTMLElement | null;
-
-    if (!targetCard) return;
-
-    // Отменяем предыдущий таймер.
-    if (scrollTimerRef.current !== null) {
-      window.clearTimeout(scrollTimerRef.current);
-    }
-
-    // Блокируем обработку промежуточных scroll-событий.
-    isProgrammaticScroll.current = true;
-
-    // Сразу показываем правильный номер.
-    // Он больше не будет прыгать 01 → 02 → 01 во время smooth scroll.
-    setActiveIndex(safeIndex);
-
-    // offsetLeft уже учитывает положение элемента внутри scroll-контейнера.
-    // Это стабильнее, чем комбинация getBoundingClientRect() + scrollLeft.
-    const targetLeft = targetCard.offsetLeft;
-
-    track.scrollTo({
-      left: targetLeft,
-      behavior: 'smooth',
-    });
-
-    // После завершения анимации снова разрешаем
-    // определять activeIndex по свайпу.
-    scrollTimerRef.current = window.setTimeout(() => {
-      isProgrammaticScroll.current = false;
-
-      // Финально синхронизируем состояние с реальной позицией.
-      updateActiveIndex();
-    }, 450);
-  };
+  const { trackRef, activeIndex, scrollToCard } = useCategoryCarousel(models.length);
 
   return (
     <div className={Styles.page}>
@@ -197,7 +75,7 @@ export const AccountingSystem = () => {
                 href="#equipment"
               >
                 Смотреть исполнения{' '}
-                <span aria-hidden="true">↗</span>
+                <ArrowUpRight />
               </a>
 
               <a
@@ -254,7 +132,6 @@ export const AccountingSystem = () => {
               role="region"
               aria-label="Исполнения АГЗУ"
               tabIndex={0}
-              onScroll={updateActiveIndex}
             >
               {models.map((model) => (
                 <EquipmentCard
@@ -264,61 +141,11 @@ export const AccountingSystem = () => {
               ))}
             </div>
 
-            <div className={Styles.carouselControls}>
-              <span className={Styles.carouselHint}>
-                Листайте карточки свайпом
-              </span>
-
-              <div className={Styles.carouselButtons}>
-                <span
-                  className={Styles.carouselCount}
-                  aria-live="polite"
-                >
-                  {String(activeIndex + 1).padStart(2, '0')}
-                  {' / '}
-                  {String(models.length).padStart(2, '0')}
-                </span>
-
-                <button
-                  type="button"
-                  aria-label="Предыдущее исполнение"
-                  disabled={activeIndex === 0}
-                  onClick={() =>
-                    scrollToModel(activeIndex - 1)
-                  }
-                >
-                  ←
-                </button>
-
-                <button
-                  type="button"
-                  aria-label="Следующее исполнение"
-                  disabled={
-                    activeIndex === models.length - 1
-                  }
-                  onClick={() =>
-                    scrollToModel(activeIndex + 1)
-                  }
-                >
-                  →
-                </button>
-              </div>
-            </div>
-
-            <div
-              className={Styles.carouselProgress}
-              aria-hidden="true"
-            >
-              <span
-                style={{
-                  width: `${
-                    ((activeIndex + 1) /
-                      models.length) *
-                    100
-                  }%`,
-                }}
-              />
-            </div>
+            <CategoryCarouselControls
+              labels={models.map((item) => item.label)}
+              activeIndex={activeIndex}
+              onSelect={scrollToCard}
+            />
           </div>
         </section>
 
@@ -396,7 +223,7 @@ export const AccountingSystem = () => {
 
             <a href="/products/accounting-system/calculator/">
               Рассчитать стоимость{' '}
-              <span aria-hidden="true">↗</span>
+              <ArrowUpRight />
             </a>
           </div>
         </section>

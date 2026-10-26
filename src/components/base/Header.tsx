@@ -948,20 +948,6 @@ export const Header = ({
           >
             <div
               className={
-                Styles.topBarLeft
-              }
-            >
-              <span
-                className={
-                  Styles.topBarLabel
-                }
-              >
-                ООО ИПП «Новые Технологии»
-              </span>
-            </div>
-
-            <div
-              className={
                 Styles.topBarContacts
               }
             >

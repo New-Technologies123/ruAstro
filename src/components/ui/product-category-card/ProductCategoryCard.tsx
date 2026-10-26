@@ -48,6 +48,7 @@ export const ProductCategoryCard = ({
     >
       <div className={Styles.cardImage}>
         <img src={product.image} alt={product.title} loading="lazy" />
+
         <div className={Styles.cardImageTop}>
           <span>{product.number}</span>
           <span>{product.tag}</span>
@@ -58,9 +59,26 @@ export const ProductCategoryCard = ({
         <span className={Styles.cardCategory}>{product.label}</span>
         <h3>{product.title}</h3>
         <p>{product.description}</p>
+
         <div className={Styles.cardAction}>
           <span>Смотреть оборудование</span>
-          <span className={Styles.cardArrow} aria-hidden="true">↗</span>
+
+          <span className={Styles.cardArrow} aria-hidden="true">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              focusable="false"
+              style={{ display: 'block' }}
+            >
+              <path d="M5 15 15 5M6 5h9v9" />
+            </svg>
+          </span>
         </div>
       </div>
     </a>

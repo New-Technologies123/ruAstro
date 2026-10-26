@@ -11,6 +11,24 @@ import {
   type TNewsItem,
 } from './newsData';
 
+const ArrowUpRight = () => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    width="20"
+    height="20"
+    viewBox="0 0 20 20"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.8"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    style={{ flexShrink: 0 }}
+  >
+    <path d="M5 15 15 5M6 5h9v9" />
+  </svg>
+);
+
 const MOBILE_INITIAL_COUNT = 2;
 const DESKTOP_INITIAL_COUNT = 4;
 const MOBILE_PAGE_SIZE = 2;
@@ -74,7 +92,7 @@ function NewsCard({ news, onOpen, photoId, onPhotoChange, featured = false }: Ne
           onClick={(event) => onOpen(news, event.currentTarget)}
           aria-label={`Читать новость: ${news.title}`}
         >
-          Читать новость <span aria-hidden="true">↗</span>
+          Читать новость <span aria-hidden="true"><ArrowUpRight /></span>
         </button>
       </div>
     </article>

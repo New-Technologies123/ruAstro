@@ -129,7 +129,7 @@ export const Dosing = () => {
             <div className={Styles.documentsGrid}>
               <a className={Styles.materialCard} href="/documents/?category=preparation-systems">
                 <span className={Styles.materialIcon} aria-hidden="true">↗</span>
-                <span><strong>Документация по системам подготовки</strong><small>Открыть раздел документов</small></span>
+                <span><strong>Документация по БДР</strong><small>Открыть раздел документов</small></span>
                 <span className={Styles.materialArrow} aria-hidden="true">→</span>
               </a>
             </div>

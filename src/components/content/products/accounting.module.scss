@@ -197,11 +197,6 @@
   gap: 8px;
 }
 
-.breadcrumbs a:first-child::before {
-  color: #a9cfff;
-  content: "←";
-}
-
 @media (hover: hover) and (pointer: fine) {
   .breadcrumbs a:hover {
     background: rgba(255, 255, 255, 0.2);
@@ -306,38 +301,28 @@
 .primaryButton {
   background: var(--blue);
   color: #fff;
-
-  box-shadow:
-    0 8px 22px rgba(23, 105, 223, 0.2);
+  box-shadow: 0 8px 22px rgba(23, 105, 223, 0.2);
 }
 
 .secondaryButton {
   border: 1px solid rgba(255, 255, 255, 0.3);
-
   background: rgba(255, 255, 255, 0.025);
-
   color: #fff;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .primaryButton:hover {
     background: #3983ed;
-
-    box-shadow:
-      0 10px 26px rgba(23, 105, 223, 0.28);
-
+    box-shadow: 0 10px 26px rgba(23, 105, 223, 0.28);
     transform: translateY(-2px);
   }
 
   .secondaryButton:hover {
     border-color: rgba(255, 255, 255, 0.48);
-
     background: rgba(255, 255, 255, 0.1);
-
     transform: translateY(-2px);
   }
 }
-
 
 /* =========================================================
    HERO FACTS
@@ -346,23 +331,18 @@
 .heroFacts {
   display: flex;
   flex-wrap: wrap;
-
+  align-items: center;
   gap: 12px 30px;
-
   margin-top: 38px;
   padding-top: 19px;
-
   border-top: 1px solid rgba(255, 255, 255, 0.17);
-
   color: #b8ccdf;
-
   font-size: 13px;
   line-height: 1.4;
 }
 
 .heroFacts strong {
   color: #fff;
-
   font-size: 17px;
 }
 
@@ -373,7 +353,6 @@
 
 .collection {
   padding: 74px 0 86px;
-
   scroll-margin-top: 20px;
 }
 
@@ -468,12 +447,8 @@
 }
 
 
-/* =========================================================
-   CAROUSEL — DESKTOP
-   ========================================================= */
-
-.carouselControls,
-.carouselProgress {
+/* Carousel controls are shown with the mobile card track. */
+.carouselControls {
   display: none;
 }
 
@@ -568,27 +543,20 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-
   gap: 40px;
-
   padding: 38px 42px;
-
   border-radius: 20px;
-
   background: var(--surface);
 }
 
 .contactCta h2 {
   max-width: 650px;
-
   font-size: clamp(28px, 3vw, 38px);
 }
 
 .contactCta p {
   margin: 14px 0 0;
-
   color: var(--muted);
-
   font-size: 15px;
   line-height: 1.5;
 }
@@ -789,59 +757,26 @@
   }
 
 
-  /* =======================================================
-     MOBILE HORIZONTAL CAROUSEL
-     ======================================================= */
-
+  /* Mobile card carousel: the same track and controls as Products. */
   .cards,
   .cardsTwo,
   .cardsFour {
     display: flex;
-
-    gap: 14px;
-
-    width: calc(100% + 32px);
+    align-items: stretch;
+    width: calc(100% + 16px);
     max-width: none;
-
-    margin-left: -16px;
-
-    padding: 0 16px 10px;
-
+    min-width: 0;
+    margin: 0 -16px 0 0;
+    padding: 0 16px 6px 0;
+    gap: 12px;
     overflow-x: auto;
     overflow-y: hidden;
-
-    /*
-      Главный snap для мобильной карусели.
-      Карточка фиксируется у левого края.
-    */
     scroll-snap-type: x mandatory;
-
-    /*
-      Отступ, относительно которого браузер
-      рассчитывает snap-позицию.
-    */
-    scroll-padding-inline: 16px;
-
-    /*
-      Не даём вертикальному скроллу страницы
-      случайно превратиться в горизонтальный.
-    */
+    scroll-padding-left: 0;
     overscroll-behavior-x: contain;
-
-    /*
-      Нативная плавность.
-      Основное управление также идёт из TSX.
-    */
-    scroll-behavior: smooth;
-
-    scrollbar-width: none;
-
     -webkit-overflow-scrolling: touch;
-
-    /*
-      Небольшая оптимизация для мобильных браузеров.
-    */
-    contain: layout paint;
+    scrollbar-width: none;
+    touch-action: pan-x pan-y;
   }
 
   .cards::-webkit-scrollbar,
@@ -850,220 +785,140 @@
     display: none;
   }
 
-
-  /*
-    ВАЖНО:
-
-    Не используем scroll-snap-stop: always.
-
-    При программной smooth-прокрутке и двух карточках
-    он мог усиливать ощущение скачка.
-  */
-
   .cards > *,
   .cardsTwo > *,
   .cardsFour > * {
-    flex: 0 0 84%;
-
-    min-width: 84%;
-    max-width: 84%;
-
+    flex: 0 0 86%;
+    width: 86%;
+    min-width: 0;
     scroll-snap-align: start;
-
-    /*
-      Позволяем браузеру нормально завершать
-      smooth scroll.
-    */
-    scroll-snap-stop: normal;
   }
 
-
-  /* =======================================================
-     CAROUSEL CONTROLS
-     ======================================================= */
-
   .carouselControls {
-    display: flex;
-
+    display: grid;
+    grid-template-columns: 40px auto 40px;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    column-gap: 8px;
+    row-gap: 9px;
+    width: 100%;
+    margin-top: 15px;
+  }
 
-    gap: 14px;
+  .carouselNavigation {
+    display: contents;
+  }
 
-    margin-top: 16px;
+  .carouselNavigation button:first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .carouselDots {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .carouselDots::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carouselDots button {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 32px;
+    flex: 0 0 20px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .carouselDots button::before {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #b9c5d4;
+    content: '';
+    transition: width 180ms ease, background-color 180ms ease;
+  }
+
+  .carouselDots button[aria-current='true']::before {
+    width: 16px;
+    background: var(--blue);
+  }
+
+  .carouselDots button:focus,
+  .carouselNavigation button:focus {
+    outline: none;
+  }
+
+  .carouselDots button:focus-visible {
+    outline: 2px solid rgba(23, 105, 223, 0.45);
+    outline-offset: 1px;
+  }
+
+  .carouselNavigation button:last-child {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .carouselNavigation button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 150ms ease;
+  }
+
+  .carouselNavigation button:focus-visible {
+    outline: 3px solid rgba(23, 105, 223, 0.35);
+    outline-offset: 3px;
+  }
+
+  .carouselNavigation button:active {
+    transform: scale(0.96);
+  }
+
+  .carouselNavigation button svg {
+    width: 18px;
+    height: 18px;
   }
 
   .carouselHint {
-    min-width: 0;
-
-    color: var(--muted);
-
-    font-size: 12px;
-    line-height: 1.4;
-  }
-
-
-  /* -------------------------------------------------------
-     BUTTON GROUP
-     ------------------------------------------------------- */
-
-  .carouselButtons {
-    display: flex;
-
-    align-items: center;
-
-    flex: 0 0 auto;
-
-    gap: 7px;
-  }
-
-
-  /* -------------------------------------------------------
-     COUNTER
-     ------------------------------------------------------- */
-
-  .carouselCount {
-    margin-right: 5px;
-
-    color: var(--muted);
-
-    font-size: 12px;
-    font-weight: 700;
-
-    line-height: 1.4;
-
-    font-variant-numeric: tabular-nums;
-
-    white-space: nowrap;
-
-    /*
-      Не позволяет ширине счётчика прыгать
-      при смене 01 / 02.
-    */
-    min-width: 38px;
-
+    grid-column: 1 / -1;
+    color: #617187;
+    font-size: 11px;
+    line-height: 1.3;
     text-align: center;
   }
 
-
-  /* -------------------------------------------------------
-     ARROW BUTTONS
-     ------------------------------------------------------- */
-
-  .carouselButtons button {
-    display: grid;
-    place-items: center;
-
-    width: 42px;
-    height: 42px;
-
-    padding: 0;
-
-    border: 1px solid var(--line);
-    border-radius: 50%;
-
-    background: #fff;
-
-    color: var(--blue);
-
-    font: inherit;
-    font-size: 19px;
-
-    cursor: pointer;
-
-    /*
-      Убираем стандартный мобильный highlight.
-    */
-    -webkit-tap-highlight-color: transparent;
-
-    /*
-      Не используем transition для transform
-      на touch-устройствах при обычном состоянии.
-    */
-    transition:
-      background 180ms ease,
-      border-color 180ms ease,
-      color 180ms ease,
-      opacity 180ms ease;
-  }
-
-
-  /* -------------------------------------------------------
-     DESKTOP HOVER ONLY
-     ------------------------------------------------------- */
-
   @media (hover: hover) and (pointer: fine) {
-    .carouselButtons button:hover:not(:disabled) {
-      border-color: #b8d0eb;
+    .carouselNavigation button:hover {
+      border-color: #b8cdeb;
+      background: #edf3fb;
+      color: var(--blue);
+    }
 
-      background: var(--blue-soft);
-
-      transform: translateY(-1px);
+    .carouselDots button:not([aria-current='true']):hover::before {
+      background: var(--blue);
     }
   }
-
-
-  /* -------------------------------------------------------
-     TOUCH PRESS
-     ------------------------------------------------------- */
-
-  .carouselButtons button:active:not(:disabled) {
-    background: var(--blue-soft);
-
-    /*
-      Очень небольшое уменьшение вместо сильного
-      scale, чтобы не было визуального мигания.
-    */
-    transform: scale(0.97);
-  }
-
-
-  /* -------------------------------------------------------
-     DISABLED
-     ------------------------------------------------------- */
-
-  .carouselButtons button:disabled {
-    color: #a5b2bf;
-
-    cursor: default;
-
-    opacity: 0.5;
-
-    transform: none;
-  }
-
-
-  /* =======================================================
-     PROGRESS
-     ======================================================= */
-
-  .carouselProgress {
-    display: block;
-
-    height: 3px;
-
-    margin-top: 14px;
-
-    overflow: hidden;
-
-    border-radius: 999px;
-
-    background: #e4edf6;
-  }
-
-  .carouselProgress span {
-    display: block;
-
-    height: 100%;
-
-    border-radius: inherit;
-
-    background: var(--blue);
-
-    transition:
-      width 220ms ease;
-  }
-
 
   /* =======================================================
      DETAILS
@@ -1173,48 +1028,6 @@
 
 
   /* -------------------------------------------------------
-     CARDS
-     ------------------------------------------------------- */
-
-  .cards > *,
-  .cardsTwo > *,
-  .cardsFour > * {
-    flex-basis: 88%;
-
-    min-width: 88%;
-    max-width: 88%;
-  }
-
-
-  /* -------------------------------------------------------
-     CAROUSEL
-     ------------------------------------------------------- */
-
-  .carouselControls {
-    align-items: flex-end;
-  }
-
-  .carouselHint {
-    max-width: 130px;
-  }
-
-  .carouselButtons {
-    gap: 6px;
-  }
-
-  .carouselCount {
-    margin-right: 2px;
-
-    min-width: 36px;
-  }
-
-  .carouselButtons button {
-    width: 40px;
-    height: 40px;
-  }
-
-
-  /* -------------------------------------------------------
      CTA
      ------------------------------------------------------- */
 
@@ -1240,46 +1053,12 @@
   }
 
 
-  /* -------------------------------------------------------
-     CAROUSEL
-     ------------------------------------------------------- */
-
   .cards,
   .cardsTwo,
   .cardsFour {
-    width: calc(100% + 24px);
-
-    margin-left: -12px;
-
+    width: calc(100% + 12px);
+    margin-right: -12px;
     padding-right: 12px;
-    padding-left: 12px;
-
-    scroll-padding-inline: 12px;
-  }
-
-  .cards > *,
-  .cardsTwo > *,
-  .cardsFour > * {
-    flex-basis: 90%;
-
-    min-width: 90%;
-    max-width: 90%;
-  }
-
-
-  /* -------------------------------------------------------
-     CONTROLS
-     ------------------------------------------------------- */
-
-  .carouselHint {
-    max-width: 100px;
-
-    font-size: 11px;
-  }
-
-  .carouselButtons button {
-    width: 38px;
-    height: 38px;
   }
 }
 

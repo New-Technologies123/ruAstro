@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, CategoryCarouselControls, useCategoryCarousel } from './CategoryCarousel';
 
 import Styles from './accounting.module.scss';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
@@ -54,212 +54,7 @@ const systems = [
 ] as const;
 
 export const PreparationSystems = () => {
-  const trackRef = useRef<HTMLDivElement | null>(null);
-
-  /**
-   * Когда true — пользователь нажал кнопку
-   * и сейчас выполняется программный smooth-scroll.
-   *
-   * onScroll в этот момент не должен менять activeIndex.
-   */
-  const isProgrammaticScroll = useRef(false);
-
-  /**
-   * Таймер окончания программного скролла.
-   */
-  const scrollTimerRef = useRef<number | null>(null);
-
-  /**
-   * RAF для ограничения количества пересчётов
-   * activeIndex во время ручного свайпа.
-   */
-  const rafRef = useRef<number | null>(null);
-
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  /**
-   * Очистка таймеров при размонтировании компонента.
-   */
-  useEffect(() => {
-    return () => {
-      if (scrollTimerRef.current !== null) {
-        window.clearTimeout(scrollTimerRef.current);
-      }
-
-      if (rafRef.current !== null) {
-        window.cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, []);
-
-  /**
-   * Определяем карточку, которая находится ближе
-   * всего к текущей позиции scrollLeft.
-   *
-   * Во время программного scroll ничего не меняем,
-   * чтобы кнопка не вызывала скачки 01 → 02 → 01.
-   */
-  const updateActiveIndex = () => {
-    if (isProgrammaticScroll.current) return;
-
-    const track = trackRef.current;
-
-    if (!track) return;
-
-    if (rafRef.current !== null) {
-      window.cancelAnimationFrame(rafRef.current);
-    }
-
-    rafRef.current = window.requestAnimationFrame(() => {
-      const currentTrack = trackRef.current;
-
-      if (!currentTrack || isProgrammaticScroll.current) {
-        return;
-      }
-
-      const cards = Array.from(
-        currentTrack.children,
-      ) as HTMLElement[];
-
-      if (!cards.length) return;
-
-      const currentScrollLeft =
-        currentTrack.scrollLeft;
-
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((card, index) => {
-        const distance = Math.abs(
-          card.offsetLeft - currentScrollLeft,
-        );
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      setActiveIndex((previousIndex) =>
-        previousIndex === closestIndex
-          ? previousIndex
-          : closestIndex,
-      );
-    });
-  };
-
-  /**
-   * Плавный переход к выбранной карточке.
-   */
-  const scrollToSystem = (index: number) => {
-    const track = trackRef.current;
-
-    if (!track) return;
-
-    /**
-     * Не позволяем уйти за границы массива.
-     */
-    const safeIndex = Math.max(
-      0,
-      Math.min(index, systems.length - 1),
-    );
-
-    const card = track.children.item(
-      safeIndex,
-    ) as HTMLElement | null;
-
-    if (!card) return;
-
-    /**
-     * Останавливаем предыдущий таймер.
-     */
-    if (scrollTimerRef.current !== null) {
-      window.clearTimeout(scrollTimerRef.current);
-    }
-
-    /**
-     * Останавливаем ожидающий RAF.
-     */
-    if (rafRef.current !== null) {
-      window.cancelAnimationFrame(rafRef.current);
-    }
-
-    /**
-     * Самое важное:
-     * блокируем обработку onScroll.
-     */
-    isProgrammaticScroll.current = true;
-
-    /**
-     * Номер меняется сразу и больше не прыгает
-     * во время smooth-scroll.
-     */
-    setActiveIndex(safeIndex);
-
-    const computedStyle = getComputedStyle(track);
-
-    const paddingLeft =
-      parseFloat(computedStyle.paddingLeft) || 0;
-
-    /**
-     * Позиция карточки относительно scroll-контейнера.
-     *
-     * Учитываем padding-left карусели,
-     * чтобы карточка попадала точно в начало.
-     */
-    const targetLeft = Math.max(
-      0,
-      card.offsetLeft - paddingLeft,
-    );
-
-    track.scrollTo({
-      left: targetLeft,
-      behavior: 'smooth',
-    });
-
-    /**
-     * После завершения анимации снова разрешаем
-     * ручное определение активной карточки.
-     */
-    scrollTimerRef.current = window.setTimeout(() => {
-      isProgrammaticScroll.current = false;
-
-      const currentTrack = trackRef.current;
-
-      if (!currentTrack) return;
-
-      const cards = Array.from(
-        currentTrack.children,
-      ) as HTMLElement[];
-
-      if (!cards.length) return;
-
-      const currentScrollLeft =
-        currentTrack.scrollLeft;
-
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-
-      cards.forEach((item, itemIndex) => {
-        const distance = Math.abs(
-          item.offsetLeft -
-            paddingLeft -
-            currentScrollLeft,
-        );
-
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = itemIndex;
-        }
-      });
-
-      setActiveIndex((previousIndex) =>
-        previousIndex === closestIndex
-          ? previousIndex
-          : closestIndex,
-      );
-    }, 500);
-  };
+  const { trackRef, activeIndex, scrollToCard } = useCategoryCarousel(systems.length);
 
   return (
     <div className={Styles.page}>
@@ -303,7 +98,7 @@ export const PreparationSystems = () => {
                 href="#equipment"
               >
                 Смотреть оборудование{' '}
-                <span aria-hidden="true">↗</span>
+                <ArrowUpRight />
               </a>
 
               <a
@@ -358,7 +153,6 @@ export const PreparationSystems = () => {
               role="region"
               aria-label="Оборудование для подготовки"
               tabIndex={0}
-              onScroll={updateActiveIndex}
             >
               {systems.map((system) => (
                 <EquipmentCard
@@ -368,61 +162,11 @@ export const PreparationSystems = () => {
               ))}
             </div>
 
-            <div className={Styles.carouselControls}>
-              <span className={Styles.carouselHint}>
-                Листайте карточки свайпом
-              </span>
-
-              <div className={Styles.carouselButtons}>
-                <span
-                  className={Styles.carouselCount}
-                  aria-live="polite"
-                >
-                  {String(activeIndex + 1).padStart(2, '0')}
-                  {' / '}
-                  {String(systems.length).padStart(2, '0')}
-                </span>
-
-                <button
-                  type="button"
-                  aria-label="Предыдущее изделие"
-                  disabled={activeIndex === 0}
-                  onClick={() =>
-                    scrollToSystem(activeIndex - 1)
-                  }
-                >
-                  ←
-                </button>
-
-                <button
-                  type="button"
-                  aria-label="Следующее изделие"
-                  disabled={
-                    activeIndex === systems.length - 1
-                  }
-                  onClick={() =>
-                    scrollToSystem(activeIndex + 1)
-                  }
-                >
-                  →
-                </button>
-              </div>
-            </div>
-
-            <div
-              className={Styles.carouselProgress}
-              aria-hidden="true"
-            >
-              <span
-                style={{
-                  width: `${
-                    ((activeIndex + 1) /
-                      systems.length) *
-                    100
-                  }%`,
-                }}
-              />
-            </div>
+            <CategoryCarouselControls
+              labels={systems.map((item) => item.label)}
+              activeIndex={activeIndex}
+              onSelect={scrollToCard}
+            />
           </div>
         </section>
 
@@ -499,7 +243,7 @@ export const PreparationSystems = () => {
 
             <a href="/contact/">
               Обсудить проект{' '}
-              <span aria-hidden="true">↗</span>
+              <ArrowUpRight />
             </a>
           </div>
         </section>
