@@ -94,7 +94,7 @@ const equipment = (
 });
 
 export const equipmentCatalog: CatalogItem[] = [
-  equipment('shop_1', 9001, 'Расходомер-счетчик ЭРВИП.НТ', '250 000', '/images/shop/product_1.png'),
+  equipment('shop_1', 9001, 'Расходомер-счетчик ЭРВИП.НТ', '250 000', '/images/shop/product_1.webp'),
   equipment(
     'shop_2',
     9011,

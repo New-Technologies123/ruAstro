@@ -4,7 +4,7 @@ import Styles from './accounting.module.scss';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
 import { EquipmentCard } from '../../ui/equipment-card/EquipmentCard';
 
-import ervipImage from '../../../images/products/product_2.png';
+import ervipImage from '../../../images/products/product_2.webp';
 import urpdImage from '../../../images/products/urpd.webp';
 import psmImage from '../../../images/products/product_2_2.webp';
 import kmrImage from '../../../images/products/product_2_3.webp';
