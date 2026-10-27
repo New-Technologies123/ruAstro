@@ -173,6 +173,7 @@ export const GlobalCart = () => {
                   onBack={() => {
                     setMode('cart');
                   }}
+                  onFinish={closeCart}
                 />
               )}
             </div>

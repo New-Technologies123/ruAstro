@@ -211,16 +211,16 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
 
   const uniqueProducts = cart.length;
 
-  const handleRemove = (id: number) => {
-    removeFromCart(id);
+  const handleRemove = (cartKey: string) => {
+    removeFromCart(cartKey);
   };
 
-  const handleDecrease = (id: number) => {
-    changeItemCount(id, -1);
+  const handleDecrease = (cartKey: string) => {
+    changeItemCount(cartKey, -1);
   };
 
-  const handleIncrease = (id: number) => {
-    changeItemCount(id, 1);
+  const handleIncrease = (cartKey: string) => {
+    changeItemCount(cartKey, 1);
   };
 
   const handleClear = () => {
@@ -399,7 +399,7 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
 
                         return (
                           <motion.article
-                            key={item.id}
+                            key={item.cartKey}
                             className={Styles.productItem}
                             layout
                             initial={{
@@ -441,7 +441,7 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
                                   <h3>{item.title}</h3>
 
                                   <span className={Styles.productType}>
-                                    Оборудование
+                                    {item.id >= 9000 ? 'Оборудование' : 'Комплектующая'}
                                   </span>
                                 </div>
 
@@ -449,7 +449,7 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
                                   type="button"
                                   className={Styles.removeButton}
                                   onClick={() =>
-                                    handleRemove(item.id)
+                                    handleRemove(item.cartKey)
                                   }
                                   aria-label={`Удалить ${item.title}`}
                                   title="Удалить товар"
@@ -465,7 +465,7 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
                                   <button
                                     type="button"
                                     onClick={() =>
-                                      handleDecrease(item.id)
+                                      handleDecrease(item.cartKey)
                                     }
                                     aria-label="Уменьшить количество"
                                   >
@@ -477,7 +477,7 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
                                   <button
                                     type="button"
                                     onClick={() =>
-                                      handleIncrease(item.id)
+                                      handleIncrease(item.cartKey)
                                     }
                                     aria-label="Увеличить количество"
                                   >
@@ -568,7 +568,7 @@ export const Basket = ({ onBack, goToOrder }: BasketProps) => {
                     <div className={Styles.summaryDivider} />
 
                     <div className={Styles.totalRow}>
-                      <span>К оплате</span>
+                      <span>Стоимость товаров</span>
 
                       <strong>
                         {formatPrice(totalPrice)} ₽

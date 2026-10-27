@@ -22,6 +22,7 @@ import back from '../../../images/back.svg';
 
 type OrderProps = {
   onBack: () => void;
+  onFinish?: () => void;
 };
 
 type Errors = {
@@ -55,7 +56,7 @@ const FIELDS: FieldConfig[] = [
   },
   {
     key: 'position',
-    label: 'Должность',
+    label: 'Должность (необязательно)',
     type: 'text',
     autocomplete: 'organization-title',
   },
@@ -321,6 +322,7 @@ const CheckoutStepper = ({
 
 export const Order = ({
   onBack,
+  onFinish = onBack,
 }: OrderProps) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
@@ -338,6 +340,12 @@ export const Order = ({
   const [errors, setErrors] = useState<Errors>({});
   const [successMessage, setSuccessMessage] =
     useState('');
+  const [confirmedOrderId, setConfirmedOrderId] =
+    useState('');
+  const [submitError, setSubmitError] =
+    useState('');
+  const [summaryExpanded, setSummaryExpanded] =
+    useState(false);
 
   const [isSubmitting, setIsSubmitting] =
     useState(false);
@@ -409,24 +417,6 @@ export const Order = ({
   }, [cart]);
 
   /* =========================================================
-     SUCCESS
-     ========================================================= */
-
-  useEffect(() => {
-    if (!successMessage) {
-      return;
-    }
-
-    const timer = window.setTimeout(() => {
-      setSuccessMessage('');
-    }, 10000);
-
-    return () => {
-      window.clearTimeout(timer);
-    };
-  }, [successMessage]);
-
-  /* =========================================================
      VALIDATION
      ========================================================= */
 
@@ -437,6 +427,8 @@ export const Order = ({
     const trimmed = value.trim();
 
     switch (key) {
+      case 'position':
+        return undefined;
       case 'email':
         if (!trimmed) {
           return 'Обязательно заполнить';
@@ -539,6 +531,8 @@ export const Order = ({
       return;
     }
 
+    setSubmitError('');
+
     if (!cart.length) {
       return;
     }
@@ -550,10 +544,6 @@ export const Order = ({
      */
     const newErrors: Errors = {
       name: validateField('name', name),
-      position: validateField(
-        'position',
-        position
-      ),
       company: validateField(
         'company',
         company
@@ -583,9 +573,7 @@ export const Order = ({
     const firstInvalidId =
       newErrors.name
         ? 'order-name'
-        : newErrors.position
-          ? 'order-position'
-          : newErrors.company
+        : newErrors.company
             ? 'order-company'
             : newErrors.email
               ? 'order-email'
@@ -669,6 +657,7 @@ export const Order = ({
         (await response.json()) as {
           success?: boolean;
           error?: string;
+          orderId?: string;
         };
 
       if (
@@ -678,6 +667,7 @@ export const Order = ({
         setSuccessMessage(
           'Спасибо за заказ!'
         );
+        setConfirmedOrderId(result.orderId || '');
 
         setCart([]);
         clearCart();
@@ -698,18 +688,12 @@ export const Order = ({
           behavior: 'smooth',
         });
       } else {
-        alert(
-          'Ошибка при отправке: ' +
-          (result.error ||
-            'Неизвестная ошибка')
-        );
+        setSubmitError(result.error || 'Не удалось отправить заказ. Попробуйте ещё раз.');
       }
     } catch (error) {
       console.error(error);
 
-      alert(
-        'Ошибка сети. Попробуйте ещё раз.'
-      );
+      setSubmitError('Ошибка сети. Проверьте подключение и попробуйте ещё раз.');
     } finally {
       setIsSubmitting(false);
     }
@@ -764,8 +748,8 @@ export const Order = ({
         <button
           type="button"
           className={Styles.backButton}
-          onClick={onBack}
-          aria-label="Вернуться в корзину"
+          onClick={successMessage ? onFinish : onBack}
+          aria-label={successMessage ? 'Закрыть подтверждение' : 'Вернуться в корзину'}
         >
           <img
             src={back.src}
@@ -773,7 +757,7 @@ export const Order = ({
             aria-hidden="true"
           />
 
-          <span>Корзина</span>
+          <span>{successMessage ? 'Закрыть' : 'Корзина'}</span>
         </button>
 
         <div className={Styles.headerCenter}>
@@ -861,12 +845,12 @@ export const Order = ({
                       Styles.successEyebrow
                     }
                   >
-                    Заказ оформлен
+                    Заявка отправлена
                   </span>
 
                   <h2>
-                    Заказ успешно
-                    отправлен
+                    Заявка успешно
+                    отправлена
                   </h2>
 
                   <p>
@@ -876,14 +860,20 @@ export const Order = ({
                     время.
                   </p>
 
+                  {confirmedOrderId && (
+                    <p className={Styles.successReference}>
+                      Номер заявки: <strong>{confirmedOrderId}</strong>
+                    </p>
+                  )}
+
                   <button
                     type="button"
                     className={
                       Styles.successButton
                     }
-                    onClick={onBack}
+                    onClick={onFinish}
                   >
-                    Вернуться в корзину
+                    Закрыть
                   </button>
                 </div>
               </div>
@@ -1312,6 +1302,12 @@ export const Order = ({
 
                 {/* SUBMIT */}
 
+                {submitError && (
+                  <p className={Styles.submitError} role="alert">
+                    {submitError}
+                  </p>
+                )}
+
                 <motion.button
                   type="submit"
                   className={
@@ -1409,10 +1405,20 @@ export const Order = ({
                     </span>
                   </div>
 
+                  <button
+                    type="button"
+                    className={Styles.summaryToggle}
+                    aria-expanded={summaryExpanded}
+                    aria-controls="order-summary-products"
+                    onClick={() => setSummaryExpanded((expanded) => !expanded)}
+                  >
+                    {summaryExpanded ? 'Скрыть товары' : `Показать товары (${cart.length})`}
+                    <span aria-hidden="true">{summaryExpanded ? '−' : '+'}</span>
+                  </button>
+
                   <div
-                    className={
-                      Styles.products
-                    }
+                    id="order-summary-products"
+                    className={`${Styles.products} ${summaryExpanded ? Styles.productsExpanded : ''}`}
                   >
                     {cart.map(item => {
                       const itemTotal =
@@ -1423,7 +1429,7 @@ export const Order = ({
 
                       return (
                         <div
-                          key={item.id}
+                          key={item.cartKey}
                           className={
                             Styles.product
                           }
@@ -1481,7 +1487,7 @@ export const Order = ({
                     className={Styles.total}
                   >
                     <span>
-                      Итого
+                      Стоимость товаров
                     </span>
 
                     <strong>

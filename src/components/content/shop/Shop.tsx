@@ -1,826 +1,535 @@
-import { useEffect, useState, useRef } from 'react';
-import { Layout } from '../../layout/Layout';
-import { Card } from '../../ui/card/Card';
+import { useEffect, useMemo, useState } from 'react';
+import { ArrowRight, RotateCcw, Search, SlidersHorizontal, X } from 'lucide-react';
 import { Order } from '../../ui/order/Order';
-
-import { Shop_1 } from './Shop_1';
-import { Shop_2 } from './Shop_2';
-import { Shop_3 } from './Shop_3';
-import { Shop_4 } from './Shop_4';
-import { Shop_5 } from './Shop_5';
-
+import { ProductPage } from '../../ui/product-page/ProductPage';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { addToCart, changeItemCount, getCart, getCartKey, type CartItem } from '../../utils/cartStorage';
+import { CatalogCard } from './CatalogCard';
+import {
+  categoryShortTitles,
+  categoryTitles,
+  equipmentCatalog,
+  matchesCatalogSelection,
+  parseCatalogPrice,
+  partsCatalog,
+  uniquePartsCatalog,
+  type CatalogItem,
+  type ShopType,
+} from './catalog';
+import styles from './catalog.module.scss';
 
-import product_1 from '../../../images/products/product_2.webp';
-import product_2 from '../../../images/products/product_2_1.webp';
-import product_3 from '../../../images/products/product_2_2.webp';
-import product_4 from '../../../images/products/product_2_3.webp';
-import product_5 from '../../../images/products/product_2_4.webp';
+type Page = 'shop' | 'equipment' | 'part' | 'order';
+type CatalogView = 'all' | 'equipment' | 'parts';
+type SortOrder = 'default' | 'price-asc' | 'price-desc' | 'name';
+type Detail = { kind: 'equipment' | 'part'; item: CatalogItem };
 
-import styles from './scroll.module.scss';
+const categories = Object.keys(categoryTitles) as ShopType[];
+const completeCatalog = [...equipmentCatalog, ...uniquePartsCatalog];
+const DESKTOP_PAGE_SIZE = 12;
+const MOBILE_PAGE_SIZE = 4;
 
-type TProducts =
-  | 'shop_1'
-  | 'shop_2'
-  | 'shop_3'
-  | 'shop_4'
-  | 'shop_5';
+const detailFromPath = (pathname: string): Detail | null => {
+  const equipmentId = pathname.match(/^\/shop\/equipment\/(\d+)\/?$/)?.[1];
+  if (equipmentId) {
+    const item = equipmentCatalog.find((entry) => String(entry.product.id) === equipmentId);
+    if (item) return { kind: 'equipment', item };
+  }
+  const partPath = pathname.match(/^\/shop\/parts\/([^/]+)\/(\d+)\/?$/);
+  if (partPath) {
+    const item = partsCatalog.find((entry) => entry.tem === partPath[1] && String(entry.product.id) === partPath[2]);
+    if (item) return { kind: 'part', item };
+  }
+  return null;
+};
 
-type Page = 'shop' | TProducts | 'order';
+const detailFromUrl = (): Detail | null => {
+  const pathDetail = detailFromPath(window.location.pathname);
+  if (pathDetail) return pathDetail;
+  const params = new URLSearchParams(window.location.search);
+  const equipment = equipmentCatalog.find((item) => String(item.product.id) === params.get('equipment'));
+  if (equipment) return { kind: 'equipment', item: equipment };
+  const part = partsCatalog.find(
+    (item) => item.category === params.get('type') && item.tem === params.get('tem') && String(item.product.id) === params.get('product'),
+  );
+  return part ? { kind: 'part', item: part } : null;
+};
 
-/* =========================================================
-   SESSION STORAGE
-   ========================================================= */
+const pageFromUrl = (): Page => {
+  if (new URLSearchParams(window.location.search).get('view') === 'order') return 'order';
+  return detailFromUrl()?.kind ?? 'shop';
+};
 
-const SCROLL_POSITION_KEY = 'shop_scroll_position';
-const SELECTED_CARD_KEY = 'shop_selected_card';
-const FROM_SHOP_KEY = 'from_shop_page';
+const itemHref = ({ tem, product }: CatalogItem, isPart: boolean): string => {
+  if (!isPart) return `/shop/equipment/${product.id}`;
+  return `/shop/parts/${encodeURIComponent(tem ?? '')}/${product.id}`;
+};
 
-/* =========================================================
-   SHOP
-   ========================================================= */
-
-export const Shop = () => {
-  const cardTitle: Record<TProducts, string> = {
-    shop_1: 'Вихревой расходомер ЭРВИП',
-    shop_2: 'Устройство регулирования перепада давления (УРПД)',
-    shop_3: 'Переключатель скважин многоходовой (ПСМ)',
-    shop_4: 'Магниторегулируемый клапан (КМР)',
-    shop_5: 'Гидропривод (ГП)',
-  };
-
-  const [currentPage, setCurrentPage] = useState<Page>('shop');
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+export const Shop = ({ initialPath = '/shop' }: { initialPath?: string }) => {
+  const [currentPage, setCurrentPage] = useState<Page>(() => detailFromPath(initialPath)?.kind ?? 'shop');
+  const [catalogView, setCatalogView] = useState<CatalogView>('all');
+  const [selectedCategories, setSelectedCategories] = useState<ShopType[]>([]);
+  const [selectedModels, setSelectedModels] = useState<string[]>([]);
+  const [priceFrom, setPriceFrom] = useState('');
+  const [priceTo, setPriceTo] = useState('');
+  const [withPhoto, setWithPhoto] = useState(false);
+  const [search, setSearch] = useState('');
+  const [sortOrder, setSortOrder] = useState<SortOrder>('default');
+  const [catalogPage, setCatalogPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
-
-  const trackRef = useRef<HTMLDivElement>(null);
-  const prevBtnRef = useRef<HTMLButtonElement>(null);
-  const nextBtnRef = useRef<HTMLButtonElement>(null);
-
-  /* =========================================================
-     PRODUCTS
-     ========================================================= */
-
-  const products = [
-    {
-      img: product_1.src,
-      title: cardTitle.shop_1,
-      type: 'shop_1' as TProducts,
-    },
-    {
-      img: product_2.src,
-      title: cardTitle.shop_2,
-      type: 'shop_2' as TProducts,
-    },
-    {
-      img: product_3.src,
-      title: cardTitle.shop_3,
-      type: 'shop_3' as TProducts,
-    },
-    {
-      img: product_4.src,
-      title: cardTitle.shop_4,
-      type: 'shop_4' as TProducts,
-    },
-    {
-      img: product_5.src,
-      title: cardTitle.shop_5,
-      type: 'shop_5' as TProducts,
-    },
-  ];
-
-  /* =========================================================
-     MOBILE CHECK
-     ========================================================= */
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 720);
+    const syncFromUrl = () => {
+      const page = pageFromUrl();
+      setCurrentPage(page);
+      if (page !== 'shop') return;
+      const params = new URLSearchParams(window.location.search);
+      const category = params.get('type') as ShopType;
+      if (!categories.includes(category)) return;
+      const model = params.get('tem');
+      const validModel = model && equipmentCatalog.some((item) => item.category === category && item.tem === model);
+      setSelectedCategories([category]);
+      setSelectedModels(validModel ? [`${category}:${model}`] : []);
+      setCatalogView(validModel ? 'parts' : 'equipment');
+      setCatalogPage(1);
     };
-
-    checkMobile();
-
-    window.addEventListener('resize', checkMobile);
-
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
-  }, []);
-
-  /* =========================================================
-     URL → PAGE
-     ========================================================= */
-
-  const syncFromUrl = () => {
-    const params = new URLSearchParams(window.location.search);
-
-    const view = params.get('view');
-    const type = params.get('type') as TProducts | null;
-
-    /*
-     * Оформление заказа.
-     * Корзина здесь НЕ обрабатывается:
-     * она открывается через GlobalCart.
-     */
-    if (view === 'order') {
-      setCurrentPage('order');
-      return;
-    }
-
-    if (
-      type === 'shop_1' ||
-      type === 'shop_2' ||
-      type === 'shop_3' ||
-      type === 'shop_4' ||
-      type === 'shop_5'
-    ) {
-      setCurrentPage(type);
-      return;
-    }
-
-    setCurrentPage('shop');
-  };
-
-  useEffect(() => {
     syncFromUrl();
-
     window.addEventListener('popstate', syncFromUrl);
+    return () => window.removeEventListener('popstate', syncFromUrl);
+  }, []);
 
+  useEffect(() => {
+    const syncCart = () => setCart(getCart());
+    syncCart();
+    window.addEventListener('cartUpdated', syncCart);
+    window.addEventListener('storage', syncCart);
     return () => {
-      window.removeEventListener('popstate', syncFromUrl);
+      window.removeEventListener('cartUpdated', syncCart);
+      window.removeEventListener('storage', syncCart);
     };
   }, []);
 
-  /* =========================================================
-     MOBILE CAROUSEL
-     ========================================================= */
+  useEffect(() => {
+    if (!filtersOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setFiltersOpen(false);
+    };
+    window.addEventListener('keydown', onEscape);
+    return () => {
+      window.removeEventListener('keydown', onEscape);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [filtersOpen]);
 
   useEffect(() => {
-    if (currentPage !== 'shop') {
-      return;
-    }
-
-    const track = trackRef.current;
-    const prevBtn = prevBtnRef.current;
-    const nextBtn = nextBtnRef.current;
-
-    if (!track || !prevBtn || !nextBtn) {
-      return;
-    }
-
-    const cards = track.querySelectorAll('.card');
-
-    if (!cards.length) {
-      return;
-    }
-
-    let current = 0;
-
-    /* -------------------------------------------------------
-       ARROWS
-    ------------------------------------------------------- */
-
-    const updateArrows = () => {
-      if (current <= 0) {
-        prevBtn.classList.remove(styles.visible);
-        prevBtn.style.visibility = 'hidden';
-      } else {
-        prevBtn.classList.add(styles.visible);
-        prevBtn.style.visibility = 'visible';
-      }
-
-      if (current >= cards.length - 1) {
-        nextBtn.classList.remove(styles.visible);
-        nextBtn.style.visibility = 'hidden';
-      } else {
-        nextBtn.classList.add(styles.visible);
-        nextBtn.style.visibility = 'visible';
-      }
+    const mediaQuery = window.matchMedia('(max-width: 650px)');
+    const syncViewport = () => {
+      setIsMobile(mediaQuery.matches);
+      setCatalogPage(1);
     };
+    syncViewport();
+    mediaQuery.addEventListener('change', syncViewport);
+    return () => mediaQuery.removeEventListener('change', syncViewport);
+  }, []);
 
-    /* -------------------------------------------------------
-       DOTS
-    ------------------------------------------------------- */
+  const allItems = catalogView === 'equipment' ? equipmentCatalog : catalogView === 'parts' ? uniquePartsCatalog : completeCatalog;
+  const modelOptions = equipmentCatalog.filter(
+    (item) =>
+      item.tem &&
+      (selectedCategories.length === 0 || selectedCategories.includes(item.category)) &&
+      uniquePartsCatalog.some((part) => part.compatibleModels?.some((model) => model.category === item.category && model.tem === item.tem)),
+  );
 
-    const updateDots = (index: number) => {
-      setCurrentCardIndex(index);
-    };
-
-    /* -------------------------------------------------------
-       CARD STEP
-    ------------------------------------------------------- */
-
-    const cardStep = () => {
-      if (cards.length <= 1) {
-        return (cards[0] as HTMLElement).offsetWidth;
-      }
-
-      return (
-        (cards[1] as HTMLElement).offsetLeft -
-        (cards[0] as HTMLElement).offsetLeft
-      );
-    };
-
-    /* -------------------------------------------------------
-       GO TO CARD
-    ------------------------------------------------------- */
-
-    const goToCard = (
-      index: number,
-      smooth = true,
-    ) => {
-      current = Math.max(
-        0,
-        Math.min(cards.length - 1, index),
-      );
-
-      const card = cards[current] as HTMLElement;
-
-      const left =
-        card.offsetLeft -
-        (track.clientWidth - card.clientWidth) / 2;
-
-      track.scrollTo({
-        left,
-        behavior: smooth ? 'smooth' : 'auto',
-      });
-
-      updateArrows();
-      updateDots(current);
-    };
-
-    /* -------------------------------------------------------
-       SCROLL
-    ------------------------------------------------------- */
-
-    const handleScroll = () => {
-      const step = cardStep();
-
-      if (step <= 0) {
-        return;
-      }
-
-      current = Math.round(
-        track.scrollLeft / step,
-      );
-
-      current = Math.max(
-        0,
-        Math.min(cards.length - 1, current),
-      );
-
-      updateArrows();
-      updateDots(current);
-
-      sessionStorage.setItem(
-        SCROLL_POSITION_KEY,
-        String(track.scrollLeft),
-      );
-    };
-
-    /* -------------------------------------------------------
-       RESTORE CARD
-    ------------------------------------------------------- */
-
-    const getTargetCardIndex = () => {
-      const fromShop =
-        sessionStorage.getItem(FROM_SHOP_KEY);
-
-      if (fromShop === 'true') {
-        const savedCardIndex =
-          sessionStorage.getItem(
-            SELECTED_CARD_KEY,
-          );
-
-        sessionStorage.removeItem(
-          FROM_SHOP_KEY,
-        );
-
-        sessionStorage.removeItem(
-          SELECTED_CARD_KEY,
-        );
-
-        sessionStorage.removeItem(
-          SCROLL_POSITION_KEY,
-        );
-
-        if (savedCardIndex !== null) {
-          const index = parseInt(
-            savedCardIndex,
-            10,
-          );
-
-          if (
-            !Number.isNaN(index) &&
-            index >= 0 &&
-            index < cards.length
-          ) {
-            return index;
-          }
-        }
-
-        return 0;
-      }
-
-      sessionStorage.removeItem(
-        SELECTED_CARD_KEY,
-      );
-
-      sessionStorage.removeItem(
-        SCROLL_POSITION_KEY,
-      );
-
-      return 0;
-    };
-
-    /* -------------------------------------------------------
-       INITIAL POSITION
-    ------------------------------------------------------- */
-
-    const targetIndex =
-      getTargetCardIndex();
-
-    goToCard(
-      targetIndex,
-      false,
-    );
-
-    setIsInitialized(true);
-
-    /* -------------------------------------------------------
-       NEXT
-    ------------------------------------------------------- */
-
-    const handleNextClick = () => {
-      goToCard(current + 1);
-
-      window.setTimeout(() => {
-        if (trackRef.current) {
-          sessionStorage.setItem(
-            SCROLL_POSITION_KEY,
-            String(
-              trackRef.current.scrollLeft,
-            ),
-          );
-        }
-      }, 100);
-    };
-
-    /* -------------------------------------------------------
-       PREVIOUS
-    ------------------------------------------------------- */
-
-    const handlePrevClick = () => {
-      goToCard(current - 1);
-
-      window.setTimeout(() => {
-        if (trackRef.current) {
-          sessionStorage.setItem(
-            SCROLL_POSITION_KEY,
-            String(
-              trackRef.current.scrollLeft,
-            ),
-          );
-        }
-      }, 100);
-    };
-
-    /* -------------------------------------------------------
-       EVENTS
-    ------------------------------------------------------- */
-
-    nextBtn.addEventListener(
-      'click',
-      handleNextClick,
-    );
-
-    prevBtn.addEventListener(
-      'click',
-      handlePrevClick,
-    );
-
-    track.addEventListener(
-      'scroll',
-      handleScroll,
-      { passive: true },
-    );
-
-    return () => {
-      nextBtn.removeEventListener(
-        'click',
-        handleNextClick,
-      );
-
-      prevBtn.removeEventListener(
-        'click',
-        handlePrevClick,
-      );
-
-      track.removeEventListener(
-        'scroll',
-        handleScroll,
-      );
-    };
-  }, [currentPage]);
-
-  /* =========================================================
-     OPEN CATEGORY
-     ========================================================= */
-
-  const openCategory = (
-    type: TProducts,
-    cardIndex?: number,
-  ) => {
-    if (cardIndex !== undefined) {
-      sessionStorage.setItem(
-        SELECTED_CARD_KEY,
-        String(cardIndex),
-      );
-
-      sessionStorage.setItem(
-        FROM_SHOP_KEY,
-        'true',
-      );
-    }
-
-    if (trackRef.current) {
-      sessionStorage.setItem(
-        SCROLL_POSITION_KEY,
-        String(
-          trackRef.current.scrollLeft,
-        ),
-      );
-    }
-
-    const url = new URL(
-      window.location.href,
-    );
-
-    url.searchParams.set(
-      'type',
-      type,
-    );
-
-    url.searchParams.delete(
-      'view',
-    );
-
-    window.history.pushState(
-      {},
-      '',
-      url.toString(),
-    );
-
-    setCurrentPage(type);
-
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
+  const filteredItems = useMemo(() => {
+    const query = search.trim().toLocaleLowerCase('ru');
+    const min = priceFrom === '' ? null : Math.max(0, Number(priceFrom));
+    const max = priceTo === '' ? null : Math.max(0, Number(priceTo));
+    const result = allItems.filter((item) => {
+      const { category, product, parentTitle, compatibleModels } = item;
+      if (!matchesCatalogSelection(item, selectedCategories, selectedModels)) return false;
+      if (withPhoto && !product.image) return false;
+      const price = parseCatalogPrice(product.price);
+      if (min !== null && price < min) return false;
+      if (max !== null && price > max) return false;
+      if (!query) return true;
+      return `${product.title} ${product.description} ${parentTitle ?? ''} ${categoryTitles[category]} ${compatibleModels?.map((model) => model.parentTitle).join(' ') ?? ''}`
+        .toLocaleLowerCase('ru')
+        .includes(query);
     });
+    if (sortOrder === 'price-asc') result.sort((a, b) => parseCatalogPrice(a.product.price) - parseCatalogPrice(b.product.price));
+    if (sortOrder === 'price-desc') result.sort((a, b) => parseCatalogPrice(b.product.price) - parseCatalogPrice(a.product.price));
+    if (sortOrder === 'name') result.sort((a, b) => a.product.title.localeCompare(b.product.title, 'ru'));
+    return result;
+  }, [allItems, selectedCategories, selectedModels, priceFrom, priceTo, withPhoto, search, sortOrder]);
+
+  const cartCounts = useMemo(() => new Map(cart.map((item) => [item.cartKey, item.count])), [cart]);
+  const pageSize = isMobile ? MOBILE_PAGE_SIZE : DESKTOP_PAGE_SIZE;
+  const pageCount = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+  const visiblePage = Math.min(catalogPage, pageCount);
+  const pageStart = (visiblePage - 1) * pageSize;
+  const pageItems = filteredItems.slice(pageStart, pageStart + pageSize);
+  const selectView = (view: CatalogView) => {
+    setCatalogView(view);
+    setCatalogPage(1);
   };
 
-  /* =========================================================
-     BACK TO SHOP
-     ========================================================= */
+  const toggleCategory = (category: ShopType) => {
+    const next = selectedCategories.includes(category)
+      ? selectedCategories.filter((selected) => selected !== category)
+      : [...selectedCategories, category];
+    setSelectedCategories(next);
+    if (next.length > 0) setSelectedModels((models) => models.filter((model) => next.includes(model.split(':')[0] as ShopType)));
+    setCatalogPage(1);
+  };
+
+  const toggleModel = (model: string) => {
+    setSelectedModels((models) => (models.includes(model) ? models.filter((selected) => selected !== model) : [...models, model]));
+    setCatalogPage(1);
+  };
+
+  const resetFilters = () => {
+    setCatalogView('all');
+    setSelectedCategories([]);
+    setSelectedModels([]);
+    setPriceFrom('');
+    setPriceTo('');
+    setWithPhoto(false);
+    setSearch('');
+    setSortOrder('default');
+    setCatalogPage(1);
+  };
+
+  const activeFilters: { key: string; label: string; onRemove: () => void }[] = [];
+  const removeFilter = (update: () => void) => () => {
+    update();
+    setCatalogPage(1);
+  };
+  if (catalogView !== 'all')
+    activeFilters.push({
+      key: 'type',
+      label: catalogView === 'equipment' ? 'Оборудование' : 'Комплектующие',
+      onRemove: removeFilter(() => selectView('all')),
+    });
+  selectedCategories.forEach((category) => {
+    activeFilters.push({
+      key: `category-${category}`,
+      label: `Категория: ${categoryShortTitles[category]}`,
+      onRemove: removeFilter(() => toggleCategory(category)),
+    });
+  });
+  selectedModels.forEach((model) => {
+    activeFilters.push({
+      key: `model-${model}`,
+      label: `Модель: ${equipmentCatalog.find((item) => `${item.category}:${item.tem}` === model)?.product.title ?? model}`,
+      onRemove: removeFilter(() => toggleModel(model)),
+    });
+  });
+  if (priceFrom !== '')
+    activeFilters.push({
+      key: 'price-from',
+      label: `Цена от ${Number(priceFrom).toLocaleString('ru-RU')} ₽`,
+      onRemove: removeFilter(() => setPriceFrom('')),
+    });
+  if (priceTo !== '')
+    activeFilters.push({
+      key: 'price-to',
+      label: `Цена до ${Number(priceTo).toLocaleString('ru-RU')} ₽`,
+      onRemove: removeFilter(() => setPriceTo('')),
+    });
+  if (withPhoto) activeFilters.push({ key: 'photo', label: 'С фотографией', onRemove: removeFilter(() => setWithPhoto(false)) });
+  if (search.trim()) activeFilters.push({ key: 'search', label: `Поиск: ${search.trim()}`, onRemove: removeFilter(() => setSearch('')) });
+  const activeFilterCount = activeFilters.length;
+
+  const goToPage = (page: number) => {
+    setCatalogPage(page);
+    document.getElementById('catalog-results')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
+  const addItem = (item: CatalogItem) => {
+    addToCart(item.product, 1);
+  };
+
+  const openCart = () => window.dispatchEvent(new Event('toggleGlobalCart'));
+
+  const openItem = (item: CatalogItem, isPart: boolean) => {
+    window.history.pushState({}, '', itemHref(item, isPart));
+    setCurrentPage(isPart ? 'part' : 'equipment');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const backToShop = () => {
-    const url = new URL(
-      window.location.href,
-    );
-
-    url.searchParams.delete(
-      'type',
-    );
-
-    url.searchParams.delete(
-      'view',
-    );
-
-    window.history.pushState(
-      {},
-      '',
-      url.toString(),
-    );
-
+    window.history.pushState({}, '', '/shop');
     setCurrentPage('shop');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /* =========================================================
-     ORDER
-     ========================================================= */
-
-  const openOrder = () => {
-    const url = new URL(
-      window.location.href,
-    );
-
-    url.searchParams.set(
-      'view',
-      'order',
-    );
-
-    url.searchParams.delete(
-      'type',
-    );
-
-    window.history.pushState(
-      {},
-      '',
-      url.toString(),
-    );
-
-    setCurrentPage('order');
-  };
-
-  const closeOrder = () => {
-    /*
-     * Возвращаемся в магазин.
-     * Не используем history.back(),
-     * чтобы не было неожиданных возвратов
-     * на предыдущую страницу сайта.
-     */
-
-    const url = new URL(
-      window.location.href,
-    );
-
-    url.searchParams.delete(
-      'view',
-    );
-
-    url.searchParams.delete(
-      'type',
-    );
-
-    window.history.pushState(
-      {},
-      '',
-      url.toString(),
-    );
-
-    setCurrentPage('shop');
-  };
-
-  /* =========================================================
-     PAGE STATE
-     ========================================================= */
-
-  const isOrder =
-    currentPage === 'order';
-
-  /* =========================================================
-     RENDER
-     ========================================================= */
-
+  if (currentPage === 'order') return <Order onBack={backToShop} onFinish={backToShop} />;
+  const detail = typeof window === 'undefined' ? detailFromPath(initialPath) : detailFromUrl();
+  if (currentPage === 'equipment' && detail?.kind === 'equipment')
+    return <ProductPage product={detail.item.product} kind="equipment" onBack={backToShop} />;
+  if (currentPage === 'part' && detail?.kind === 'part')
+    return <ProductPage product={detail.item.product} onBack={backToShop} />;
   return (
-    <>
-      {/* =====================================================
-          ORDER
-          ===================================================== */}
+    <section className={styles.catalog} aria-label="Каталог товаров">
+      <header className={styles.shopHeader}>
+        <span className={styles.shopEyebrow}>Каталог</span>
+        <h1>Онлайн-магазин</h1>
+        <p>Оборудование и комплектующие для вашей модели — в одном каталоге.</p>
+      </header>
 
-      {isOrder && (
-        <Order
-          onBack={closeOrder}
-        />
-      )}
-
-      {/* =====================================================
-          SHOP
-          ===================================================== */}
-
-      {currentPage === 'shop' && (
-        <Layout
-          title="Онлайн магазин"
-          description="Качество продукции ООО ИПП «Новые Технологии» соответствует всем стандартам в области безопасности и качества."
+      <div className={styles.searchRow}>
+        <label className={styles.searchField}>
+          <Search size={21} aria-hidden="true" />
+          <span className={styles.visuallyHidden}>Поиск по названию и артикулу</span>
+          <input
+            type="search"
+            value={search}
+            onChange={(event) => {
+              setSearch(event.target.value);
+              setCatalogPage(1);
+            }}
+            placeholder="Поиск по названию, модели или артикулу"
+          />
+          {search && (
+            <button type="button" onClick={() => setSearch('')} aria-label="Очистить поиск">
+              <X size={17} />
+            </button>
+          )}
+        </label>
+        <button
+          type="button"
+          className={styles.mobileFilterButton}
+          onClick={() => setFiltersOpen(true)}
+          aria-label={`Открыть фильтры${activeFilterCount > 0 ? `, выбрано: ${activeFilterCount}` : ''}`}
         >
-          <>
-            <div className={styles.shopWrapper}>
-              <div
-                className={styles.cardsTrack}
-                ref={trackRef}
-              >
-                {products.map(
-                  (
-                    product,
-                    index,
-                  ) => (
-                    <div
-                      className="card"
-                      key={product.type}
-                    >
-                      <Card
-                        imgSrc={
-                          product.img
-                        }
-                        title={
-                          product.title
-                        }
-                        onClick={() =>
-                          openCategory(
-                            product.type,
-                            index,
-                          )
-                        }
-                      />
-                    </div>
-                  ),
-                )}
-              </div>
+          <SlidersHorizontal size={19} aria-hidden="true" />
+          <span className={styles.mobileFilterLabel}>Фильтры</span>
+          {activeFilterCount > 0 && <span className={styles.mobileFilterCount} aria-hidden="true">{activeFilterCount}</span>}
+        </button>
+      </div>
 
-              {/* =================================================
-                  MOBILE NAVIGATION
-                  ================================================= */}
+      <div className={styles.contentLayout}>
+        {filtersOpen && (
+          <button type="button" className={styles.filterBackdrop} aria-label="Закрыть фильтры" onClick={() => setFiltersOpen(false)} />
+        )}
+        <aside
+          className={`${styles.sidebar} ${filtersOpen ? styles.sidebarOpen : ''}`}
+          aria-label="Фильтры каталога"
+          role={filtersOpen ? 'dialog' : undefined}
+          aria-modal={filtersOpen ? true : undefined}
+        >
+          <div className={styles.sidebarHeader}>
+            <h2>Фильтры</h2>
+            <button type="button" className={styles.resetButton} onClick={resetFilters}>
+              <RotateCcw size={15} /> Сбросить
+            </button>
+            <button type="button" className={styles.closeFilters} onClick={() => setFiltersOpen(false)} aria-label="Закрыть фильтры">
+              <X size={22} />
+            </button>
+          </div>
 
-              <div
-                className={
-                  styles.mobileNav
-                }
-              >
-                <button
-                  type="button"
-                  className={
-                    styles.prevBtn
-                  }
-                  ref={
-                    prevBtnRef
-                  }
-                  aria-label="Предыдущий товар"
-                >
-                  ←
-                </button>
+          <div className={styles.filterGroup}>
+            <h3>Тип товара</h3>
+            {(
+              [
+                ['all', 'Все товары', completeCatalog.length],
+                ['equipment', 'Оборудование', equipmentCatalog.length],
+                ['parts', 'Комплектующие', uniquePartsCatalog.length],
+              ] as const
+            ).map(([view, label, count]) => (
+              <label key={view} className={styles.radioRow}>
+                <input type="radio" name="catalog-type" checked={catalogView === view} onChange={() => selectView(view)} />
+                <span>{label}</span>
+                <small>{count}</small>
+              </label>
+            ))}
+          </div>
 
-                <button
-                  type="button"
-                  className={
-                    styles.nextBtn
-                  }
-                  ref={
-                    nextBtnRef
-                  }
-                  aria-label="Следующий товар"
-                >
-                  →
-                </button>
-              </div>
-
-              {/* =================================================
-                  MOBILE PAGINATION
-                  ================================================= */}
-
-              {isMobile && (
-                <div
-                  className={
-                    styles.paginationDots
-                  }
-                  role="tablist"
-                  aria-label="Навигация по товарам"
-                >
-                  {products.map(
-                    (
-                      product,
-                      index,
-                    ) => (
-                      <button
-                        type="button"
-                        key={
-                          product.type
-                        }
-                        className={[
-                          styles.dot,
-                          currentCardIndex ===
-                            index
-                            ? styles.active
-                            : '',
-                        ]
-                          .filter(
-                            Boolean,
-                          )
-                          .join(' ')}
-                        onClick={() => {
-                          const track =
-                            trackRef.current;
-
-                          const cards =
-                            track?.querySelectorAll(
-                              '.card',
-                            );
-
-                          if (
-                            !track ||
-                            !cards ||
-                            !cards[index]
-                          ) {
-                            return;
-                          }
-
-                          const card =
-                            cards[
-                            index
-                            ] as HTMLElement;
-
-                          const left =
-                            card.offsetLeft -
-                            (
-                              track.clientWidth -
-                              card.clientWidth
-                            ) /
-                            2;
-
-                          track.scrollTo({
-                            left,
-                            behavior:
-                              'smooth',
-                          });
-
-                          setCurrentCardIndex(
-                            index,
-                          );
-                        }}
-                        role="tab"
-                        aria-selected={
-                          currentCardIndex ===
-                          index
-                        }
-                        aria-label={`Перейти к товару ${index + 1}`}
-                      />
-                    ),
-                  )}
-                </div>
-              )}
+          <div className={styles.filterGroup}>
+            <h3>Цена, ₽</h3>
+            <div className={styles.priceInputs}>
+              <label>
+                <span>От</span>
+                <input
+                  type="number"
+                  min="0"
+                  inputMode="numeric"
+                  value={priceFrom}
+                  onChange={(event) => {
+                    setPriceFrom(event.target.value);
+                    setCatalogPage(1);
+                  }}
+                  placeholder="0"
+                />
+              </label>
+              <label>
+                <span>До</span>
+                <input
+                  type="number"
+                  min="0"
+                  inputMode="numeric"
+                  value={priceTo}
+                  onChange={(event) => {
+                    setPriceTo(event.target.value);
+                    setCatalogPage(1);
+                  }}
+                  placeholder="Любая"
+                />
+              </label>
             </div>
-          </>
+          </div>
 
-          <BackToTop />
-        </Layout>
-      )}
+          <div className={styles.filterGroup}>
+            <h3>Категория</h3>
+            <p className={styles.filterHint}>Можно выбрать несколько категорий</p>
+            {categories.map((category) => (
+              <label key={category} className={styles.radioRow}>
+                <input type="checkbox" checked={selectedCategories.includes(category)} onChange={() => toggleCategory(category)} />
+                <span>{categoryShortTitles[category]}</span>
+                <small>
+                  {
+                    allItems.filter(
+                      (item) => item.category === category || item.compatibleModels?.some((model) => model.category === category),
+                    ).length
+                  }
+                </small>
+              </label>
+            ))}
+          </div>
 
-      {/* =====================================================
-          SHOP 1
-          ===================================================== */}
+          <div className={styles.filterGroup}>
+            <h3>Для модели оборудования</h3>
+            <p className={styles.filterHint}>Можно выбрать несколько моделей</p>
+            <div className={styles.modelOptions}>
+              {modelOptions.map((item) => (
+                <label key={`${item.category}:${item.tem}`} className={styles.radioRow}>
+                  <input
+                    type="checkbox"
+                    checked={selectedModels.includes(`${item.category}:${item.tem}`)}
+                    onChange={() => toggleModel(`${item.category}:${item.tem}`)}
+                  />
+                  <span title={item.product.title}>{item.product.title}</span>
+                </label>
+              ))}
+            </div>
+          </div>
 
-      {currentPage ===
-        'shop_1' && (
-          <Shop_1
-            title={
-              cardTitle.shop_1
-            }
-            onBackProducts={
-              backToShop
-            }
-          />
-        )}
+          <div className={styles.filterGroup}>
+            <label className={styles.checkRow}>
+              <input
+                type="checkbox"
+                checked={withPhoto}
+                onChange={(event) => {
+                  setWithPhoto(event.target.checked);
+                  setCatalogPage(1);
+                }}
+              />
+              <span>Только с фотографией</span>
+            </label>
+          </div>
+          <button type="button" className={styles.applyFilters} onClick={() => setFiltersOpen(false)}>
+            Показать {filteredItems.length} товаров <ArrowRight size={18} />
+          </button>
+        </aside>
 
-      {/* =====================================================
-          SHOP 2
-          ===================================================== */}
+        <div id="catalog-results" className={styles.resultsArea}>
+          <div className={styles.resultsHeader}>
+            <div>
+              <h2>{catalogView === 'equipment' ? 'Оборудование' : catalogView === 'parts' ? 'Комплектующие' : 'Все товары'}</h2>
+              <p aria-live="polite">
+                {filteredItems.length > 0
+                  ? `Показаны ${pageStart + 1}–${pageStart + pageItems.length} из ${filteredItems.length} товаров`
+                  : 'Товары не найдены'}
+              </p>
+            </div>
+            <label className={styles.sortField}>
+              <span>Сортировка</span>
+              <select
+                value={sortOrder}
+                onChange={(event) => {
+                  setSortOrder(event.target.value as SortOrder);
+                  setCatalogPage(1);
+                }}
+              >
+                <option value="default">По умолчанию</option>
+                <option value="price-asc">Сначала дешевле</option>
+                <option value="price-desc">Сначала дороже</option>
+                <option value="name">По названию</option>
+              </select>
+            </label>
+          </div>
 
-      {currentPage ===
-        'shop_2' && (
-          <Shop_2
-            title={
-              cardTitle.shop_2
-            }
-            onBackProducts={
-              backToShop
-            }
-          />
-        )}
+          {activeFilterCount > 0 && (
+            <div className={styles.activeFilters} aria-label="Выбранные фильтры">
+              {activeFilters.map((filter) => (
+                <button
+                  key={filter.key}
+                  type="button"
+                  className={styles.activeFilter}
+                  onClick={filter.onRemove}
+                  aria-label={`Убрать фильтр: ${filter.label}`}
+                >
+                  <span>{filter.label}</span> <X size={15} aria-hidden="true" />
+                </button>
+              ))}
+            </div>
+          )}
 
-      {/* =====================================================
-          SHOP 3
-          ===================================================== */}
+          {filteredItems.length ? (
+            <div className={styles.grid}>
+              {pageItems.map((item) => {
+                const isPart = Boolean(item.compatibleModels);
+                const detailItem =
+                  item.compatibleModels?.find((model) => selectedModels.includes(`${model.category}:${model.tem}`)) ??
+                  item.compatibleModels?.find((model) => selectedCategories.includes(model.category)) ??
+                  item;
+                return (
+                  <CatalogCard
+                    key={getCartKey(item.product)}
+                    item={item}
+                    isPart={isPart}
+                    count={cartCounts.get(getCartKey(item.product)) ?? 0}
+                    href={itemHref(detailItem, isPart)}
+                    onOpen={() => openItem(detailItem, isPart)}
+                    onAdd={() => addItem(item)}
+                    onIncrease={() => addToCart(item.product, 1)}
+                    onDecrease={() => changeItemCount(getCartKey(item.product), -1)}
+                    onOpenCart={openCart}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div className={styles.empty}>
+              <Search size={32} aria-hidden="true" />
+              <h3>Ничего не найдено</h3>
+              <p>Попробуйте изменить запрос или параметры фильтра.</p>
+              <button type="button" onClick={resetFilters}>
+                Сбросить фильтры
+              </button>
+            </div>
+          )}
 
-      {currentPage ===
-        'shop_3' && (
-          <Shop_3
-            title={ cardTitle.shop_3 }
-            onBackProducts={ backToShop }
-          />
-        )}
+          {pageCount > 1 && (
+            <nav className={styles.pagination} aria-label="Страницы каталога">
+              <button type="button" onClick={() => goToPage(visiblePage - 1)} disabled={visiblePage === 1}>
+                Назад
+              </button>
+              <span aria-live="polite">
+                Страница {visiblePage} из {pageCount}
+              </span>
+              <button type="button" onClick={() => goToPage(visiblePage + 1)} disabled={visiblePage === pageCount}>
+                Следующая <ArrowRight size={16} aria-hidden="true" />
+              </button>
+            </nav>
+          )}
+        </div>
+      </div>
 
-      {/* =====================================================
-          SHOP 4
-          ===================================================== */}
-
-      {currentPage ===
-        'shop_4' && (
-          <Shop_4
-            title={ cardTitle.shop_4 }
-            onBackProducts={ backToShop }
-          />
-        )}
-
-      {/* =====================================================
-          SHOP 5
-          ===================================================== */}
-
-      {currentPage === 'shop_5' && (
-          <Shop_5 
-            title={ cardTitle.shop_5 }
-            onBackProducts={ backToShop }
-          />
-        )}
-    </>
+      <BackToTop />
+    </section>
   );
 };
