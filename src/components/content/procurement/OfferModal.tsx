@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Styles from "./forma.module.scss";
 import { exportGroupToExcel } from "./exportExcel";
 import * as XLSX from "xlsx";
@@ -7,6 +7,34 @@ import InputMask from "react-input-mask";
 type Item = { id: number; name: string | null; quantity: number | string; unit: string; note: string | null };
 type Group = { note: string; items: Item[] };
 type Props = { group: Group; onClose: () => void;};
+
+const fileLabels: Record<string, string> = {
+  egrul: "Выписка ЕГРЮЛ",
+  charter: "Устав компании",
+  partnerCard: "Карта партнёра",
+  directorDecision: "Решение директора",
+  invoicePDF: "Счёт с подписью и печатью (PDF)",
+  offerFile: "Файл с предложением (Excel)"
+};
+
+const fieldIds: Record<string, string> = {
+  fullName: "offer-full-name",
+  company: "offer-company",
+  email: "offer-email",
+  phone: "offer-phone",
+  inn: "offer-inn",
+  egrul: "offer-egrul",
+  charter: "offer-charter",
+  partnerCard: "offer-partner-card",
+  directorDecision: "offer-director-decision",
+  invoicePDF: "offer-invoice",
+  offerFile: "offer-excel",
+  consent: "offer-consent",
+  privacyAgreement: "offer-privacy"
+};
+
+const fieldOrder = Object.keys(fieldIds);
+type FormErrors = Record<string, string | boolean | undefined>;
 
 export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
   const [form, setForm] = useState({
@@ -23,10 +51,55 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     egrul: null, charter: null, partnerCard: null, directorDecision: null, offerFile: null, invoicePDF: null
   });
 
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState(false);
+  const [checkingOfferFile, setCheckingOfferFile] = useState(false);
+  const focusOnErrorRef = useRef(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
-  useEffect(() => { document.body.style.overflow = "hidden"; return () => { document.body.style.overflow = ""; }; }, []);
+  useEffect(() => {
+    if (!focusOnErrorRef.current) return;
+    focusOnErrorRef.current = false;
+    const firstInvalid = fieldOrder.find((field) => errors[field]);
+    if (!firstInvalid) return;
+    const target = document.getElementById(fieldIds[firstInvalid]) as HTMLElement | null;
+    if (!target) return;
+    const scrollTarget = target.closest("label") || target;
+    scrollTarget.scrollIntoView({ behavior: "smooth", block: "center" });
+    target.focus({ preventScroll: true });
+  }, [errors]);
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    const returnFocusTo = document.activeElement as HTMLElement | null;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") onClose(); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+      if (returnFocusTo?.isConnected) returnFocusTo.focus({ preventScroll: true });
+    };
+  }, [onClose]);
+
+  const handleDialogKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Tab" || !dialogRef.current) return;
+    const focusable = Array.from(dialogRef.current.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), a[href], input:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )).filter((element) => element.getClientRects().length > 0);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (!first || !last) return;
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
 
   const handleFormChange = (field: keyof typeof form, value: string | boolean) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -52,8 +125,16 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     handleFormChange(field, checked);
   };
 
+  const rejectOfferFile = (message: string) => {
+    const input = document.getElementById("offer-excel") as HTMLInputElement | null;
+    if (input) input.value = "";
+    setFiles(prev => ({ ...prev, offerFile: null }));
+    setErrors(prev => ({ ...prev, offerFile: message }));
+  };
+
   const handleOfferFileChange = (file: File | null) => {
-    if (!file) { handleFileChange("offerFile", null); setErrors(prev => ({ ...prev, offerFile: "Выберите файл" })); return; }
+    if (!file) { setCheckingOfferFile(false); rejectOfferFile("Выберите файл с предложением (Excel)"); return; }
+    setCheckingOfferFile(true);
     const reader = new FileReader();
     reader.onload = e => {
       try {
@@ -78,26 +159,28 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
           while (row.length < Math.max(...requiredIndexes) + 1) row.push("");
           if (requiredIndexes.every(idx => (row[idx] ?? "").toString().trim() !== "")) { hasValidRow = true; break; }
         }
-        if (!hasValidRow) { handleFileChange("offerFile", null); setErrors(prev => ({ ...prev, offerFile: "Должна быть хотя бы одна строка с заполненными столбцами" })); return; }
+        if (!hasValidRow) { rejectOfferFile("В Excel должна быть хотя бы одна строка с заполненными столбцами"); return; }
         handleFileChange("offerFile", file);
       } catch (err: any) {
-        handleFileChange("offerFile", null);
-        setErrors(prev => ({ ...prev, offerFile: err.message || "Ошибка при чтении Excel" }));
+        rejectOfferFile(err.message || "Ошибка при чтении Excel");
+      } finally {
+        setCheckingOfferFile(false);
       }
     };
-    reader.onerror = () => { handleFileChange("offerFile", null); setErrors(prev => ({ ...prev, offerFile: "Ошибка при чтении Excel" })); };
+    reader.onerror = () => { setCheckingOfferFile(false); rejectOfferFile("Ошибка при чтении Excel"); };
     reader.readAsArrayBuffer(file);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newErrors: any = {};
+    const newErrors: FormErrors = {};
     
     // Валидация полей
-    if (!form.fullName) newErrors.fullName = "Введите ФИО";
-    if (!form.company) newErrors.company = "Введите компанию";
-    if (!form.email) newErrors.email = "Введите email";
-    if (!form.inn) newErrors.inn = "Введите ИНН";
+    if (!form.fullName.trim()) newErrors.fullName = "Введите ФИО";
+    if (!form.company.trim()) newErrors.company = "Введите компанию";
+    if (!form.email.trim()) newErrors.email = "Введите email";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) newErrors.email = "Введите корректный email";
+    if (!form.inn.trim()) newErrors.inn = "Введите ИНН";
     if (!form.phone || form.phone.includes("_")) newErrors.phone = "Введите корректный номер телефона";
     
     // Проверка чекбоксов
@@ -105,9 +188,15 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     if (!form.privacyAgreement) newErrors.privacyAgreement = "Необходимо подтвердить ознакомление с политикой конфиденциальности";
     
     // Проверка файлов
-    Object.entries(files).forEach(([key, file]) => { if (!file) newErrors[key] = "Загрузите файл"; });
+    Object.entries(files).forEach(([key, file]) => {
+      if (!file) newErrors[key] = `Не прикреплён файл «${fileLabels[key]}»`;
+    });
     
-    if (Object.keys(newErrors).length > 0) { setErrors(newErrors); return; }
+    if (Object.keys(newErrors).length > 0) {
+      focusOnErrorRef.current = true;
+      setErrors(newErrors);
+      return;
+    }
 
     const formData = new FormData();
     Object.entries(form).forEach(([key, value]) => formData.append(key, value.toString()));
@@ -124,120 +213,162 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
   };
 
   return (
-    <div className={Styles.modalBg} onClick={onClose}>
-      <div className={Styles.modal} onClick={e => e.stopPropagation()}>
-        <h1>Добавить свое предложение</h1>
+    <div className={Styles.modalBg} onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
+      <div ref={dialogRef} className={Styles.modal} role="dialog" aria-modal="true" aria-labelledby="offer-title" onKeyDown={handleDialogKeyDown}>
+        <div className={Styles.modalHeader}>
+          <div>
+            <span className={Styles.modalEyebrow}>ПОСТАВЩИКАМ · ЛОТ {group.note}</span>
+            <h2 id="offer-title">Добавить предложение</h2>
+            <p>Оставьте контакты и приложите документы для участия в закупке.</p>
+          </div>
+          <button ref={closeRef} type="button" className={Styles.closeButton} onClick={onClose} aria-label="Закрыть форму">×</button>
+        </div>
 
+        <div className={Styles.modalBody}>
         <div className={Styles.downloadBlock}>
+          <div><strong>Перечень закупаемых МТР</strong><span>Скачайте файл, заполните предложение и прикрепите его ниже.</span></div>
           <button type="button" className={Styles.downloadButton} onClick={() => exportGroupToExcel(group)}>
-            Скачать перечень закупаемых МТР
+            Скачать Excel <span aria-hidden="true">↓</span>
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className={Styles.form}>
+        <form onSubmit={handleSubmit} className={Styles.form} noValidate>
+          <div className={Styles.sectionHeading}><span>01</span><div><h3>Контактные данные</h3><p>Как с вами связаться</p></div></div>
+          <div className={Styles.fieldGrid}>
           <div>
+            <label htmlFor="offer-full-name">ФИО</label>
             <input
+              id="offer-full-name"
               type="text"
-              placeholder="ФИО"
+              placeholder="Иванов Иван Иванович"
               value={form.fullName}
               onChange={e => handleFormChange("fullName", e.target.value)}
               className={`${Styles.input} ${errors.fullName ? Styles.errorInput : ""}`}
+              aria-invalid={!!errors.fullName}
             />
             {errors.fullName && <p className={Styles.error}>{errors.fullName}</p>}
           </div>
 
           <div>
+            <label htmlFor="offer-company">Компания</label>
             <input
+              id="offer-company"
               type="text"
               placeholder="Название компании"
               value={form.company}
               onChange={e => handleFormChange("company", e.target.value)}
               className={`${Styles.input} ${errors.company ? Styles.errorInput : ""}`}
+              aria-invalid={!!errors.company}
             />
             {errors.company && <p className={Styles.error}>{errors.company}</p>}
           </div>
 
           <div>
+            <label htmlFor="offer-email">Электронная почта</label>
             <input
+              id="offer-email"
               type="email"
-              placeholder="Email"
+              placeholder="mail@company.ru"
               value={form.email}
               onChange={e => handleFormChange("email", e.target.value)}
               className={`${Styles.input} ${errors.email ? Styles.errorInput : ""}`}
+              aria-invalid={!!errors.email}
             />
             {errors.email && <p className={Styles.error}>{errors.email}</p>}
           </div>          
 
           <div>
+            <label htmlFor="offer-phone">Телефон</label>
             <InputMask
+              id="offer-phone"
               mask="+7 (999) 999-99-99"
-              placeholder="Телефон"
+              placeholder="+7 (999) 000-00-00"
               value={form.phone}
               onChange={e => handleFormChange("phone", e.target.value)}
               className={`${Styles.input} ${errors.phone ? Styles.errorInput : ""}`}
+              aria-invalid={!!errors.phone}
             />
             {errors.phone && <p className={Styles.error}>{errors.phone}</p>}
           </div>
 
           <div>
+            <label htmlFor="offer-inn">ИНН компании</label>
             <input
+              id="offer-inn"
               type="text"
-              placeholder="ИНН компании"
+              placeholder="10 или 12 цифр"
               value={form.inn}
               onChange={e => handleFormChange("inn", e.target.value)}
               className={`${Styles.input} ${errors.inn ? Styles.errorInput : ""}`}
+              aria-invalid={!!errors.inn}
             />
             {errors.inn && <p className={Styles.error}>{errors.inn}</p>}
           </div>
 
-          {/* Файлы */}
-          <div>
-            <label>Выписка ЕГРЮЛ</label>
-            <input type="file" onChange={e => handleFileChange("egrul", e.target.files?.[0] || null)} />
+          </div>
+
+          <div className={Styles.sectionHeading}><span>02</span><div><h3>Документы</h3><p>Приложите файлы компании и заполненное предложение</p></div></div>
+          {Object.keys(fileLabels).some((key) => errors[key]) && (
+            <div className={Styles.missingFiles} role="alert">
+              <strong>Не хватает документов:</strong>
+              <span>{Object.keys(fileLabels).filter((key) => errors[key]).map((key) => fileLabels[key]).join(", ")}</span>
+            </div>
+          )}
+          <div className={Styles.fileGrid}>
+          <div className={errors.egrul ? Styles.fileError : ""}>
+            <label htmlFor="offer-egrul">Выписка ЕГРЮЛ</label>
+            <input id="offer-egrul" type="file" aria-invalid={!!errors.egrul} onChange={e => handleFileChange("egrul", e.target.files?.[0] || null)} />
+            <p className={`${Styles.fileStatus} ${files.egrul ? Styles.fileChosen : ""}`}>{files.egrul ? `✓ ${files.egrul.name}` : "Файл не выбран"}</p>
             {errors.egrul && <p className={Styles.error}>{errors.egrul}</p>}
           </div>
-          <div>
-            <label>Устав компании</label>
-            <input type="file" onChange={e => handleFileChange("charter", e.target.files?.[0] || null)} />
+          <div className={errors.charter ? Styles.fileError : ""}>
+            <label htmlFor="offer-charter">Устав компании</label>
+            <input id="offer-charter" type="file" aria-invalid={!!errors.charter} onChange={e => handleFileChange("charter", e.target.files?.[0] || null)} />
+            <p className={`${Styles.fileStatus} ${files.charter ? Styles.fileChosen : ""}`}>{files.charter ? `✓ ${files.charter.name}` : "Файл не выбран"}</p>
             {errors.charter && <p className={Styles.error}>{errors.charter}</p>}
           </div>
-          <div>
-            <label>Карта партнера</label>
-            <input type="file" onChange={e => handleFileChange("partnerCard", e.target.files?.[0] || null)} />
+          <div className={errors.partnerCard ? Styles.fileError : ""}>
+            <label htmlFor="offer-partner-card">Карта партнёра</label>
+            <input id="offer-partner-card" type="file" aria-invalid={!!errors.partnerCard} onChange={e => handleFileChange("partnerCard", e.target.files?.[0] || null)} />
+            <p className={`${Styles.fileStatus} ${files.partnerCard ? Styles.fileChosen : ""}`}>{files.partnerCard ? `✓ ${files.partnerCard.name}` : "Файл не выбран"}</p>
             {errors.partnerCard && <p className={Styles.error}>{errors.partnerCard}</p>}
           </div>
-          <div>
-            <label>Решение директора</label>
-            <input type="file" onChange={e => handleFileChange("directorDecision", e.target.files?.[0] || null)} />
+          <div className={errors.directorDecision ? Styles.fileError : ""}>
+            <label htmlFor="offer-director-decision">Решение директора</label>
+            <input id="offer-director-decision" type="file" aria-invalid={!!errors.directorDecision} onChange={e => handleFileChange("directorDecision", e.target.files?.[0] || null)} />
+            <p className={`${Styles.fileStatus} ${files.directorDecision ? Styles.fileChosen : ""}`}>{files.directorDecision ? `✓ ${files.directorDecision.name}` : "Файл не выбран"}</p>
             {errors.directorDecision && <p className={Styles.error}>{errors.directorDecision}</p>}
           </div>
-          <div>
-            <label>Счет с подписью и печатью (PDF)</label>
-            <input type="file" accept=".pdf" onChange={e => handleFileChange("invoicePDF", e.target.files?.[0] || null)} />
+          <div className={errors.invoicePDF ? Styles.fileError : ""}>
+            <label htmlFor="offer-invoice">Счёт с подписью и печатью (PDF)</label>
+            <input id="offer-invoice" type="file" accept=".pdf" aria-invalid={!!errors.invoicePDF} onChange={e => handleFileChange("invoicePDF", e.target.files?.[0] || null)} />
+            <p className={`${Styles.fileStatus} ${files.invoicePDF ? Styles.fileChosen : ""}`}>{files.invoicePDF ? `✓ ${files.invoicePDF.name}` : "Файл не выбран"}</p>
             {errors.invoicePDF && <p className={Styles.error}>{errors.invoicePDF}</p>}
           </div>
-          <div>
-            <label>Файл с предложением (Excel)</label>
-            <input type="file" accept=".xlsx,.xls" onChange={e => handleOfferFileChange(e.target.files?.[0] || null)} />
+          <div className={errors.offerFile ? Styles.fileError : ""}>
+            <label htmlFor="offer-excel">Файл с предложением (Excel)</label>
+            <input id="offer-excel" type="file" accept=".xlsx,.xls" aria-invalid={!!errors.offerFile} onChange={e => handleOfferFileChange(e.target.files?.[0] || null)} />
+            <p className={`${Styles.fileStatus} ${files.offerFile ? Styles.fileChosen : ""}`}>{checkingOfferFile ? "Проверяем файл…" : files.offerFile ? `✓ ${files.offerFile.name}` : "Файл не выбран"}</p>
             {errors.offerFile && <p className={Styles.error}>{errors.offerFile}</p>}
           </div>
 
-          {/* Чекбоксы*/}
-          <div>
+          </div>
+
+          <div className={Styles.sectionHeading}><span>03</span><div><h3>Согласия</h3><p>Подтвердите условия обработки данных</p></div></div>
+          <div className={Styles.consents}>
             {/* Первый чекбокс - согласие на обработку данных */}
             <div className={Styles.checkboxWrapper}>
               <label className={`${Styles.checkbox} ${errors.consent ? Styles.error : ''}`}>
                 <input
+                  id="offer-consent"
                   type="checkbox"
                   checked={form.consent}
                   onChange={e => handleCheckboxChange('consent', e.target.checked)}
+                  aria-invalid={!!errors.consent}
                 />
                 <span className={Styles.customCheckbox}></span>
                 <span className={Styles.checkboxText}>
-                  Я даю согласие на
-                  <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">
-                    обработку моих персональных данных
-                  </a>
+                  Я даю согласие на <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">обработку моих персональных данных</a>
                   , включая загрузку и обработку прилагаемых документов.
                 </span>
               </label>
@@ -252,14 +383,15 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
             <div className={Styles.checkboxWrapper}>
               <label className={`${Styles.checkbox} ${errors.privacyAgreement ? Styles.error : ''}`}>
                 <input
+                  id="offer-privacy"
                   type="checkbox"
                   checked={form.privacyAgreement}
                   onChange={e => handleCheckboxChange('privacyAgreement', e.target.checked)}
+                  aria-invalid={!!errors.privacyAgreement}
                 />
                 <span className={Styles.customCheckbox}></span>
                 <span className={Styles.checkboxText}>
-                  С <a href="/file/privacy_v1.pdf" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a> 
-                  ознакомлен(а) и согласен(на).
+                  С <a href="/file/privacy_v1.pdf" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a> ознакомлен(а) и согласен(на).
                 </span>
               </label>
               {errors.privacyAgreement && (
@@ -271,10 +403,11 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
           </div>
 
           <div className={Styles.buttons}>
-            <button type="submit" disabled={loading}>{loading ? "Отправка..." : "Отправить"}</button>
             <button type="button" onClick={onClose}>Отмена</button>
+            <button type="submit" disabled={loading || checkingOfferFile}>{loading ? "Отправка…" : checkingOfferFile ? "Проверяем Excel…" : "Отправить предложение"} <span aria-hidden="true">↗</span></button>
           </div>
         </form>
+        </div>
       </div>
     </div>
   );
