@@ -20,8 +20,8 @@ type Group = {
   items: Item[];
 };
 
-const PAGE_SIZE = 10;
-const MOBILE_PAGE_SIZE = 6;
+const PAGE_SIZE = 9;
+const MOBILE_PAGE_SIZE = 4;
 
 export const Procurement = () => {
   const [items, setItems] = useState<Item[]>([]);

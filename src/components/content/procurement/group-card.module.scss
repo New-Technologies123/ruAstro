@@ -109,13 +109,13 @@
 .selected .cardBottom { background: #e2f0fb; }
 
 @media (max-width: 800px) {
-  .card { min-height: 136px; padding: 16px; gap: 7px; }
+  .card { min-height: 150px; padding: 17px; gap: 8px; }
   .lotTitle { font-size: 17px; }
-  .preview { min-height: 18px; -webkit-line-clamp: 1; }
+  .preview { min-height: 36px; -webkit-line-clamp: 2; }
 }
 
 @media (max-width: 560px) {
-  .card { min-height: 128px; }
+  .card { min-height: 144px; }
   .cardBottom { min-height: 42px; font-size: 13px; }
 }
 
