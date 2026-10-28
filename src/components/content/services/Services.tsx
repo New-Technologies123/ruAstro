@@ -1,5 +1,6 @@
 import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { CategoryCarouselControls, useCategoryCarousel } from '../../ui/carousel/CategoryCarousel';
 
 import { Repair } from './Repair';
 import { Metering } from './Metering';
@@ -133,8 +134,8 @@ export const Services = () => {
   const [currentPage, setCurrentPage] =
     useState<TServices | null>(null);
 
-  const trackRef =
-    useRef<HTMLDivElement>(null);
+  const { trackRef, activeIndex, scrollToCard } =
+    useCategoryCarousel(SERVICES.length);
 
   useEffect(() => {
     const syncPage = () => {
@@ -279,13 +280,7 @@ export const Services = () => {
     );
   }, [currentPage]);
 
-  /*
-   * На мобильном сохраняем положение
-   * горизонтального скролла.
-   *
-   * Никаких стрелок, точек или ручного
-   * переключения карточек здесь нет.
-   */
+  /* Сохраняем положение карусели при переходе к услуге. */
   useEffect(() => {
     const track =
       trackRef.current;
@@ -378,15 +373,9 @@ export const Services = () => {
                   styles.heroDescription
                 }
               >
-                Обслуживаем, ремонтируем
-                и модернизируем
-                нефтепромысловое
-                оборудование, выполняем
-                специализированные работы
-                на скважинах и обеспечиваем
-                техническое сопровождение
-                оборудования на протяжении
-                жизненного цикла.
+                Обслуживаем и модернизируем нефтепромысловое оборудование,
+                выполняем работы на скважинах и сопровождаем технику
+                на всех этапах эксплуатации.
               </p>
 
               <div
@@ -412,6 +401,16 @@ export const Services = () => {
                 >
                   Обсудить сервисную задачу
                 </a>
+              </div>
+            </div>
+            <div className={styles.heroStatement}>
+              <div className={styles.heroStatementCard}>
+                <span className={styles.heroStatementLabel}>СЕРВИС НА ОБЪЕКТЕ</span>
+                <span className={styles.heroStatementLine} aria-hidden="true" />
+                <div className={styles.heroStatementText}>
+                  <strong>От диагностики до результата</strong>
+                  <span>Диагностика · Обслуживание · Модернизация</span>
+                </div>
               </div>
             </div>
           </div>
@@ -469,6 +468,9 @@ export const Services = () => {
                 styles.cardsTrack
               }
               ref={trackRef}
+              role="region"
+              aria-label="Сервисные услуги"
+              tabIndex={0}
             >
               {SERVICES.map(
                 (service, index) => (
@@ -514,9 +516,7 @@ export const Services = () => {
                         alt={
                           service.shortTitle
                         }
-                        className={
-                          styles.cardImage
-                        }
+                        className={`${styles.cardImage} ${service.slug === 'service' || service.slug === 'dewaxing' ? styles.cardImageCover : ''}`}
                         loading={
                           index === 0
                             ? 'eager'
@@ -580,31 +580,13 @@ export const Services = () => {
               )}
             </div>
 
-            {/* Подсказка только для мобильных */}
-            <div
-              className={
-                styles.swipeHint
-              }
-              aria-hidden="true"
-            >
-              <span
-                className={
-                  styles.swipeHintLine
-                }
+            <div className={styles.serviceControls}>
+              <CategoryCarouselControls
+                labels={SERVICES.map((service) => service.shortTitle)}
+                activeIndex={activeIndex}
+                onSelect={scrollToCard}
+                groupLabel="Выбрать сервисную услугу"
               />
-
-              <span>
-                Смахните, чтобы увидеть
-                другие услуги
-              </span>
-
-              <span
-                className={
-                  styles.swipeHintArrow
-                }
-              >
-                →
-              </span>
             </div>
           </div>
         </section>

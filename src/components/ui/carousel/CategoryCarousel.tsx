@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 
-import Styles from './accounting.module.scss';
+import Styles from './category-carousel.module.scss';
 
 export const ArrowUpRight = () => (
   <svg
@@ -151,15 +151,17 @@ type CategoryCarouselControlsProps = {
   labels: readonly string[];
   activeIndex: number;
   onSelect: (index: number) => void;
+  groupLabel?: string;
 };
 
 export const CategoryCarouselControls = ({
   labels,
   activeIndex,
   onSelect,
+  groupLabel = 'Выбрать оборудование',
 }: CategoryCarouselControlsProps) => (
   <div className={Styles.carouselControls}>
-    <div className={Styles.carouselDots} role="group" aria-label="Выбрать оборудование">
+    <div className={Styles.carouselDots} role="group" aria-label={groupLabel}>
       {labels.map((label, index) => (
         <button
           key={`${label}-${index}`}
@@ -191,3 +193,45 @@ export const CategoryCarouselControls = ({
     <span className={Styles.carouselHint}>Листайте карточки свайпом</span>
   </div>
 );
+
+type CategoryCarouselProps = {
+  children: ReactNode;
+  labels: readonly string[];
+  trackClassName: string;
+  controlsClassName?: string;
+  ariaLabel: string;
+  groupLabel?: string;
+};
+
+export const CategoryCarousel = ({
+  children,
+  labels,
+  trackClassName,
+  controlsClassName,
+  ariaLabel,
+  groupLabel,
+}: CategoryCarouselProps) => {
+  const { trackRef, activeIndex, scrollToCard } = useCategoryCarousel(labels.length);
+
+  return (
+    <div>
+      <div
+        ref={trackRef}
+        className={trackClassName}
+        role="region"
+        aria-label={ariaLabel}
+        tabIndex={0}
+      >
+        {children}
+      </div>
+      <div className={controlsClassName}>
+        <CategoryCarouselControls
+          labels={labels}
+          activeIndex={activeIndex}
+          onSelect={scrollToCard}
+          groupLabel={groupLabel}
+        />
+      </div>
+    </div>
+  );
+};

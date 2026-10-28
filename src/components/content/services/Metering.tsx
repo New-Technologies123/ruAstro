@@ -2,8 +2,9 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 import Styles from './service.module.scss'
+import { ServiceBreadcrumbs } from './ServiceBreadcrumbs'
+import { CategoryCarousel } from '../../ui/carousel/CategoryCarousel'
 
-import back from '../../../images/back.svg'
 import serves_3 from '../../../images/services/serves_3.webp'
 
 import { BigPhoto } from '../../ui/big-photo/BigPhoto'
@@ -73,10 +74,6 @@ const DATA_ITEMS = [
 export const Metering = () => {
   const [bigPhoto, setBigPhoto] = useState<string | null>(null)
 
-  const onBack = () => {
-    window.location.href = '/services/'
-  }
-
   const openPhoto = () => {
     setBigPhoto(serves_3.src)
   }
@@ -93,20 +90,6 @@ export const Metering = () => {
   return (
     <main className={Styles.wrapper}>
 
-      {/* =====================================================
-          TOP
-          ===================================================== */}
-
-      <div className={Styles.topBar}>
-        <button
-          className={Styles.backButton}
-          onClick={onBack}
-          aria-label="Вернуться к сервисным услугам"
-        >
-          <img src={back.src} alt="" />
-          {/* <span>Все сервисные услуги</span> */}
-        </button>
-      </div>
 
 
       {/* =====================================================
@@ -126,6 +109,7 @@ export const Metering = () => {
           }}
         >
 
+          <ServiceBreadcrumbs current="Замер дебита" />
           <div className={Styles.eyebrow}>
             <span />
             Мобильные измерения
@@ -572,49 +556,23 @@ export const Metering = () => {
         </motion.div>
 
 
-        <div className={Styles.relatedList}>
-
-          {RELATED_ITEMS.map((item, index) => (
-
-            <motion.a
-              key={item.number}
-              href={item.href}
-              className={Styles.relatedItem}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{
-                once: true,
-                amount: 0.15,
-              }}
-              variants={fadeUp}
-              transition={{
-                duration: 0.55,
-                delay: index * 0.07,
-                ease,
-              }}
-            >
-
-              <span className={Styles.relatedNumber}>
-                {item.number}
-              </span>
-
+        <CategoryCarousel
+          labels={RELATED_ITEMS.map((item) => item.title)}
+          trackClassName={Styles.relatedList}
+          controlsClassName={Styles.relatedControls}
+          ariaLabel="Другие сервисные услуги"
+          groupLabel="Выбрать сервисную услугу"
+        >
+          {RELATED_ITEMS.map((item) => (
+            <a key={item.href} href={item.href} className={Styles.relatedItem}>
+              <span className={Styles.relatedNumber}>{item.number}</span>
               <div className={Styles.relatedContent}>
-
-                <h3>
-                  {item.title}
-                </h3>
-
-                <p>
-                  {item.text}
-                </p>
-
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
               </div>
-
-            </motion.a>
-
+            </a>
           ))}
-
-        </div>
+        </CategoryCarousel>
 
       </section>
 

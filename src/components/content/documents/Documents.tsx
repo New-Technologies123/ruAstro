@@ -1,8 +1,6 @@
 import {
-  useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
   type ReactNode,
 } from 'react';
@@ -16,6 +14,7 @@ import {
 } from './documents.data';
 
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { useCategoryCarousel } from '../../ui/carousel/CategoryCarousel';
 
 type IndexedDocument = TDocument & {
   categoryId: string;
@@ -272,113 +271,8 @@ function MobileSlider({
   className: string;
   label: string;
 }) {
-  const sliderRef = useRef<HTMLDivElement | null>(null);
-  const programmaticIndexRef = useRef<number | null>(null);
-  const releaseTimerRef = useRef<number | null>(null);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  const updateActiveIndex = useCallback(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-    if (programmaticIndexRef.current !== null) return;
-
-    const cards = Array.from(slider.children) as HTMLElement[];
-    if (!cards.length) {
-      setActiveIndex(0);
-      return;
-    }
-
-    const sliderLeft = slider.getBoundingClientRect().left;
-    let closestIndex = 0;
-    let closestDistance = Number.POSITIVE_INFINITY;
-
-    cards.forEach((card, index) => {
-      const distance = Math.abs(
-        card.getBoundingClientRect().left - sliderLeft,
-      );
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closestIndex = index;
-      }
-    });
-
-    setActiveIndex(closestIndex);
-  }, []);
-
-  useEffect(() => {
-    const slider = sliderRef.current;
-    if (!slider) return;
-
-    let frame = 0;
-    const releaseProgrammaticScroll = () => {
-      if (releaseTimerRef.current !== null) {
-        window.clearTimeout(releaseTimerRef.current);
-        releaseTimerRef.current = null;
-      }
-      if (programmaticIndexRef.current === null) return;
-      programmaticIndexRef.current = null;
-      updateActiveIndex();
-    };
-
-    const handleScroll = () => {
-      window.cancelAnimationFrame(frame);
-      if (programmaticIndexRef.current !== null) {
-        if (releaseTimerRef.current !== null) {
-          window.clearTimeout(releaseTimerRef.current);
-        }
-        releaseTimerRef.current = window.setTimeout(
-          releaseProgrammaticScroll,
-          260,
-        );
-        return;
-      }
-      frame = window.requestAnimationFrame(updateActiveIndex);
-    };
-
-    slider.addEventListener('scroll', handleScroll, { passive: true });
-    slider.addEventListener('scrollend', releaseProgrammaticScroll);
-    window.addEventListener('resize', updateActiveIndex);
-    updateActiveIndex();
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-      if (releaseTimerRef.current !== null) {
-        window.clearTimeout(releaseTimerRef.current);
-      }
-      slider.removeEventListener('scroll', handleScroll);
-      slider.removeEventListener('scrollend', releaseProgrammaticScroll);
-      window.removeEventListener('resize', updateActiveIndex);
-    };
-  }, [count, updateActiveIndex]);
-
-  const scrollToIndex = (index: number) => {
-    const slider = sliderRef.current;
-    const target = slider?.children[index] as HTMLElement | undefined;
-    if (!slider || !target) return;
-
-    const left =
-      slider.scrollLeft +
-      target.getBoundingClientRect().left -
-      slider.getBoundingClientRect().left;
-
-    programmaticIndexRef.current = index;
-    setActiveIndex(index);
-    if (releaseTimerRef.current !== null) {
-      window.clearTimeout(releaseTimerRef.current);
-    }
-    releaseTimerRef.current = window.setTimeout(() => {
-      programmaticIndexRef.current = null;
-      releaseTimerRef.current = null;
-      updateActiveIndex();
-    }, 2000);
-
-    slider.scrollTo({
-      left,
-      behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
-        ? 'auto'
-        : 'smooth',
-    });
-  };
+  const { trackRef: sliderRef, activeIndex, scrollToCard: scrollToIndex } =
+    useCategoryCarousel(count);
 
   return (
     <div className={Styles.sliderWrapper}>

@@ -971,7 +971,7 @@
   .serviceCard {
     flex:
       0 0 min(calc(100vw - 82px),
-        330px);
+        230px);
 
     scroll-snap-align: start;
 
@@ -1341,4 +1341,199 @@
   .swipeHintArrow {
     animation: none;
   }
+}
+
+/* Unified service presentation */
+.page { background: #f5f8fb; }
+
+.hero {
+  padding: 24px 0 0;
+  border-bottom: 0;
+  background: transparent;
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(230px, .65fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 60px);
+  width: min(1400px, calc(100% - 48px));
+  padding: clamp(30px, 4vw, 58px);
+  overflow: hidden;
+  border-radius: 30px;
+  background: radial-gradient(circle at 80% 0%, rgba(72, 168, 225, .22), transparent 36%), linear-gradient(120deg, #082844, #155b86);
+  box-shadow: 0 22px 54px rgba(9, 41, 65, .15);
+}
+
+.heroContent { position: relative; z-index: 1; }
+.hero .eyebrow { color: #aed9f3; }
+.hero .eyebrowLine { background: #68d5b1; }
+.heroTitle { color: #fff; font-size: clamp(42px, 4.8vw, 68px); line-height: 1.02; }
+.heroTitle span { color: #a9dbf9; }
+.heroDescription { max-width: 590px; color: #d2e4ef; font-size: 16px; line-height: 1.65; }
+.hero .primaryButton { background: #fff; color: #104a73; box-shadow: 0 10px 24px rgba(0, 20, 40, .16); }
+.hero .primaryButton:hover { background: #e8f5ff; }
+.hero .secondaryButton { border-color: rgba(255, 255, 255, .3); background: rgba(255, 255, 255, .08); color: #fff; }
+.hero .secondaryButton:hover { border-color: rgba(255, 255, 255, .55); background: rgba(255, 255, 255, .16); }
+
+.heroStatement {
+  position: relative;
+  min-width: 0;
+  min-height: 410px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroStatementCard {
+  position: relative;
+  z-index: 1;
+  width: min(390px, 86%);
+  padding: 32px;
+  border: 1px solid rgba(194, 229, 248, .28);
+  border-radius: 24px;
+  background: linear-gradient(145deg, rgba(28, 99, 141, .72), rgba(8, 50, 82, .88));
+  box-shadow: 0 30px 70px rgba(3, 28, 53, .18), inset 0 1px 0 rgba(255, 255, 255, .12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.heroStatementLabel { color: #a8dcf7; font-size: 11px; font-weight: 750; letter-spacing: .13em; }
+.heroStatementLine { display: block; width: 100%; height: 1px; margin: 24px 0; background: rgba(210, 236, 249, .3); }
+.heroStatementText { display: flex; flex-direction: column; gap: 9px; }
+.heroStatementText strong { color: #fff; font-size: 28px; font-weight: 650; line-height: 1.12; letter-spacing: -.035em; }
+.heroStatementText span { color: #d5e8f2; font-size: 14px; line-height: 1.55; }
+
+.servicesSection { padding-top: 88px; padding-bottom: 90px; }
+.serviceCard { border-color: #dbe6ef; box-shadow: 0 8px 28px rgba(9, 41, 65, .06); }
+.cardImageWrap { background: linear-gradient(145deg, #e6f2fa, #f6fafc); }
+.cardImage.cardImageCover { object-fit: cover; }
+.cardContent h3 { font-size: 20px; }
+.cardContent p { font-size: 13px; line-height: 1.6; }
+
+.workflowSection { padding-top: 50px; padding-bottom: 80px; }
+.workflowSection::before { display: none; }
+.workflowGrid { gap: 12px; border: 0; }
+.workflowGrid .workflowItem {
+  min-height: 205px;
+  padding: 24px;
+  border: 1px solid #dfe9f0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 6px 22px rgba(9, 41, 65, .035);
+}
+.workflowItem h3 { margin-top: 46px; }
+.workflowItem p { font-size: 13px; }
+
+.expertiseSection { gap: 60px; padding-top: 80px; padding-bottom: 100px; }
+.expertiseGrid { gap: 12px; border: 0; }
+.expertiseGrid .expertiseItem { min-height: 190px; padding: 24px; border: 1px solid #dfe9f0; border-radius: 18px; background: #fff; }
+.expertiseItem h3 { margin-top: 38px; }
+.expertiseItem p { font-size: 13px; }
+
+@media (max-width: 900px) {
+  .heroInner { grid-template-columns: 1fr; width: min(760px, calc(100% - 36px)); }
+  .heroStatement { min-height: 280px; }
+}
+
+@media (max-width: 720px) {
+  .hero { padding-top: 14px; }
+  .heroInner { width: calc(100% - 24px); gap: 28px; padding: 28px 24px 24px; border-radius: 23px; }
+  .heroTitle { font-size: clamp(34px, 8vw, 48px); }
+  .heroDescription { font-size: 14px; }
+  .heroStatement { min-height: 0; }
+  .heroStatementCard { width: 100%; padding: 19px 21px; border-radius: 18px; }
+  .heroStatementLine { margin: 14px 0; }
+  .heroStatementText strong { font-size: 20px; }
+  .heroStatementText span { font-size: 12px; }
+  .servicesSection { padding-top: 58px; padding-bottom: 52px; }
+  .workflowSection, .expertiseSection { padding-top: 48px; padding-bottom: 55px; }
+  .workflowGrid .workflowItem { min-height: 0; padding: 20px; }
+  .workflowItem h3 { margin: 18px 0 8px; }
+  .expertiseGrid .expertiseItem { min-height: 0; padding: 20px; }
+  .expertiseItem h3 { margin: 16px 0 8px; }
+}
+
+@media (max-width: 360px) {
+  .heroInner { padding-inline: 18px; }
+  .heroTitle { font-size: 30px; overflow-wrap: anywhere; }
+}
+
+.serviceControls {
+  display: none;
+  --blue: var(--services-blue);
+  --line: var(--services-border);
+  --ink: var(--services-navy);
+}
+
+.cardsTrack:focus-visible {
+  outline: 3px solid rgba(23, 105, 224, .35);
+  outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .serviceControls { display: block; }
+}
+
+/* Spacious service cards on desktop; the mobile swipe layout stays above. */
+@media (min-width: 721px) {
+  .cardsTrack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  .cardContent {
+    flex: 1;
+    min-height: 225px;
+    padding: 26px 28px 22px;
+  }
+
+  .cardContent h3 { font-size: clamp(20px, 1.8vw, 25px); line-height: 1.18; }
+  .cardContent p { font-size: 13px; line-height: 1.6; }
+
+  .cardLink {
+    min-height: 49px;
+    padding-top: 12px;
+    border-top: 1px solid #e8eef3;
+    font-size: 13px;
+  }
+
+  .cardLink span {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: #edf5fb;
+    font-size: 20px;
+  }
+}
+
+@media (min-width: 1180px) {
+  .serviceCard {
+    min-height: 230px;
+    flex-direction: row;
+  }
+
+  .cardImageWrap {
+    width: 42%;
+    height: auto;
+    flex: 0 0 42%;
+    border-radius: 21px 0 0 21px;
+  }
+
+  .cardContent { min-width: 0; min-height: 0; }
+  .cardTags { margin-top: 16px; }
+}
+
+@media (min-width: 721px) and (max-width: 1179px) {
+  .cardImageWrap { height: clamp(190px, 22vw, 240px); flex-basis: auto; }
+}
+
+@media (max-width: 720px) {
+  .cardImage.cardImageCover { object-fit: contain; }
+
+  .serviceCard:hover .cardImage,
+  .serviceCard:focus-visible .cardImage { transform: none; }
 }

@@ -1,0 +1,134 @@
+/* Carousel controls are shown with the mobile card track. */
+.carouselControls {
+  display: none;
+}
+
+
+@media (max-width: 760px) {
+  .carouselControls {
+    display: grid;
+    grid-template-columns: 40px auto 40px;
+    align-items: center;
+    justify-content: center;
+    column-gap: 8px;
+    row-gap: 9px;
+    width: 100%;
+    margin-top: 15px;
+  }
+
+  .carouselNavigation {
+    display: contents;
+  }
+
+  .carouselNavigation button:first-child {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .carouselDots {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .carouselDots::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carouselDots button {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 32px;
+    flex: 0 0 20px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .carouselDots button::before {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: #b9c5d4;
+    content: '';
+    transition: width 180ms ease, background-color 180ms ease;
+  }
+
+  .carouselDots button[aria-current='true']::before {
+    width: 16px;
+    background: var(--blue);
+  }
+
+  .carouselDots button:focus,
+  .carouselNavigation button:focus {
+    outline: none;
+  }
+
+  .carouselDots button:focus-visible {
+    outline: 2px solid rgba(23, 105, 223, 0.45);
+    outline-offset: 1px;
+  }
+
+  .carouselNavigation button:last-child {
+    grid-column: 3;
+    grid-row: 1;
+  }
+
+  .carouselNavigation button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fff;
+    color: var(--ink);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 180ms ease, border-color 180ms ease, color 180ms ease, transform 150ms ease;
+  }
+
+  .carouselNavigation button:focus-visible {
+    outline: 3px solid rgba(23, 105, 223, 0.35);
+    outline-offset: 3px;
+  }
+
+  .carouselNavigation button:active {
+    transform: scale(0.96);
+  }
+
+  .carouselNavigation button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .carouselHint {
+    grid-column: 1 / -1;
+    color: #617187;
+    font-size: 11px;
+    line-height: 1.3;
+    text-align: center;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .carouselNavigation button:hover {
+      border-color: #b8cdeb;
+      background: #edf3fb;
+      color: var(--blue);
+    }
+
+    .carouselDots button:not([aria-current='true']):hover::before {
+      background: var(--blue);
+    }
+  }
+
+}

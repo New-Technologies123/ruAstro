@@ -1,4 +1,4 @@
-import { ArrowUpRight, CategoryCarouselControls, useCategoryCarousel } from './CategoryCarousel';
+import { ArrowUpRight, CategoryCarouselControls, useCategoryCarousel } from '../../ui/carousel/CategoryCarousel';
 
 import Styles from './accounting.module.scss';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
