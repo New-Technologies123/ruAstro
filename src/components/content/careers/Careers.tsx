@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import Styles from './careers.module.scss';
 import { Vacancy } from '../../ui/vacancy/Vacancy';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -917,7 +918,7 @@ export const Careers = () => {
               Перейти на HH.ru
             </span>
 
-            <span className={Styles.ctaButtonIcon}>↗</span>
+            <span className={Styles.ctaButtonIcon}><ArrowUpRightIcon /></span>
           </a>
         </div>
 

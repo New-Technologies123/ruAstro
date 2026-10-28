@@ -524,9 +524,6 @@ export const Products = () => {
               </p>
             </div>
 
-            {/* <span className={Styles.stepArrow} aria-hidden="true">
-              ↗
-            </span> */}
           </div>
 
           <div className={Styles.approachStep}>
@@ -541,9 +538,6 @@ export const Products = () => {
               </p>
             </div>
 
-            {/* <span className={Styles.stepArrow} aria-hidden="true">
-              ↗
-            </span> */}
           </div>
 
           <div className={Styles.approachStep}>
@@ -558,9 +552,6 @@ export const Products = () => {
               </p>
             </div>
 
-            {/* <span className={Styles.stepArrow} aria-hidden="true">
-              ↗
-            </span> */}
           </div>
         </div>
       </section>

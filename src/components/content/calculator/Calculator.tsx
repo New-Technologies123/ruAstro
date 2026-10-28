@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 
 import Styles from './calculator.module.scss';
@@ -219,7 +220,7 @@ export const Calculator = () => {
               Итог можно сохранить в PDF.
             </p>
             <div className={Styles.heroActions}>
-              <a className={Styles.primaryButton} href="#configurator">Выбрать параметры <span aria-hidden="true">↗</span></a>
+              <a className={Styles.primaryButton} href="#configurator">Выбрать параметры <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
               {/* <a className={Styles.secondaryButton} href="/products/accounting-system/">Вернуться к АГЗУ <span aria-hidden="true">→</span></a> */}
             </div>
             <div className={Styles.heroFacts}>
@@ -316,7 +317,7 @@ export const Calculator = () => {
           <div className={Styles.container}>
             <div><span className={Styles.eyebrow}>Индивидуальное предложение</span><h2 id="contact-title">Нужна помощь с подбором?</h2><p>Направьте запрос с параметрами установки — специалисты подготовят предложение.</p></div>
             <a href="mailto:tendernt@tech-new.ru">tendernt@tech-new.ru 
-              {/* <span aria-hidden="true">↗</span> */}
+              {/* <span aria-hidden="true"><ArrowUpRightIcon /></span> */}
               </a>
           </div>
           <p className={Styles.legalNote}>Информация на сайте не является публичной офертой.</p>

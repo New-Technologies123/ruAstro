@@ -10,9 +10,10 @@ type Props = {
   onClose: () => void;
   onAddOffer: () => void;
   returnFocusTo: HTMLElement | null;
+  restoreFocus: boolean;
 };
 
-export const LotSheet = ({ group, searchTerm, onClose, onAddOffer, returnFocusTo }: Props) => {
+export const LotSheet = ({ group, searchTerm, onClose, onAddOffer, returnFocusTo, restoreFocus }: Props) => {
   const sheetRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -24,16 +25,20 @@ export const LotSheet = ({ group, searchTerm, onClose, onAddOffer, returnFocusTo
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    closeRef.current?.focus();
+    if (restoreFocus) closeRef.current?.focus({ preventScroll: true });
+    else {
+      returnFocusTo?.blur();
+      sheetRef.current?.focus({ preventScroll: true });
+    }
     return () => {
       if (dismissTimer.current !== null) window.clearTimeout(dismissTimer.current);
       document.body.style.overflow = previousOverflow;
       const focusTarget = returnFocusTo?.isConnected
         ? returnFocusTo
         : document.querySelector<HTMLElement>('[aria-label="Список лотов"] button');
-      focusTarget?.focus({ preventScroll: true });
+      if (restoreFocus) focusTarget?.focus({ preventScroll: true });
     };
-  }, [returnFocusTo]);
+  }, [returnFocusTo, restoreFocus]);
 
   useEffect(() => {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
@@ -53,7 +58,7 @@ export const LotSheet = ({ group, searchTerm, onClose, onAddOffer, returnFocusTo
     const first = focusable[0];
     const last = focusable[focusable.length - 1];
     if (!first || !last) return;
-    if (event.shiftKey && document.activeElement === first) {
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === sheetRef.current)) {
       event.preventDefault();
       last.focus();
     } else if (!event.shiftKey && document.activeElement === last) {
@@ -111,7 +116,7 @@ export const LotSheet = ({ group, searchTerm, onClose, onAddOffer, returnFocusTo
 
   return createPortal(
     <div className={Styles.lotOverlay} onMouseDown={(event) => { if (event.target === event.currentTarget) onClose(); }}>
-      <div ref={sheetRef} className={Styles.lotSheet} role="dialog" aria-modal="true" aria-label={`Лот ${group.note}`} onKeyDown={handleKeyDown}>
+      <div ref={sheetRef} className={Styles.lotSheet} role="dialog" aria-modal="true" aria-label={`Лот ${group.note}`} tabIndex={-1} onKeyDown={handleKeyDown}>
         <div
           className={Styles.lotTopbar}
           onPointerDown={handleDragStart}

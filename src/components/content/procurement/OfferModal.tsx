@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import React, { useState, useEffect, useRef } from "react";
 import Styles from "./forma.module.scss";
 import { exportGroupToExcel } from "./exportExcel";
@@ -404,7 +405,7 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
 
           <div className={Styles.buttons}>
             <button type="button" onClick={onClose}>Отмена</button>
-            <button type="submit" disabled={loading || checkingOfferFile}>{loading ? "Отправка…" : checkingOfferFile ? "Проверяем Excel…" : "Отправить предложение"} <span aria-hidden="true">↗</span></button>
+            <button type="submit" disabled={loading || checkingOfferFile}>{loading ? "Отправка…" : checkingOfferFile ? "Проверяем Excel…" : "Отправить предложение"} <span aria-hidden="true"><ArrowUpRightIcon /></span></button>
           </div>
         </form>
         </div>

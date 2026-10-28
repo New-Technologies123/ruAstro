@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 
 import Styles from '../products.module.scss';
@@ -72,7 +73,7 @@ export const Dosing = () => {
                 <h1 id="product-title">Установка дозирования <em>химического реагента (БДР)</em></h1>
                 <p className={Styles.heroDescription}>Дозированно вводит жидкие деэмульгаторы и ингибиторы коррозии в системы транспорта и подготовки нефти и газа.</p>
                 <div className={Styles.heroActions}>
-                  <a className={Styles.primaryButton} href="#features">Назначение и особенности <span aria-hidden="true">↗</span></a>
+                  <a className={Styles.primaryButton} href="#features">Назначение и особенности <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
                   <a className={Styles.secondaryButton} href="/documents/?category=preparation-systems">Документация <span aria-hidden="true">→</span></a>
                 </div>
                 <div className={Styles.heroNote}><span className={Styles.noteDot} aria-hidden="true" />Деэмульгаторы · ингибиторы коррозии · контроль подачи</div>
@@ -80,7 +81,7 @@ export const Dosing = () => {
               <div className={Styles.productVisual}>
                 <button className={Styles.photoButton} type="button" onClick={() => setBigPhoto(true)} aria-label="Открыть крупное фото: БДР">
                   <img src={productImage.src} alt="Установка дозирования химического реагента" className={Styles.productImage} />
-                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото <ArrowUpRightIcon /></span>
                 </button>
                 <span className={Styles.visualCaption}>БДР · оборудование для подготовки</span>
               </div>
@@ -128,7 +129,7 @@ export const Dosing = () => {
             </div>
             <div className={Styles.documentsGrid}>
               <a className={Styles.materialCard} href="/documents/?category=preparation-systems">
-                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span className={Styles.materialIcon} aria-hidden="true"><ArrowUpRightIcon /></span>
                 <span><strong>Документация по БДР</strong><small>Открыть раздел документов</small></span>
                 <span className={Styles.materialArrow} aria-hidden="true">→</span>
               </a>
@@ -147,7 +148,7 @@ export const Dosing = () => {
                 <article className={Styles.relatedCard} key={system.id}>
                   <a href={`/products/preparation-systems/${system.id}/`}>
                     <span className={Styles.relatedImage}><img src={system.image} alt={system.alt} loading="lazy" /></span>
-                    <span className={Styles.relatedInfo}><strong>{system.title}</strong><span aria-hidden="true">↗</span></span>
+                    <span className={Styles.relatedInfo}><strong>{system.title}</strong><span aria-hidden="true"><ArrowUpRightIcon /></span></span>
                   </a>
                 </article>
               ))}
@@ -165,7 +166,7 @@ export const Dosing = () => {
         <section className={Styles.bottomCta} aria-labelledby="next-title">
           <div className={Styles.container}>
             <div><span className={Styles.eyebrow}>Выбор системы</span><h2 id="next-title">Нужно оборудование для другой задачи?</h2><p>Посмотрите весь раздел систем подготовки.</p></div>
-            <a href="/products/preparation-systems/">Все решения <span aria-hidden="true">↗</span></a>
+            <a href="/products/preparation-systems/">Все решения <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
           </div>
         </section>
       </main>

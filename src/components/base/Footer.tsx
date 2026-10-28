@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../ui/icon/ArrowUpRightIcon";
 import logoRu from '../../images/logo_fut_ru.webp';
 import Styles from './footer.module.scss';
 
@@ -161,7 +162,7 @@ export const Footer = () => {
               className={Styles.ctaLink}
             >
               Связаться с нами
-              <span>↗</span>
+              <span><ArrowUpRightIcon /></span>
             </a>
           </div>
         </div>
@@ -181,7 +182,7 @@ export const Footer = () => {
                 rel="noopener noreferrer"
               >
                 {document.label}
-                <span>↗</span>
+                <span><ArrowUpRightIcon /></span>
               </a>
             ))}
           </div>

@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useState } from 'react';
 
 import Styles from '../products.module.scss';
@@ -43,7 +44,7 @@ export const Multiphase = () => {
                 <h1 id="product-title">Блочная мультифазная <em>насосная станция</em></h1>
                 <p className={Styles.heroDescription}>Перекачивает газожидкостную смесь из скважин без предварительной сепарации газа.</p>
                 <div className={Styles.heroActions}>
-                  <a className={Styles.primaryButton} href="#features">Возможности станции <span aria-hidden="true">↗</span></a>
+                  <a className={Styles.primaryButton} href="#features">Возможности станции <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
                   <a className={Styles.secondaryButton} href="/documents/?category=pumping-stations">Документация <span aria-hidden="true">→</span></a>
                 </div>
                 <div className={Styles.heroNote}><span className={Styles.noteDot} aria-hidden="true" />Газожидкостная смесь · блочное исполнение · ПАЗ</div>
@@ -51,7 +52,7 @@ export const Multiphase = () => {
               <div className={Styles.productVisual}>
                 <button className={Styles.photoButton} type="button" onClick={() => setBigPhoto(true)} aria-label="Открыть крупное фото: Мультифазная станция">
                   <img src={productImage.src} alt="Блочная мультифазная насосная станция" className={Styles.productImage} />
-                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото <ArrowUpRightIcon /></span>
                 </button>
                 <span className={Styles.visualCaption}>Мультифазная станция · насосная станция</span>
               </div>
@@ -99,7 +100,7 @@ export const Multiphase = () => {
             </div>
             <div className={Styles.documentsGrid}>
               <a className={Styles.materialCard} href="/documents/?category=pumping-stations">
-                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span className={Styles.materialIcon} aria-hidden="true"><ArrowUpRightIcon /></span>
                 <span><strong>Документация по насосным станциям</strong><small>Открыть раздел документов</small></span>
                 <span className={Styles.materialArrow} aria-hidden="true">→</span>
               </a>
@@ -117,7 +118,7 @@ export const Multiphase = () => {
               <article className={Styles.relatedCard}>
                 <a href={`/products/pumping-stations/${related.id}/`}>
                   <span className={Styles.relatedImage}><img src={related.image} alt={related.alt} loading="lazy" /></span>
-                  <span className={Styles.relatedInfo}><strong>{related.title}</strong><span aria-hidden="true">↗</span></span>
+                  <span className={Styles.relatedInfo}><strong>{related.title}</strong><span aria-hidden="true"><ArrowUpRightIcon /></span></span>
                 </a>
               </article>
             </div>
@@ -127,7 +128,7 @@ export const Multiphase = () => {
         <section className={Styles.bottomCta} aria-labelledby="next-title">
           <div className={Styles.container}>
             <div><span className={Styles.eyebrow}>Выбор станции</span><h2 id="next-title">Подберём станцию под вашу задачу</h2><p>Посмотрите оба исполнения насосных станций.</p></div>
-            <a href="/products/pumping-stations/">Все станции <span aria-hidden="true">↗</span></a>
+            <a href="/products/pumping-stations/">Все станции <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
           </div>
         </section>
       </main>

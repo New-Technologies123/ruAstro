@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../icon/ArrowUpRightIcon";
 import Styles from './vacancy.module.scss';
 
 type TVacancyProps = {
@@ -22,7 +23,7 @@ export const Vacancy = ({
   >
     <div className={Styles.header}>
       <h3>{header}</h3>
-      <span className={Styles.arrow} aria-hidden="true">↗</span>
+      <span className={Styles.arrow} aria-hidden="true"><ArrowUpRightIcon /></span>
     </div>
 
     <div className={Styles.details}>

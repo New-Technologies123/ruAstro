@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 
 import Styles from '../products.module.scss';
@@ -123,7 +124,7 @@ export const Psm = () => {
                 <p className={Styles.heroDescription}>{item.description}</p>
                 <div className={Styles.heroActions}>
                   <a className={Styles.primaryButton} href="#features">
-                    Оборудование и назначение <span aria-hidden="true">↗</span>
+                    Оборудование и назначение <span aria-hidden="true"><ArrowUpRightIcon /></span>
                   </a>
                   <a
                     className={Styles.secondaryButton}
@@ -146,7 +147,7 @@ export const Psm = () => {
                   onClick={() => setBigPhoto(true)}
                 >
                   <img src={item.image} alt={item.imageAlt} className={Styles.productImage} />
-                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото <ArrowUpRightIcon /></span>
                 </button>
                 <span className={Styles.visualCaption}>{item.shortName} · фото оборудования</span>
               </div>
@@ -208,7 +209,7 @@ export const Psm = () => {
                 className={Styles.materialCard}
                 href="/documents/?category=accessories"
               >
-                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span className={Styles.materialIcon} aria-hidden="true"><ArrowUpRightIcon /></span>
                 <span><strong>Документация по комплектующим</strong><small>Открыть раздел документов</small></span>
                 <span className={Styles.materialArrow} aria-hidden="true">→</span>
               </a>
@@ -221,7 +222,7 @@ export const Psm = () => {
                   </div>
                   <div className={Styles.documentActions}>
                     <a href={item.survey} target="_blank" rel="noopener noreferrer">
-                      Открыть <span aria-hidden="true">↗</span>
+                      Открыть <span aria-hidden="true"><ArrowUpRightIcon /></span>
                     </a>
                     <a className={Styles.downloadButton} href={item.survey} download>
                       Скачать <span aria-hidden="true">↓</span>
@@ -258,7 +259,7 @@ export const Psm = () => {
                     </span>
                     <span className={Styles.relatedInfo}>
                       <strong>{product.shortName}</strong>
-                      <span aria-hidden="true">↗</span>
+                      <span aria-hidden="true"><ArrowUpRightIcon /></span>
                     </span>
                   </a>
                 </article>
@@ -285,7 +286,7 @@ export const Psm = () => {
               <p>Посмотрите весь раздел оборудования.</p>
             </div>
             <a href="/products/accessories/">
-              Все комплектующие <span aria-hidden="true">↗</span>
+              Все комплектующие <span aria-hidden="true"><ArrowUpRightIcon /></span>
             </a>
           </div>
         </section>

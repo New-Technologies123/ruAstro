@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 import Styles from './gallery.module.scss';
 import { GalleryModal } from './GalleryModal';
@@ -34,7 +35,7 @@ export const Gallery = ({ photos, photoId, onPhotoChange }: TProps) => {
       >
         <img className={Styles.thumbnail} src={currentPhoto.src} alt={currentPhoto.alt || ''} />
         <span className={Styles.imageOverlay} aria-hidden="true">
-          <span className={Styles.zoomText}>Увеличить фото ↗</span>
+          <span className={Styles.zoomText}>Увеличить фото <ArrowUpRightIcon /></span>
         </span>
         {photos.length > 1 && (
           <span className={Styles.photoCounter}>{currentIndex + 1} / {photos.length}</span>

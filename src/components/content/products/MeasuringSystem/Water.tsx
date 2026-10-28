@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 
 import Styles from '../products.module.scss';
@@ -74,7 +75,7 @@ export const Water = () => {
                   давления и температуры воды.
                 </p>
                 <div className={Styles.heroActions}>
-                  <a className={Styles.primaryButton} href="#features">Назначение системы <span aria-hidden="true">↗</span></a>
+                  <a className={Styles.primaryButton} href="#features">Назначение системы <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
                   <a className={Styles.secondaryButton} href="/documents/?category=measuring-system">Документация <span aria-hidden="true">→</span></a>
                 </div>
                 <div className={Styles.heroNote}><span className={Styles.noteDot} aria-hidden="true" />Расход · давление · температура</div>
@@ -82,7 +83,7 @@ export const Water = () => {
               <div className={Styles.productVisual}>
                 <button className={Styles.photoButton} type="button" onClick={() => setBigPhoto(true)} aria-label="Открыть крупное фото СИКВ">
                   <img src={productImage.src} alt="Система измерения количества воды СИКВ" className={Styles.productImage} />
-                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото <ArrowUpRightIcon /></span>
                 </button>
                 <span className={Styles.visualCaption}>СИКВ · система измерения воды</span>
               </div>
@@ -130,7 +131,7 @@ export const Water = () => {
             </div>
             <div className={Styles.documentsGrid}>
               <a className={Styles.materialCard} href="/documents/?category=measuring-system">
-                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span className={Styles.materialIcon} aria-hidden="true"><ArrowUpRightIcon /></span>
                 <span><strong>Документация по измерительным системам</strong><small>Открыть раздел документов</small></span>
                 <span className={Styles.materialArrow} aria-hidden="true">→</span>
               </a>
@@ -149,7 +150,7 @@ export const Water = () => {
                 <article className={Styles.relatedCard} key={system.id}>
                   <a href={`/products/measuring-system/${system.id}/`}>
                     <span className={Styles.relatedImage}><img src={system.image} alt={system.alt} loading="lazy" /></span>
-                    <span className={Styles.relatedInfo}><strong>{system.title}</strong><span aria-hidden="true">↗</span></span>
+                    <span className={Styles.relatedInfo}><strong>{system.title}</strong><span aria-hidden="true"><ArrowUpRightIcon /></span></span>
                   </a>
                 </article>
               ))}
@@ -167,7 +168,7 @@ export const Water = () => {
         <section className={Styles.bottomCta} aria-labelledby="next-title">
           <div className={Styles.container}>
             <div><span className={Styles.eyebrow}>Выбор системы</span><h2 id="next-title">Нужна система для другого продукта?</h2><p>Посмотрите все измерительные системы.</p></div>
-            <a href="/products/measuring-system/">Все системы <span aria-hidden="true">↗</span></a>
+            <a href="/products/measuring-system/">Все системы <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
           </div>
         </section>
       </main>

@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../icon/ArrowUpRightIcon";
 import Styles from './EquipmentCard.module.scss';
 
 export interface EquipmentCardItem {
@@ -28,7 +29,7 @@ export const EquipmentCard = ({ item }: { item: EquipmentCardItem }) => (
           </ul>
         )}
         <span className={Styles.cardAction}>
-          Характеристики и документы <span aria-hidden="true">↗</span>
+          Характеристики и документы <span aria-hidden="true"><ArrowUpRightIcon /></span>
         </span>
       </div>
     </a>

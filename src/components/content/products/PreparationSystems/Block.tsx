@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 
 import Styles from '../products.module.scss';
@@ -70,7 +71,7 @@ export const Block = () => {
                 <h1 id="product-title">Блок <em>гребёнки (БГ)</em></h1>
                 <p className={Styles.heroDescription}>Распределяет воду от кустовых насосных станций по нагнетательным скважинам для поддержания пластового давления.</p>
                 <div className={Styles.heroActions}>
-                  <a className={Styles.primaryButton} href="#features">Назначение и особенности <span aria-hidden="true">↗</span></a>
+                  <a className={Styles.primaryButton} href="#features">Назначение и особенности <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
                   <a className={Styles.secondaryButton} href="/documents/?category=preparation-systems">Документация <span aria-hidden="true">→</span></a>
                 </div>
                 <div className={Styles.heroNote}><span className={Styles.noteDot} aria-hidden="true" />Распределение · нагнетательные скважины · давление</div>
@@ -78,7 +79,7 @@ export const Block = () => {
               <div className={Styles.productVisual}>
                 <button className={Styles.photoButton} type="button" onClick={() => setBigPhoto(true)} aria-label="Открыть крупное фото: БГ">
                   <img src={productImage.src} alt="Блок гребёнки" className={Styles.productImage} />
-                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото ↗</span>
+                  <span className={Styles.zoomButton} aria-hidden="true">Увеличить фото <ArrowUpRightIcon /></span>
                 </button>
                 <span className={Styles.visualCaption}>БГ · оборудование для подготовки</span>
               </div>
@@ -126,7 +127,7 @@ export const Block = () => {
             </div>
             <div className={Styles.documentsGrid}>
               <a className={Styles.materialCard} href="/documents/?category=preparation-systems">
-                <span className={Styles.materialIcon} aria-hidden="true">↗</span>
+                <span className={Styles.materialIcon} aria-hidden="true"><ArrowUpRightIcon /></span>
                 <span><strong>Документация по системам подготовки</strong><small>Открыть раздел документов</small></span>
                 <span className={Styles.materialArrow} aria-hidden="true">→</span>
               </a>
@@ -145,7 +146,7 @@ export const Block = () => {
                 <article className={Styles.relatedCard} key={system.id}>
                   <a href={`/products/preparation-systems/${system.id}/`}>
                     <span className={Styles.relatedImage}><img src={system.image} alt={system.alt} loading="lazy" /></span>
-                    <span className={Styles.relatedInfo}><strong>{system.title}</strong><span aria-hidden="true">↗</span></span>
+                    <span className={Styles.relatedInfo}><strong>{system.title}</strong><span aria-hidden="true"><ArrowUpRightIcon /></span></span>
                   </a>
                 </article>
               ))}
@@ -163,7 +164,7 @@ export const Block = () => {
         <section className={Styles.bottomCta} aria-labelledby="next-title">
           <div className={Styles.container}>
             <div><span className={Styles.eyebrow}>Выбор системы</span><h2 id="next-title">Нужно оборудование для другой задачи?</h2><p>Посмотрите весь раздел систем подготовки.</p></div>
-            <a href="/products/preparation-systems/">Все решения <span aria-hidden="true">↗</span></a>
+            <a href="/products/preparation-systems/">Все решения <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
           </div>
         </section>
       </main>

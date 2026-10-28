@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { useEffect, useRef, useState } from "react";
 import Styles from "./procurement.module.scss";
 
@@ -114,7 +115,7 @@ export const LotDetail = ({ group, searchTerm, onClose, onAddOffer, inSheet = fa
     </div>
     <div className={Styles.detailFooter}>
       <div><strong>Готовы предложить поставку?</strong><span>Заполните форму и приложите ваше предложение.</span></div>
-      <button type="button" onClick={onAddOffer}>Добавить предложение <span aria-hidden="true">↗</span></button>
+      <button type="button" onClick={onAddOffer}>Добавить предложение <span aria-hidden="true"><ArrowUpRightIcon /></span></button>
     </div>
   </section>
   );

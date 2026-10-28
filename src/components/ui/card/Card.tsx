@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../icon/ArrowUpRightIcon";
 import Styles from './card.module.scss';
 
 type TProps = {
@@ -31,7 +32,7 @@ export const Card = ({ imgSrc, title, header, onClick }: TProps) => {
           <p>{title}</p>
 
           <span className={Styles.openIcon} aria-hidden="true">
-            ↗
+            <ArrowUpRightIcon />
           </span>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { useEffect, useRef, useState } from 'react';
 
 import { Repair } from './Repair';
@@ -400,7 +401,7 @@ export const Services = () => {
                   href="#services"
                 >
                   Смотреть услуги
-                  <span>↗</span>
+                  <span><ArrowUpRightIcon /></span>
                 </a>
 
                 <a
@@ -889,7 +890,7 @@ export const Services = () => {
             <div className={styles.ctaActions}>
               <a href="/contact/" className={styles.ctaButton}>
                 Обсудить сервисную задачу
-                <span>↗</span>
+                <span><ArrowUpRightIcon /></span>
               </a>
             </div>
           </div>

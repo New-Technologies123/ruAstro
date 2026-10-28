@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 
 import Styles from '../products.module.scss';
@@ -219,7 +220,7 @@ export const Ervip = () => {
                     href="#features"
                   >
                     Оборудование и назначение{' '}
-                    <span aria-hidden="true">↗</span>
+                    <span aria-hidden="true"><ArrowUpRightIcon /></span>
                   </a>
 
                   <a
@@ -257,7 +258,7 @@ export const Ervip = () => {
                     className={Styles.zoomButton}
                     aria-hidden="true"
                   >
-                    Увеличить фото ↗
+                    Увеличить фото <ArrowUpRightIcon />
                   </span>
                 </button>
 
@@ -382,7 +383,7 @@ export const Ervip = () => {
                       rel="noopener noreferrer"
                     >
                       Открыть{' '}
-                      <span aria-hidden="true">↗</span>
+                      <span aria-hidden="true"><ArrowUpRightIcon /></span>
                     </a>
 
                     <a
@@ -404,7 +405,7 @@ export const Ervip = () => {
                   className={Styles.materialIcon}
                   aria-hidden="true"
                 >
-                  ↗
+                  <ArrowUpRightIcon />
                 </span>
 
                 <span>
@@ -468,7 +469,7 @@ export const Ervip = () => {
 
                     <span className={Styles.relatedInfo}>
                       <strong>{product.shortName}</strong>
-                      <span aria-hidden="true">↗</span>
+                      <span aria-hidden="true"><ArrowUpRightIcon /></span>
                     </span>
                   </a>
                 </article>
@@ -529,7 +530,7 @@ export const Ervip = () => {
 
             <a href="/products/accessories/">
               Все комплектующие{' '}
-              <span aria-hidden="true">↗</span>
+              <span aria-hidden="true"><ArrowUpRightIcon /></span>
             </a>
           </div>
         </section>

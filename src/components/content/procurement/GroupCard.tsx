@@ -9,14 +9,14 @@ type Group = {
 type Props = {
   group: Group;
   isSelected: boolean;
-  onSelect: (trigger: HTMLButtonElement) => void;
+  onSelect: (trigger: HTMLButtonElement, keyboardActivated: boolean) => void;
 };
 
 export const GroupCard: React.FC<Props> = ({ group, isSelected, onSelect }) => (
   <button
     type="button"
     className={`${Styles.card} ${isSelected ? Styles.selected : ""}`}
-    onClick={(event) => onSelect(event.currentTarget)}
+    onClick={(event) => onSelect(event.currentTarget, event.detail === 0)}
     aria-pressed={isSelected}
   >
     <span className={Styles.cardTop}>

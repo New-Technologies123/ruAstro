@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 
 import Styles from '../products.module.scss';
@@ -145,7 +146,7 @@ export const Mobile = () => {
                     href="#questionnaires"
                   >
                     Выбрать опросный лист
-                    <span aria-hidden="true">↗</span>
+                    <span aria-hidden="true"><ArrowUpRightIcon /></span>
                   </a>
 
                   <a
@@ -186,7 +187,7 @@ export const Mobile = () => {
                     className={Styles.zoomButton}
                     aria-hidden="true"
                   >
-                    Увеличить фото ↗
+                    Увеличить фото <ArrowUpRightIcon />
                   </span>
                 </button>
 
@@ -330,7 +331,7 @@ export const Mobile = () => {
                       aria-label={`Открыть опросный лист, исполнение ${document.number}`}
                     >
                       Открыть
-                      <span aria-hidden="true">↗</span>
+                      <span aria-hidden="true"><ArrowUpRightIcon /></span>
                     </a>
 
                     <a
@@ -350,7 +351,7 @@ export const Mobile = () => {
                 href="/documents/?category=accounting-system"
               >
                 <span className={Styles.materialIcon} aria-hidden="true">
-                  ↗
+                  <ArrowUpRightIcon />
                 </span>
 
                 <span>
@@ -409,7 +410,7 @@ export const Mobile = () => {
                     </strong>
 
                     <span aria-hidden="true">
-                      ↗
+                      <ArrowUpRightIcon />
                     </span>
                   </div>
                 </a>
@@ -461,7 +462,7 @@ export const Mobile = () => {
 
             <a href="/contact/">
               Обсудить проект
-              <span aria-hidden="true">↗</span>
+              <span aria-hidden="true"><ArrowUpRightIcon /></span>
             </a>
           </div>
         </section>

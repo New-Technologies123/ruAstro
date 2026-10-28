@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
@@ -512,7 +513,7 @@ export const Service = () => {
             className={Styles.ctaButton}
           >
             Обсудить обслуживание
-            <span>↗</span>
+            <span><ArrowUpRightIcon /></span>
           </a>
         </motion.section>
 

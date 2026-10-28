@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { useEffect, useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import Styles from "./procurement.module.scss";
@@ -33,6 +34,8 @@ export const Procurement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const restoreFocusRef = useRef(false);
 
   useEffect(() => {
     const media = window.matchMedia("(max-width: 800px)");
@@ -95,14 +98,21 @@ export const Procurement = () => {
   const selectedGroup = selectedIndex >= 0 ? filteredGroups[selectedIndex] : null;
   const isMobile = pageSize === MOBILE_PAGE_SIZE;
 
-  const selectGroup = (note: string, trigger: HTMLButtonElement) => {
+  const selectGroup = (note: string, trigger: HTMLButtonElement, keyboardActivated: boolean) => {
     triggerRef.current = trigger;
+    restoreFocusRef.current = keyboardActivated;
     setSelectedNote(note);
   };
 
   const closeDetail = () => {
     setSelectedNote(null);
-    if (!isMobile) requestAnimationFrame(() => triggerRef.current?.focus({ preventScroll: true }));
+    if (!isMobile && restoreFocusRef.current) requestAnimationFrame(() => triggerRef.current?.focus({ preventScroll: true }));
+  };
+
+  const updateSearch = (value: string) => {
+    setSearch(value);
+    setCurrentPage(1);
+    setSelectedNote(null);
   };
 
   const changePage = (nextPage: number) => {
@@ -123,26 +133,28 @@ export const Procurement = () => {
             <span>Открыто сейчас</span>
             <strong>{loading ? "—" : groupedItems.length}</strong>
             <span>лотов · {loading ? "—" : items.length} позиций</span>
-            <div className={Styles.heroAsideArrow} aria-hidden="true">↗</div>
+            <div className={Styles.heroAsideArrow} aria-hidden="true"><ArrowUpRightIcon /></div>
           </div>
         </header>
 
         <div className={Styles.toolbar}>
-          <label className={Styles.searchWrap}>
+          <div className={Styles.searchWrap}>
             <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
-            <span className={Styles.visuallyHidden}>Поиск по лотам и товарам</span>
+            <label htmlFor="procurement-search" className={Styles.visuallyHidden}>Поиск по лотам и товарам</label>
             <input
+              ref={searchInputRef}
+              id="procurement-search"
               type="search"
               placeholder="Найти лот или товар"
               value={search}
-              onChange={(event) => {
-                setSearch(event.target.value);
-                setCurrentPage(1);
-                setSelectedNote(null);
-              }}
+              onChange={(event) => updateSearch(event.target.value)}
             />
-          </label>
-          <span className={Styles.resultCount}>{loading ? "Загрузка…" : `${filteredGroups.length} лотов`}</span>
+            {search && (
+              <button type="button" className={Styles.clearSearch} onClick={() => { updateSearch(""); searchInputRef.current?.focus(); }} aria-label="Очистить поиск">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5 5 19" /></svg>
+              </button>
+            )}
+          </div>
         </div>
 
         {loadError ? (
@@ -166,7 +178,7 @@ export const Procurement = () => {
                     key={group.note}
                     group={group}
                     isSelected={group.note === selectedNote}
-                    onSelect={(trigger) => selectGroup(group.note, trigger)}
+                    onSelect={(trigger, keyboardActivated) => selectGroup(group.note, trigger, keyboardActivated)}
                   />
                 ))}
               </div>
@@ -194,6 +206,7 @@ export const Procurement = () => {
           onClose={closeDetail}
           onAddOffer={() => setOfferGroup(selectedGroup)}
           returnFocusTo={triggerRef.current}
+          restoreFocus={restoreFocusRef.current}
         />
       )}
     </div>
