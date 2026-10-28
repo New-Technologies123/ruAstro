@@ -444,6 +444,10 @@ export const Service = () => {
                   <h3>{item.title}</h3>
                   <p>{item.text}</p>
                 </div>
+                <span className={Styles.relatedArrow}>
+                  Открыть услугу
+                  <span className={Styles.relatedArrowIcon}><ArrowUpRightIcon /></span>
+                </span>
               </a>
             ))}
           </CategoryCarousel>

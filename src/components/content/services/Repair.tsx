@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Styles from './service.module.scss'
 import { ServiceBreadcrumbs } from './ServiceBreadcrumbs'
 import { CategoryCarousel } from '../../ui/carousel/CategoryCarousel'
+import { ArrowUpRightIcon } from '../../ui/icon/ArrowUpRightIcon'
 
 import serves_1 from '../../../images/services/serves_12.png'
 
@@ -494,6 +495,10 @@ export const Repair = () => {
                 <h3>{item.title}</h3>
                 <p>{item.text}</p>
               </div>
+              <span className={Styles.relatedArrow}>
+                Открыть услугу
+                <span className={Styles.relatedArrowIcon}><ArrowUpRightIcon /></span>
+              </span>
             </a>
           ))}
         </CategoryCarousel>
