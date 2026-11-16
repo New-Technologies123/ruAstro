@@ -51,8 +51,16 @@ function NewsCard({ news, onOpen, photoId, onPhotoChange, featured = false }: Ne
   return (
     <article className={`${Styles.newsItem} ${featured ? Styles.featured : ''}`}>
       {news.photos.length > 0 ? (
-        <div className={Styles.cardGallery} data-news-gallery>
-          <Gallery photos={news.photos} photoId={photoId} onPhotoChange={onPhotoChange} />
+        <div className={Styles.cardMedia}>
+          <Gallery
+            photos={news.photos}
+            photoId={photoId}
+            onPhotoChange={onPhotoChange}
+            variant="card"
+            onImageClick={(trigger) => onOpen(news, trigger)}
+            imageLabel={news.title}
+            loading={featured ? 'eager' : 'lazy'}
+          />
         </div>
       ) : (
         <div className={Styles.cardNoPhoto} aria-hidden="true">
@@ -376,9 +384,16 @@ export const News = () => {
     <>
       <section className={Styles.newsPage} aria-label="Новости компании">
         <div ref={titleRef} className={Styles.pageHeader}>
-          <span className={Styles.eyebrow}>Жизнь компании <span aria-hidden="true">/</span> Новости</span>
-          <h1>Новости и события</h1>
-          <p>Выставки, проекты, партнёрства и важные события предприятия.</p>
+          <div className={Styles.headerCopy}>
+            <span className={Styles.eyebrow}>Жизнь компании <span aria-hidden="true">/</span> Новости</span>
+            <h1>Новости и события</h1>
+            <p>Выставки, проекты, партнёрства и важные события предприятия.</p>
+          </div>
+          <div className={Styles.headerAside}>
+            <span>Последняя публикация</span>
+            <strong>{NEWS_DATA[0].date}</strong>
+            <span>Следите за тем, что происходит в компании</span>
+          </div>
         </div>
 
         <div className={Styles.toolbar}>
@@ -401,9 +416,17 @@ export const News = () => {
               ))}
             </div>
           </div>
-          <p className={Styles.newsCount} aria-live="polite">
-            {isMobile ? `${visibleNews.length} из ${filteredNews.length} ${newsWord(filteredNews.length)}` : `Показано ${visibleNews.length} из ${filteredNews.length} ${newsWord(filteredNews.length)}`}
-          </p>
+          <div className={Styles.toolbarMeta}>
+            <span className={Styles.filterHint} aria-hidden="true">
+              Листайте категории
+              <svg viewBox="0 0 24 24" fill="none" focusable="false">
+                <path d="M4 12h16m-4-4 4 4-4 4M8 8l-4 4 4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </span>
+            <p className={Styles.newsCount} aria-live="polite">
+              {isMobile ? `${visibleNews.length} из ${filteredNews.length} ${newsWord(filteredNews.length)}` : `Показано ${visibleNews.length} из ${filteredNews.length} ${newsWord(filteredNews.length)}`}
+            </p>
+          </div>
         </div>
 
         {visibleNews.length > 0 ? (

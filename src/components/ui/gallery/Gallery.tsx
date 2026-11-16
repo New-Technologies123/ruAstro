@@ -8,9 +8,13 @@ type TProps = {
   photos: TPhoto[];
   photoId?: number;
   onPhotoChange: (photoId: number) => void;
+  variant?: 'detail' | 'card';
+  onImageClick?: (trigger: HTMLButtonElement) => void;
+  imageLabel?: string;
+  loading?: 'eager' | 'lazy';
 };
 
-export const Gallery = ({ photos, photoId, onPhotoChange }: TProps) => {
+export const Gallery = ({ photos, photoId, onPhotoChange, variant = 'detail', onImageClick, imageLabel, loading }: TProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const imageButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -25,22 +29,29 @@ export const Gallery = ({ photos, photoId, onPhotoChange }: TProps) => {
   };
 
   return (
-    <div className={Styles.slider} onClick={(event) => event.stopPropagation()}>
+    <div className={`${Styles.slider} ${variant === 'card' ? Styles.cardSlider : ''}`} onClick={(event) => event.stopPropagation()}>
       <button
         ref={imageButtonRef}
         type="button"
         className={Styles.item}
-        onClick={() => setIsOpenModal(true)}
-        aria-label={`Увеличить фото: ${currentPhoto.alt || 'Новость'}`}
+        onClick={(event) => {
+          if (onImageClick) onImageClick(event.currentTarget);
+          else setIsOpenModal(true);
+        }}
+        aria-label={onImageClick ? `Читать новость: ${imageLabel || currentPhoto.alt}` : `Увеличить фото: ${currentPhoto.alt || 'Новость'}`}
       >
-        <img className={Styles.thumbnail} src={currentPhoto.src} alt={currentPhoto.alt || ''} />
+        <img className={Styles.thumbnail} src={currentPhoto.src} alt={currentPhoto.alt || ''} loading={loading} decoding="async" />
         <span className={Styles.imageOverlay} aria-hidden="true">
-          <span className={Styles.zoomText}>Увеличить фото <ArrowUpRightIcon /></span>
+          <span className={Styles.zoomText}>{onImageClick ? 'Читать новость' : 'Увеличить фото'} <ArrowUpRightIcon /></span>
         </span>
-        {photos.length > 1 && (
+        {photos.length > 1 && variant !== 'card' && (
           <span className={Styles.photoCounter}>{currentIndex + 1} / {photos.length}</span>
         )}
       </button>
+
+      {variant === 'card' && photos.length > 1 && (
+        <span className={Styles.visuallyHidden} aria-live="polite">Фото {currentIndex + 1} из {photos.length}</span>
+      )}
 
       {photos.length > 1 && (
         <>

@@ -92,8 +92,8 @@ export const NEWS_DATA: TNewsItem[] = [
     title: 'Участие в ADIPEC-2025',
     description: 'Переговоры с ADNOC и Aramco на выставке в Абу-Даби',
     photos: [
-      { id: 1, src: news_9.src, alt: 'ADIPEC 2025' },
-      { id: 2, src: news_10.src, alt: 'ADIPEC 2025' },
+      { id: 1, src: news_10.src, alt: 'ADIPEC 2025' },
+      { id: 2, src: news_9.src, alt: 'ADIPEC 2025' },
     ],
     content: [
       'ООО ИПП «Новые Технологии» успешно приняли участие в международной выставке ADIPEC-2025, прошедшей в Абу-Даби, ОАЭ с 3 по 6 ноября 2025 года.',
