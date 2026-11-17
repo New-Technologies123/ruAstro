@@ -32,8 +32,8 @@ export const Vacancy = ({
       {employmentType && <span>{employmentType}</span>}
     </div>
 
-    {/* <span className={Styles.cardFooter} aria-hidden="true">
-      Подробнее о вакансии
-    </span> */}
+    <span className={Styles.cardFooter} aria-hidden="true">
+      Открыть на HH.ru
+    </span>
   </button>
 );
