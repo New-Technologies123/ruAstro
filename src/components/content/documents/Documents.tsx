@@ -14,6 +14,7 @@ import {
 } from './documents.data';
 
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { CompanyBreadcrumbs } from '../../ui/company-breadcrumbs/CompanyBreadcrumbs';
 import { useCategoryCarousel } from '../../ui/carousel/CategoryCarousel';
 
 type IndexedDocument = TDocument & {
@@ -682,6 +683,7 @@ export function Documents() {
       <header className={Styles.hero}>
         <div className={Styles.heroInner}>
           <div className={Styles.heroMain}>
+            <CompanyBreadcrumbs current="Документы" />
             <span
               className={
                 Styles.eyebrow

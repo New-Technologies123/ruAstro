@@ -4,12 +4,22 @@ import { Header } from '../components/base/Header';
 import { Footer } from '../components/base/Footer';
 import { Content } from '../components/base/Content';
 import { Procurement as ProcurementContent } from '../components/content/procurement/Procurement';
+import { parseProcurementWorkbook, type ProcurementItem } from '../components/content/procurement/parseProcurement';
+import { readFile } from 'node:fs/promises';
+
+let initialItems: ProcurementItem[] = [];
+try {
+  const file = await readFile(new URL('../../public/procurement.xlsx', import.meta.url));
+  initialItems = parseProcurementWorkbook(file);
+} catch (error) {
+  console.error('Не удалось подготовить список закупок:', error);
+}
 ---
 
 <Layout>
   <Header pageType="procurement" client:load />
   <Content>
-    <ProcurementContent client:load />
+    <ProcurementContent initialItems={initialItems} client:load />
   </Content>
   <Footer client:load />
 </Layout>

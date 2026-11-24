@@ -40,11 +40,11 @@
 
     background: linear-gradient(90deg,
         transparent 0%,
-        rgba(46, 83, 248, 0.35) 15%,
-        #2e53f8 35%,
-        #080197 50%,
-        #2e53f8 65%,
-        rgba(46, 83, 248, 0.35) 85%,
+        rgba(23, 105, 224, 0.35) 15%,
+        var(--site-blue) 35%,
+        var(--site-navy) 50%,
+        var(--site-blue) 65%,
+        rgba(23, 105, 224, 0.35) 85%,
         transparent 100%);
 
     border-radius: 999px;

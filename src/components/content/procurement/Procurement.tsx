@@ -1,6 +1,6 @@
 import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { useEffect, useRef, useState } from "react";
-import * as XLSX from "xlsx";
+import type { ProcurementItem } from "./parseProcurement";
 import Styles from "./procurement.module.scss";
 import { BackToTop } from "../../ui/back-to-top/BackToTop";
 import { OfferModal } from "./OfferModal";
@@ -8,32 +8,29 @@ import { GroupCard } from "./GroupCard";
 import { LotDetail } from "./LotDetail";
 import { LotSheet } from "./LotSheet";
 
-type Item = {
-  id: number;
-  name: string | null;
-  quantity: number | string;
-  unit: string;
-  note: string | null;
-};
+type Item = ProcurementItem;
 
 type Group = {
   note: string;
   items: Item[];
 };
 
-const PAGE_SIZE = 9;
-const MOBILE_PAGE_SIZE = 4;
+const PAGE_SIZE = 12;
+const MOBILE_PAGE_SIZE = 6;
 
-export const Procurement = () => {
-  const [items, setItems] = useState<Item[]>([]);
+export const Procurement = ({ initialItems }: { initialItems: Item[] }) => {
+  const [items, setItems] = useState<Item[]>(initialItems);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(initialItems.length === 0);
   const [loadError, setLoadError] = useState(false);
   const [selectedNote, setSelectedNote] = useState<string | null>(null);
   const [offerGroup, setOfferGroup] = useState<Group | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(PAGE_SIZE);
+  const [pageEntranceReady, setPageEntranceReady] = useState(true);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const cardListRef = useRef<HTMLDivElement | null>(null);
+  const scrollToFirstLotRef = useRef(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const restoreFocusRef = useRef(false);
 
@@ -42,6 +39,7 @@ export const Procurement = () => {
     const updatePageSize = () => {
       setPageSize(media.matches ? MOBILE_PAGE_SIZE : PAGE_SIZE);
       setCurrentPage(1);
+      setPageEntranceReady(true);
       setSelectedNote(null);
     };
     updatePageSize();
@@ -56,20 +54,15 @@ export const Procurement = () => {
       try {
         const response = await fetch("/procurement.xlsx");
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const workbook = XLSX.read(await response.arrayBuffer());
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const rows = XLSX.utils.sheet_to_json<unknown[]>(sheet, { header: 1 });
-        const parsed = rows.slice(1).map((row, index) => ({
-          id: index + 1,
-          name: String(row[2] ?? "").trim() || null,
-          quantity: (row[3] ?? "") as number | string,
-          unit: String(row[4] ?? ""),
-          note: String(row[5] ?? "").trim() || null
-        })).filter((item) => item.name);
-        if (active) setItems(parsed);
+        const { parseProcurementWorkbook } = await import("./parseProcurement");
+        const parsed = parseProcurementWorkbook(await response.arrayBuffer());
+        if (active) {
+          setItems(parsed);
+          setLoadError(false);
+        }
       } catch (error) {
         console.error("Ошибка загрузки закупок:", error);
-        if (active) setLoadError(true);
+        if (active && initialItems.length === 0) setLoadError(true);
       } finally {
         if (active) setLoading(false);
       }
@@ -98,9 +91,45 @@ export const Procurement = () => {
   const selectedGroup = selectedIndex >= 0 ? filteredGroups[selectedIndex] : null;
   const isMobile = pageSize === MOBILE_PAGE_SIZE;
 
+  useEffect(() => {
+    if (!scrollToFirstLotRef.current) return;
+
+    let revealTimer: number | undefined;
+    const frame = window.requestAnimationFrame(() => {
+      scrollToFirstLotRef.current = false;
+      const list = cardListRef.current;
+      if (!list) {
+        setPageEntranceReady(true);
+        return;
+      }
+
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      list.scrollTop = 0;
+      const catalog = list.closest("aside") ?? list;
+      catalog.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start"
+      });
+
+      if (reduceMotion) setPageEntranceReady(true);
+      else revealTimer = window.setTimeout(() => setPageEntranceReady(true), 380);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      if (revealTimer !== undefined) window.clearTimeout(revealTimer);
+    };
+  }, [page]);
+
   const selectGroup = (note: string, trigger: HTMLButtonElement, keyboardActivated: boolean) => {
     triggerRef.current = trigger;
     restoreFocusRef.current = keyboardActivated;
+    if (!isMobile && !selectedNote && cardListRef.current) {
+      const sidebarTop = cardListRef.current.closest("aside")?.getBoundingClientRect().top ?? 0;
+      if (sidebarTop < 90) {
+        window.scrollTo({ top: window.scrollY + sidebarTop - 90, behavior: "auto" });
+      }
+    }
     setSelectedNote(note);
   };
 
@@ -112,12 +141,15 @@ export const Procurement = () => {
   const updateSearch = (value: string) => {
     setSearch(value);
     setCurrentPage(1);
+    setPageEntranceReady(true);
     setSelectedNote(null);
   };
 
   const changePage = (nextPage: number) => {
+    if (nextPage < 1 || nextPage > totalPages || nextPage === page) return;
+    scrollToFirstLotRef.current = true;
+    setPageEntranceReady(false);
     setCurrentPage(nextPage);
-    setSelectedNote(null);
   };
 
   return (
@@ -172,7 +204,7 @@ export const Procurement = () => {
                 <div><span className={Styles.sectionKicker}>КАТАЛОГ</span><h2>Лоты</h2></div>
                 <span className={Styles.sectionCount}>{filteredGroups.length}</span>
               </div>
-              <div className={Styles.cardList}>
+              <div className={`${Styles.cardList} ${pageEntranceReady ? Styles.cardListPage : Styles.cardListPending}`} key={page} ref={cardListRef}>
                 {paginatedGroups.map((group) => (
                   <GroupCard
                     key={group.note}
@@ -196,6 +228,7 @@ export const Procurement = () => {
             )}
           </div>
         )}
+
       </div>
       {offerGroup && <OfferModal group={offerGroup} onClose={() => setOfferGroup(null)} />}
       <BackToTop />

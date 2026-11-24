@@ -181,7 +181,7 @@ export const InstallationCard = ({
   };
 
   return (
-    <article className={Styles.card} ref={cardRef}>
+    <article className={Styles.card} ref={cardRef} data-motion-ignore>
       <div className={Styles.cardHeader}>
         <span className={Styles.cardIndex}>{String(index ?? inst.id).padStart(2, '0')}</span>
         <div>

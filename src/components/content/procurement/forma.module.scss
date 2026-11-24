@@ -19,7 +19,7 @@
   border-radius: 24px;
   background: #fff;
   color: #14263f;
-  font-family: Inter, Arial, sans-serif;
+  font-family: inherit;
   box-shadow: 0 30px 90px rgba(1, 15, 32, .3);
 }
 
@@ -30,7 +30,7 @@
   gap: 22px;
   flex: 0 0 auto;
   padding: 30px 36px 27px;
-  background: linear-gradient(115deg, #09233d, #15517d);
+  background: var(--site-hero-gradient);
   color: #fff;
 
   h2 { margin: 10px 0 8px; font-size: clamp(25px, 3vw, 34px); line-height: 1.15; letter-spacing: -.04em; }
@@ -87,7 +87,7 @@
   border: 1px solid #b9d2e6;
   border-radius: 10px;
   background: #fff;
-  color: #155586;
+  color: var(--site-blue);
   font: inherit;
   font-size: 12px;
   font-weight: 750;
@@ -95,7 +95,7 @@
 
   span { color: inherit; font-size: 18px; }
   &:hover { border-color: #6ca7d1; background: #f8fcff; }
-  &:focus-visible { outline: 3px solid #77afea; outline-offset: 2px; }
+  &:focus-visible { outline: 3px solid var(--site-blue-light); outline-offset: 2px; }
 }
 
 .form { padding: 3px 36px 0; }
@@ -205,7 +205,7 @@
     cursor: pointer;
   }
 
-  &:focus-visible { outline: 3px solid #77afea; outline-offset: 2px; }
+  &:focus-visible { outline: 3px solid var(--site-blue-light); outline-offset: 2px; }
 }
 
 .fileStatus {
@@ -246,8 +246,8 @@
     height: 20px;
     opacity: 0;
 
-    &:focus-visible + .customCheckbox { outline: 3px solid #77afea; outline-offset: 2px; }
-    &:checked + .customCheckbox { border-color: #19679f; background: #19679f; }
+    &:focus-visible + .customCheckbox { outline: 3px solid var(--site-blue-light); outline-offset: 2px; }
+    &:checked + .customCheckbox { border-color: var(--site-blue); background: var(--site-blue); }
     &:checked + .customCheckbox::after { content: "✓"; color: #fff; font-size: 13px; font-weight: 800; }
   }
 
@@ -305,10 +305,10 @@
 
     &:first-child { border: 1px solid #d8e2ea; background: #fff; color: #566d82; }
     &:first-child:hover { background: #f5f8fa; }
-    &:last-child { border: 1px solid #155586; background: #155586; color: #fff; }
-    &:last-child:hover:not(:disabled) { background: #0c416d; }
+    &:last-child { border: 1px solid var(--site-blue); background: var(--site-blue); color: #fff; }
+    &:last-child:hover:not(:disabled) { background: var(--site-blue-hover); }
     &:disabled { opacity: .55; cursor: wait; }
-    &:focus-visible { outline: 3px solid #77afea; outline-offset: 2px; }
+    &:focus-visible { outline: 3px solid var(--site-blue-light); outline-offset: 2px; }
     span { font-size: 18px; line-height: 1; }
   }
 }

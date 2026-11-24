@@ -4,9 +4,9 @@
 // ============================================================
 
 :root {
-  --card-blue: #168bd0;
-  --card-blue-dark: #0876bd;
-  --card-blue-light: #3aa9df;
+  --card-blue: var(--site-blue);
+  --card-blue-dark: var(--site-blue-hover);
+  --card-blue-light: var(--site-blue-light);
 
   --card-radius: 18px;
 
@@ -72,9 +72,9 @@
 
   background:
     linear-gradient(145deg,
-      #3aa9df 0%,
-      #168bd0 52%,
-      #0876bd 100%);
+      var(--site-blue-light) 0%,
+      var(--site-blue) 52%,
+      var(--site-blue-hover) 100%);
 
   border: 1px solid rgba(255, 255, 255, 0.28);
 
@@ -375,7 +375,7 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid rgba(255, 255, 255, 0.96);
-  color: #0876bd;
+  color: var(--site-blue-hover);
   font-size: 20px;
   font-weight: 600;
   line-height: 1;

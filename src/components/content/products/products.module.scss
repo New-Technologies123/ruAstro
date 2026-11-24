@@ -1,12 +1,12 @@
 .page {
-  --navy: #071e38;
-  --navy-light: #0e365e;
-  --blue: #1769df;
-  --blue-soft: #edf5ff;
-  --ink: #142438;
-  --muted: #5b6c7e;
-  --line: #dce6ef;
-  --surface: #f4f8fc;
+  --navy: var(--site-navy);
+  --navy-light: var(--site-navy-light);
+  --blue: var(--site-blue);
+  --blue-soft: var(--site-blue-soft);
+  --ink: var(--site-ink);
+  --muted: var(--site-muted);
+  --line: var(--site-line);
+  --surface: var(--site-surface);
 
   min-height: 100vh;
   background: #fff;
@@ -36,7 +36,7 @@
 
 .container {
   position: relative;
-  width: min(1200px, calc(100% - 64px));
+  width: var(--site-page-width);
   margin: 0 auto;
 }
 
@@ -52,14 +52,14 @@
 
 .hero {
   position: relative;
-  width: min(1320px, calc(100% - 32px));
+  width: var(--site-page-width);
   margin: 24px auto 0;
   padding: 26px 0 54px;
   overflow: hidden;
   border-radius: 24px;
   background:
     radial-gradient(circle at 86% 19%, rgba(55, 128, 215, 0.3), transparent 36%),
-    linear-gradient(125deg, #071b32 0%, #0b2b4b 74%, #10395f 100%);
+    var(--site-hero-gradient);
   color: #fff;
 }
 
@@ -110,7 +110,7 @@
 }
 
 .breadcrumbs>span[aria-hidden] {
-  color: #78a9de;
+  color: var(--site-blue-light);
   font-size: 20px;
   line-height: 1;
 }
@@ -511,8 +511,8 @@
 }
 
 .documentActions .downloadButton:hover {
-  border-color: #0f58be;
-  background: #0f58be;
+  border-color: var(--site-blue-hover);
+  background: var(--site-blue-hover);
 }
 
 .bottomCta {

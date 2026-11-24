@@ -1,16 +1,16 @@
 .products {
-  --navy: #071d36;
-  --navy-2: #0b2948;
-  --blue: #1769df;
-  --blue-light: #73aaff;
-  --blue-soft: #edf5ff;
-  --ink: #122238;
-  --muted: #617184;
-  --muted-light: #8b9bad;
-  --line: #dce5ef;
+  --navy: var(--site-navy);
+  --navy-2: var(--site-navy-light);
+  --blue: var(--site-blue);
+  --blue-light: var(--site-blue-light);
+  --blue-soft: var(--site-blue-soft);
+  --ink: var(--site-ink);
+  --muted: var(--site-muted);
+  --muted-light: var(--site-muted-soft);
+  --line: var(--site-line);
   --line-dark: rgba(255, 255, 255, 0.12);
-  --surface: #f4f8fc;
-  --surface-blue: #edf5ff;
+  --surface: var(--site-surface);
+  --surface-blue: var(--site-blue-soft);
 
   width: 100%;
   min-height: 100vh;
@@ -71,7 +71,7 @@
 .hero {
   position: relative;
   isolation: isolate;
-  width: min(1340px, calc(100% - 48px));
+  width: var(--site-page-width);
   min-height: 510px;
   margin: 32px auto 0;
   overflow: hidden;
@@ -180,14 +180,17 @@
 }
 
 .heroMain {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   flex: 1;
   align-items: center;
+  gap: clamp(24px, 4vw, 60px);
   padding: 38px 0 40px;
 }
 
 .heroCopy {
-  max-width: 820px;
+  min-width: 0;
+  max-width: 900px;
 }
 
 .hero h1 {
@@ -310,7 +313,7 @@
 ========================================== */
 
 .catalog {
-  width: min(1240px, calc(100% - 48px));
+  width: var(--site-page-width);
   margin: 0 auto;
   padding: 96px 0 100px;
   scroll-margin-top: 30px;
@@ -504,7 +507,7 @@
   grid-template-columns:
     minmax(0, 0.82fr) minmax(0, 1.18fr);
   gap: 90px;
-  width: min(1240px, calc(100% - 48px));
+  width: var(--site-page-width);
   margin: 0 auto;
   padding: 72px 0 90px;
   border-top: 1px solid var(--line);
@@ -606,7 +609,7 @@
 
   align-items: center;
   gap: 35px;
-  width: min(1240px, calc(100% - 48px));
+  width: var(--site-page-width);
   margin: 0 auto 85px;
   padding: 42px 46px;
   overflow: hidden;
@@ -714,8 +717,10 @@
   }
 
   .hero h1 {
-    font-size: clamp(42px, 5.4vw, 62px);
+    font-size: clamp(40px, 4.6vw, 60px);
   }
+
+  .heroMain { grid-template-columns: minmax(0, 1fr); gap: 24px; }
 
   .catalog,
   .approach,
@@ -776,8 +781,10 @@
   }
 
   .heroMain {
+    grid-template-columns: 1fr;
     padding: 38px 0 30px;
   }
+
 
   .hero h1 {
     font-size: clamp(38px, 9vw, 50px);

@@ -56,7 +56,7 @@ const FIELDS: FieldConfig[] = [
   },
   {
     key: 'position',
-    label: 'Должность (необязательно)',
+    label: 'Должность',
     type: 'text',
     autocomplete: 'organization-title',
   },
@@ -427,8 +427,6 @@ export const Order = ({
     const trimmed = value.trim();
 
     switch (key) {
-      case 'position':
-        return undefined;
       case 'email':
         if (!trimmed) {
           return 'Обязательно заполнить';
@@ -544,6 +542,7 @@ export const Order = ({
      */
     const newErrors: Errors = {
       name: validateField('name', name),
+      position: validateField('position', position),
       company: validateField(
         'company',
         company
@@ -573,7 +572,9 @@ export const Order = ({
     const firstInvalidId =
       newErrors.name
         ? 'order-name'
-        : newErrors.company
+        : newErrors.position
+          ? 'order-position'
+          : newErrors.company
             ? 'order-company'
             : newErrors.email
               ? 'order-email'
@@ -1031,6 +1032,7 @@ export const Order = ({
                               field.autocomplete
                             }
                             placeholder=" "
+                            required
                             aria-invalid={Boolean(
                               error
                             )}
@@ -1097,16 +1099,9 @@ export const Order = ({
                   }
                 >
                   <div
-                    className={
-                      Styles.inputWrapper
-                    }
+                    className={`${Styles.inputWrapper} ${Styles.commentInputWrapper}`}
                   >
-                    <span
-                      className={
-                        Styles.fieldIcon
-                      }
-                      aria-hidden="true"
-                    >
+                    <span className={Styles.fieldIcon} aria-hidden="true">
                       <MessageIcon />
                     </span>
 

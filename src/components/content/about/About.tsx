@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import type { CSSProperties } from 'react';
 import Styles from './about.module.scss';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { ArrowUpRightIcon } from '../../ui/icon/ArrowUpRightIcon';
+import latestNewsPhoto from '../../../images/news/news_17.webp';
 
 const STATS = [
   {
@@ -66,6 +68,24 @@ const COMPETENCIES = [
   'Промысловое исполнение',
 ];
 
+const COMPANY_LINKS = [
+  {
+    title: 'Новости',
+    text: 'События предприятия, проекты и участие в отраслевых мероприятиях.',
+    href: '/news/',
+  },
+  {
+    title: 'Документы',
+    text: 'Техническая и эксплуатационная документация по направлениям продукции.',
+    href: '/documents/',
+  },
+  {
+    title: 'Карьера',
+    text: 'Открытые вакансии и возможности работать в нашей команде.',
+    href: '/careers/',
+  },
+];
+
 const formatNumber = (value: number) => {
   return new Intl.NumberFormat('ru-RU').format(
     Math.round(value)
@@ -102,9 +122,7 @@ export const About = () => {
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-
           entry.target.classList.add(Styles.visible);
-
           observer.unobserve(entry.target);
         });
       },
@@ -114,13 +132,9 @@ export const About = () => {
       }
     );
 
-    elements.forEach((element) => {
-      observer.observe(element);
-    });
+    elements.forEach((element) => observer.observe(element));
 
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, []);
 
   /* =====================================================
@@ -228,6 +242,7 @@ export const About = () => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
               runCounters();
+              counterObserver.unobserve(entry.target);
             }
           });
         },
@@ -424,9 +439,7 @@ export const About = () => {
           FULL CYCLE
       ====================================================== */}
 
-      <section
-        className={`${Styles.cycleSection} ${Styles.animateOnScroll}`}
-      >
+      <section className={Styles.cycleSection}>
         <div className={Styles.container}>
           <div className={Styles.cycleHeader}>
             <div className={Styles.sectionLabel}>
@@ -435,7 +448,7 @@ export const About = () => {
 
             <h2>
               От инженерной задачи
-              <br />
+              <br />{' '}
               до <em>готового оборудования.</em>
             </h2>
 
@@ -447,10 +460,12 @@ export const About = () => {
           </div>
 
           <div className={Styles.directionList}>
-            {DIRECTIONS.map((direction) => (
+            {DIRECTIONS.map((direction, index) => (
               <div
-                className={Styles.directionItem}
+                className={`${Styles.directionItem} ${Styles.animateOnScroll}`}
                 key={direction.number}
+                data-motion-ignore
+                style={{ '--delay': `${index * 140}ms` } as CSSProperties}
               >
                 <span
                   className={Styles.directionNumber}
@@ -473,12 +488,10 @@ export const About = () => {
           COMPETENCIES
       ====================================================== */}
 
-      <section
-        className={`${Styles.competenciesSection} ${Styles.animateOnScroll}`}
-      >
+      <section className={Styles.competenciesSection}>
         <div className={Styles.container}>
           <div className={Styles.competenciesHeader}>
-            <div className={Styles.sectionLabel}>
+            <div className={Styles.sectionLabel} data-motion-text>
               Компетенции
             </div>
 
@@ -497,11 +510,11 @@ export const About = () => {
           <div className={Styles.competenciesGrid}>
             {COMPETENCIES.map((item, index) => (
               <div
-                className={Styles.competencyItem}
+                className={`${Styles.competencyItem} ${Styles.animateOnScroll}`}
                 key={item}
                 style={
                   {
-                    '--delay': `${index * 100}ms`,
+                    '--delay': `${index * 140}ms`,
                   } as CSSProperties
                 }
               >
@@ -513,6 +526,56 @@ export const About = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className={Styles.companyLinksSection} aria-labelledby="company-links-title">
+        <div className={Styles.container}>
+          <div className={Styles.companyLinksHeader}>
+            <div className={Styles.sectionLabel}>Другие разделы</div>
+            <h2 id="company-links-title">Продолжить знакомство.</h2>
+          </div>
+
+          <nav className={Styles.companyLinksGrid} aria-label="Другие разделы компании">
+            <a className={`${Styles.companyNewsLink} ${Styles.animateOnScroll}`} href={COMPANY_LINKS[0].href} data-motion-ignore>
+              <img
+                src={latestNewsPhoto.src}
+                width={latestNewsPhoto.width}
+                height={latestNewsPhoto.height}
+                alt="Команда компании на выставке KIOGE 2026"
+                loading="lazy"
+              />
+              <div className={Styles.companyNewsCaption}>
+                <div>
+                  <span className={Styles.companyLinkEyebrow}>События компании</span>
+                  <h3>{COMPANY_LINKS[0].title}</h3>
+                  <p>{COMPANY_LINKS[0].text}</p>
+                </div>
+                <span className={Styles.companyLinkArrow}><ArrowUpRightIcon /></span>
+              </div>
+            </a>
+
+            <div className={Styles.companyLinksAside}>
+              {COMPANY_LINKS.slice(1).map((link, index) => (
+                <a
+                  className={`${Styles.companySideLink} ${Styles.animateOnScroll}`}
+                  href={link.href}
+                  key={link.href}
+                  data-motion-ignore
+                  style={{ '--delay': `${(index + 1) * 130}ms` } as CSSProperties}
+                >
+                  <div className={Styles.companySideLinkTop}>
+                    <span className={Styles.companyLinkEyebrow}>{index === 0 ? 'Документация' : 'Команда'}</span>
+                    <span className={Styles.companyLinkArrow}><ArrowUpRightIcon /></span>
+                  </div>
+                  <div className={Styles.companySideLinkBody}>
+                    <h3>{link.title}</h3>
+                    <p>{link.text}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </nav>
         </div>
       </section>
 

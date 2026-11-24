@@ -27,8 +27,8 @@
 }
 
 .breadcrumbs a:hover { background: rgba(255, 255, 255, .2); }
-.breadcrumbs a:focus-visible { outline: 2px solid #a9dbf9; outline-offset: 2px; }
-.breadcrumbs > span[aria-hidden] { color: #78a9de; font-size: 20px; line-height: 1; }
+.breadcrumbs a:focus-visible { outline: 2px solid var(--site-blue-light); outline-offset: 2px; }
+.breadcrumbs > span[aria-hidden] { color: var(--site-blue-light); font-size: 20px; line-height: 1; }
 .breadcrumbs > span[aria-current] { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 @media (max-width: 680px) {

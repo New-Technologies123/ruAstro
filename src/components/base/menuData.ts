@@ -2,14 +2,31 @@ export interface MenuItemType {
   title: string;
   url: string;
   pageType?: string;
+  navLabel?: string;
+  eyebrow?: string;
+  description?: string;
   children?: MenuItemType[];
 }
 
 export const menuData: MenuItemType[] = [
   {
+    title: 'Компания',
+    url: '/about/',
+    pageType: 'about',
+    eyebrow: 'О ПРЕДПРИЯТИИ',
+    description: 'История, документы, новости и команда предприятия.',
+    children: [
+      { title: 'Новости', url: '/news/' },
+      { title: 'Документы', url: '/documents/' },
+      { title: 'Карьера', url: '/careers/' },
+    ],
+  },
+  {
     title: 'Продукция',
     url: '/products/',
     pageType: 'products',
+    eyebrow: 'КАТАЛОГ ОБОРУДОВАНИЯ',
+    description: 'Оборудование и комплектующие для нефтегазовых объектов.',
 
     children: [
       {
@@ -154,6 +171,9 @@ export const menuData: MenuItemType[] = [
     title: 'Сервисные услуги',
     url: '/services/',
     pageType: 'services',
+    navLabel: 'Сервис',
+    eyebrow: 'СЕРВИСНЫЕ УСЛУГИ',
+    description: 'Обслуживание, измерения и сопровождение оборудования.',
 
     children: [
       {

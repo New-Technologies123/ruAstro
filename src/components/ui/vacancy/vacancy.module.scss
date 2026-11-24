@@ -50,7 +50,7 @@
     bottom: 0;
     height: 2px;
     border-radius: 2px 2px 0 0;
-    background: #1455d9;
+    background: var(--site-blue);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
@@ -65,7 +65,7 @@
   }
 
   &:focus-visible {
-    outline: 3px solid #1455d9;
+    outline: 3px solid var(--site-blue);
     outline-offset: 3px;
   }
 }
@@ -93,8 +93,8 @@
 
     .arrow {
       color: #ffffff;
-      background: #1455d9;
-      border-color: #1455d9;
+      background: var(--site-blue);
+      border-color: var(--site-blue);
       transform: translate(2px, -2px);
       box-shadow: 0 8px 18px rgba(20, 85, 217, 0.18);
     }
@@ -160,7 +160,7 @@
   border: 1px solid #dce8fb;
   border-radius: 11px;
   background: #f0f5ff;
-  color: #1455d9;
+  color: var(--site-blue);
   font-size: 17px;
   font-weight: 500;
   line-height: 1;
@@ -202,7 +202,7 @@
   margin-top: auto;
   padding-top: 17px;
   border-top: 1px solid #e8eef6;
-  color: #1455d9;
+  color: var(--site-blue);
   font-size: 13px;
   font-weight: 700;
   line-height: 1.3;

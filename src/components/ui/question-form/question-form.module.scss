@@ -762,17 +762,22 @@
   }
 
   .chatButton {
-    right: 16px;
-    bottom: 16px;
-    width: 58px;
-    height: 58px;
+    right: 14px;
+    bottom: max(52px, calc(env(safe-area-inset-bottom) + 44px));
+    width: 56px;
+    height: 56px;
+    border: 2px solid #fff;
     border-radius: 50%;
+    animation: chatAttention 6s ease-in-out infinite;
+    box-shadow: 0 12px 28px rgba(7, 48, 103, 0.34), 0 0 0 4px rgba(38, 130, 223, 0.14);
   }
 
-  .chatButtonOpen { width: 58px; height: 58px; }
-  .buttonIcon { width: 26px; height: 26px; }
-  .buttonIcon svg { width: 24px; height: 24px; }
-  .buttonDot { width: 10px; height: 10px; }
+  .chatButton::before { inset: -7px; border-color: rgba(38, 130, 223, 0.54); animation-duration: 6s; }
+  .chatButton::after { display: none; }
+  .chatButtonOpen { width: 56px; height: 56px; }
+  .buttonIcon { width: 28px; height: 28px; }
+  .buttonIcon svg { width: 27px; height: 27px; }
+  .buttonDot { top: 0; right: 1px; width: 10px; height: 10px; }
 
   .chatWindow {
     right: 16px;
@@ -791,13 +796,13 @@
 
 @media (max-width: 380px) {
   .chatButton {
-    right: 12px;
-    bottom: 12px;
-    width: 52px;
-    height: 52px;
+    right: 10px;
+    bottom: max(72px, calc(env(safe-area-inset-bottom) + 64px));
+    width: 54px;
+    height: 54px;
   }
 
-  .chatButtonOpen { width: 52px; height: 52px; }
+  .chatButtonOpen { width: 54px; height: 54px; }
   .chatWindow {
     right: 12px;
     bottom: max(12px, env(safe-area-inset-bottom));

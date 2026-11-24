@@ -23,15 +23,15 @@
   }
 
   &:focus-visible {
-    outline: 3px solid #77afea;
+    outline: 3px solid var(--site-blue-light);
     outline-offset: 2px;
   }
 }
 
 .selected {
-  border-color: #1d5da0;
+  border-color: var(--site-blue);
   background: linear-gradient(120deg, #f5faff, #fff 80%);
-  box-shadow: inset 4px 0 #1d5da0, 0 12px 28px rgba(13, 59, 111, .11);
+  box-shadow: inset 4px 0 var(--site-blue), 0 12px 28px rgba(13, 59, 111, .11);
 }
 
 .cardTop, .cardBottom {
@@ -82,7 +82,7 @@
   padding: 5px 6px 5px 12px;
   border-radius: 11px;
   background: #f0f6fb;
-  color: #1d5da0;
+  color: var(--site-blue);
   font-size: 12px;
   font-weight: 750;
 }
@@ -94,7 +94,7 @@
   width: 28px;
   height: 28px;
   border-radius: 8px;
-  background: #1d5da0;
+  background: var(--site-blue);
   color: #fff;
   font-size: 17px;
   line-height: 1;

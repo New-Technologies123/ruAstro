@@ -24,7 +24,7 @@
   height: 40px;
   border-radius: 10px;
   background: var(--blue-soft, #edf5ff);
-  color: var(--blue, #1769df);
+  color: var(--blue, var(--site-blue));
   font-size: 12px;
   font-weight: 750;
   font-variant-numeric: tabular-nums;
@@ -33,7 +33,7 @@
 .cardEyebrow {
   display: block;
   margin-bottom: 5px;
-  color: var(--blue, #1769df);
+  color: var(--blue, var(--site-blue));
   font-size: 11px;
   font-weight: 750;
   line-height: 1.4;
@@ -157,8 +157,8 @@
 }
 
 .option input:checked + span::before {
-  border-color: var(--blue, #1769df);
-  background: var(--blue, #1769df);
+  border-color: var(--blue, var(--site-blue));
+  background: var(--blue, var(--site-blue));
   color: #fff;
   content: '✓';
   font-size: 11px;
@@ -221,7 +221,7 @@
   padding: 11px 17px;
   border: 0;
   border-radius: 9px;
-  background: var(--blue, #1769df);
+  background: var(--blue, var(--site-blue));
   color: #fff;
   font-size: 13px;
   font-weight: 700;
@@ -230,7 +230,7 @@
 }
 
 .addButton:hover {
-  background: #0d56bf;
+  background: var(--site-blue-hover);
   transform: translateY(-2px);
 }
 
@@ -250,6 +250,8 @@
   .errorMessage { margin: 18px 19px 0; }
   .paramsGrid { gap: 12px; padding: 19px; }
   .fieldGroup { padding: 13px 12px 14px; }
+  .options { gap: 8px; }
+  .option span { min-height: 44px; padding: 9px 11px; }
   .cardFooter { padding: 18px 19px; }
 }
 

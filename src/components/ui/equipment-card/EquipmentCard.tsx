@@ -13,7 +13,7 @@ export interface EquipmentCardItem {
 }
 
 export const EquipmentCard = ({ item }: { item: EquipmentCardItem }) => (
-  <article className={Styles.card}>
+  <article className={Styles.card} data-motion-card data-motion-sequence>
     <a className={Styles.cardLink} href={item.href}>
       <div className={Styles.cardImage}>
         <img src={item.image} alt={item.title} loading="lazy" />

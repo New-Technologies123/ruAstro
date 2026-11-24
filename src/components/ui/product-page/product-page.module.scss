@@ -184,7 +184,7 @@
   border: 1px solid #c9def9;
   border-radius: 11px;
   background: #eef6ff;
-  color: #0d5ec6;
+  color: var(--site-blue);
 }
 .qty button {
   display: grid;
@@ -193,7 +193,7 @@
   height: 45px;
   border: 0;
   background: transparent;
-  color: #0d5ec6;
+  color: var(--site-blue);
   cursor: pointer;
 }
 .qty button:hover {

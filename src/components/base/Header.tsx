@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type Dispatch, type MouseEvent, type SetStateAction, } from 'react';
+import { useEffect, useMemo, useRef, useState, type Dispatch, type MouseEvent, type SetStateAction, } from 'react';
 import Styles from './header.module.scss';
 import logoRu from '../../images/logo_fut_ru.webp';
 import { menuData } from './menuData';
@@ -8,6 +8,9 @@ interface MenuItem {
   title: string;
   url?: string;
   pageType?: string;
+  navLabel?: string;
+  eyebrow?: string;
+  description?: string;
   children?: MenuItem[];
 }
 
@@ -283,12 +286,32 @@ const DesktopMenuItem = ({
   const hasChildren = Boolean(
     item.children && item.children.length,
   );
+  const hasNestedColumns = item.children?.some((child) => Boolean(child.children?.length));
 
   const active = itemHasActiveChild(
     item,
     currentPath,
     pageType,
   );
+
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelClose = () => {
+    if (closeTimer.current !== null) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => {
+      closeTimer.current = null;
+      onClose();
+    }, 180);
+  };
+
+  useEffect(() => cancelClose, []);
 
   return (
     <div
@@ -300,46 +323,57 @@ const DesktopMenuItem = ({
       ]
         .filter(Boolean)
         .join(' ')}
-      onMouseEnter={onOpen}
-      onMouseLeave={onClose}
-    >
-      <a
-        href={item.url || '#'}
-        className={[
-          Styles.navLink,
-          active
-            ? Styles.navLinkActive
-            : '',
-          isOpen
-            ? Styles.navLinkOpen
-            : '',
-        ]
-          .filter(Boolean)
-          .join(' ')}
-        aria-current={
-          active && !hasChildren
-            ? 'page'
-            : undefined
+      onPointerEnter={(event) => {
+        if (event.pointerType === 'mouse') {
+          cancelClose();
+          onOpen();
         }
-      >
-        <span>{item.title}</span>
-
+      }}
+      onPointerLeave={(event) => {
+        if (event.pointerType === 'mouse' && !event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          scheduleClose();
+        }
+      }}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) scheduleClose();
+      }}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && isOpen) {
+          cancelClose();
+          onClose();
+          event.currentTarget.querySelector<HTMLButtonElement>('button')?.focus();
+        }
+      }}
+    >
+      <div className={[Styles.navGroup, active ? Styles.navGroupActive : '', isOpen ? Styles.navGroupOpen : ''].filter(Boolean).join(' ')}>
+        <a href={item.url || '#'} className={Styles.navLink}>
+          {item.navLabel || item.title}
+        </a>
         {hasChildren && (
-          <ChevronDown
-            className={[
-              Styles.arrowDown,
-              isOpen
-                ? Styles.arrowOpen
-                : '',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-          />
+          <button
+            type="button"
+            className={Styles.navMenuToggle}
+            onClick={isOpen ? onClose : onOpen}
+            aria-label={`${isOpen ? 'Закрыть' : 'Открыть'} меню «${item.title}»`}
+            aria-expanded={isOpen}
+            aria-haspopup="true"
+          >
+            <ChevronDown className={[Styles.arrowDown, isOpen ? Styles.arrowOpen : ''].filter(Boolean).join(' ')} />
+          </button>
         )}
-      </a>
+      </div>
 
       {hasChildren && isOpen && (
-        <div className={Styles.megaMenu}>
+        <div
+          className={Styles.megaMenu}
+          onPointerEnter={cancelClose}
+          onPointerLeave={(event) => {
+            if (event.pointerType === 'mouse' && event.clientY >= event.currentTarget.getBoundingClientRect().bottom - 1) {
+              cancelClose();
+              onClose();
+            }
+          }}
+        >
           <div className={Styles.megaInner}>
             <div className={Styles.megaIntro}>
               <div
@@ -347,15 +381,13 @@ const DesktopMenuItem = ({
                   Styles.megaEyebrow
                 }
               >
-                ИНЖЕНЕРНЫЕ РЕШЕНИЯ
+                {item.eyebrow || 'НАПРАВЛЕНИЯ'}
               </div>
 
               <h3>{item.title}</h3>
 
               <p>
-                Комплексные решения и
-                оборудование для предприятий
-                ТЭК.
+                {item.description || 'Узнайте больше о направлении работы предприятия.'}
               </p>
 
               {item.url && (
@@ -379,8 +411,13 @@ const DesktopMenuItem = ({
             <div
               className={Styles.megaColumns}
             >
-              {item.children?.map(
-                (child, index) => {
+              {(hasNestedColumns ? [0, 1] : [0]).map((columnIndex) => (
+                <div
+                  className={hasNestedColumns ? Styles.megaColumnStack : Styles.megaColumnGrid}
+                  key={columnIndex}
+                >
+                  {item.children?.map((child, index) => {
+                    if (hasNestedColumns && index % 2 !== columnIndex) return null;
                   const childActive =
                     itemHasActiveChild(
                       child,
@@ -485,8 +522,9 @@ const DesktopMenuItem = ({
                       ) : null}
                     </div>
                   );
-                },
-              )}
+                  })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -549,11 +587,15 @@ const MobileMenuItem = ({
     setOpenItems((previous) => {
       if (previous.includes(itemId)) {
         return previous.filter(
-          (id) => id !== itemId,
+          (id) => id !== itemId && !id.startsWith(`${itemId}-`),
         );
       }
 
-      return [...previous, itemId];
+      const openAncestors = previous.filter(
+        (id) => id === parentId || parentId.startsWith(`${id}-`),
+      );
+
+      return [...openAncestors, itemId];
     });
   };
 
@@ -574,14 +616,8 @@ const MobileMenuItem = ({
       >
         <a
           href={item.url || '#'}
-          className={
-            Styles.mobileItemLink
-          }
-          aria-current={
-            active && !hasChildren
-              ? 'page'
-              : undefined
-          }
+          className={Styles.mobileItemLink}
+          aria-current={active && !hasChildren ? 'page' : undefined}
         >
           {item.title}
         </a>
@@ -616,30 +652,32 @@ const MobileMenuItem = ({
         )}
       </div>
 
-      {hasChildren && isOpen && (
+      {hasChildren && (
         <div
-          className={
-            Styles.mobileChildren
-          }
+          className={[
+            Styles.mobileChildren,
+            isOpen ? Styles.mobileChildrenOpen : '',
+          ].filter(Boolean).join(' ')}
+          aria-hidden={!isOpen}
         >
-          {item.children?.map(
-            (child, index) => (
-              <MobileMenuItem
-                key={`${child.title}-${index}`}
-                item={child}
-                currentPath={
-                  currentPath
-                }
-                pageType={pageType}
-                level={level + 1}
-                openItems={openItems}
-                setOpenItems={
-                  setOpenItems
-                }
-                parentId={itemId}
-              />
-            ),
-          )}
+          <div className={Styles.mobileChildrenInner}>
+            <div className={Styles.mobileChildrenContent}>
+              {item.children?.map(
+                (child, index) => (
+                  <MobileMenuItem
+                    key={`${child.title}-${index}`}
+                    item={child}
+                    currentPath={currentPath}
+                    pageType={pageType}
+                    level={level + 1}
+                    openItems={openItems}
+                    setOpenItems={setOpenItems}
+                    parentId={itemId}
+                  />
+                ),
+              )}
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -670,6 +708,23 @@ export const Header = ({
 
   const [lang, setLang] =
     useState<'ru' | 'en'>('ru');
+
+  useEffect(() => {
+    if (!openDesktopMenu) return;
+
+    const desktopPointer = window.matchMedia('(min-width: 1281px) and (hover: hover) and (pointer: fine)');
+    const closeBelowMenu = (event: PointerEvent) => {
+      if (event.pointerType !== 'mouse' || !desktopPointer.matches) return;
+
+      const menu = document.querySelector(`.${Styles.megaMenu}`);
+      if (menu && event.clientY > menu.getBoundingClientRect().bottom) {
+        setOpenDesktopMenu(null);
+      }
+    };
+
+    window.addEventListener('pointermove', closeBelowMenu);
+    return () => window.removeEventListener('pointermove', closeBelowMenu);
+  }, [openDesktopMenu]);
 
   /* =====================================================
      CURRENT PAGE
@@ -852,60 +907,21 @@ export const Header = ({
   }, [mobileOpen]);
 
   /* =====================================================
-     MAIN LINKS
-  ===================================================== */
-
-  const mainLinks = useMemo(
-    () => [
-      {
-        title: 'Главная',
-        url: '/home/',
-        pageType: 'home',
-      },
-      {
-        title: 'О компании',
-        url: '/about/',
-        pageType: 'about',
-      },
-    ],
-    [],
-  );
-
-  /* =====================================================
      SECONDARY LINKS
   ===================================================== */
 
   const secondaryLinks = useMemo(
     () => [
       {
-        title: 'Документы',
-        url: '/documents/',
-        pageType: 'documents',
-      },
-      {
-        title: 'Новости',
-        url: '/news/',
-        pageType: 'news',
+        title: 'Онлайн магазин',
+        navLabel: 'Магазин',
+        url: '/shop/',
+        pageType: 'shop',
       },
       {
         title: 'Закупки',
         url: '/procurement/',
         pageType: 'procurement',
-      },
-      {
-        title: 'Карьера',
-        url: '/careers/',
-        pageType: 'careers',
-      },
-      {
-        title: 'Онлайн магазин',
-        url: '/shop/',
-        pageType: 'shop',
-      },
-      {
-        title: 'Контакты',
-        url: '/contact/',
-        pageType: 'contact',
       },
     ],
     [],
@@ -932,82 +948,11 @@ export const Header = ({
           isScrolled
             ? Styles.headerScrolled
             : '',
+          openDesktopMenu ? Styles.headerMenuOpen : '',
         ]
           .filter(Boolean)
           .join(' ')}
       >
-        {/* =================================================
-            TOP CONTACT BAR
-        ================================================= */}
-
-        <div className={Styles.topBar}>
-          <div
-            className={
-              Styles.topBarInner
-            }
-          >
-            <div
-              className={
-                Styles.topBarContacts
-              }
-            >
-              <a
-                href="#"
-                className={
-                  Styles.topContact
-                }
-                onClick={(event) =>
-                  event.preventDefault()
-                }
-              >
-                <span
-                  className={
-                    Styles.contactIcon
-                  }
-                >
-                  <LocationIcon />
-                </span>
-
-                Уфа, ул. Заки Валиди 32/2
-              </a>
-
-              <a
-                href="mailto:nt@tech-new.ru"
-                className={
-                  Styles.topContact
-                }
-              >
-                <span
-                  className={
-                    Styles.contactIcon
-                  }
-                >
-                  <MailIcon />
-                </span>
-
-                nt@tech-new.ru
-              </a>
-
-              <a
-                href="tel:+73472939333"
-                className={
-                  Styles.topContact
-                }
-              >
-                <span
-                  className={
-                    Styles.contactIcon
-                  }
-                >
-                  <PhoneIcon />
-                </span>
-
-                +7 (347) 293-93-33
-              </a>
-            </div>
-          </div>
-        </div>
-
         {/* =================================================
             MAIN HEADER
         ================================================= */}
@@ -1039,42 +984,6 @@ export const Header = ({
               }
               aria-label="Основная навигация"
             >
-              {mainLinks.map((link) => {
-                const active =
-                  isMainLinkActive(
-                    link.url,
-                    link.pageType,
-                  );
-
-                return (
-                  <div
-                    key={link.url}
-                    className={
-                      Styles.desktopNavItem
-                    }
-                  >
-                    <a
-                      href={link.url}
-                      className={[
-                        Styles.navLink,
-                        active
-                          ? Styles.navLinkActive
-                          : '',
-                      ]
-                        .filter(Boolean)
-                        .join(' ')}
-                      aria-current={
-                        active
-                          ? 'page'
-                          : undefined
-                      }
-                    >
-                      {link.title}
-                    </a>
-                  </div>
-                );
-              })}
-
               {menuData.map(
                 (item, index) => {
                   const menuKey =
@@ -1105,7 +1014,7 @@ export const Header = ({
                       }
                       onClose={() =>
                         setOpenDesktopMenu(
-                          null,
+                          (current) => current === menuKey ? null : current,
                         )
                       }
                     />
@@ -1144,7 +1053,7 @@ export const Header = ({
                             : undefined
                         }
                       >
-                        {link.title}
+                        {link.navLabel || link.title}
                       </a>
                     </div>
                   );
@@ -1292,26 +1201,6 @@ export const Header = ({
           className={Styles.mobileNav}
           aria-label="Мобильная навигация"
         >
-          {mainLinks.map((item) => (
-            <a
-              key={item.title}
-              href={item.url}
-              className={[
-                Styles.mobileMainLink,
-                isMainLinkActive(
-                  item.url,
-                  item.pageType
-                )
-                  ? Styles.mobileMainLinkActive
-                  : '',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-            >
-              {item.title}
-            </a>
-          ))}
-
           {menuData.map(
             (item: MenuItem, index: number) => (
               <MobileMenuItem
@@ -1348,7 +1237,7 @@ export const Header = ({
           {/* =================================================
         ТОЛЬКО <= 900px
 
-        В 901–1340px этот блок полностью скрыт.
+        В 901–1280px этот блок полностью скрыт.
         Он находится ВНУТРИ mobileNav,
         поэтому не фиксируется снизу.
     ================================================= */}

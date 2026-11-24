@@ -1,8 +1,8 @@
 .page {
-  --ink: #112a3f;
-  --muted: #5e7486;
-  --blue: #0f6396;
-  --line: #dae6ee;
+  --ink: var(--site-ink);
+  --muted: var(--site-muted);
+  --blue: var(--site-blue);
+  --line: var(--site-line);
   min-width: 0;
   padding: 34px 0 90px;
   background: #f5f9fc;
@@ -10,7 +10,7 @@
   * { box-sizing: border-box; }
 }
 
-.container { width: min(1320px, calc(100% - 64px)); margin: 0 auto; }
+.container { width: var(--site-page-width); margin: 0 auto; }
 
 .hero {
   position: relative;
@@ -19,7 +19,7 @@
   padding: clamp(38px, 5vw, 70px);
   border-radius: 30px;
   background: radial-gradient(circle at 82% 18%, rgba(85, 176, 218, .38), transparent 34%),
-    linear-gradient(120deg, #092a46 0%, #0d486f 60%, #12638f 100%);
+    var(--site-hero-gradient);
   box-shadow: 0 24px 55px rgba(14, 59, 89, .13);
   color: #fff;
   &::before {

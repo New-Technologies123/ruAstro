@@ -1,17 +1,17 @@
 .page {
   --services-bg: #ffffff;
-  --services-soft: #f5f8fb;
-  --services-blue-bg: #edf5fb;
+  --services-soft: var(--site-surface);
+  --services-blue-bg: var(--site-blue-soft);
 
-  --services-navy: #092941;
-  --services-navy-2: #103b5a;
+  --services-navy: var(--site-navy);
+  --services-navy-2: var(--site-navy-light);
 
-  --services-blue: #1769e0;
-  --services-blue-dark: #0f54bd;
+  --services-blue: var(--site-blue);
+  --services-blue-dark: var(--site-blue-hover);
 
-  --services-text: #0b2032;
-  --services-text-soft: #536b7d;
-  --services-border: #dfe8ef;
+  --services-text: var(--site-ink);
+  --services-text-soft: var(--site-muted);
+  --services-border: var(--site-line);
 
   width: 100%;
   overflow: hidden;
@@ -42,7 +42,7 @@
 }
 
 .heroInner {
-  width: min(1400px, calc(100% - 38px));
+  width: var(--site-page-width);
   margin: 0 auto;
   padding: 92px 0 82px;
 }
@@ -187,7 +187,7 @@
 .servicesSection,
 .workflowSection,
 .expertiseSection {
-  width: min(1400px, calc(100% - 48px));
+  width: var(--site-page-width);
 
   margin: 0 auto;
 }
@@ -298,7 +298,7 @@
 
 .serviceCard:hover,
 .serviceCard:focus-visible {
-  transform: translateY(-6px);
+  transform: translateY(-3px);
 
   border-color:
     rgba(23, 105, 224, 0.25);
@@ -342,7 +342,7 @@
 
 .serviceCard:hover .cardImage,
 .serviceCard:focus-visible .cardImage {
-  transform: scale(1.015);
+  transform: scale(1.03);
 }
 
 
@@ -1357,11 +1357,11 @@
   grid-template-columns: minmax(0, 1.05fr) minmax(230px, .65fr);
   align-items: center;
   gap: clamp(24px, 4vw, 60px);
-  width: min(1400px, calc(100% - 48px));
+  width: var(--site-page-width);
   padding: clamp(30px, 4vw, 58px);
   overflow: hidden;
   border-radius: 30px;
-  background: radial-gradient(circle at 80% 0%, rgba(72, 168, 225, .22), transparent 36%), linear-gradient(120deg, #082844, #155b86);
+  background: radial-gradient(circle at 80% 0%, rgba(72, 168, 225, .22), transparent 36%), var(--site-hero-gradient);
   box-shadow: 0 22px 54px rgba(9, 41, 65, .15);
 }
 
@@ -1369,7 +1369,7 @@
 .hero .eyebrow { color: #aed9f3; }
 .hero .eyebrowLine { background: #68d5b1; }
 .heroTitle { color: #fff; font-size: clamp(42px, 4.8vw, 68px); line-height: 1.02; }
-.heroTitle span { color: #a9dbf9; }
+.heroTitle span { color: var(--site-blue-light); }
 .heroDescription { max-width: 590px; color: #d2e4ef; font-size: 16px; line-height: 1.65; }
 .hero .primaryButton { background: #fff; color: #104a73; box-shadow: 0 10px 24px rgba(0, 20, 40, .16); }
 .hero .primaryButton:hover { background: #e8f5ff; }
@@ -1438,7 +1438,7 @@
 
 @media (max-width: 720px) {
   .hero { padding-top: 14px; }
-  .heroInner { width: calc(100% - 24px); gap: 28px; padding: 28px 24px 24px; border-radius: 23px; }
+  .heroInner { width: var(--site-page-width); gap: 28px; padding: 28px 24px 24px; border-radius: 23px; }
   .heroTitle { font-size: clamp(34px, 8vw, 48px); }
   .heroDescription { font-size: 14px; }
   .heroStatement { min-height: 0; }

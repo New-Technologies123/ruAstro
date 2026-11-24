@@ -1,18 +1,18 @@
 
 .page {
-  --navy: #071e38;
-  --navy-light: #0f355b;
+  --navy: var(--site-navy);
+  --navy-light: var(--site-navy-light);
 
-  --blue: #1769df;
-  --blue-hover: #0e55c9;
-  --blue-soft: #eaf3ff;
+  --blue: var(--site-blue);
+  --blue-hover: var(--site-blue-hover);
+  --blue-soft: var(--site-blue-soft);
 
-  --ink: #142438;
-  --muted: #56677a;
-  --muted-light: #8b9aaa;
+  --ink: var(--site-ink);
+  --muted: var(--site-muted);
+  --muted-light: var(--site-muted-soft);
 
-  --line: #dce5ee;
-  --surface: #f4f8fc;
+  --line: var(--site-line);
+  --surface: var(--site-surface);
 
   min-height: 100vh;
 
@@ -53,7 +53,7 @@
   position: relative;
   z-index: 1;
 
-  width: min(1200px, calc(100% - 64px));
+  width: var(--site-page-width);
 
   margin: 0 auto;
 }
@@ -84,7 +84,7 @@
 .hero {
   position: relative;
 
-  width: min(1320px, calc(100% - 32px));
+  width: var(--site-page-width);
 
   margin: 24px auto 0;
   padding: 28px 0 34px;
@@ -204,7 +204,7 @@
 }
 
 .breadcrumbs > span[aria-hidden="true"] {
-  color: #78a9de;
+  color: var(--site-blue-light);
 
   font-size: 20px;
   line-height: 1;

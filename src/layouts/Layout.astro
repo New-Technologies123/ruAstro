@@ -3,6 +3,9 @@
 import { QuestionEntry } from '../components/ui/question-form/QuestionEntry';
 import { GlobalCart } from '../components/ui/global-cart/GlobalCart';
 import CookieBanner from '../components/ui/CookieBanner.astro';
+import '@fontsource-variable/geist/wght.css';
+import geistCyrillic from '@fontsource-variable/geist/files/geist-cyrillic-wght-normal.woff2?url';
+import geistLatin from '@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url';
 
 const {
   title = 'ООО ИПП «Новые Технологии»',
@@ -65,8 +68,35 @@ const {
     <meta name="yandex-verification" content="8493e0037eb2c07f" />
 
     <link rel="icon" type="image/png" href="/images/icon.png" />
+    <link rel="preload" href={geistCyrillic} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={geistLatin} as="font" type="font/woff2" crossorigin />
+
+    <script is:inline>
+      if ('IntersectionObserver' in window && window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+        document.documentElement.classList.add('site-motion-enabled');
+      }
+    </script>
 
     <style is:inline>
+      :root {
+        --site-ink: #0b2032;
+        --site-muted: #526b7d;
+        --site-navy: #092941;
+        --site-navy-light: #103b5a;
+        --site-blue: #1769e0;
+        --site-blue-hover: #0f54bd;
+        --site-blue-light: #a9d8f7;
+        --site-blue-soft: #eaf3ff;
+        --site-hero-gradient: linear-gradient(120deg, #092941 0%, #103b5a 62%, #155b86 100%);
+        --site-surface: #f5f8fb;
+        --site-line: #dfe8ef;
+        --site-line-strong: #cbdbe7;
+        --site-muted-soft: #7890a2;
+        --site-container: 1420px;
+        --site-gutter: clamp(16px, 3.3vw, 48px);
+        --site-page-width: min(var(--site-container), calc(100% - var(--site-gutter) - var(--site-gutter)));
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -74,11 +104,120 @@ const {
       }
 
       body {
-        font-family: Arial, sans-serif;
+        font-family: 'Geist Variable', Arial, sans-serif;
+        color: var(--site-ink);
         display: flex;
         flex-direction: column;
         min-height: 100vh;
         overflow-x: hidden;
+      }
+
+      button, input, select, textarea { font: inherit; }
+
+      @media (prefers-reduced-motion: no-preference) {
+        main h1 {
+          animation: site-text-heading-enter 1300ms cubic-bezier(.22, 1, .36, 1) 70ms backwards;
+        } 
+
+        .site-motion-enabled [data-motion-card]:not(.site-motion-visible) {
+          opacity: 0;
+          translate: 0 52px;
+          scale: .96;
+        }
+
+        .site-motion-enabled [data-motion-card].site-motion-visible {
+          animation: site-card-enter 1100ms cubic-bezier(.22, 1, .36, 1) both;
+        }
+
+        .site-motion-enabled [data-motion-card].site-motion-visible:nth-child(4n + 2) {
+          animation-delay: 130ms;
+        }
+
+        .site-motion-enabled [data-motion-card].site-motion-visible:nth-child(4n + 3) {
+          animation-delay: 260ms;
+        }
+
+        .site-motion-enabled [data-motion-card].site-motion-visible:nth-child(4n + 4) {
+          animation-delay: 390ms;
+        }
+
+        .site-motion-enabled [data-motion-card][data-motion-sequence]:not(.site-motion-visible) {
+          opacity: 1;
+          translate: none;
+          scale: 1;
+        }
+
+        .site-motion-enabled [data-motion-card][data-motion-sequence].site-motion-visible {
+          animation-delay: var(--site-card-delay, 0ms);
+        }
+
+        .site-motion-enabled [data-motion-image] {
+          transform: scale(.92);
+          filter: saturate(.62);
+          transition: transform 850ms cubic-bezier(.22, 1, .36, 1), filter 850ms ease;
+        }
+
+        .site-motion-enabled [data-motion-image].site-motion-visible {
+          transform: scale(1);
+          filter: saturate(1);
+        }
+
+        .site-motion-enabled main :is(h2, h3, p, [data-motion-text], .site-motion-label).site-motion-visible {
+          animation: site-text-copy-enter 1050ms cubic-bezier(.22, 1, .36, 1) both;
+        }
+
+        .site-motion-enabled main :is(h2, h3, [data-motion-text], .site-motion-label).site-motion-visible {
+          animation-name: site-text-heading-enter;
+        }
+
+        .site-motion-enabled main :is(h2, h3, p, [data-motion-text], .site-motion-label):not(.site-motion-visible) {
+          opacity: 0;
+          translate: 0 16px;
+        }
+
+        .site-motion-enabled main :is(h2, h3) + p.site-motion-visible,
+        .site-motion-enabled main p + p.site-motion-visible {
+          animation-delay: 110ms;
+        }
+
+        .site-motion-enabled main :is([data-motion-card], form, [role="dialog"], [data-motion-ignore], nav, button, [aria-live], [role="alert"]) :is(h2, h3, p, [data-motion-text], .site-motion-label),
+        .site-motion-enabled main :is(h2, h3, p, [data-motion-text], .site-motion-label):is([aria-live], [role="alert"], [data-motion-ignore]) {
+          opacity: 1;
+          translate: none;
+          animation: none;
+        }
+
+        .site-motion-enabled astro-island [data-motion-card]:not(.site-motion-visible) {
+          opacity: 1;
+          translate: none;
+          scale: 1;
+        }
+
+        .site-motion-enabled astro-island [data-motion-card][data-motion-gentle]:not(.site-motion-visible) {
+          opacity: 0;
+          translate: 0 18px;
+          scale: 1;
+        }
+
+        .site-motion-enabled astro-island [data-motion-image] {
+          transform: none;
+          filter: none;
+        }
+      }
+
+      @keyframes site-card-enter {
+        from { opacity: 0; translate: 0 52px; scale: .96; }
+        to { opacity: 1; translate: 0 0; scale: 1; }
+      }
+
+      @keyframes site-text-heading-enter {
+        from { opacity: .1; clip-path: inset(0 100% 0 0); translate: 0 12px; }
+        to { opacity: 1; clip-path: inset(0 0 0 0); translate: 0 0; }
+      }
+
+      @keyframes site-text-copy-enter {
+        from { opacity: 0; translate: 0 16px; }
+        to { opacity: 1; translate: 0 0; }
       }
     </style>
   </head>
@@ -102,6 +241,98 @@ const {
 
     <!-- COOKIE БАННЕР -->
     <CookieBanner />
+
+    <script is:inline>
+      if (document.documentElement.classList.contains('site-motion-enabled')) {
+        const productCardSelector = 'main article[class*="purposeCard"], main article[class*="relatedCard"], main :is(a, article, div)[class*="materialCard"], main :is(a, article, div)[class*="documentCard"]';
+        const labelSelector = 'main :is(span, div)[class*="eyebrow" i]:not(:empty):not([class*="line" i]):not([class*="dot" i]), main :is(span, div)[class*="kicker" i]:not(:empty), main :is(span, div)[class*="sectionLabel" i]:not(:empty), main :is(span, div)[class*="overline" i]:not(:empty)';
+        const textSelector = `main h2, main h3, main p, main [data-motion-text], ${labelSelector}`;
+        const motionSelector = `[data-motion-image], [data-motion-card], ${textSelector}`;
+        const excludedText = '[data-motion-card], form, [role="dialog"], [data-motion-ignore], nav, button, [aria-live], [role="alert"]';
+        const isProductRoute = window.location.pathname.startsWith('/products/');
+        const registered = new WeakSet();
+
+        const revealVisible = (entries, observer) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue;
+            const element = entry.target;
+            if (element.closest('astro-island')) {
+              const isCard = element.matches('[data-motion-card]') || (isProductRoute && element.matches(productCardSelector));
+              const isImage = element.matches('[data-motion-image]');
+              const isGentleCard = element.hasAttribute('data-motion-gentle');
+              const siblings = isCard ? Array.from(element.parentElement?.children ?? []).filter((child) =>
+                child.matches('[data-motion-card]') || (isProductRoute && child.matches(productCardSelector))
+              ) : [];
+              const delay = isGentleCard ? Math.max(0, siblings.indexOf(element)) * 100 : isCard && isProductRoute ? Math.min(siblings.indexOf(element), 8) * 130 : 0;
+              const keyframes = isGentleCard
+                ? [{ opacity: 0, translate: '0 18px' }, { opacity: 1, translate: '0 0' }]
+                : isCard
+                ? [{ opacity: 0, transform: 'translateY(42px) scale(.97)' }, { opacity: 1, transform: 'none' }]
+                : [{ transform: 'scale(.94)', filter: 'saturate(.7)' }, { transform: 'none', filter: 'none' }];
+              if (isCard || isImage) {
+                element.animate(keyframes, {
+                  duration: isImage ? 850 : isGentleCard ? 780 : 1000,
+                  delay,
+                  easing: 'cubic-bezier(.22, 1, .36, 1)',
+                  fill: isGentleCard ? 'forwards' : 'backwards',
+                });
+              } else {
+                element.classList.add('site-motion-visible');
+              }
+            } else {
+              element.classList.add('site-motion-visible');
+            }
+            observer.unobserve(entry.target);
+          }
+        };
+        const motionObserver = new IntersectionObserver(revealVisible, {
+          threshold: 0.08,
+          rootMargin: '0px 0px -24px 0px',
+        });
+        const lateObserver = new IntersectionObserver(revealVisible, {
+          threshold: 0.08,
+          rootMargin: '0px 0px -28% 0px',
+        });
+
+        const registerMotion = (element) => {
+          if (registered.has(element)) return;
+          registered.add(element);
+          if (!element.closest('astro-island') && isProductRoute && (element.matches('[data-motion-card]') || element.matches(productCardSelector))) {
+            element.setAttribute('data-motion-card', '');
+            element.setAttribute('data-motion-sequence', '');
+            const siblings = Array.from(element.parentElement?.children ?? []).filter((child) =>
+              child.matches('[data-motion-card]') || child.matches(productCardSelector)
+            );
+            const index = Math.max(0, siblings.indexOf(element));
+            element.style.setProperty('--site-card-delay', `${Math.min(index, 8) * 170}ms`);
+          }
+          if (element.matches(textSelector) && element.closest(excludedText)) return;
+          if (element.matches(labelSelector)) element.classList.add('site-motion-label');
+          if (!element.classList.contains('site-motion-visible')) {
+            (element.hasAttribute('data-motion-late') ? lateObserver : motionObserver).observe(element);
+          }
+        };
+
+        const observeMotion = (element) => {
+          if (isProductRoute) {
+            if (element.matches(productCardSelector)) registerMotion(element);
+            element.querySelectorAll?.(productCardSelector).forEach(registerMotion);
+          }
+          if (element.matches(motionSelector)) registerMotion(element);
+          element.querySelectorAll?.(motionSelector).forEach(registerMotion);
+        };
+
+        if (isProductRoute) document.querySelectorAll(productCardSelector).forEach(registerMotion);
+        document.querySelectorAll(motionSelector).forEach(registerMotion);
+        new MutationObserver((records) => {
+          for (const record of records) {
+            record.addedNodes.forEach((node) => {
+              if (node.nodeType === Node.ELEMENT_NODE) observeMotion(node);
+            });
+          }
+        }).observe(document.body, { childList: true, subtree: true });
+      }
+    </script>
 
     <!-- ТВОЯ ЛОГИКА КОРЗИНЫ -->
     <script is:inline>

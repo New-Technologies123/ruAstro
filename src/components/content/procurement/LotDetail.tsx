@@ -54,7 +54,7 @@ export const LotDetail = ({ group, searchTerm, onClose, onAddOffer, inSheet = fa
   const itemWord = itemForm === "one" ? "товар" : itemForm === "few" ? "товара" : "товаров";
 
   return (
-  <section className={Styles.detail} aria-label={`Информация о лоте ${group.note}`}>
+  <section className={Styles.detail} data-motion-ignore aria-label={`Информация о лоте ${group.note}`}>
     <div className={Styles.detailHero}>
       <div className={Styles.detailTop}>
         <span className={Styles.detailKicker}>ЗАКУПКА / ЛОТ</span>

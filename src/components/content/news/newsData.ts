@@ -1,23 +1,31 @@
 import news_1 from '../../../images/news/news_1.webp';
-import news_2 from '../../../images/news/news_2.webp';
+import news_2 from '../../../images/news/news_2_display.webp';
+import news_2_preview from '../../../images/news/news_2_preview.webp';
 import news_3 from '../../../images/news/news_3.webp';
-import news_4 from '../../../images/news/news_4.webp';
+import news_4 from '../../../images/news/news_4_display.webp';
+import news_4_preview from '../../../images/news/news_4_preview.webp';
 import news_5 from '../../../images/news/news_5.webp';
 import news_6 from '../../../images/news/news_6.webp';
 import news_7 from '../../../images/news/news_7.webp';
 import news_8 from '../../../images/news/news_8.webp';
 import news_9 from '../../../images/news/news_14.webp';
 import news_10 from '../../../images/news/news_10.webp';
-import news_11 from '../../../images/news/news_11.jpg';
-import news_12 from '../../../images/news/news_12.webp';
-import news_13 from '../../../images/news/news_13.webp';
-import news_14 from '../../../images/news/news_16.png';
-import news_15 from '../../../images/news/news_15.jpg';
-import news_16 from '../../../images/news/news_17.jpeg';
+import news_11 from '../../../images/news/news_11.webp';
+import news_12 from '../../../images/news/news_12_display.webp';
+import news_12_preview from '../../../images/news/news_12_preview.webp';
+import news_13 from '../../../images/news/news_13_display.webp';
+import news_13_preview from '../../../images/news/news_13_preview.webp';
+import news_14 from '../../../images/news/news_16_display.webp';
+import news_14_preview from '../../../images/news/news_16_preview.webp';
+import news_15 from '../../../images/news/news_15_display.webp';
+import news_15_preview from '../../../images/news/news_15_preview.webp';
+import news_16 from '../../../images/news/news_17_display.webp';
+import news_16_preview from '../../../images/news/news_17_preview.webp';
 
 export type TPhoto = {
   id: number;
   src: string;
+  previewSrc?: string;
   alt: string;
 };
 
@@ -39,9 +47,9 @@ export const NEWS_DATA: TNewsItem[] = [
     title: 'Участие в KIOGE 2026',
     description: 'Обсудили новые проекты и представили решения для учета скважин.',
     photos: [
-      { id: 1, src: news_14.src, alt: 'KIOGE 2026' },
-      { id: 2, src: news_15.src, alt: 'KIOGE 2026' },      
-      { id: 3, src: news_16.src, alt: 'KIOGE 2026' },
+      { id: 1, src: news_14.src, previewSrc: news_14_preview.src, alt: 'KIOGE 2026' },
+      { id: 2, src: news_15.src, previewSrc: news_15_preview.src, alt: 'KIOGE 2026' },
+      { id: 3, src: news_16.src, previewSrc: news_16_preview.src, alt: 'KIOGE 2026' },
     ],
     content: [
       'ООО ИПП «Новые Технологии» приняло участие в нефтегазовой выставке KIOGE 2026, которая проходила с 30 сентября по 2 октября в Алматы. Наша команда провела переговоры с представителями крупнейших добывающих компаний, обсудила задачи заказчиков и получила опросные листы для проработки технических решений.',
@@ -56,8 +64,8 @@ export const NEWS_DATA: TNewsItem[] = [
     title: 'Участие в EGYPES 2026',
     description: 'Успешное участие в выставке Egypt Energy Show в Каире',
     photos: [
-      { id: 1, src: news_13.src, alt: 'EGYPES 2026' },
-      { id: 2, src: news_12.src, alt: 'EGYPES 2026' },
+      { id: 1, src: news_13.src, previewSrc: news_13_preview.src, alt: 'EGYPES 2026' },
+      { id: 2, src: news_12.src, previewSrc: news_12_preview.src, alt: 'EGYPES 2026' },
     ],
     content: [
       'Рады сообщить, что ООО ИПП "Новые Технологии" успешно приняла участие в выставке Egypt Energy Show (EGYPES) 2026, состоявшейся в Каире.',
@@ -139,7 +147,7 @@ export const NEWS_DATA: TNewsItem[] = [
     title: 'Награждение генерального директора',
     description: 'Почетная грамота за развитие международных связей',
     photos: [
-      { id: 1, src: news_4.src, alt: 'Награждение' }
+      { id: 1, src: news_4.src, previewSrc: news_4_preview.src, alt: 'Награждение' }
     ],
     content: [
       '27 марта 2025 года Генеральный директор ООО ИПП «Новые Технологии» Сафаров Ян Рауфович был награждён Почётной грамотой за заслуги в развитии международных, внешнеэкономических и межрегиональных связей Республики Башкортостан с субъектами Российской Федерации.'
@@ -152,7 +160,7 @@ export const NEWS_DATA: TNewsItem[] = [
     title: 'Участие в KIOGE 2024',
     description: '29-я Казахстанская международная выставка «Нефть и газ»',
     photos: [
-      { id: 1, src: news_2.src, alt: 'KIOGE 2024' },
+      { id: 1, src: news_2.src, previewSrc: news_2_preview.src, alt: 'KIOGE 2024' },
       { id: 2, src: news_1.src, alt: 'KIOGE 2024' },      
     ],
     content: [

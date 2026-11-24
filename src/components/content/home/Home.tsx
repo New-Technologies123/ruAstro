@@ -1,6 +1,7 @@
-import { memo, useCallback, useEffect } from 'react';
+import { memo, useCallback, useEffect, useState, type SyntheticEvent } from 'react';
 import Styles from './home.module.scss';
 import { NEWS_DATA } from '../news/newsData';
+import geographyMap from '../../../images/home/geography.webp';
 
 function ArrowUpRight() {
   return (
@@ -20,23 +21,48 @@ function ArrowUpRight() {
       <path d="M5 15 15 5M6 5h9v9" />
     </svg>
   );
-const ArrowUpRight = () => (
-  <svg
-    aria-hidden="true"
-    focusable="false"
-    width="20"
-    height="20"
-    viewBox="0 0 20 20"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="1.8"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    style={{ flexShrink: 0 }}
-  >
-    <path d="M5 15 15 5M6 5h9v9" />
-  </svg>
-);
+}
+
+function DeliveryMap() {
+  const [canLoadMap, setCanLoadMap] = useState(false);
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapVisible, setMapVisible] = useState(false);
+
+  useEffect(() => setCanLoadMap(true), []);
+  useEffect(() => {
+    if (!mapLoaded) return;
+    const timer = window.setTimeout(() => setMapVisible(true), 5000);
+    return () => window.clearTimeout(timer);
+  }, [mapLoaded]);
+
+  const handleMapLoad = (event: SyntheticEvent<HTMLIFrameElement>) => {
+    if (event.currentTarget.contentDocument?.URL === 'about:blank') return;
+    setMapLoaded(true);
+  };
+
+  return (
+    <div className={`${Styles.mapFrame} ${mapVisible ? Styles.mapFrameReady : ''}`}>
+      <img
+        src={geographyMap.src}
+        width={geographyMap.width}
+        height={geographyMap.height}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        decoding="async"
+        className={Styles.mapPreview}
+      />
+      {canLoadMap && (
+        <iframe
+          src="https://yandex.ru/map-widget/v1/?um=constructor%3A1b8f65f94a276e996aad834e0a7f72466019818dd5d59a5f194f1d391a7e68ac&source=constructor"
+          title="Интерактивная карта географии поставок"
+          loading="eager"
+          onLoad={handleMapLoad}
+          className={Styles.map}
+        />
+      )}
+    </div>
+  );
 }
 
 const LOGOS = [
@@ -98,42 +124,6 @@ export const Home = memo(() => {
     });
   }, []);
 
-  useEffect(() => {
-    const elements = Array.from(
-      document.querySelectorAll<HTMLElement>(
-        `.${Styles.animateOnScroll}`,
-      ),
-    );
-
-    if (!elements.length) return;
-
-    if (!('IntersectionObserver' in window)) {
-      elements.forEach((element) =>
-        element.classList.add(Styles.visible),
-      );
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-
-          entry.target.classList.add(Styles.visible);
-          observer.unobserve(entry.target);
-        });
-      },
-      {
-        threshold: 0.08,
-        rootMargin: '0px 0px -60px 0px',
-      },
-    );
-
-    elements.forEach((element) => observer.observe(element));
-
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <main className={Styles.page}>
 
@@ -143,9 +133,7 @@ export const Home = memo(() => {
         <div className={Styles.heroGlow} />
 
         <div className={Styles.heroGrid}>
-          <div
-            className={`${Styles.heroContent} ${Styles.animateOnScroll}`}
-          >
+          <div className={Styles.heroContent} data-motion-ignore>
             <div className={Styles.heroEyebrow}>
               <span className={Styles.liveDot} />
               <span>ООО ИПП «Новые Технологии»</span>
@@ -200,9 +188,7 @@ export const Home = memo(() => {
             </div>
           </div>
 
-          <div
-            className={`${Styles.heroVisual} ${Styles.animateOnScroll}`}
-          >
+          <div className={Styles.heroVisual}>
             <div className={Styles.heroImageFrame}>
               <img
                 src="/images/home/product.webp"
@@ -262,12 +248,12 @@ export const Home = memo(() => {
       {/* ABOUT */}
 
       <section
-        className={`${Styles.section} ${Styles.aboutSection} ${Styles.animateOnScroll}`}
+        className={`${Styles.section} ${Styles.aboutSection}`}
       >
         <div className={Styles.container}>
 
           <div className={Styles.sectionTop}>
-            <div className={Styles.kicker}>
+            <div className={Styles.kicker} data-motion-text>
               <span>02</span>
               <b>О компании</b>
             </div>
@@ -309,7 +295,7 @@ export const Home = memo(() => {
 
           <div className={Styles.aboutBottom}>
             <div className={Styles.aboutSideText}>
-              <span>ПРАКТИЧЕСКИЙ ОПЫТ</span>
+              <span data-motion-text>ПРАКТИЧЕСКИЙ ОПЫТ</span>
               <p>
                 Работаем там, где важны точность, надёжность
                 и предсказуемый результат.
@@ -336,9 +322,9 @@ export const Home = memo(() => {
 
           <div id="directions" className={Styles.capabilities}>
             <div className={Styles.capabilitiesHeader}>
-              <span>ЧЕМ МЫ ЗАНИМАЕМСЯ</span>
+              <span data-motion-text data-motion-late>ЧЕМ МЫ ЗАНИМАЕМСЯ</span>
 
-              <p>
+              <p data-motion-late>
                 Выберите направление, чтобы перейти
                 к продукции или сервисным услугам.
               </p>
@@ -363,6 +349,9 @@ export const Home = memo(() => {
               ].map(({ number, title, text, href, image }) => (
                 <a
                   className={Styles.capability}
+                  data-motion-card
+                  data-motion-gentle
+                  data-motion-late
                   key={number}
                   href={href}
                 >
@@ -386,13 +375,13 @@ export const Home = memo(() => {
       {/* GEOGRAPHY */}
 
       <section
-        className={`${Styles.section} ${Styles.mapSection} ${Styles.animateOnScroll}`}
+        className={`${Styles.section} ${Styles.mapSection}`}
       >
         <div className={Styles.container}>
 
           <div className={Styles.mapHeader}>
             <div>
-              <div className={Styles.kicker}>
+              <div className={Styles.kicker} data-motion-text>
                 <span>03</span>
                 <b>География</b>
               </div>
@@ -429,14 +418,7 @@ export const Home = memo(() => {
               </button>
             </div>
 
-            <div className={Styles.mapFrame}>
-              <iframe
-                src="https://yandex.ru/map-widget/v1/?um=constructor%3A1b8f65f94a276e996aad834e0a7f72466019818dd5d59a5f194f1d391a7e68ac&source=constructor"
-                title="Карта географии поставок"
-                loading="lazy"
-                className={Styles.map}
-              />
-            </div>
+            <DeliveryMap />
           </div>
         </div>
       </section>
@@ -444,13 +426,13 @@ export const Home = memo(() => {
       {/* NEWS */}
 
       <section
-        className={`${Styles.section} ${Styles.newsSection} ${Styles.animateOnScroll}`}
+        className={`${Styles.section} ${Styles.newsSection}`}
       >
         <div className={Styles.container}>
 
           <div className={Styles.newsHeader}>
             <div>
-              <div className={Styles.kicker}>
+              <div className={Styles.kicker} data-motion-text>
                 <span>04</span>
                 <b>Новости</b>
               </div>
@@ -466,6 +448,7 @@ export const Home = memo(() => {
           {latestNews && (
             <a
               className={Styles.newsTeaser}
+              data-motion-card
               href={`/news/?news=${latestNews.id}`}
               aria-label={`Читать новость: ${latestNews.title}`}
             >
@@ -513,13 +496,13 @@ export const Home = memo(() => {
       {/* CLIENTS */}
 
       <section
-        className={`${Styles.section} ${Styles.clientsSection} ${Styles.animateOnScroll}`}
+        className={`${Styles.section} ${Styles.clientsSection}`}
       >
         <div className={Styles.container}>
 
           <div className={Styles.clientsHeader}>
             <div>
-              <div className={Styles.kicker}>
+              <div className={Styles.kicker} data-motion-text>
                 <span>05</span>
                 <b>Клиенты</b>
               </div>
@@ -560,14 +543,14 @@ export const Home = memo(() => {
 
       <section
         id="faq"
-        className={`${Styles.section} ${Styles.faqSection} ${Styles.animateOnScroll}`}
+        className={`${Styles.section} ${Styles.faqSection}`}
       >
         <div className={Styles.container}>
 
           <div className={Styles.faqLayout}>
 
             <div className={Styles.faqIntro}>
-              <div className={Styles.kicker}>
+              <div className={Styles.kicker} data-motion-text>
                 <span>06</span>
                 <b>Вопросы</b>
               </div>

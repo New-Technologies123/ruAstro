@@ -480,6 +480,7 @@ export const Services = () => {
                       styles.serviceCard
                     }
                     data-service-card
+                    data-motion-card
                     tabIndex={0}
                     role="button"
                     onClick={() =>
@@ -510,6 +511,7 @@ export const Services = () => {
                       className={
                         styles.cardImageWrap
                       }
+                      data-motion-image
                     >
                       <img
                         src={service.image}

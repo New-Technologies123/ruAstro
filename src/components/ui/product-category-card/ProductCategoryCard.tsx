@@ -28,7 +28,7 @@ export const ProductCategoryCard = ({
   index,
   onSelect,
 }: ProductCategoryCardProps) => (
-  <article className={Styles.productCard} data-product-card={index}>
+  <article className={Styles.productCard} data-product-card={index} data-motion-card data-motion-sequence>
     <a
       className={Styles.cardLink}
       href={`/products/${product.id}/`}
@@ -46,7 +46,7 @@ export const ProductCategoryCard = ({
         onSelect(index);
       }}
     >
-      <div className={Styles.cardImage}>
+      <div className={Styles.cardImage} data-motion-image>
         <img src={product.image} alt={product.title} loading="lazy" />
 
         <div className={Styles.cardImageTop}>

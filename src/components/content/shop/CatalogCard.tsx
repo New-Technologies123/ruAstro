@@ -192,11 +192,12 @@ export const CatalogCard = ({
   // ---------------------------------------------------------
 
   return (
-    <article className={styles.productCard}>
+    <article className={styles.productCard} data-motion-card>
       {/* IMAGE */}
 
       <a
         className={styles.productMedia}
+        data-motion-image
         href={href}
         onClick={handleOpen}
         aria-label={`Открыть ${product.title}`}

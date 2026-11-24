@@ -1,20 +1,20 @@
 .wrapper {
-    --bg: #f7f9fb;
-    --surface: #ffffff;
-    --surface-soft: #f1f5f8;
+    --bg: var(--site-surface);
+    --surface: var(--site-surface);
+    --surface-soft: var(--site-surface);
 
-    --navy: #092941;
-    --navy-light: #123b58;
+    --navy: var(--site-navy);
+    --navy-light: var(--site-navy-light);
 
-    --blue: #1769e0;
-    --blue-soft: #eaf2ff;
+    --blue: var(--site-blue);
+    --blue-soft: var(--site-blue-soft);
 
-    --text: #0b2032;
-    --text-soft: #526677;
-    --text-muted: #8795a2;
+    --text: var(--site-ink);
+    --text-soft: var(--site-muted);
+    --text-muted: var(--site-muted-soft);
 
-    --border: #dfe7ed;
-    --border-light: #e9eef2;
+    --border: var(--site-line);
+    --border-light: var(--site-line);
 
     min-height: 100vh;
     padding-bottom: 100px;
@@ -34,7 +34,7 @@
    ========================================================= */
 
 .topBar {
-    width: min(92%, 1440px);
+    width: var(--site-page-width);
     margin: 0 auto;
     padding-top: 24px;
 }
@@ -91,7 +91,7 @@
    ========================================================= */
 
 .hero {
-    width: min(92%, 1440px);
+    width: var(--site-page-width);
     margin: 58px auto 0;
 
     display: grid;
@@ -317,7 +317,7 @@
 
 .worksSection,
 .relatedSection {
-    width: min(92%, 1440px);
+    width: var(--site-page-width);
 
     margin-left: auto;
     margin-right: auto;
@@ -478,7 +478,7 @@
    ========================================================= */
 
 .resultSection {
-    width: min(92%, 1440px);
+    width: var(--site-page-width);
 
     margin: 150px auto 0;
 
@@ -723,7 +723,7 @@
    ========================================================= */
 
 .cta {
-    width: min(92%, 1440px);
+    width: var(--site-page-width);
 
     margin: 120px auto 0;
 
@@ -1307,7 +1307,7 @@
     padding: clamp(30px, 4vw, 58px);
     overflow: hidden;
     border-radius: 30px;
-    background: radial-gradient(circle at 80% 0%, rgba(72, 168, 225, .22), transparent 36%), linear-gradient(120deg, #082844, #155b86);
+    background: radial-gradient(circle at 80% 0%, rgba(72, 168, 225, .22), transparent 36%), var(--site-hero-gradient);
     box-shadow: 0 22px 54px rgba(9, 41, 65, .15);
 }
 
@@ -1315,7 +1315,7 @@
 .hero .eyebrow span { background: #68d5b1; }
 .heroNumber { color: #9ecbe6; }
 .hero h1 { color: #fff; font-size: clamp(38px, 4vw, 58px); line-height: 1.04; }
-.hero h1 em { color: #a9dbf9; }
+.hero h1 em { color: var(--site-blue-light); }
 .heroDescription { color: #d2e4ef; font-size: 15px; line-height: 1.65; }
 .heroFacts { gap: 8px; margin-top: 26px; }
 .heroFacts>div, .heroFacts>div:last-child { min-height: 36px; margin: 0; padding: 7px 12px; border: 1px solid rgba(255, 255, 255, .18); border-radius: 999px; background: rgba(255, 255, 255, .08); }
@@ -1331,7 +1331,7 @@
     background: #e8f1f7;
     box-shadow: 0 16px 40px rgba(0, 20, 40, .15);
 }
-.imageWrapper:focus-visible { outline: 3px solid #a9dbf9; outline-offset: 4px; }
+.imageWrapper:focus-visible { outline: 3px solid var(--site-blue-light); outline-offset: 4px; }
 .serviceImage { width: 100%; height: 100%; object-fit: contain; }
 .serviceImage.photoImage { object-fit: contain; object-position: center; }
 .imageWrapper:hover .serviceImage { transform: none; }
@@ -1361,7 +1361,7 @@
 
 .relatedItem { box-shadow: 0 7px 24px rgba(9, 41, 65, .04); }
 .relatedContent p { font-size: 13px; }
-.cta { margin-top: 90px; background: radial-gradient(circle at 88% 12%, rgba(72, 168, 225, .25), transparent 34%), linear-gradient(120deg, #082844, #155b86); box-shadow: 0 20px 50px rgba(9, 41, 65, .14); }
+.cta { margin-top: 90px; background: radial-gradient(circle at 88% 12%, rgba(72, 168, 225, .25), transparent 34%), var(--site-hero-gradient); box-shadow: 0 20px 50px rgba(9, 41, 65, .14); }
 
 @media (max-width: 900px) {
     .hero { grid-template-columns: 1fr; }
@@ -1370,8 +1370,8 @@
 
 .relatedControls {
     display: none;
-    --line: var(--border);
-    --ink: var(--navy);
+    --line: var(--site-line);
+    --ink: var(--site-ink);
 }
 
 .relatedList:focus-visible {
@@ -1416,14 +1416,15 @@
 }
 
 @media (max-width: 680px) {
-    .topBar, .hero, .worksSection, .resultSection, .relatedSection, .cta { width: calc(100% - 28px); }
+    .topBar, .hero, .worksSection, .resultSection, .relatedSection, .cta { width: var(--site-page-width); }
     .hero { gap: 24px; margin-top: 14px; padding: 26px 22px 22px; border-radius: 23px; }
     .hero h1 { font-size: clamp(29px, 8vw, 42px); }
     .heroDescription { margin-top: 18px; font-size: 14px; }
     .heroFacts { gap: 7px; margin-top: 20px; }
-    .heroFacts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .heroFacts>div, .heroFacts>div:last-child { min-width: 0; flex-direction: column; align-items: flex-start; gap: 3px; padding: 6px 8px; border-radius: 12px; }
-    .heroFacts span { max-width: 100%; font-size: 10px; line-height: 1.2; letter-spacing: -.02em; white-space: nowrap; }
+    .heroFacts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .heroFacts>div, .heroFacts>div:last-child { min-width: 0; min-height: 48px; flex-direction: row; align-items: center; gap: 7px; padding: 9px 11px; border-radius: 12px; }
+    .heroFacts>div:last-child { grid-column: 1 / -1; }
+    .heroFacts span { min-width: 0; max-width: 100%; font-size: 11px; line-height: 1.3; letter-spacing: 0; white-space: normal; }
     .imageWrapper { height: 250px; border-radius: 16px; }
     .worksSection, .relatedSection, .resultSection { margin-top: 64px; }
     .sectionHeading h2, .resultHeader h2 { font-size: clamp(27px, 7vw, 34px); }

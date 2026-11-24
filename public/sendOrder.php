@@ -1,9 +1,16 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $data = json_decode(file_get_contents("php://input"), true);
+    $positionRaw = $data['position'] ?? null;
+
+    if (!is_string($positionRaw) || trim($positionRaw) === '') {
+        http_response_code(422);
+        echo json_encode(["success" => false, "error" => "Укажите должность"], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 
     $name = htmlspecialchars($data['name'] ?? '');
-    $position = htmlspecialchars($data['position'] ?? '');
+    $position = htmlspecialchars(trim($positionRaw));
     $company = htmlspecialchars($data['company'] ?? '');
     $email = htmlspecialchars($data['email'] ?? '');
     $phone = htmlspecialchars($data['phone'] ?? '');
@@ -37,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $message .= "👤 КОНТАКТНЫЕ ДАННЫЕ:\n";
     $message .= "────────────────────────────────────────\n";
     $message .= "ФИО: $name\n";
-    $message .= "Должность: " . ($position ?: "Не указана") . "\n";
+    $message .= "Должность: $position\n";
     $message .= "Компания: $company\n";
     $message .= "Email: $email\n";
     $message .= "Телефон: $phone\n";

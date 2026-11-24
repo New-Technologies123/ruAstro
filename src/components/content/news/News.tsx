@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 import Styles from './news.module.scss';
 import { Gallery } from '../../ui/gallery/Gallery';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
+import { CompanyBreadcrumbs } from '../../ui/company-breadcrumbs/CompanyBreadcrumbs';
 import {
   NEWS_DATA,
   CATEGORIES,
@@ -29,10 +30,12 @@ const ArrowUpRight = () => (
   </svg>
 );
 
-const MOBILE_INITIAL_COUNT = 2;
-const DESKTOP_INITIAL_COUNT = 4;
+const MOBILE_INITIAL_COUNT = 3;
+const DESKTOP_INITIAL_COUNT = 3;
 const MOBILE_PAGE_SIZE = 2;
 const DESKTOP_PAGE_SIZE = 3;
+const featuredNews = NEWS_DATA[0];
+const otherNews = NEWS_DATA.slice(1);
 
 function newsWord(count: number) {
   const form = new Intl.PluralRules('ru').select(count);
@@ -49,7 +52,7 @@ type NewsCardProps = {
 
 function NewsCard({ news, onOpen, photoId, onPhotoChange, featured = false }: NewsCardProps) {
   return (
-    <article className={`${Styles.newsItem} ${featured ? Styles.featured : ''}`}>
+    <article className={`${Styles.newsItem} ${featured ? Styles.featured : ''}`} data-motion-card>
       {news.photos.length > 0 ? (
         <div className={Styles.cardMedia}>
           <Gallery
@@ -345,13 +348,14 @@ export const News = () => {
   const pageSize = isMobile ? MOBILE_PAGE_SIZE : DESKTOP_PAGE_SIZE;
 
   const filteredNews = activeFilter === 'Все'
-    ? NEWS_DATA
-    : NEWS_DATA.filter((news) => news.category === activeFilter);
+    ? otherNews
+    : otherNews.filter((news) => news.category === activeFilter);
   const visibleNews = filteredNews.slice(0, visibleCount);
   const hasMoreNews = visibleCount < filteredNews.length;
   const canCollapse = visibleCount > initialCount;
+  const dialogNews = [featuredNews, ...filteredNews];
   const selectedNewsIndex = selectedNews
-    ? filteredNews.findIndex((news) => news.id === selectedNews.id)
+    ? dialogNews.findIndex((news) => news.id === selectedNews.id)
     : -1;
 
   const openNews = useCallback((news: TNewsItem, trigger: HTMLElement) => {
@@ -365,7 +369,7 @@ export const News = () => {
   }, []);
 
   const navigateNews = (direction: -1 | 1) => {
-    const nextNews = filteredNews[selectedNewsIndex + direction];
+    const nextNews = dialogNews[selectedNewsIndex + direction];
     if (nextNews) setSelectedNews(nextNews);
   };
 
@@ -385,15 +389,25 @@ export const News = () => {
       <section className={Styles.newsPage} aria-label="Новости компании">
         <div ref={titleRef} className={Styles.pageHeader}>
           <div className={Styles.headerCopy}>
-            <span className={Styles.eyebrow}>Жизнь компании <span aria-hidden="true">/</span> Новости</span>
+            <CompanyBreadcrumbs current="Новости" />
             <h1>Новости и события</h1>
             <p>Выставки, проекты, партнёрства и важные события предприятия.</p>
           </div>
           <div className={Styles.headerAside}>
-            <span>Последняя публикация</span>
-            <strong>{NEWS_DATA[0].date}</strong>
-            <span>Следите за тем, что происходит в компании</span>
+            <span>Архив компании</span>
+            <strong>{NEWS_DATA.length} публикаций</strong>
+            <span>События и работа предприятия</span>
           </div>
+        </div>
+
+        <div className={Styles.featuredStory}>
+          <NewsCard
+            news={featuredNews}
+            featured
+            onOpen={openNews}
+            photoId={photoIds[featuredNews.id]}
+            onPhotoChange={(photoId) => updatePhotoId(featuredNews.id, photoId)}
+          />
         </div>
 
         <div className={Styles.toolbar}>
@@ -431,11 +445,10 @@ export const News = () => {
 
         {visibleNews.length > 0 ? (
           <div className={Styles.newsContent}>
-            {visibleNews.map((news, index) => (
+            {visibleNews.map((news) => (
               <NewsCard
                 key={news.id}
                 news={news}
-                featured={index === 0 && activeFilter === 'Все'}
                 onOpen={openNews}
                 photoId={photoIds[news.id]}
                 onPhotoChange={(photoId) => updatePhotoId(news.id, photoId)}
@@ -471,7 +484,7 @@ export const News = () => {
         <NewsDialog
           news={selectedNews}
           newsIndex={selectedNewsIndex}
-          newsTotal={filteredNews.length}
+          newsTotal={dialogNews.length}
           onNavigate={navigateNews}
           onClose={closeNews}
           returnFocusTo={returnFocusTo}

@@ -1,10 +1,10 @@
 import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
+import { Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 import Styles from './calculator.module.scss';
 import { installations } from './installationsData';
 import { InstallationCard } from './InstallationCard';
-import { exportToPDF } from '../calculator/exportToPDF';
 import { maxGasSepRules } from './maxGasSepRules';
 import { maxGasNonSepPriceRules } from './maxGasNonSepPriceRules';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
@@ -130,7 +130,9 @@ export const Calculator = () => {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [openSelected, setOpenSelected] = useState<OpenSelected>({});
   const [validationAttempts, setValidationAttempts] = useState<ValidationAttempts>({});
+  const [pdfError, setPdfError] = useState(false);
   const nextSelectionKey = useRef(0);
+  const selectedListRef = useRef<HTMLElement>(null);
 
   const totalPrice = selectedInstallations.reduce((sum, item) => sum + item.price, 0);
 
@@ -179,12 +181,19 @@ export const Calculator = () => {
     const base = `${inst.name} ${pressure}-${quantity}`;
     const summary = hasNonSepGas ? base : `${base}-${volume}`;
 
+    const selectionKey = nextSelectionKey.current++;
     setSelectedInstallations((prev) => [
       ...prev,
-      { ...inst, ...selection, price, summary, selectionKey: nextSelectionKey.current++ },
+      { ...inst, ...selection, price, summary, selectionKey },
     ]);
     setSelections((prev) => ({ ...prev, [instId]: {} }));
     setFieldErrors((prev) => ({ ...prev, [instId]: {} }));
+    if (window.matchMedia('(max-width: 1050px)').matches) {
+      window.requestAnimationFrame(() => selectedListRef.current?.scrollIntoView({
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+        block: 'start',
+      }));
+    }
   };
 
   const removeInstallation = (selectionKey: number) => {
@@ -196,9 +205,16 @@ export const Calculator = () => {
     });
   };
 
-  const downloadPDF = () => {
-    const data = selectedInstallations.map(({ selectionKey, ...item }) => item);
-    exportToPDF(data, totalPrice);
+  const downloadPDF = async () => {
+    try {
+      setPdfError(false);
+      const { exportToPDF } = await import('./exportToPDF');
+      const data = selectedInstallations.map(({ selectionKey, ...item }) => item);
+      await exportToPDF(data, totalPrice);
+    } catch (error) {
+      console.error('Не удалось подготовить PDF расчёта', error);
+      setPdfError(true);
+    }
   };
 
   return (
@@ -255,7 +271,7 @@ export const Calculator = () => {
                 ))}
               </div>
 
-              <aside className={Styles.selectedList} aria-labelledby="selected-title">
+              <aside className={Styles.selectedList} aria-labelledby="selected-title" ref={selectedListRef}>
                 <div className={Styles.selectedHeading}>
                   <span className={Styles.eyebrow}>02 / Ваш расчёт</span>
                   <h2 id="selected-title">Выбранные установки</h2>
@@ -278,17 +294,24 @@ export const Calculator = () => {
                                 type="button"
                                 aria-expanded={isOpen}
                                 aria-controls={detailsId}
+                                aria-label={`${isOpen ? 'Скрыть' : 'Показать'} параметры установки ${item.summary}`}
                                 onClick={() => setOpenSelected((prev) => ({
                                   ...prev,
                                   [item.selectionKey]: !prev[item.selectionKey],
                                 }))}
                               >
-                                <span className={Styles.selectedName}>{item.summary}</span>
+                                <span className={Styles.selectedTitleBlock}>
+                                  <span className={Styles.selectedName}>{item.summary}</span>
+                                  <span className={Styles.toggleLabel}>{isOpen ? 'Скрыть параметры' : 'Посмотреть параметры'}</span>
+                                </span>
                                 <span className={Styles.toggleIcon} aria-hidden="true">{isOpen ? '−' : '+'}</span>
                               </button>
                               <div className={Styles.selectedMeta}>
                                 <strong>{formatPrice(item.price)} <small>без НДС</small></strong>
-                                <button className={Styles.deleteButton} type="button" onClick={() => removeInstallation(item.selectionKey)} aria-label={`Удалить ${item.summary}`}>Удалить</button>
+                                <button className={Styles.deleteButton} type="button" onClick={() => removeInstallation(item.selectionKey)} aria-label={`Удалить ${item.summary}`}>
+                                  <Trash2 size={15} strokeWidth={1.8} aria-hidden="true" />
+                                  <span>Удалить</span>
+                                </button>
                               </div>
                             </div>
                             <dl className={Styles.selectedDetails} id={detailsId} hidden={!isOpen}>
@@ -305,6 +328,7 @@ export const Calculator = () => {
                       <strong>{formatPrice(totalPrice)}</strong>
                       <small>Без НДС</small>
                       <button className={Styles.pdfButton} type="button" onClick={downloadPDF}>Скачать расчёт в PDF <span aria-hidden="true">↓</span></button>
+                      {pdfError && <p className={Styles.pdfError} role="alert">Не удалось создать PDF. Обновите страницу и попробуйте ещё раз.</p>}
                     </div>
                   </>
                 )}

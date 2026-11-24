@@ -40,7 +40,14 @@ export const Gallery = ({ photos, photoId, onPhotoChange, variant = 'detail', on
         }}
         aria-label={onImageClick ? `Читать новость: ${imageLabel || currentPhoto.alt}` : `Увеличить фото: ${currentPhoto.alt || 'Новость'}`}
       >
-        <img className={Styles.thumbnail} src={currentPhoto.src} alt={currentPhoto.alt || ''} loading={loading} decoding="async" />
+        <img
+          className={Styles.thumbnail}
+          src={currentPhoto.previewSrc || currentPhoto.src}
+          alt={currentPhoto.alt || ''}
+          loading={loading}
+          decoding="async"
+          fetchPriority={loading === 'eager' ? 'high' : 'auto'}
+        />
         <span className={Styles.imageOverlay} aria-hidden="true">
           <span className={Styles.zoomText}>{onImageClick ? 'Читать новость' : 'Увеличить фото'} <ArrowUpRightIcon /></span>
         </span>
@@ -50,7 +57,7 @@ export const Gallery = ({ photos, photoId, onPhotoChange, variant = 'detail', on
       </button>
 
       {variant === 'card' && photos.length > 1 && (
-        <span className={Styles.visuallyHidden} aria-live="polite">Фото {currentIndex + 1} из {photos.length}</span>
+        <span className={Styles.cardCounter} aria-live="polite">{currentIndex + 1} / {photos.length} фото</span>
       )}
 
       {photos.length > 1 && (
