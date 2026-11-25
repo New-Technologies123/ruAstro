@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useRef, useState } from 'react';
 
@@ -62,11 +63,7 @@ export const Dosing = () => {
       <main>
         <section className={Styles.hero} aria-labelledby="product-title">
           <div className={Styles.container}>
-            <nav className={Styles.breadcrumbs} aria-label="Хлебные крошки">
-              <a href="/products/">Продукция</a><span aria-hidden="true">›</span>
-              <a href="/products/preparation-systems/">Системы подготовки</a><span aria-hidden="true">›</span>
-              <span aria-current="page">БДР</span>
-            </nav>
+            <Breadcrumbs path="/products/preparation-systems/dosing/" />
             <div className={Styles.heroGrid}>
               <div className={Styles.heroContent}>
                 <span className={Styles.eyebrow}>Подача химических реагентов</span>

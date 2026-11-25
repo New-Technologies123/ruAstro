@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowUpRight, CategoryCarouselControls, useCategoryCarousel } from '../../ui/carousel/CategoryCarousel';
 
 import Styles from './accounting.module.scss';
@@ -47,18 +48,7 @@ export const PumpingStations = () => {
           />
 
           <div className={Styles.container}>
-            <nav
-              className={Styles.breadcrumbs}
-              aria-label="Хлебные крошки"
-            >
-              <a href="/products/">Продукция</a>
-
-              <span aria-hidden="true">›</span>
-
-              <span aria-current="page">
-                Насосные станции
-              </span>
-            </nav>
+            <Breadcrumbs path="/products/pumping-stations/" />
 
             <h1 id="pumping-title">
               Насосные станции{' '}

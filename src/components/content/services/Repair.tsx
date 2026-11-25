@@ -1,8 +1,8 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 import Styles from './service.module.scss'
-import { ServiceBreadcrumbs } from './ServiceBreadcrumbs'
 import { CategoryCarousel } from '../../ui/carousel/CategoryCarousel'
 import { ArrowUpRightIcon } from '../../ui/icon/ArrowUpRightIcon'
 
@@ -115,7 +115,7 @@ export const Repair = () => {
             ease,
           }}
         >
-          <ServiceBreadcrumbs current="Ремонт АГЗУ" />
+          <Breadcrumbs path="/services/repair/" />
           <div className={Styles.eyebrow}>
             <span />
             Сервисное обслуживание

@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 
@@ -214,13 +215,7 @@ export const Calculator = () => {
       <main>
         <section className={Styles.hero} aria-labelledby="calculator-title">
           <div className={Styles.container}>
-            <nav className={Styles.breadcrumbs} aria-label="Хлебные крошки">
-              <a href="/products/">Продукция</a>
-              <span aria-hidden="true">›</span>
-              <a href="/products/accounting-system/">АГЗУ</a>
-              <span aria-hidden="true">›</span>
-              <span aria-current="page">Калькулятор</span>
-            </nav>
+            <Breadcrumbs path="/products/accounting-system/calculator/" />
             {/* <span className={Styles.eyebrow}>Подбор конфигурации АГЗУ</span> */}
             <h1 id="calculator-title">Расчёт стоимости <em>АГЗУ</em></h1>
             <p className={Styles.heroDescription}>

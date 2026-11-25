@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowUpRightIcon } from "../../../ui/icon/ArrowUpRightIcon";
 import { useState } from 'react';
 
@@ -33,11 +34,7 @@ export const Internal = () => {
       <main>
         <section className={Styles.hero} aria-labelledby="product-title">
           <div className={Styles.container}>
-            <nav className={Styles.breadcrumbs} aria-label="Хлебные крошки">
-              <a href="/products/">Продукция</a><span aria-hidden="true">›</span>
-              <a href="/products/pumping-stations/">Насосные станции</a><span aria-hidden="true">›</span>
-              <span aria-current="page">Перекачка нефти</span>
-            </nav>
+            <Breadcrumbs path="/products/pumping-stations/internal/" />
             <div className={Styles.heroGrid}>
               <div className={Styles.heroContent}>
                 <span className={Styles.eyebrow}>Внутренняя и внешняя перекачка</span>

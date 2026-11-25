@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowUpRight, CategoryCarouselControls, useCategoryCarousel } from '../../ui/carousel/CategoryCarousel';
 
 import Styles from './accounting.module.scss';
@@ -69,18 +70,7 @@ export const PreparationSystems = () => {
           />
 
           <div className={Styles.container}>
-            <nav
-              className={Styles.breadcrumbs}
-              aria-label="Хлебные крошки"
-            >
-              <a href="/products/">Продукция</a>
-
-              <span aria-hidden="true">›</span>
-
-              <span aria-current="page">
-                Подготовка нефти, газа и воды
-              </span>
-            </nav>
+            <Breadcrumbs path="/products/preparation-systems/" />
 
             <h1 id="preparation-title">
               Системы подготовки{' '}

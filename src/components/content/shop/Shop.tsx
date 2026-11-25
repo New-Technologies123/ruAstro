@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 
 import { useEffect, useMemo, useRef, useState, type TouchEvent } from 'react';
 import {
@@ -1006,6 +1007,7 @@ export const Shop = ({
     >
       <header className={styles.shopHeader}>
         <div className={styles.shopHeaderContent}>
+          <Breadcrumbs path="/shop/" />
           <span className={styles.shopEyebrow}>Каталог производителя</span>
           <h1>Оборудование и комплектующие</h1>
           <p>Оборудование и запчасти с подбором по модели, артикулу или категории.</p>

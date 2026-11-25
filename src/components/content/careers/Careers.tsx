@@ -1,5 +1,5 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
-import { CompanyBreadcrumbs } from '../../ui/company-breadcrumbs/CompanyBreadcrumbs';
 import Styles from './careers.module.scss';
 import { Vacancy } from '../../ui/vacancy/Vacancy';
 import { useEffect, useMemo, useRef, useState } from 'react';
@@ -468,7 +468,7 @@ export const Careers = () => {
       <section className={Styles.hero}>
         <div className={Styles.heroInner}>
           <div className={Styles.heroContent} data-motion-ignore>
-            <CompanyBreadcrumbs current="Карьера" />
+            <Breadcrumbs path="/careers/" />
             <div className={Styles.eyebrow}>
               <span className={Styles.eyebrowDot} />
               КАРЬЕРА В НОВЫХ ТЕХНОЛОГИЯХ

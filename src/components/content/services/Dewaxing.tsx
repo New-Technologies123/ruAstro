@@ -1,8 +1,8 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 import Styles from './service.module.scss'
-import { ServiceBreadcrumbs } from './ServiceBreadcrumbs'
 import { CategoryCarousel } from '../../ui/carousel/CategoryCarousel'
 import { ArrowUpRightIcon } from '../../ui/icon/ArrowUpRightIcon'
 
@@ -110,7 +110,7 @@ export const Dewaxing = () => {
             ease,
           }}
         >
-          <ServiceBreadcrumbs current="Депарафинизация" />
+          <Breadcrumbs path="/services/dewaxing/" />
           <div className={Styles.eyebrow}>
             <span />
             Сервис нефтяных скважин

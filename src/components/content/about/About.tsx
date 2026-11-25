@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { useEffect, useRef } from 'react';
 import type { CSSProperties } from 'react';
 import Styles from './about.module.scss';
@@ -276,6 +277,7 @@ export const About = () => {
         <div className={Styles.heroInner}>
           <div className={Styles.heroMain}>
             <div className={Styles.heroCopy}>
+              <Breadcrumbs path="/about/" />
               <div className={Styles.heroBadge}>
                 <span />
                 Работаем с 2005 года

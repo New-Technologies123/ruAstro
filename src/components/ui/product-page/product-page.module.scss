@@ -9,6 +9,11 @@
   color: #14253c;
 }
 
+.breadcrumbsRow {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
 .image,
 .order {
   min-width: 0;

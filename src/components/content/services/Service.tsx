@@ -1,9 +1,9 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 
 import Styles from './service.module.scss'
-import { ServiceBreadcrumbs } from './ServiceBreadcrumbs'
 import { CategoryCarousel } from '../../ui/carousel/CategoryCarousel'
 
 import serves_4 from '../../../images/services/serves_4.webp'
@@ -123,7 +123,7 @@ export const Service = () => {
               ease,
             }}
           >
-            <ServiceBreadcrumbs current="Обслуживание УОК-НКТ" />
+            <Breadcrumbs path="/services/service/" />
             <div className={Styles.eyebrow}>
               <span />
               Техническое обслуживание

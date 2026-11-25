@@ -1,10 +1,10 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent, PointerEvent } from 'react';
 import { createPortal } from 'react-dom';
 import Styles from './news.module.scss';
 import { Gallery } from '../../ui/gallery/Gallery';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
-import { CompanyBreadcrumbs } from '../../ui/company-breadcrumbs/CompanyBreadcrumbs';
 import {
   NEWS_DATA,
   CATEGORIES,
@@ -389,7 +389,7 @@ export const News = () => {
       <section className={Styles.newsPage} aria-label="Новости компании">
         <div ref={titleRef} className={Styles.pageHeader}>
           <div className={Styles.headerCopy}>
-            <CompanyBreadcrumbs current="Новости" />
+            <Breadcrumbs path="/news/" />
             <h1>Новости и события</h1>
             <p>Выставки, проекты, партнёрства и важные события предприятия.</p>
           </div>

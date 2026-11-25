@@ -3,6 +3,7 @@ import { ArrowLeft, Check, Minus, Package, Plus, ShoppingCart, Truck } from 'luc
 import styles from './product-page.module.scss';
 import type { Product } from '../../products/types';
 import { addToCart, changeItemCount, getCart, getCartKey } from '../../utils/cartStorage';
+import { Breadcrumbs } from '../breadcrumbs/Breadcrumbs';
 
 interface Props {
   product: Product;
@@ -30,6 +31,9 @@ export const ProductPage = ({ product, kind = 'part', onBack, backLabel = 'На�
 
   return (
     <div className={styles.page}>
+      <div className={styles.breadcrumbsRow}>
+        <Breadcrumbs path="/shop/" current={product.title} tone="light" />
+      </div>
       {onBack && (
         <button type="button" className={styles.backButton} onClick={onBack}>
           <ArrowLeft size={17} aria-hidden="true" /> {backLabel}

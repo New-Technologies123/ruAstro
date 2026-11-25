@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { useEffect, useState } from 'react';
 import { CategoryCarouselControls, useCategoryCarousel } from '../../ui/carousel/CategoryCarousel';
@@ -355,6 +356,7 @@ export const Services = () => {
         <section className={styles.hero}>
           <div className={styles.heroInner}>
             <div className={styles.heroContent}>
+              <Breadcrumbs path="/services/" />
               <div
                 className={styles.eyebrow}
               >

@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { ProcurementItem } from "./parseProcurement";
@@ -157,6 +158,7 @@ export const Procurement = ({ initialItems }: { initialItems: Item[] }) => {
       <div className={Styles.inner}>
         <header className={Styles.hero}>
           <div className={Styles.heroContent}>
+            <Breadcrumbs path="/procurement/" />
             <span className={Styles.eyebrow}><span aria-hidden="true" /> ПЛОЩАДКА ДЛЯ ПОСТАВЩИКОВ</span>
             <h1>Актуальные <em>закупки</em></h1>
             <p>Выберите лот, изучите состав и предложите условия поставки.</p>

@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Styles from './scroll.module.scss';
@@ -324,6 +325,7 @@ export const Products = () => {
         <div className={Styles.heroGrid} />
 
         <div className={Styles.heroContent}>
+          <Breadcrumbs path="/products/" />
           <div className={Styles.heroTopline}>
             <span className={Styles.eyebrow}>
               Продукция · Собственное производство

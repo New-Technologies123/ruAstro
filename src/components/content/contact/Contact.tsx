@@ -1,3 +1,4 @@
+import { Breadcrumbs } from '../../ui/breadcrumbs/Breadcrumbs';
 import { ArrowRight, ArrowUpRight, Factory, FileText, Mail, MapPin, Phone } from 'lucide-react';
 import Styles from './contact.module.scss';
 
@@ -20,6 +21,7 @@ export const Contact = () => (
       <div className={Styles.container}>
         <header className={Styles.hero}>
           <div className={Styles.heroContent}>
+            <Breadcrumbs path="/contact/" />
             <span className={Styles.heroEyebrow}>Контакты · Новые Технологии</span>
             <h1>Контакты <span>предприятия</span></h1>
             <p>Поможем с подбором оборудования, комплектацией и сервисом.</p>
