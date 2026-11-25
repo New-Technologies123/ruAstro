@@ -1,5 +1,7 @@
 # Astro Starter Kit: Minimal
 
+Настройка PHP-обработчиков, закрытых журналов, серверного каталога и ограничений загрузки описана в [docs/forms-deployment.md](docs/forms-deployment.md).
+
 ```sh
 npm create astro@latest -- --template minimal
 ```
@@ -38,6 +40,7 @@ All commands are run from the root of the project, from a terminal:
 | `npm install`             | Installs dependencies                            |
 | `npm run dev`             | Starts local dev server at `localhost:4321`      |
 | `npm run build`           | Build your production site to `./dist/`          |
+| `npm test`                | Run cart, calculator, navigation and PHP checks after a build |
 | `npm run preview`         | Preview your build locally, before deploying     |
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |

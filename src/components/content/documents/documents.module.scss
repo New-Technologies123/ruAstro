@@ -1,3 +1,5 @@
+@use '../../../styles/buttons' as buttons;
+
 .page {
   --navy: var(--site-navy);
   --navy-2: var(--site-navy-light);
@@ -90,10 +92,10 @@
 
   align-items: end;
 
-  gap: 38px 40px;
+  gap: 20px 28px;
 
   margin: 0 auto;
-  padding: 74px 0 62px;
+  padding: 28px 0;
 }
 
 .heroMain {
@@ -130,10 +132,10 @@
 }
 
 .heroTitle {
-  margin: 24px 0 0;
+  margin: 14px 0 0;
   color: #fff;
 
-  font-size: clamp(56px, 6.4vw, 88px);
+  font-size: clamp(32px, 3.4vw, 48px);
   font-weight: 650;
 
   letter-spacing: -0.07em;
@@ -147,12 +149,12 @@
 .heroDescription {
   max-width: 670px;
 
-  margin: 23px 0 0;
+  margin: 12px 0 0;
 
   color: #cbd8eb;
 
-  font-size: 17px;
-  line-height: 1.62;
+  font-size: 15px;
+  line-height: 1.55;
 }
 
 /* =========================================================
@@ -165,7 +167,7 @@
   align-items: center;
   gap: 24px;
 
-  padding: 19px 23px;
+  padding: 12px 16px;
 
   border: 1px solid rgba(255, 255, 255, 0.19);
   border-radius: 15px;
@@ -214,7 +216,7 @@
 
   margin: 0 auto;
 
-  padding: 68px 0 110px;
+  padding: 40px 0 70px;
 
   scroll-margin-top: 24px;
 }
@@ -848,16 +850,8 @@
 }
 
 .openButton {
-  flex: 1;
-  gap: 13px;
-  padding: 0 13px;
-  background: var(--navy);
-  color: #fff;
-}
-
-.openButton:hover {
-  background: var(--blue);
-  transform: translateY(-1px);
+    flex: 1;
+  @include buttons.primary();
 }
 
 .downloadButton {
@@ -962,34 +956,7 @@
 }
 
 .emptyButton {
-  min-height: 43px;
-
-  padding: 0 17px;
-
-  border: 1px solid var(--line);
-  border-radius: 10px;
-
-  background: #fff;
-
-  color: var(--blue);
-
-  font-size: 13px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
-    transform 180ms ease;
-}
-
-.emptyButton:hover {
-  border-color: #a9c3eb;
-
-  background: #edf3fb;
-
-  transform: translateY(-1px);
+  @include buttons.secondary();
 }
 
 /* =========================================================
@@ -1053,17 +1020,19 @@
   .heroInner {
     grid-template-columns: 1fr;
 
-    gap: 27px;
+    gap: 20px 28px;
 
-    padding: 54px 0 48px;
+    padding: 28px 0;
   }
 
   .heroStats {
+  padding: 12px 16px;
+
     justify-self: start;
   }
 
   .content {
-    padding: 56px 0 85px;
+    padding: 40px 0 70px;
   }
 
   .backBar + .content {
@@ -1120,36 +1089,42 @@
   }
 
   .heroInner {
-    gap: 24px;
-    padding: 40px 0 39px;
+    gap: 20px 28px;
+    padding: 28px 0;
   }
 
-  .eyebrow{
-    font-size: 10px;
-  }
+  .eyebrow { display: none; }
 
   .heroTitle {
+  margin: 14px 0 0;
+
     margin-top: 15px;
-    font-size: 32px;
+    font-size: clamp(32px, 3.4vw, 48px);
   }
 
   .heroDescription {
+  margin: 12px 0 0;
+  line-height: 1.55;
+
     margin-top: 12px;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .heroStats {
-    gap: 17px;
-
-    padding: 13px 16px;
+    justify-content: flex-start;
+    gap: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
   }
 
-  .stat strong {
-    font-size: 25px;
-  }
+  .stat { display: flex; flex-direction: row; align-items: baseline; gap: 6px; }
+  .stat strong { font-size: 22px; }
+  .stat span { margin-top: 0; }
+  .statDivider { display: none; }
 
   .content {
-    padding: 45px 0 70px;
+    padding: 40px 0 70px;
 
     scroll-margin-top: 15px;
   }
@@ -1491,18 +1466,25 @@
   }
 
   .heroInner {
-    padding-top: 35px;
-    padding-bottom: 34px;
+  padding: 28px 0;
+  gap: 20px 28px;
+
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
 
   .heroStats {
+    padding: 0;
     width: 100%;
 
-    justify-content: space-between;
+    justify-content: flex-start;
   }
 
   .heroDescription {
-    font-size: 14px;
+  margin: 12px 0 0;
+  line-height: 1.55;
+
+    font-size: 15px;
   }
 
   .sectionTitle {

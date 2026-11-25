@@ -76,6 +76,7 @@ export const exportToPDF = async (selectedInstallations: any[], totalPrice: numb
             ['Количество скважин', item.quantity ?? '-'],
             ['Максимальное рабочее давление', item.heating?.join(', ') ?? '-'],
             ['Производительность по жидкости', item.volume?.join(', ') ?? '-'],
+            ['Исполнение входных трубопроводов', item.density?.join(', ') ?? '-'],
             ['Производительность по газу (сеп.)', item.max_gas?.join(', ') ?? '-'],
             ['Производительность по газу (бессеп.)', item.max_gas_1?.join(', ') ?? '-'],
             ['Расходомер (газ)', item.vagometer?.join(', ') ?? '-'],

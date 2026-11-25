@@ -1,3 +1,5 @@
+@use '../../../styles/buttons' as buttons;
+
 /* =========================================================
    ORDER PAGE
    ========================================================= */
@@ -969,40 +971,8 @@
    ========================================================= */
 
 .submitButton {
-  width: 100%;
-
-  min-height: 54px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 10px;
-
-  padding: 0 18px;
-
-  box-sizing: border-box;
-
-  border: 0;
-  border-radius: 14px;
-
-  background: var(--accent);
-  color: #fff;
-
-  font-family: inherit;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 8px 20px rgba(21, 94, 239, 0.19);
-
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.2s ease;
+    width: 100%;
+  @include buttons.primary();
 }
 
 .submitError {
@@ -1014,19 +984,6 @@
   color: #a52d2d;
   font-size: 13px;
   line-height: 1.45;
-}
-
-.submitButton:hover:not(:disabled) {
-  background: var(--accent-hover);
-
-  transform: translateY(-1px);
-
-  box-shadow:
-    0 11px 24px rgba(21, 94, 239, 0.24);
-}
-
-.submitButton:active:not(:disabled) {
-  transform: translateY(0);
 }
 
 .submitButton:focus-visible {
@@ -1540,33 +1497,8 @@
 }
 
 .successButton {
-  margin-top: 18px;
-
-  min-height: 42px;
-
-  padding: 0 15px;
-
-  border: 1px solid var(--border);
-  border-radius: 11px;
-
-  background: var(--surface);
-  color: var(--text);
-
-  font-family: inherit;
-
-  font-size: 12px;
-  font-weight: 650;
-
-  cursor: pointer;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease;
-}
-
-.successButton:hover {
-  background: var(--surface-soft);
-  border-color: var(--border-strong);
+    margin-top: 18px;
+  @include buttons.primary();
 }
 
 /* =========================================================
@@ -1633,23 +1565,8 @@
 }
 
 .emptyButton {
-  min-height: 43px;
-
-  margin-top: 18px;
-  padding: 0 17px;
-
-  border: 0;
-  border-radius: 11px;
-
-  background: var(--accent);
-  color: #fff;
-
-  font-family: inherit;
-
-  font-size: 12px;
-  font-weight: 700;
-
-  cursor: pointer;
+    margin-top: 18px;
+  @include buttons.primary();
 }
 
 /* =========================================================

@@ -1,123 +1,46 @@
 <?php
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $data = json_decode(file_get_contents("php://input"), true);
-    $positionRaw = $data['position'] ?? null;
+declare(strict_types=1);
+namespace RuAstro\Forms;
+define('RUASTRO_FORM_ENTRY', true);
+require __DIR__ . '/_forms/bootstrap.php';
+require __DIR__ . '/_forms/orders.php';
 
-    if (!is_string($positionRaw) || trim($positionRaw) === '') {
-        http_response_code(422);
-        echo json_encode(["success" => false, "error" => "Укажите должность"], JSON_UNESCAPED_UNICODE);
-        exit;
-    }
-
-    $name = htmlspecialchars($data['name'] ?? '');
-    $position = htmlspecialchars(trim($positionRaw));
-    $company = htmlspecialchars($data['company'] ?? '');
-    $email = htmlspecialchars($data['email'] ?? '');
-    $phone = htmlspecialchars($data['phone'] ?? '');
-    $comment = htmlspecialchars($data['comment'] ?? '');
-    $cart = $data['cart'] ?? [];
-
-    // ✅ Получаем состояния чекбоксов
-    $consent = !empty($data['consent']) ? "✅ ДА" : "❌ НЕТ";
-    $offerAgreement = !empty($data['offerAgreement']) ? "✅ ДА" : "❌ НЕТ";
-
-    // ============================
-    // ✅ МЕТАДАННЫЕ
-    // ============================
-    $date = date("d.m.Y H:i:s");
-    $orderId = 'NT-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(6)));
-    $dateISO = gmdate("c"); // UTC ISO 8601
-    $policyVersion = "v1.0 (от 01.04.2024)";
-    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-    $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'unknown';
-    $referer = $_SERVER['HTTP_REFERER'] ?? 'Прямой переход';
-    // ============================
-
-    $total = 0;
-    
-    // Формируем письмо
-    $message = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
-    $message .= "🛒 НОВЫЙ ЗАКАЗ С САЙТА\n";
-    $message .= "Номер заявки: $orderId\n";
-    $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
-    
-    $message .= "👤 КОНТАКТНЫЕ ДАННЫЕ:\n";
-    $message .= "────────────────────────────────────────\n";
-    $message .= "ФИО: $name\n";
-    $message .= "Должность: $position\n";
-    $message .= "Компания: $company\n";
-    $message .= "Email: $email\n";
-    $message .= "Телефон: $phone\n";
-    $message .= "Комментарий: " . ($comment ?: "Нет комментария") . "\n\n";
-    
-    $message .= "✅ СОГЛАСИЯ:\n";
-    $message .= "────────────────────────────────────────\n";
-    $message .= "Согласие на обработку персональных данных: $consent\n";
-    $message .= "Согласие с офертой и условиями возврата: $offerAgreement\n\n";
-    
-    $message .= "📦 СОСТАВ ЗАКАЗА:\n";
-    $message .= "────────────────────────────────────────\n";
-    
-    if (count($cart) > 0) {
-        foreach ($cart as $index => $item) {
-            $itemPrice = intval(str_replace(' ', '', $item['price']));
-            $itemTotal = $itemPrice * $item['count'];
-            $total += $itemTotal;
-            $message .= ($index + 1) . ". {$item['title']}\n";
-            $message .= "   Количество: {$item['count']} шт.\n";
-            $message .= "   Цена за шт.: {$item['price']} ₽\n";
-            $message .= "   Сумма: " . number_format($itemTotal, 0, '', ' ') . " ₽\n\n";
+run(static function (): void {
+    begin('order', 'application/json');
+    $data = jsonBody();
+    $contact = contact($data);
+    $position = text($data, 'position', 'Должность');
+    $company = text($data, 'company', 'Компания', 300);
+    $comment = text($data, 'comment', 'Комментарий', 5000, false, true);
+    consent($data, 'consent');
+    consent($data, 'offerAgreement');
+    $result = orderOnce($data, static function (string $orderId, array $order) use ($contact, $position, $company, $comment): array {
+        $message = "НОВЫЙ ЗАКАЗ $orderId\nДата (UTC): " . gmdate('c') . "\n\n";
+        $message .= "ФИО: {$contact['name']}\nДолжность: $position\nКомпания: $company\n";
+        $message .= "Email: {$contact['email']}\nТелефон: {$contact['phone']}\nКомментарий: $comment\n\n";
+        $message .= "Согласие на обработку персональных данных: ДА\nСогласие с офертой: ДА\n\n";
+        $itemsMessage = '';
+        foreach ($order['lines'] as $index => $item) {
+            $itemsMessage .= ($index + 1) . '. ' . $item['title'] . "\n";
+            $itemsMessage .= 'Количество: ' . $item['count'] . ' шт. Цена: ' . money($item['priceMinor']) . ' ₽. Сумма: ' . money($item['totalMinor']) . " ₽\n\n";
         }
-    } else {
-        $message .= "Корзина пуста!\n\n";
-    }
-    
-    $message .= "────────────────────────────────────────\n";
-    $message .= "💰 СТОИМОСТЬ ТОВАРОВ: " . number_format($total, 0, '', ' ') . " ₽ (без НДС)\n";
-    $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n";
-    
-    $message .= "📊 ТЕХНИЧЕСКАЯ ИНФОРМАЦИЯ:\n";
-    $message .= "────────────────────────────────────────\n";
-    $message .= "Дата и время: $date\n";
-    $message .= "Временная метка (UTC): $dateISO\n";
-    $message .= "Версия политики конфиденциальности: $policyVersion\n";
-    $message .= "IP-адрес: $ip\n";
-    $message .= "Источник: $referer\n";
-    $message .= "User-Agent: $userAgent\n";
-    $message .= "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+        $message .= $itemsMessage;
+        $message .= 'ИТОГО: ' . money($order['totalMinor']) . " ₽ (без НДС)\nЦены проверены по серверному каталогу.";
+        $sent = sendText('tendernt@tech-new.ru', "Новый заказ $orderId с сайта", $message, $contact['email']);
+        audit('order', ['id' => $orderId, 'sent' => $sent, 'items' => count($order['lines'])]);
+        if (!$sent) throw new FormError('Не удалось отправить заказ. Попробуйте позже.', 502);
 
-    $to = "tendernt@tech-new.ru";
-    $subject = "=?UTF-8?B?" . base64_encode("🛒 Новый заказ $orderId с сайта") . "?=";
-
-    // Заголовки
-    $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type: text/plain; charset=UTF-8\r\n";
-    $headers .= "From: no-reply@tech-new.ru\r\n";
-    $headers .= "Reply-To: $email\r\n";
-
-    // Логирование для отладки
-    $logData = [
-        'orderId' => $orderId,
-        'timestamp' => date('Y-m-d H:i:s'),
-        'to' => $to,
-        'name' => $name,
-        'email' => $email,
-        'phone' => $phone,
-        'consent' => $consent,
-        'offerAgreement' => $offerAgreement,
-        'total' => $total,
-        'ip' => $ip
-    ];
-    $logFile = __DIR__ . '/order-submissions.log';
-    file_put_contents($logFile, json_encode($logData, JSON_UNESCAPED_UNICODE) . PHP_EOL, FILE_APPEND);
-
-    if (mail($to, $subject, $message, $headers)) {
-        echo json_encode(["success" => true, "message" => "Заказ успешно отправлен", "orderId" => $orderId]);
-    } else {
-        error_log("Mail send failed to: $to");
-        echo json_encode(["success" => false, "error" => "Не удалось отправить письмо"]);
-    }
-} else {
-    echo json_encode(["success" => false, "error" => "Неверный метод запроса"]);
-}
-?>
+        $confirmation = "Здравствуйте!\n\nВаша заявка $orderId принята в обработку.\n\nЗаказанные товары:\n\n" . $itemsMessage;
+        $confirmation .= 'ИТОГО: ' . money($order['totalMinor']) . " ₽ (без НДС).\n\n";
+        $confirmation .= "Менеджер свяжется с вами для подтверждения комплектации и условий поставки.\n\nООО ИПП «Новые Технологии»\ntendernt@tech-new.ru";
+        $confirmationSent = false;
+        try {
+            $confirmationSent = sendText($contact['email'], "Ваша заявка $orderId принята", $confirmation, 'tendernt@tech-new.ru');
+        } catch (\Throwable $error) {
+            // The manager already received the order; a failed customer copy must not invite a duplicate submission.
+        }
+        audit('order-confirmation', ['id' => $orderId, 'sent' => $confirmationSent]);
+        return ['success' => true, 'message' => 'Заказ успешно отправлен', 'orderId' => $orderId, 'totalMinor' => $order['totalMinor'], 'confirmationSent' => $confirmationSent];
+    });
+    respond($result);
+});

@@ -4,12 +4,14 @@ import { Header } from "../components/base/Header";
 import { Footer } from "../components/base/Footer";
 import { Content } from "../components/base/Content";
 import { Contact as ContactContent } from "../components/content/contact/Contact";
+import { BackToTop } from "../components/ui/back-to-top/BackToTop";
 ---
 
 <Layout>
   <Header pageType="contact" client:load />
   <Content>
-    <ContactContent client:load />
+    <ContactContent />
+    <BackToTop client:load />
   </Content>
-  <Footer client:load/>
+  <Footer />
 </Layout>

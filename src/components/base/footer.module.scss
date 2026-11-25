@@ -1,3 +1,5 @@
+@use '../../styles/buttons' as buttons;
+
 .footer {
   font-family: 'Geist Variable', Arial, sans-serif;
   --footer-text: #f3f8fc;
@@ -187,21 +189,9 @@
 }
 
 .ctaLink {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 100%;
-  min-height: 48px;
+    width: 100%;
   margin-top: 24px;
-  padding: 7px 8px 7px 14px;
-  border-radius: 10px;
-  background: #e7f4ff;
-  color: #0a3857;
-  font-size: 13px;
-  font-weight: 750;
-  line-height: 1.25;
-  transition: background .2s ease, transform .2s ease;
+  @include buttons.primary();
 }
 
 .ctaLink span {
@@ -213,8 +203,6 @@
   border-radius: 7px;
   background: #cae7fa;
 }
-
-.ctaLink:hover { background: #fff; transform: translateY(-2px); }
 
 .documents {
   display: grid;

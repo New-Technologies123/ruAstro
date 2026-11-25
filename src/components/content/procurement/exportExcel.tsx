@@ -1,5 +1,3 @@
-import * as XLSX from "xlsx-js-style";
-
 type Item = {
     id: number;
     name: string | null;
@@ -13,7 +11,8 @@ type Group = {
     items: Item[];
 };
 
-export const exportGroupToExcel = (group: Group) => {
+export const exportGroupToExcel = async (group: Group) => {
+    const XLSX = await import('xlsx-js-style');
     const wb = XLSX.utils.book_new();
 
     const headers = [

@@ -1,0 +1,4 @@
+# Also block legacy logs left by earlier deployments.
+<FilesMatch "(?i)\.(log|ini)$">
+  Require all denied
+</FilesMatch>

@@ -1,10 +1,12 @@
+@use '../../../styles/buttons' as buttons;
+
 .page {
   --ink: var(--site-ink);
   --muted: var(--site-muted);
   --blue: var(--site-blue);
   --line: var(--site-line);
   min-width: 0;
-  padding: 34px 0 90px;
+  padding: 24px 0 70px;
   background: #f5f9fc;
   color: var(--ink);
   * { box-sizing: border-box; }
@@ -14,9 +16,9 @@
 
 .hero {
   position: relative;
-  min-height: 380px;
+  min-height: 0;
   overflow: hidden;
-  padding: clamp(38px, 5vw, 70px);
+  padding: clamp(24px, 3vw, 40px);
   border-radius: 30px;
   background: radial-gradient(circle at 82% 18%, rgba(85, 176, 218, .38), transparent 34%),
     var(--site-hero-gradient);
@@ -47,8 +49,8 @@
 }
 .heroEyebrow { color: #abd9ef; }
 .hero h1 {
-  margin: 22px 0 0;
-  font-size: clamp(48px, 5.2vw, 76px);
+  margin: 16px 0 0;
+  font-size: clamp(34px, 4vw, 52px);
   font-weight: 740;
   letter-spacing: -.055em;
   line-height: 1.03;
@@ -56,38 +58,22 @@
 }
 .heroContent > p {
   max-width: 610px;
-  margin: 25px 0 0;
+  margin: 16px 0 0;
   color: #c7ddec;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.65;
 }
-.heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-.heroActionPrimary, .heroActionSecondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  min-height: 52px;
-  padding: 0 19px;
-  border: 1px solid rgba(255, 255, 255, .28);
-  border-radius: 12px;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  transition: transform .2s, background .2s, border-color .2s;
-  &:hover { transform: translateY(-2px); }
-}
+.heroActions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+
 .heroActionPrimary {
-  border-color: #fff;
-  background: #fff;
-  color: #104d73;
-  &:hover { background: #e9f5fb; }
+  @include buttons.primary();
 }
-.heroActionSecondary { background: rgba(255,255,255,.08); &:hover { background: rgba(255,255,255,.16); } }
+.heroActionSecondary {
+  @include buttons.secondary($inverse: true);
+}
 .actionTextMobile { display: none; }
 
-.mainGrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .86fr); gap: 28px; align-items: stretch; margin-top: 56px; }
+.mainGrid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .86fr); gap: 28px; align-items: stretch; margin-top: 32px; }
 .infoColumn { display: flex; flex-direction: column; gap: 43px; min-width: 0; }
 .section { min-width: 0; }
 .sectionHeading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
@@ -146,17 +132,23 @@
 
 .page a:focus-visible { outline: 3px solid #75bde8; outline-offset: 4px; }
 @media (max-width: 1120px) {
-  .mainGrid { grid-template-columns: 1fr; }
+  .mainGrid {
+  margin-top: 32px;
+ grid-template-columns: 1fr; }
   .mapFrame { min-height: 400px; }
   .legal { grid-template-columns: 1fr; gap: 18px; }
 }
 @media (max-width: 700px) {
-  .page { padding: 18px 0 60px; }
+  .page { padding: 24px 0 70px; }
   .container { width: min(100% - 32px, 600px); }
-  .hero { min-height: 0; padding: 36px 28px; border-radius: 23px; }
-  .hero h1 { font-size: clamp(40px, 8vw, 55px); }
-  .heroContent > p { font-size: 15px; }
-  .mainGrid { gap: 28px; margin-top: 42px; }
+  .hero { min-height: 0; padding: clamp(24px, 3vw, 40px); border-radius: 23px; }
+  .hero h1 {
+  margin: 16px 0 0;
+ font-size: clamp(34px, 4vw, 52px); }
+  .heroContent > p {
+  margin: 16px 0 0;
+ font-size: 16px; }
+  .mainGrid { gap: 28px; margin-top: 32px; }
   .infoColumn { gap: 34px; }
   .sectionHeading > p { display: none; }
   .methodGrid { grid-template-columns: 1fr 1fr; }
@@ -167,11 +159,17 @@
   .legalGrid > div:first-child { grid-column: 1 / -1; }
 }
 @media (max-width: 480px) {
-  .hero { padding: 31px 22px; }
+  .hero {
+  min-height: 0;
+ padding: clamp(24px, 3vw, 40px); }
   .heroEyebrow, .sectionEyebrow { font-size: 10px; }
-  .hero h1 { margin-top: 17px; font-size: clamp(36px, 9vw, 45px); }
-  .heroContent > p { margin-top: 19px; font-size: 14px; }
-  .heroActions { flex-wrap: nowrap; gap: 8px; margin-top: 25px; }
+  .hero h1 {
+  margin: 16px 0 0;
+ margin-top: 17px; font-size: clamp(34px, 4vw, 52px); }
+  .heroContent > p {
+  margin: 16px 0 0;
+ margin-top: 19px; font-size: 16px; }
+  .heroActions { flex-wrap: nowrap; gap: 8px; margin-top: 22px; }
   .heroActionPrimary, .heroActionSecondary { flex: 1 1 0; min-width: 0; min-height: 48px; justify-content: center; gap: 7px; padding: 0 9px; font-size: 13px; white-space: nowrap; }
   .heroActionPrimary > svg:last-child, .heroActionSecondary > svg:last-child { display: none; }
   .heroActionPrimary > svg:first-child, .heroActionSecondary > svg:first-child { width: 16px; height: 16px; flex: 0 0 16px; }

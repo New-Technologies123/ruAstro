@@ -17,6 +17,10 @@ export const GlobalCart = () => {
      ========================================================= */
 
   useEffect(() => {
+    const syncCart = (event: StorageEvent) => {
+      if (event.key === 'cart' || event.key === null) window.dispatchEvent(new Event('cartUpdated'));
+    };
+    window.addEventListener('storage', syncCart);
     const handler = () => {
       setMode('cart');
       setIsOpen(true);
@@ -28,6 +32,7 @@ export const GlobalCart = () => {
     );
 
     return () => {
+      window.removeEventListener('storage', syncCart);
       window.removeEventListener(
         'toggleGlobalCart',
         handler,

@@ -265,19 +265,18 @@ export const Products = () => {
   }, [category, handleCarouselScroll]);
 
   useEffect(() => {
-    if (
-      category !== null ||
-      sessionStorage.getItem(FROM_PRODUCT_KEY) !== 'true'
-    ) {
+    if (category !== null) return;
+
+    let savedIndex: number;
+    try {
+      if (sessionStorage.getItem(FROM_PRODUCT_KEY) !== 'true') return;
+      savedIndex = Number(sessionStorage.getItem(SELECTED_CARD_KEY));
+      sessionStorage.removeItem(FROM_PRODUCT_KEY);
+      sessionStorage.removeItem(SELECTED_CARD_KEY);
+    } catch {
+      // Restoring the carousel position is optional when storage is unavailable.
       return;
     }
-
-    const savedIndex = Number(
-      sessionStorage.getItem(SELECTED_CARD_KEY)
-    );
-
-    sessionStorage.removeItem(FROM_PRODUCT_KEY);
-    sessionStorage.removeItem(SELECTED_CARD_KEY);
 
     if (
       !Number.isInteger(savedIndex) ||
@@ -363,30 +362,7 @@ export const Products = () => {
             </div>
           </div>
 
-          <div className={Styles.heroBottom}>
-            <div className={Styles.heroFacts}>
-              <div className={Styles.heroFact}>
-                <strong>05</strong>
-                <span>направлений продукции</span>
-              </div>
 
-              <div className={Styles.heroFact}>
-                <strong>2005</strong>
-                <span>год основания</span>
-              </div>
-
-              <div className={Styles.heroFact}>
-                <strong>Уфа</strong>
-                <span>собственное производство</span>
-              </div>
-            </div>
-
-            <div className={Styles.heroMeta}>
-              <span>НЕФТЬ</span>
-              <span>ГАЗ</span>
-              <span>ВОДА</span>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -432,12 +408,12 @@ export const Products = () => {
               product={product}
               index={index}
               onSelect={(selectedIndex) => {
-                sessionStorage.setItem(
-                  SELECTED_CARD_KEY,
-                  String(selectedIndex)
-                );
-
-                sessionStorage.setItem(FROM_PRODUCT_KEY, 'true');
+                try {
+                  sessionStorage.setItem(SELECTED_CARD_KEY, String(selectedIndex));
+                  sessionStorage.setItem(FROM_PRODUCT_KEY, 'true');
+                } catch {
+                  // Storage must not prevent opening a product category.
+                }
               }}
             />
           ))}

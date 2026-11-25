@@ -1,6 +1,5 @@
 import { ArrowRight, ArrowUpRight, Factory, FileText, Mail, MapPin, Phone } from 'lucide-react';
 import Styles from './contact.module.scss';
-import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 const officeMapUrl = 'https://2gis.ru/ufa/firm/70000001088836817/55.935872%2C54.720355?m=55.935872%2C54.720355%2F16';
 const productionMapUrl = 'https://2gis.ru/ufa/search/%D1%83%D0%BB.%20%D0%91%D0%BB%D0%B0%D0%B3%D0%BE%D0%B2%D0%B0%D1%80%D1%81%D0%BA%D0%B0%D1%8F%2016%2F2';
@@ -22,8 +21,8 @@ export const Contact = () => (
         <header className={Styles.hero}>
           <div className={Styles.heroContent}>
             <span className={Styles.heroEyebrow}>Контакты · Новые Технологии</span>
-            <h1>Есть задача?<br /><span>Давайте обсудим.</span></h1>
-            <p>Расскажите о своём проекте. Поможем подобрать решение и ответим на вопросы по оборудованию и услугам.</p>
+            <h1>Контакты <span>предприятия</span></h1>
+            <p>Поможем с подбором оборудования, комплектацией и сервисом.</p>
             <div className={Styles.heroActions}>
               <a className={Styles.heroActionPrimary} href="tel:+73472939333"><Phone size={18} aria-hidden="true" /> Позвонить <ArrowUpRight size={18} aria-hidden="true" /></a>
               <a className={Styles.heroActionSecondary} href="mailto:nt@tech-new.ru"><Mail size={18} aria-hidden="true" /><span className={Styles.actionTextDesktop}>Написать письмо</span><span className={Styles.actionTextMobile}>Написать</span><ArrowUpRight size={18} aria-hidden="true" /></a>
@@ -81,6 +80,5 @@ export const Contact = () => (
         </section>
       </div>
     </div>
-    <BackToTop />
   </>
 );

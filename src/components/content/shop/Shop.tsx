@@ -1008,10 +1008,7 @@ export const Shop = ({
         <div className={styles.shopHeaderContent}>
           <span className={styles.shopEyebrow}>Каталог производителя</span>
           <h1>Оборудование и комплектующие</h1>
-          <p>Подберите изделие по модели, артикулу или категории. Всё необходимое для комплектации — в одном каталоге.</p>
-          <a className={styles.shopHeaderLink} href="#catalog-results">
-            Смотреть товары <ArrowRight size={18} aria-hidden="true" />
-          </a>
+          <p>Оборудование и запчасти с подбором по модели, артикулу или категории.</p>
         </div>
         <div className={styles.shopHeaderStats} aria-label="Состав каталога">
           <div><strong>{equipmentCatalog.length}</strong><span>позиций оборудования</span></div>

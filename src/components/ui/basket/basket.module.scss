@@ -1,3 +1,5 @@
+@use '../../../styles/buttons' as buttons;
+
 .basketContainer {
   --bg: var(--site-surface);
   --surface: #ffffff;
@@ -132,28 +134,8 @@
 }
 
 .backButton {
-  justify-self: start;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-
-  min-height: 44px;
-
-  padding: 5px 13px 5px 6px;
-
-  border-radius: 13px;
-
-  color: var(--text-secondary);
-
-  &:hover {
-    color: var(--text);
-    background: var(--surface-soft);
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
+    justify-self: start;
+  @include buttons.secondary();
 }
 
 .backIcon {
@@ -919,52 +901,8 @@
 }
 
 .checkoutButton {
-  width: 100%;
-  min-height: 50px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  padding: 13px 17px;
-
-  border: 0;
-  border-radius: 12px;
-
-  background: var(--accent);
-
-  color: #ffffff;
-
-  cursor: pointer;
-
-  font-size: 14px;
-  font-weight: 700;
-
-  box-shadow:
-    0 5px 13px rgba(21, 94, 239, 0.17);
-
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-
-  &:hover {
-    background: var(--accent-hover);
-
-    box-shadow:
-      0 7px 17px rgba(21, 94, 239, 0.22);
-  }
-
-  &:focus-visible {
-    outline: 3px solid rgba(21, 94, 239, 0.2);
-    outline-offset: 3px;
-  }
-
-  svg {
-    width: 18px;
-    height: 18px;
-  }
+    width: 100%;
+  @include buttons.primary();
 }
 
 .summaryNote {
@@ -1119,51 +1057,7 @@
 }
 
 .emptyButton {
-  min-height: 46px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-
-  padding: 11px 18px;
-
-  border-radius: 11px;
-
-  background: var(--accent);
-  color: #fff;
-
-  text-decoration: none;
-
-  font-size: 13px;
-  font-weight: 700;
-
-  box-shadow:
-    0 5px 13px rgba(21, 94, 239, 0.17);
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-
-  &:hover {
-    background: var(--accent-hover);
-
-    transform: translateY(-1px);
-
-    box-shadow:
-      0 7px 17px rgba(21, 94, 239, 0.22);
-  }
-
-  &:active {
-    transform: translateY(0) scale(0.985);
-  }
-
-  svg {
-    width: 17px;
-    height: 17px;
-  }
+  @include buttons.primary();
 }
 
 /* =========================================================

@@ -475,15 +475,11 @@ export const Careers = () => {
             </div>
 
             <h1>
-              Работа, где
-              <br />
-              <span>создают решения</span>
+              Работа в <span>«Новых Технологиях»</span>
             </h1>
 
             <p>
-              Присоединяйтесь к команде, которая проектирует,
-              производит и внедряет оборудование для
-              нефтегазовой отрасли.
+              Вакансии в Уфе, Нижневартовске и на вахте.
             </p>
 
             <a href="#vacancies" className={Styles.heroButton}>
@@ -492,16 +488,6 @@ export const Careers = () => {
             </a>
           </div>
 
-          <div className={Styles.heroVisual} data-reveal>
-            <div className={Styles.visualCard}>
-              <div className={Styles.visualNumber}>ВАРИАНТЫ РАБОТЫ</div>
-              <div className={Styles.visualLine} />
-              <div className={Styles.visualText}>
-                <strong>Уфа · Нижневартовск · Вахта</strong>
-                <span>Выберите вакансию по месту и формату работы.</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 

@@ -14,11 +14,14 @@ import Styles from './order.module.scss';
 
 import {
   getCart,
-  clearCart,
+  MAX_CART_ITEMS,
+  CART_LIMIT_MESSAGE,
+  removeOrderedItems,
   type CartItem,
 } from '../../utils/cartStorage';
 
 import back from '../../../images/back.svg';
+import { finishOrderRequest, getOrderRequestId } from '../../utils/orderRequest';
 
 type OrderProps = {
   onBack: () => void;
@@ -342,6 +345,8 @@ export const Order = ({
     useState('');
   const [confirmedOrderId, setConfirmedOrderId] =
     useState('');
+  const [confirmationSent, setConfirmationSent] = useState(false);
+  const [confirmationEmail, setConfirmationEmail] = useState('');
   const [submitError, setSubmitError] =
     useState('');
   const [summaryExpanded, setSummaryExpanded] =
@@ -358,6 +363,7 @@ export const Order = ({
 
   const offerRef =
     useRef<HTMLDivElement | null>(null);
+
 
   /* =========================================================
      CART
@@ -534,6 +540,10 @@ export const Order = ({
     if (!cart.length) {
       return;
     }
+    if (cart.length > MAX_CART_ITEMS) {
+      setSubmitError(CART_LIMIT_MESSAGE);
+      return;
+    }
 
     /*
      * Формируем ошибки заново.
@@ -632,13 +642,17 @@ export const Order = ({
       email: email.trim(),
       phone: phone.trim(),
       comment: comment.trim(),
-      cart,
+      cart: cart.map((item) => ({ sku: item.cartKey, count: item.count })),
       consent,
       offerAgreement,
     };
 
+    const orderedItems = cart.map(({ cartKey, count, lineId }) => ({ cartKey, count, lineId }));
+
     try {
       setIsSubmitting(true);
+      const requestId = await getOrderRequestId(orderData);
+      const requestData = { ...orderData, requestId };
 
       const response = await fetch(
         '/sendOrder.php',
@@ -649,7 +663,7 @@ export const Order = ({
               'application/json',
           },
           body: JSON.stringify(
-            orderData
+            requestData
           ),
         }
       );
@@ -659,6 +673,7 @@ export const Order = ({
           success?: boolean;
           error?: string;
           orderId?: string;
+          confirmationSent?: boolean;
         };
 
       if (
@@ -669,9 +684,11 @@ export const Order = ({
           'Спасибо за заказ!'
         );
         setConfirmedOrderId(result.orderId || '');
+        setConfirmationSent(result.confirmationSent === true);
+        setConfirmationEmail(email.trim());
 
-        setCart([]);
-        clearCart();
+        removeOrderedItems(orderedItems, requestId);
+        finishOrderRequest(requestId);
 
         setName('');
         setPosition('');
@@ -746,20 +763,24 @@ export const Order = ({
       {/* HEADER */}
 
       <header className={Styles.header}>
-        <button
-          type="button"
-          className={Styles.backButton}
-          onClick={successMessage ? onFinish : onBack}
-          aria-label={successMessage ? 'Закрыть подтверждение' : 'Вернуться в корзину'}
-        >
-          <img
-            src={back.src}
-            alt=""
-            aria-hidden="true"
-          />
+        {successMessage ? (
+          <div aria-hidden="true" />
+        ) : (
+          <button
+            type="button"
+            className={Styles.backButton}
+            onClick={onBack}
+            aria-label="Вернуться в корзину"
+          >
+            <img
+              src={back.src}
+              alt=""
+              aria-hidden="true"
+            />
 
-          <span>{successMessage ? 'Закрыть' : 'Корзина'}</span>
-        </button>
+            <span>Корзина</span>
+          </button>
+        )}
 
         <div className={Styles.headerCenter}>
           <h1>Оформление заказа</h1>
@@ -866,6 +887,11 @@ export const Order = ({
                       Номер заявки: <strong>{confirmedOrderId}</strong>
                     </p>
                   )}
+                  <p>
+                    {confirmationSent
+                      ? `Состав заказа и номер заявки отправлены на ${confirmationEmail}.`
+                      : 'Заявка принята, но письмо с подтверждением отправить не удалось. Сохраните номер заявки.'}
+                  </p>
 
                   <button
                     type="button"

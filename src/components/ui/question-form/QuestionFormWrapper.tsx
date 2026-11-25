@@ -142,8 +142,8 @@ export const QuestionFormWrapper: React.FC = () => {
             {submitted ? (
               <div className={Styles.successMessage} role="status">
                 <span className={Styles.successIcon} aria-hidden="true">✓</span>
-                <h3>Вопрос отправлен</h3>
-                <p>Спасибо! Мы ответим по указанным контактам.</p>
+                <h3>Ваше обращение отправлено</h3>
+                <p>Обращение принято в обработку. С вами свяжутся в ближайшее время.</p>
                 <button type="button" className={Styles.successCloseButton} onClick={handleClose}>Закрыть</button>
               </div>
             ) : (

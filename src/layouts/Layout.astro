@@ -87,6 +87,8 @@ const {
         --site-blue-hover: #0f54bd;
         --site-blue-light: #a9d8f7;
         --site-blue-soft: #eaf3ff;
+        --site-button-height: 48px;
+        --site-button-radius: 12px;
         --site-hero-gradient: linear-gradient(120deg, #092941 0%, #103b5a 62%, #155b86 100%);
         --site-surface: #f5f8fb;
         --site-line: #dfe8ef;
@@ -334,16 +336,6 @@ const {
       }
     </script>
 
-    <!-- ТВОЯ ЛОГИКА КОРЗИНЫ -->
-    <script is:inline>
-      if (typeof window !== 'undefined') {
-        if (!sessionStorage.getItem('cartCleared')) {
-          localStorage.removeItem('cart');
-          window.dispatchEvent(new Event('cartUpdated'));
-          sessionStorage.setItem('cartCleared', 'true');
-        }
-      }
-    </script>
   </body>
 </html>
 

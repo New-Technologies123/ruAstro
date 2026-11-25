@@ -1,9 +1,8 @@
 import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import type { ProcurementItem } from "./parseProcurement";
 import Styles from "./procurement.module.scss";
 import { BackToTop } from "../../ui/back-to-top/BackToTop";
-import { OfferModal } from "./OfferModal";
 import { GroupCard } from "./GroupCard";
 import { LotDetail } from "./LotDetail";
 import { LotSheet } from "./LotSheet";
@@ -17,6 +16,7 @@ type Group = {
 
 const PAGE_SIZE = 12;
 const MOBILE_PAGE_SIZE = 6;
+const OfferModal = lazy(() => import('./OfferModal').then((module) => ({ default: module.OfferModal })));
 
 export const Procurement = ({ initialItems }: { initialItems: Item[] }) => {
   const [items, setItems] = useState<Item[]>(initialItems);
@@ -159,7 +159,7 @@ export const Procurement = ({ initialItems }: { initialItems: Item[] }) => {
           <div className={Styles.heroContent}>
             <span className={Styles.eyebrow}><span aria-hidden="true" /> ПЛОЩАДКА ДЛЯ ПОСТАВЩИКОВ</span>
             <h1>Актуальные <em>закупки</em></h1>
-            <p>Изучайте состав лотов и предлагайте свои условия поставки. Выберите интересующую закупку, чтобы посмотреть подробности.</p>
+            <p>Выберите лот, изучите состав и предложите условия поставки.</p>
           </div>
           <div className={Styles.heroAside} aria-label="Статистика закупок">
             <span>Открыто сейчас</span>
@@ -230,7 +230,11 @@ export const Procurement = ({ initialItems }: { initialItems: Item[] }) => {
         )}
 
       </div>
-      {offerGroup && <OfferModal group={offerGroup} onClose={() => setOfferGroup(null)} />}
+      {offerGroup && (
+        <Suspense fallback={<div className={Styles.message} role="status">Загрузка формы предложения…</div>}>
+          <OfferModal group={offerGroup} onClose={() => setOfferGroup(null)} />
+        </Suspense>
+      )}
       <BackToTop />
       {selectedGroup && isMobile && (
         <LotSheet

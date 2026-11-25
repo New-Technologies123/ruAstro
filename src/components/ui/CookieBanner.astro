@@ -9,12 +9,10 @@
   <div class="cookie-content">
     <div class="cookie-text">
       <div class="cookie-message">
-        <strong id="cookie-title"> Мы ценим вашу конфиденциальность </strong>
+        <strong id="cookie-title"> Cookies на сайте </strong>
 
         <p id="cookie-description">
-          Этот сайт использует cookies для улучшения работы, анализа трафика и персонализации. Продолжая использовать сайт, вы соглашаетесь
-          с нашей
-          <a href="/file/cookie_v1.pdf" target="_blank" rel="noopener noreferrer" class="cookie-link"> политикой использования cookies </a>.
+          Используем cookies для работы сайта, аналитики и персонализации. <a href="/file/cookie_v1.pdf" target="_blank" rel="noopener noreferrer" class="cookie-link"> Политика cookies </a>.
         </p>
       </div>
     </div>
@@ -25,459 +23,59 @@
   </div>
 </div>
 
-<style>
-  /* =========================================================
-   COOKIE BANNER
-   TECH-NEW.RU
-   Premium B2B / 2026
-   ========================================================= */
+<style lang="scss">
+  @use '../../styles/buttons' as buttons;
 
   #cookie-banner {
-    --cookie-navy: #071d36;
-    --cookie-navy-2: #0b2948;
-    --cookie-blue: #1769df;
-    --cookie-blue-hover: #0f5dcc;
-
-    --cookie-text: #ffffff;
-    --cookie-muted: rgba(255, 255, 255, 0.68);
-
-    --cookie-border: rgba(255, 255, 255, 0.12);
-
     position: fixed;
-
     z-index: 99999;
-
     left: 50%;
-    bottom: 24px;
-
-    width: min(620px, calc(100% - 40px));
-
-    box-sizing: border-box;
-
-    padding: 20px 22px;
-
-    color: var(--cookie-text);
-
-    background: linear-gradient(145deg, rgba(7, 29, 54, 0.98), rgba(11, 41, 72, 0.97));
-
-    border: 1px solid var(--cookie-border);
-
-    border-radius: 20px;
-
-    box-shadow:
-      0 24px 70px rgba(3, 15, 31, 0.32),
-      0 8px 24px rgba(3, 15, 31, 0.16);
-
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-
-    transform: translate3d(-50%, calc(100% + 40px), 0);
-
+    bottom: 16px;
+    width: min(560px, calc(100% - 32px));
+    padding: 14px 16px;
+    border: 1px solid rgba(255, 255, 255, .18);
+    border-radius: 14px;
+    background: var(--site-navy);
+    color: #fff;
+    box-shadow: 0 8px 28px rgba(3, 15, 31, .2);
+    transform: translate(-50%, calc(100% + 32px));
     opacity: 0;
-
     visibility: hidden;
-
     pointer-events: none;
-
-    transition:
-      transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-      opacity 0.3s ease,
-      visibility 0.3s ease;
+    transition: transform 220ms ease, opacity 180ms ease, visibility 180ms ease;
   }
-
-  /* =========================================================
-   TOP LIGHT
-   ========================================================= */
-
-  #cookie-banner::before {
-    content: '';
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 1px;
-
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
-
-    pointer-events: none;
-  }
-
-  /* =========================================================
-   SHOW
-   ========================================================= */
 
   #cookie-banner.show {
-    transform: translate3d(-50%, 0, 0);
-
+    transform: translate(-50%, 0);
     opacity: 1;
-
     visibility: visible;
-
     pointer-events: auto;
   }
 
-  /* =========================================================
-   CONTENT
-   ========================================================= */
-
-  .cookie-content {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 24px;
-  }
-
-  /* =========================================================
-   TEXT
-   ========================================================= */
-
-  .cookie-text {
-    min-width: 0;
-
-    flex: 1;
-  }
-
-  .cookie-message {
-    min-width: 0;
-  }
-
-  /* =========================================================
-   TITLE
-   ========================================================= */
-
+  .cookie-content { display: flex; align-items: center; gap: 14px; }
+  .cookie-text { flex: 1; min-width: 0; }
   .cookie-message strong {
-    display: block;
-
-    margin: 0 0 7px;
-
-    color: #ffffff;
-
-    font-family: inherit;
-
-    font-size: 15px;
-
-    font-weight: 650;
-
-    line-height: 1.3;
-
-    letter-spacing: -0.01em;
-  }
-
-  /* =========================================================
-   DESCRIPTION
-   ========================================================= */
-
-  .cookie-message p {
-    margin: 0;
-
-    color: var(--cookie-muted);
-
-    font-family: inherit;
-
-    font-size: 12.5px;
-
-    font-weight: 400;
-
-    line-height: 1.55;
-  }
-
-  /* =========================================================
-   LINK
-   ========================================================= */
-
-  .cookie-link {
-    position: relative;
-
-    display: inline;
-
-    color: #8dbdff;
-
-    font-weight: 500;
-
-    text-decoration: none;
-
-    transition:
-      color 0.2s ease,
-      opacity 0.2s ease;
-  }
-
-  .cookie-link::after {
-    content: '';
-
     position: absolute;
-
-    left: 0;
-    right: 0;
-
-    bottom: -1px;
-
+    width: 1px;
     height: 1px;
-
-    background: currentColor;
-
-    opacity: 0.45;
-
-    transition: opacity 0.2s ease;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
-
-  .cookie-link:hover {
-    color: #b7d5ff;
-  }
-
-  .cookie-link:hover::after {
-    opacity: 0.9;
-  }
-
-  /* =========================================================
-   ACTIONS
-   ========================================================= */
-
-  .cookie-actions {
-    flex-shrink: 0;
-
-    display: flex;
-
-    align-items: center;
-  }
-
-  /* =========================================================
-   BUTTON
-   ========================================================= */
-
-  #cookie-accept {
-    appearance: none;
-    -webkit-appearance: none;
-
-    display: inline-flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    min-width: 112px;
-
-    min-height: 44px;
-
-    padding: 10px 20px;
-
-    border: 1px solid rgba(255, 255, 255, 0.08);
-
-    border-radius: 11px;
-
-    background: var(--cookie-blue);
-
-    color: #ffffff;
-
-    font-family: inherit;
-
-    font-size: 13px;
-
-    font-weight: 600;
-
-    line-height: 1;
-
-    letter-spacing: -0.005em;
-
-    cursor: pointer;
-
-    box-shadow: 0 5px 16px rgba(23, 105, 223, 0.24);
-
-    transition:
-      background 0.2s ease,
-      transform 0.2s ease,
-      box-shadow 0.2s ease;
-  }
-
-  /* =========================================================
-   BUTTON HOVER
-   ========================================================= */
-
-  #cookie-accept:hover {
-    background: var(--cookie-blue-hover);
-
-    transform: translateY(-1px);
-
-    box-shadow: 0 8px 22px rgba(23, 105, 223, 0.34);
-  }
-
-  /* =========================================================
-   BUTTON ACTIVE
-   ========================================================= */
-
-  #cookie-accept:active {
-    transform: translateY(0);
-
-    box-shadow: 0 4px 12px rgba(23, 105, 223, 0.22);
-  }
-
-  /* =========================================================
-   FOCUS
-   ========================================================= */
-
-  #cookie-accept:focus-visible,
-  .cookie-link:focus-visible {
-    outline: 2px solid #8dbdff;
-
-    outline-offset: 3px;
-  }
-
-  /* =========================================================
-   TABLET
-   ========================================================= */
-
-  @media (max-width: 768px) {
-    #cookie-banner {
-      left: 50%;
-
-      bottom: 16px;
-
-      width: calc(100% - 32px);
-
-      padding: 18px;
-
-      border-radius: 18px;
-    }
-
-    .cookie-content {
-      gap: 16px;
-    }
-
-    .cookie-message strong {
-      font-size: 14px;
-    }
-
-    .cookie-message p {
-      font-size: 12px;
-
-      line-height: 1.55;
-    }
-
-    #cookie-accept {
-      min-width: 104px;
-
-      min-height: 44px;
-
-      padding: 10px 17px;
-
-      font-size: 13px;
-    }
-  }
-
-  /* =========================================================
-   MOBILE
-   ========================================================= */
+  .cookie-message p { margin: 0; color: #d5e2ef; font-size: 13px; line-height: 1.5; }
+  .cookie-link { color: #b8d8ff; text-decoration: underline; text-underline-offset: 3px; }
+  .cookie-link:hover { color: #fff; }
+  .cookie-link:focus-visible { outline: 3px solid var(--site-blue-light); outline-offset: 3px; }
+  .cookie-actions { flex: 0 0 auto; }
+  #cookie-accept { min-width: 92px; @include buttons.primary($compact: true); }
 
   @media (max-width: 600px) {
-    #cookie-banner {
-      bottom: 12px;
-
-      width: calc(100% - 24px);
-
-      padding: 17px;
-
-      border-radius: 17px;
-
-      box-shadow:
-        0 20px 55px rgba(3, 15, 31, 0.38),
-        0 7px 20px rgba(3, 15, 31, 0.18);
-    }
-
-    .cookie-content {
-      display: flex;
-
-      flex-direction: column;
-
-      align-items: stretch;
-
-      gap: 14px;
-    }
-
-    .cookie-message strong {
-      margin-bottom: 6px;
-
-      font-size: 14px;
-
-      line-height: 1.35;
-    }
-
-    .cookie-message p {
-      font-size: 12px;
-
-      line-height: 1.55;
-    }
-
-    .cookie-actions {
-      width: 100%;
-    }
-
-    #cookie-accept {
-      width: 100%;
-
-      min-height: 45px;
-
-      border-radius: 10px;
-
-      font-size: 13px;
-    }
+    #cookie-banner { bottom: 10px; width: calc(100% - 24px); padding: 12px; border-radius: 12px; }
+    .cookie-content { gap: 12px; }
+    #cookie-accept { min-width: 82px; padding-inline: 12px; }
   }
 
-  /* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-  @media (max-width: 380px) {
-    #cookie-banner {
-      bottom: 10px;
-
-      width: calc(100% - 20px);
-
-      padding: 15px;
-
-      border-radius: 15px;
-    }
-
-    .cookie-content {
-      gap: 12px;
-    }
-
-    .cookie-message strong {
-      font-size: 13px;
-    }
-
-    .cookie-message p {
-      font-size: 11.5px;
-
-      line-height: 1.5;
-    }
-
-    #cookie-accept {
-      min-height: 44px;
-
-      font-size: 13px;
-    }
-  }
-
-  /* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
-  @media (prefers-reduced-motion: reduce) {
-    #cookie-banner {
-      transition:
-        opacity 0.15s ease,
-        visibility 0.15s ease;
-    }
-
-    #cookie-accept {
-      transition: none;
-    }
-  }
+  @media (prefers-reduced-motion: reduce) { #cookie-banner { transition: none; } }
 </style>
 
 <script>

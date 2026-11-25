@@ -16,6 +16,19 @@ import { BackToTop } from '../../ui/back-to-top/BackToTop';
 
 import styles from './services.module.scss';
 
+// Remembering the carousel position must never prevent navigation.
+const serviceStorage = {
+  getItem(key: string) {
+    try { return sessionStorage.getItem(key); } catch { return null; }
+  },
+  setItem(key: string, value: string) {
+    try { sessionStorage.setItem(key, value); } catch { /* Storage may be blocked. */ }
+  },
+  removeItem(key: string) {
+    try { sessionStorage.removeItem(key); } catch { /* Storage may be blocked. */ }
+  },
+};
+
 type TServices =
   | 'repair'
   | 'metering'
@@ -165,18 +178,18 @@ export const Services = () => {
     slug: TServices,
     index: number,
   ) => {
-    sessionStorage.setItem(
+    serviceStorage.setItem(
       SELECTED_CARD_KEY,
       String(index),
     );
 
-    sessionStorage.setItem(
+    serviceStorage.setItem(
       FROM_SERVICE_KEY,
       'true',
     );
 
     if (trackRef.current) {
-      sessionStorage.setItem(
+      serviceStorage.setItem(
         SCROLL_POSITION_KEY,
         String(
           trackRef.current.scrollLeft,
@@ -198,12 +211,12 @@ export const Services = () => {
     }
 
     const savedFromService =
-      sessionStorage.getItem(
+      serviceStorage.getItem(
         FROM_SERVICE_KEY,
       );
 
     const savedIndex =
-      sessionStorage.getItem(
+      serviceStorage.getItem(
         SELECTED_CARD_KEY,
       );
 
@@ -221,15 +234,15 @@ export const Services = () => {
       index < 0 ||
       index >= SERVICES.length
     ) {
-      sessionStorage.removeItem(
+      serviceStorage.removeItem(
         FROM_SERVICE_KEY,
       );
 
-      sessionStorage.removeItem(
+      serviceStorage.removeItem(
         SELECTED_CARD_KEY,
       );
 
-      sessionStorage.removeItem(
+      serviceStorage.removeItem(
         SCROLL_POSITION_KEY,
       );
 
@@ -267,15 +280,15 @@ export const Services = () => {
       });
     });
 
-    sessionStorage.removeItem(
+    serviceStorage.removeItem(
       FROM_SERVICE_KEY,
     );
 
-    sessionStorage.removeItem(
+    serviceStorage.removeItem(
       SELECTED_CARD_KEY,
     );
 
-    sessionStorage.removeItem(
+    serviceStorage.removeItem(
       SCROLL_POSITION_KEY,
     );
   }, [currentPage]);
@@ -293,7 +306,7 @@ export const Services = () => {
     }
 
     const handleScroll = () => {
-      sessionStorage.setItem(
+      serviceStorage.setItem(
         SCROLL_POSITION_KEY,
         String(track.scrollLeft),
       );
@@ -361,10 +374,10 @@ export const Services = () => {
                   styles.heroTitle
                 }
               >
-                Сервис и техническое
+                Сервис нефтепромыслового
                 <span>
                   {' '}
-                  сопровождение
+                  оборудования
                 </span>
               </h1>
 
@@ -373,9 +386,7 @@ export const Services = () => {
                   styles.heroDescription
                 }
               >
-                Обслуживаем и модернизируем нефтепромысловое оборудование,
-                выполняем работы на скважинах и сопровождаем технику
-                на всех этапах эксплуатации.
+                Ремонт АГЗУ, замер дебита, обслуживание УОК-НКТ и депарафинизация скважин.
               </p>
 
               <div
@@ -401,16 +412,6 @@ export const Services = () => {
                 >
                   Обсудить сервисную задачу
                 </a>
-              </div>
-            </div>
-            <div className={styles.heroStatement}>
-              <div className={styles.heroStatementCard}>
-                <span className={styles.heroStatementLabel}>СЕРВИС НА ОБЪЕКТЕ</span>
-                <span className={styles.heroStatementLine} aria-hidden="true" />
-                <div className={styles.heroStatementText}>
-                  <strong>От диагностики до результата</strong>
-                  <span>Диагностика · Обслуживание · Модернизация</span>
-                </div>
               </div>
             </div>
           </div>

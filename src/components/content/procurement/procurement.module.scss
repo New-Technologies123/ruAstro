@@ -1,6 +1,8 @@
+@use '../../../styles/buttons' as buttons;
+
 .container {
   min-height: 100vh;
-  padding: 38px var(--site-gutter) 40px;
+  padding: 24px var(--site-gutter) 40px;
   background: #f4f7fa;
   color: var(--site-ink);
   font-family: inherit;
@@ -16,9 +18,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 40px;
-  min-height: 260px;
-  padding: 42px 52px;
+  gap: 24px;
+  min-height: 0;
+  padding: 24px clamp(20px, 3vw, 40px);
   overflow: hidden;
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, .12);
@@ -43,7 +45,7 @@
     position: relative;
     z-index: 1;
     margin: 18px 0 14px;
-    font-size: clamp(38px, 4.4vw, 62px);
+    font-size: clamp(32px, 3.6vw, 48px);
     font-weight: 800;
     line-height: 1.08;
     letter-spacing: -.055em;
@@ -81,12 +83,12 @@
 .heroAside {
   position: relative;
   z-index: 1;
-  flex: 0 0 230px;
-  min-height: 176px;
+  flex: 0 0 180px;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 24px;
+  padding: 16px;
   border: 1px solid rgba(255, 255, 255, .19);
   border-radius: 20px;
   background: rgba(255, 255, 255, .1);
@@ -94,7 +96,7 @@
   font-size: 12px;
   font-weight: 650;
 
-  strong { margin: 6px 0 3px; color: #fff; font-size: 48px; line-height: 1; letter-spacing: -.06em; }
+  strong { margin: 6px 0 3px; color: #fff; font-size: 36px; line-height: 1; letter-spacing: -.06em; }
 }
 
 .heroAsideArrow {
@@ -527,26 +529,8 @@
   span { color: #75879a; font-size: 12px; line-height: 1.5; }
 
   button {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
-    min-height: 46px;
-    padding: 0 18px;
-    border: 0;
-    border-radius: 12px;
-    background: var(--site-blue);
-    color: #fff;
-    font: inherit;
-    font-size: 12px;
-    font-weight: 750;
     white-space: nowrap;
-    cursor: pointer;
-    transition: background .2s ease, transform .2s ease;
-
-    span { color: inherit; font-size: 19px; }
-    &:hover { background: var(--site-blue-hover); transform: translateY(-2px); }
-    &:focus-visible { outline: 3px solid var(--site-blue-light); outline-offset: 2px; }
+    @include buttons.primary();
   }
 }
 
@@ -580,9 +564,15 @@
 
 @media (max-width: 800px) {
   .cardList { scroll-margin-top: 88px; }
-  .container { padding: 20px 16px 60px; }
-  .hero { min-height: 180px; padding: 30px 26px; border-radius: 20px; }
-  .heroAside { display: none; }
+  .container { padding: 24px var(--site-gutter) 40px; }
+  .hero {
+  gap: 24px;
+ min-height: 0; padding: 24px clamp(20px, 3vw, 40px); border-radius: 20px; }
+  .heroAside {
+  min-height: 0;
+  padding: 16px;
+  flex-basis: 180px;
+ display: none; }
   .toolbar { align-items: stretch; flex-direction: column; gap: 8px; margin: 20px 0; }
   .searchWrap { width: 100%; }
   .layout { grid-template-columns: 1fr; }
@@ -634,7 +624,9 @@
 }
 
 @media (max-width: 560px) {
-  .hero { min-height: 160px; padding: 26px 22px; }
+  .hero {
+  gap: 24px;
+ min-height: 0; padding: 24px clamp(20px, 3vw, 40px); }
   .hero p { font-size: 13px; }
   .layout.catalogMode .cardList, .layout.catalogMode .skeletonList { grid-template-columns: 1fr; }
   .detail { overflow: visible; }

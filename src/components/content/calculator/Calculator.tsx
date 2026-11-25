@@ -1,10 +1,10 @@
-import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import { Trash2 } from 'lucide-react';
 import { useRef, useState } from 'react';
 
 import Styles from './calculator.module.scss';
 import { installations } from './installationsData';
 import { InstallationCard } from './InstallationCard';
+import { getIncompleteFields, requiredFields } from './configurationSteps';
 import { maxGasSepRules } from './maxGasSepRules';
 import { maxGasNonSepPriceRules } from './maxGasNonSepPriceRules';
 import { BackToTop } from '../../ui/back-to-top/BackToTop';
@@ -31,12 +31,6 @@ const gasGroupNonSepMap: Record<string, 'LOW'> = {
   'До 500 000': 'LOW',
   'Свыше 500 000 до 1 500 000': 'LOW',
 };
-
-const requiredFields = [
-  'quantity', 'volume', 'fittings', 'max_gas', 'max_gas_1',
-  'vagometer', 'vagometer1', 'vagometer2', 'heating',
-  'pollution', 'closet', 'density',
-] as const;
 
 const detailRows = [
   { field: 'quantity', label: 'Количество скважин' },
@@ -65,7 +59,7 @@ const getSepGasPrice = (selection: Record<string, any>, gasLabel: string) => {
   if (!gasGroup) return undefined;
   return maxGasSepRules.find((rule) =>
     rule.quantity === selection.quantity &&
-    rule.volume === selection.volume?.[0] &&
+    rule.volume === `До ${selection.volume?.[0]}` &&
     rule.density === selection.density?.[0] &&
     rule.gasGroup === gasGroup
   )?.price;
@@ -76,7 +70,7 @@ const getNonSepGasPrice = (selection: Record<string, any>, gasLabel: string) => 
   if (!gasGroup) return undefined;
   return maxGasNonSepPriceRules.find((rule) =>
     rule.quantity === selection.quantity &&
-    rule.volume === selection.volume?.[0] &&
+    rule.volume === `До ${selection.volume?.[0]}` &&
     rule.density === selection.density?.[0] &&
     rule.gasGroup === gasGroup
   )?.price;
@@ -147,13 +141,10 @@ export const Calculator = () => {
     }));
   };
 
-  const validateSelection = (instId: number, selection?: Record<string, any>) => {
+  const validateSelection = (instId: number, selection?: Record<string, any>, fields: readonly string[] = requiredFields) => {
     const errors: Record<string, boolean> = {};
-    requiredFields.forEach((field) => {
-      const value = selection?.[field];
-      if (field === 'quantity' ? !value : !Array.isArray(value) || value.length === 0) {
-        errors[field] = true;
-      }
+    getIncompleteFields(selection, fields).forEach((field) => {
+      errors[field] = true;
     });
 
     if (Object.keys(errors).length === 0) return true;
@@ -167,9 +158,9 @@ export const Calculator = () => {
 
   const addInstallation = (instId: number) => {
     const inst = installations.find((entry) => entry.id === instId);
-    if (!inst) return;
+    if (!inst) return false;
     const selection = selections[instId];
-    if (!validateSelection(instId, selection)) return;
+    if (!validateSelection(instId, selection)) return false;
 
     const price = calculatePrice(inst, selection);
     const hasNonSepGas = Array.isArray(selection.max_gas_1) &&
@@ -194,6 +185,7 @@ export const Calculator = () => {
         block: 'start',
       }));
     }
+    return true;
   };
 
   const removeInstallation = (selectionKey: number) => {
@@ -230,20 +222,10 @@ export const Calculator = () => {
               <span aria-current="page">Калькулятор</span>
             </nav>
             {/* <span className={Styles.eyebrow}>Подбор конфигурации АГЗУ</span> */}
-            <h1 id="calculator-title">Рассчитайте <em>стоимость установки</em></h1>
+            <h1 id="calculator-title">Расчёт стоимости <em>АГЗУ</em></h1>
             <p className={Styles.heroDescription}>
-              Выберите параметры и добавьте нужные исполнения в расчёт.
-              Итог можно сохранить в PDF.
+              Выберите комплектацию установки. Готовый расчёт можно сохранить в PDF.
             </p>
-            <div className={Styles.heroActions}>
-              <a className={Styles.primaryButton} href="#configurator">Выбрать параметры <span aria-hidden="true"><ArrowUpRightIcon /></span></a>
-              {/* <a className={Styles.secondaryButton} href="/products/accounting-system/">Вернуться к АГЗУ <span aria-hidden="true">→</span></a> */}
-            </div>
-            <div className={Styles.heroFacts}>
-              <span><strong>01</strong> Выберите конфигурацию</span>
-              <span><strong>02</strong> Добавьте в расчёт</span>
-              <span><strong>03</strong> Скачайте PDF</span>
-            </div>
           </div>
         </section>
 
@@ -251,21 +233,21 @@ export const Calculator = () => {
           <div className={Styles.container}>
             <div className={Styles.sectionHeading}>
               <div><span className={Styles.eyebrow}>01 / Конфигурация</span><h2 id="configurator-title">Параметры установки</h2></div>
-              <p>Заполните все группы параметров. Если вариант недоступен, уточните связанные настройки.</p>
+              <p>Выберите все параметры на каждом из трёх шагов. Пропущенные поля будут выделены красным.</p>
             </div>
 
             <div className={Styles.calculatorLayout}>
               <div className={Styles.cardsContainer}>
-                {installations.map((inst, index) => (
+                {installations.map((inst) => (
                   <InstallationCard
                     key={inst.id}
-                    index={index + 1}
                     inst={inst}
                     sel={selections[inst.id] || {}}
                     errors={fieldErrors[inst.id] || {}}
                     showMessage={Object.values(fieldErrors[inst.id] || {}).some(Boolean)}
                     validationAttempt={validationAttempts[inst.id] || 0}
                     onChange={(field, value) => handleChange(inst.id, field, value)}
+                    onValidate={(fields) => validateSelection(inst.id, selections[inst.id], fields)}
                     onAdd={() => addInstallation(inst.id)}
                   />
                 ))}

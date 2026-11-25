@@ -1,50 +1,36 @@
+@use '../../../styles/buttons' as buttons;
+
 .card {
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--line, #dce6ef);
-  border-radius: 18px;
+  border-radius: 24px;
   background: #fff;
-  box-shadow: 0 7px 28px rgba(11, 45, 77, 0.045);
+  box-shadow: 0 12px 40px rgba(11, 45, 77, 0.06);
 }
 
 .cardHeader {
   display: flex;
-  align-items: flex-start;
-  gap: 17px;
-  padding: 23px 25px;
-  border-bottom: 1px solid var(--line, #dce6ef);
-  background: #f6f9fc;
-}
-
-.cardIndex {
-  display: grid;
-  flex: 0 0 auto;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: var(--blue-soft, #edf5ff);
-  color: var(--blue, var(--site-blue));
-  font-size: 12px;
-  font-weight: 750;
-  font-variant-numeric: tabular-nums;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 28px 28px 16px;
 }
 
 .cardEyebrow {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   color: var(--blue, var(--site-blue));
-  font-size: 11px;
-  font-weight: 750;
+  font-size: 12px;
+  font-weight: 650;
   line-height: 1.4;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .cardHeader h3 {
   margin: 0;
   color: var(--ink, #142438);
-  font-size: clamp(22px, 2vw, 27px);
+  font-size: clamp(24px, 2vw, 30px);
   font-weight: 650;
   line-height: 1.2;
   letter-spacing: -0.03em;
@@ -62,36 +48,174 @@
   line-height: 1.4;
 }
 
+.stepIntroduction {
+  padding: 0 28px;
+}
+
+.stepIntroduction > p {
+  margin: 0;
+  color: var(--muted, #5b6c7e);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.stepProgress {
+  scroll-margin-top: 110px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, max-content));
+  width: fit-content;
+  max-width: 100%;
+  gap: 8px;
+  margin: 24px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stepProgress li {
+  display: flex;
+  min-width: 0;
+  color: var(--muted, #5b6c7e);
+  font-size: 14px;
+  font-weight: 550;
+  line-height: 1.4;
+}
+
+.stepLink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 1px solid var(--line, #dce6ef);
+  border-radius: 12px;
+  background: #f6f9fd;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.stepLink:disabled { cursor: default; }
+.stepLink:hover:not(:disabled) {
+  border-color: #c2d8f1;
+  background: #fff;
+  color: var(--blue, var(--site-blue));
+  box-shadow: 0 2px 8px rgba(11, 45, 77, 0.04);
+}
+.stepLink > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.stepLink:focus-visible { outline: 3px solid #8dbfff; outline-offset: 3px; }
+
+.stepLink > span:first-child {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e8eff6;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.stepProgress .completedStep {
+  color: var(--blue, var(--site-blue));
+}
+
+.stepProgress .completedStep .stepLink > span:first-child {
+  background: #e1eeff;
+}
+
+.stepProgress .currentStep {
+  color: #fff;
+  font-weight: 700;
+}
+
+.stepProgress .currentStep .stepLink {
+  border-color: var(--blue, var(--site-blue));
+  background: var(--blue, var(--site-blue));
+  box-shadow: 0 4px 12px rgba(22, 98, 222, 0.16);
+}
+
+.stepProgress .currentStep .stepLink > span:first-child {
+  background: #fff;
+  color: var(--blue, var(--site-blue));
+}
+
+.stepStatus {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--blue-soft, #edf5ff);
+  color: var(--blue, var(--site-blue));
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.parameterSections {
+  display: grid;
+  padding: 16px 28px 28px;
+}
+
+.parameterSection {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line, #dce6ef);
+  border-radius: 16px;
+  background: #fff;
+}
+
+.parameterSection[hidden] { display: none; }
+
+.parameterSection:focus-visible { outline: 3px solid #8dbfff; outline-offset: 3px; }
+
+.stepIntroduction .parameterCount {
+  margin: 12px 0 0;
+  color: var(--muted, #5b6c7e);
+  font-size: 12px;
+  font-weight: 550;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
 .paramsGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 15px;
-  padding: 25px;
+  align-items: stretch;
+  gap: 0;
 }
 
 .fieldGroup {
   min-width: 0;
   margin: 0;
-  padding: 15px 15px 16px;
-  border: 1px solid var(--line, #dce6ef);
-  border-radius: 12px;
-  background: #fff;
+  padding: 16px 20px;
+  border: 0;
+  background: transparent;
 }
 
+.fieldGroup:nth-child(n + 3) { border-top: 1px solid var(--line, #dce6ef); }
+.fieldGroup:nth-child(2n) { border-left: 1px solid var(--line, #dce6ef); }
+
 .fieldGroup legend {
+  float: left;
+  width: 100%;
   max-width: 100%;
-  padding: 0 4px;
+  padding: 0;
   color: var(--ink, #142438);
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 650;
   line-height: 1.45;
 }
 
 .options {
+  clear: both;
   display: flex;
   flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 4px;
+  gap: 8px;
+  padding-top: 12px;
 }
 
 .option {
@@ -116,14 +240,14 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 38px;
+  min-height: 44px;
   max-width: 100%;
-  padding: 7px 10px;
+  padding: 9px 12px;
   border: 1px solid var(--line, #dce6ef);
-  border-radius: 8px;
+  border-radius: 10px;
   background: #fff;
   color: #334960;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 550;
   line-height: 1.35;
   overflow-wrap: anywhere;
@@ -176,8 +300,10 @@
 }
 
 .fieldError {
-  border-color: #d89b9e;
-  background: #fffafa;
+  background: #fff6f6;
+  box-shadow: inset 0 0 0 1px #e8b9bb;
+  legend { color: #a3393d; }
+  .option span { border-color: #d89b9e; background: #fffafa; }
 }
 
 .fieldMessage {
@@ -192,17 +318,17 @@
   align-items: center;
   justify-content: space-between;
   gap: 22px;
-  padding: 19px 25px;
+  padding: 20px 28px;
   border-top: 1px solid var(--line, #dce6ef);
-  background: #f9fbfd;
+  background: #fff;
 }
 
-.footerCopy { max-width: 390px; }
+.footerCopy { max-width: 390px; min-width: 0; }
 
 .cardFooter p {
   margin: 0;
   color: var(--muted, #5b6c7e);
-  font-size: 12px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -212,27 +338,17 @@
 }
 
 .addButton {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  min-height: 46px;
-  padding: 11px 17px;
-  border: 0;
-  border-radius: 9px;
-  background: var(--blue, var(--site-blue));
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 180ms ease, transform 180ms ease;
+    flex: 0 0 auto;
+  @include buttons.primary();
 }
 
-.addButton:hover {
-  background: var(--site-blue-hover);
-  transform: translateY(-2px);
+.stepActions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 12px;
 }
+
+.backButton { @include buttons.secondary(); }
 
 .addButton:focus-visible {
   outline: 3px solid #8dbfff;
@@ -241,21 +357,34 @@
 
 @media (max-width: 760px) {
   .paramsGrid { grid-template-columns: 1fr; }
+  .fieldGroup + .fieldGroup { border-top: 1px solid var(--line, #dce6ef); }
+  .fieldGroup:nth-child(2n) { border-left: 0; }
   .cardFooter { align-items: stretch; flex-direction: column; }
-  .addButton { width: 100%; }
+  .stepActions { width: 100%; }
+  .addButton { flex: 1; }
+  .stepLink { padding: 12px; gap: 10px; }
+  .stepProgress { width: 100%; grid-template-columns: 1fr; scroll-margin-top: 90px; }
 }
 
 @media (max-width: 480px) {
-  .cardHeader { padding: 19px; }
+  .card { border-radius: 18px; }
+  .cardHeader { padding: 20px 20px 12px; }
   .errorMessage { margin: 18px 19px 0; }
-  .paramsGrid { gap: 12px; padding: 19px; }
-  .fieldGroup { padding: 13px 12px 14px; }
+  .stepIntroduction { padding: 0 20px; }
+  .stepProgress { grid-template-columns: 1fr; gap: 8px; margin-top: 20px; }
+  .stepLink { min-height: 48px; padding: 8px 12px; gap: 12px; }
+  .stepLink > span:first-child { width: 28px; height: 28px; }
+  .parameterSections { padding: 16px 20px 24px; }
+  .fieldGroup { padding: 16px; }
   .options { gap: 8px; }
   .option span { min-height: 44px; padding: 9px 11px; }
-  .cardFooter { padding: 18px 19px; }
+  .cardFooter { padding: 20px; }
+  .stepActions { flex-wrap: wrap; }
+  .backButton { flex: 1; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .option span,
+  .stepLink,
   .addButton { transition-duration: 0.01ms !important; }
 }

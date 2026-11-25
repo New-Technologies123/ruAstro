@@ -1,3 +1,5 @@
+@use '../../../styles/buttons' as buttons;
+
 .page {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(310px, 0.9fr);
@@ -133,23 +135,10 @@
   font-size: 12px;
 }
 .button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  width: 100%;
-  min-height: 49px;
-  border: 0;
-  border-radius: 11px;
-  background: #1468df;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 750;
-  cursor: pointer;
+    width: 100%;
+  @include buttons.primary();
 }
-.button:hover {
-  background: #0757c5;
-}
+
 .cartActions {
   display: flex;
   flex-wrap: wrap;
@@ -158,25 +147,10 @@
   width: 100%;
 }
 .inCart {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  flex: 1;
-  min-height: 47px;
-  padding: 0 12px;
-  border: 1px solid #a9dccb;
-  border-radius: 11px;
-  background: #eaf8f2;
-  color: #16845f;
-  font-size: 14px;
-  font-weight: 750;
-  white-space: nowrap;
-  cursor: pointer;
+    flex: 1;
+  @include buttons.secondary();
 }
-.inCart:hover {
-  background: #d9f2e8;
-}
+
 .qty {
   display: flex;
   align-items: center;
