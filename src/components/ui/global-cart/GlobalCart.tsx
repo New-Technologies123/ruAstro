@@ -1,190 +1,136 @@
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-
-import { Basket } from '../../ui/basket/Basket';
-import { Order } from '../../ui/order/Order';
-
+import { useEffect, useRef, useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Basket } from '../basket/Basket';
+import { Order } from '../order/Order';
 import Styles from './global-cart.module.scss';
 
 type CartMode = 'cart' | 'order';
 
 export const GlobalCart = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
   const [mode, setMode] = useState<CartMode>('cart');
-
-  /* =========================================================
-     GLOBAL CART EVENT
-     ========================================================= */
+  const panelRef = useRef<HTMLElement>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const syncCart = (event: StorageEvent) => {
       if (event.key === 'cart' || event.key === null) window.dispatchEvent(new Event('cartUpdated'));
     };
-    window.addEventListener('storage', syncCart);
-    const handler = () => {
+    const open = () => {
+      openerRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      setHasOpened(true);
       setMode('cart');
       setIsOpen(true);
     };
-
-    window.addEventListener(
-      'toggleGlobalCart',
-      handler,
-    );
-
+    window.addEventListener('storage', syncCart);
+    window.addEventListener('toggleGlobalCart', open);
     return () => {
       window.removeEventListener('storage', syncCart);
-      window.removeEventListener(
-        'toggleGlobalCart',
-        handler,
-      );
+      window.removeEventListener('toggleGlobalCart', open);
     };
   }, []);
 
-  /* =========================================================
-     CLOSE
-     ========================================================= */
-
-  const closeCart = () => {
-    setIsOpen(false);
-  };
-
-  /* =========================================================
-     ESC
-     ========================================================= */
-
   useEffect(() => {
-    if (!isOpen) {
-      return;
+    if (!isOpen || !panelRef.current) return;
+    const panel = panelRef.current;
+    const previousOverflow = document.body.style.overflow;
+    const previousPadding = document.body.style.paddingRight;
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) document.body.style.paddingRight = `${scrollbarWidth}px`;
+    document.body.dataset.cartOpen = 'true';
+    // Astro may wrap this dialog in an island. Isolate siblings at every level.
+    const background = new Map<HTMLElement, boolean>();
+    let ancestor: HTMLElement = panel.parentElement!;
+    while (ancestor.parentElement) {
+      for (const sibling of ancestor.parentElement.children) {
+        if (sibling !== ancestor && sibling instanceof HTMLElement) {
+          background.set(sibling, sibling.inert);
+          sibling.inert = true;
+        }
+      }
+      if (ancestor.parentElement === document.body) break;
+      ancestor = ancestor.parentElement;
     }
-
-    const handleKeyDown = (
-      event: KeyboardEvent,
-    ) => {
+    const focusPanel = () => panel.focus({ preventScroll: true });
+    const frame = requestAnimationFrame(focusPanel);
+    const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        closeCart();
+        event.preventDefault();
+        event.stopPropagation();
+        setIsOpen(false);
+      }
+      if (event.key !== 'Tab') return;
+      const controls = [...panel.querySelectorAll<HTMLElement>('a[href], button, input, textarea, select, [tabindex]')].filter(
+        (element) => element.tabIndex >= 0 && !element.matches(':disabled') && element.getClientRects().length > 0,
+      );
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (!first) {
+        event.preventDefault();
+        focusPanel();
+      } else if (event.shiftKey && (document.activeElement === first || document.activeElement === panel)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (document.activeElement === last || document.activeElement === panel)) {
+        event.preventDefault();
+        first.focus();
       }
     };
-
-    window.addEventListener(
-      'keydown',
-      handleKeyDown,
-    );
-
+    const onFocusIn = (event: FocusEvent) => {
+      if (event.target instanceof Node && !panel.contains(event.target)) focusPanel();
+    };
+    document.addEventListener('keydown', onKeyDown, true);
+    document.addEventListener('focusin', onFocusIn);
     return () => {
-      window.removeEventListener(
-        'keydown',
-        handleKeyDown,
-      );
+      cancelAnimationFrame(frame);
+      document.removeEventListener('keydown', onKeyDown, true);
+      document.removeEventListener('focusin', onFocusIn);
+      background.forEach((wasInert, element) => {
+        element.inert = wasInert;
+      });
+      document.body.style.overflow = previousOverflow;
+      document.body.style.paddingRight = previousPadding;
+      delete document.body.dataset.cartOpen;
+      openerRef.current?.focus({ preventScroll: true });
     };
   }, [isOpen]);
-
-  /* =========================================================
-     BODY SCROLL LOCK
-     ========================================================= */
 
   useEffect(() => {
-    if (!isOpen) {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
+    if (isOpen) panelRef.current?.focus({ preventScroll: true });
+  }, [mode, isOpen]);
 
-      return;
-    }
+  if (!hasOpened) return null;
 
-    const scrollBarWidth =
-      window.innerWidth -
-      document.documentElement.clientWidth;
-
-    document.body.style.overflow = 'hidden';
-
-    if (scrollBarWidth > 0) {
-      document.body.style.paddingRight =
-        `${scrollBarWidth}px`;
-    }
-
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.paddingRight = '';
-    };
-  }, [isOpen]);
-
+  // Keep both steps mounted so edits and pending requests survive closing or changing steps.
   return (
-    <AnimatePresence mode="wait">
-      {isOpen && (
-        <>
-          {/* =================================================
-              BACKDROP
-              ================================================= */}
-
-          <motion.div
-            className={Styles.backdrop}
-            initial={{
-              opacity: 0,
-            }}
-            animate={{
-              opacity: 1,
-            }}
-            exit={{
-              opacity: 0,
-            }}
-            transition={{
-              duration: 0.25,
-              ease: 'easeOut',
-            }}
-            onClick={closeCart}
-            aria-hidden="true"
+    <div hidden={!isOpen} className={Styles.root}>
+      <div className={Styles.backdrop} onClick={() => setIsOpen(false)} aria-hidden="true" />
+      <motion.aside
+        ref={panelRef}
+        className={Styles.panel}
+        initial={{ x: '100%' }}
+        animate={{ x: isOpen ? 0 : '100%' }}
+        transition={reducedMotion ? { duration: 0 } : { type: 'spring', stiffness: 300, damping: 32 }}
+        role="dialog"
+        aria-modal="true"
+        aria-label={mode === 'cart' ? 'Корзина' : 'Оформление заявки'}
+        tabIndex={-1}
+      >
+        <div className={Styles.panelContent} hidden={mode !== 'cart'}>
+          <Basket onBack={() => setIsOpen(false)} goToOrder={() => setMode('order')} />
+        </div>
+        <div className={Styles.panelContent} hidden={mode !== 'order'}>
+          <Order
+            active={isOpen && mode === 'order'}
+            onBack={() => setMode('cart')}
+            onFinish={() => setIsOpen(false)}
+            onClose={() => setIsOpen(false)}
           />
-
-          {/* =================================================
-              PANEL
-              ================================================= */}
-
-          <motion.aside
-            className={Styles.panel}
-            initial={{
-              x: '100%',
-            }}
-            animate={{
-              x: 0,
-            }}
-            exit={{
-              x: '100%',
-            }}
-            transition={{
-              type: 'spring',
-              stiffness: 300,
-              damping: 32,
-              mass: 0.8,
-            }}
-            role="dialog"
-            aria-modal="true"
-            aria-label={
-              mode === 'cart'
-                ? 'Корзина'
-                : 'Оформление заказа'
-            }
-          >
-            <div className={Styles.panelContent}>
-              {mode === 'cart' && (
-                <Basket
-                  onBack={closeCart}
-                  goToOrder={() => {
-                    setMode('order');
-                  }}
-                />
-              )}
-
-              {mode === 'order' && (
-                <Order
-                  onBack={() => {
-                    setMode('cart');
-                  }}
-                  onFinish={closeCart}
-                />
-              )}
-            </div>
-          </motion.aside>
-        </>
-      )}
-    </AnimatePresence>
+        </div>
+      </motion.aside>
+    </div>
   );
 };

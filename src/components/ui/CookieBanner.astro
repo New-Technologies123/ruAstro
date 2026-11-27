@@ -26,6 +26,13 @@
 <style lang="scss">
   @use '../../styles/buttons' as buttons;
 
+  :global(body[data-cart-open='true']) #cookie-banner {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: none;
+  }
+
   #cookie-banner {
     position: fixed;
     z-index: 99999;

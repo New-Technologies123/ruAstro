@@ -1,4 +1,5 @@
 @use '../../../styles/buttons' as buttons;
+@use '../../../styles/floating-field' as floating;
 
 .modalBg {
   position: fixed;
@@ -137,24 +138,16 @@
   gap: 16px 18px;
 
   > div { min-width: 0; display: flex; flex-direction: column; gap: 7px; }
-  label { color: #344c62; font-size: 12px; font-weight: 700; }
+}
+
+.fileGrid label { color: #344c62; font-size: 12px; font-weight: 700; }
+
+.floatingField {
+  @include floating.label();
 }
 
 .fieldGrid input {
-  width: 100%;
-  min-height: 46px;
-  padding: 0 14px;
-  border: 1px solid #d9e3eb;
-  border-radius: 11px;
-  outline: none;
-  background: #fbfcfd;
-  color: #1b344c;
-  font: inherit;
-  font-size: 13px;
-  transition: border-color .2s ease, box-shadow .2s ease;
-
-  &::placeholder { color: #9aaaB8; }
-  &:focus { border-color: #4389b9; box-shadow: 0 0 0 4px rgba(39, 125, 184, .12); background: #fff; }
+  @include floating.control();
 }
 
 .fileGrid > div {
@@ -335,8 +328,7 @@
   .sectionHeading h3 { font-size: 17px; }
   .fieldGrid, .fileGrid { grid-template-columns: 1fr; gap: 15px; }
   .fileGrid { gap: 9px; }
-  .fieldGrid label, .fileGrid label { font-size: 13px; }
-  .fieldGrid input { min-height: 52px; font-size: 16px; }
+  .fileGrid label { font-size: 13px; }
   .fileGrid > div {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 126px;

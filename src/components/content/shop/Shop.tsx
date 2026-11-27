@@ -1008,85 +1008,77 @@ export const Shop = ({
       <header className={styles.shopHeader}>
         <div className={styles.shopHeaderContent}>
           <Breadcrumbs path="/shop/" />
-          <span className={styles.shopEyebrow}>Каталог производителя</span>
           <h1>Оборудование и комплектующие</h1>
-          <p>Оборудование и запчасти с подбором по модели, артикулу или категории.</p>
+          <div className={styles.searchRow}>
+            <div className={styles.searchField}>
+              <Search
+                size={21}
+                aria-hidden="true"
+              />
+
+              <input
+                type="search"
+                aria-label="Поиск по названию, модели или артикулу"
+                value={search}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setCatalogPage(1);
+                }}
+                placeholder="Найти товар"
+              />
+
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearch('');
+                    setCatalogPage(1);
+                  }}
+                  aria-label="Очистить поиск"
+                >
+                  <X size={17} />
+                </button>
+              )}
+            </div>
+
+            <button
+              ref={filterButtonRef}
+              type="button"
+              className={styles.mobileFilterButton}
+              onClick={() => setFiltersOpen(true)}
+              aria-label={`Открыть фильтры${
+                activeFilterCount > 0
+                  ? `, выбрано: ${activeFilterCount}`
+                  : ''
+              }`}
+              aria-expanded={filtersOpen}
+              aria-haspopup="dialog"
+            >
+              <SlidersHorizontal
+                size={19}
+                aria-hidden="true"
+              />
+
+              <span className={styles.mobileFilterLabel}>
+                Фильтры
+              </span>
+
+              {activeFilterCount > 0 && (
+                <span
+                  className={styles.mobileFilterCount}
+                  aria-hidden="true"
+                >
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
+          </div>
         </div>
         <div className={styles.shopHeaderStats} aria-label="Состав каталога">
           <div><strong>{equipmentCatalog.length}</strong><span>позиций оборудования</span></div>
           <div><strong>{uniquePartsCatalog.length}</strong><span>комплектующих</span></div>
         </div>
       </header>
-
-      {/* SEARCH */}
-
-      <div className={styles.searchRow}>
-        <label className={styles.searchField}>
-          <Search
-            size={21}
-            aria-hidden="true"
-          />
-
-          <span className={styles.visuallyHidden}>
-            Поиск по названию и артикулу
-          </span>
-
-          <input
-            type="search"
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
-              setCatalogPage(1);
-            }}
-            placeholder="Поиск по названию, модели или артикулу"
-          />
-
-          {search && (
-            <button
-              type="button"
-              onClick={() => {
-                setSearch('');
-                setCatalogPage(1);
-              }}
-              aria-label="Очистить поиск"
-            >
-              <X size={17} />
-            </button>
-          )}
-        </label>
-
-        <button
-          ref={filterButtonRef}
-          type="button"
-          className={styles.mobileFilterButton}
-          onClick={() => setFiltersOpen(true)}
-          aria-label={`Открыть фильтры${
-            activeFilterCount > 0
-              ? `, выбрано: ${activeFilterCount}`
-              : ''
-          }`}
-          aria-expanded={filtersOpen}
-          aria-haspopup="dialog"
-        >
-          <SlidersHorizontal
-            size={19}
-            aria-hidden="true"
-          />
-
-          <span className={styles.mobileFilterLabel}>
-            Фильтры
-          </span>
-
-          {activeFilterCount > 0 && (
-            <span
-              className={styles.mobileFilterCount}
-              aria-hidden="true"
-            >
-              {activeFilterCount}
-            </span>
-          )}
-        </button>
-      </div>
 
       <div className={styles.contentLayout}>
         {/* MOBILE BACKDROP */}

@@ -1,31 +1,34 @@
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
-import {
-  motion,
-  AnimatePresence,
-} from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import Styles from './order.module.scss';
+import { ArrowLeft, ChevronDown, Download, LockKeyhole, MessageSquareText, ShoppingBag } from 'lucide-react';
+import { CheckoutHeader } from '../checkout-header/CheckoutHeader';
+import { formatCartPrice, getProductWord } from '../../utils/cartPresentation';
 
-import {
-  getCart,
-  MAX_CART_ITEMS,
-  CART_LIMIT_MESSAGE,
-  removeOrderedItems,
-  type CartItem,
-} from '../../utils/cartStorage';
+import { getCart, MAX_CART_ITEMS, CART_LIMIT_MESSAGE, removeOrderedItems, type CartItem } from '../../utils/cartStorage';
 
-import back from '../../../images/back.svg';
 import { finishOrderRequest, getOrderRequestId } from '../../utils/orderRequest';
+import type { OrderPdfData, OrderReceipt } from '../../utils/orderPdf';
+import { useFormDraft } from '../../../hooks/useFormDraft';
+
+const emptyForm = {
+  name: '',
+  position: '',
+  company: '',
+  email: '',
+  phone: '',
+  comment: '',
+  consent: false,
+  offerAgreement: false,
+};
 
 type OrderProps = {
   onBack: () => void;
   onFinish?: () => void;
+  onClose?: () => void;
+  active?: boolean;
 };
 
 type Errors = {
@@ -39,12 +42,7 @@ type Errors = {
 };
 
 type FieldConfig = {
-  key:
-  | 'name'
-  | 'position'
-  | 'company'
-  | 'email'
-  | 'phone';
+  key: 'name' | 'position' | 'company' | 'email' | 'phone';
   label: string;
   type?: 'text' | 'email' | 'tel';
   autocomplete?: string;
@@ -56,12 +54,6 @@ const FIELDS: FieldConfig[] = [
     label: 'ФИО',
     type: 'text',
     autocomplete: 'name',
-  },
-  {
-    key: 'position',
-    label: 'Должность',
-    type: 'text',
-    autocomplete: 'organization-title',
   },
   {
     key: 'company',
@@ -88,43 +80,15 @@ const FIELDS: FieldConfig[] = [
    ========================================================= */
 
 const UserIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path
-      d="M20 21a8 8 0 0 0-16 0"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-    />
-    <circle
-      cx="12"
-      cy="7"
-      r="4"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M20 21a8 8 0 0 0-16 0" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <circle cx="12" cy="7" r="4" fill="none" stroke="currentColor" strokeWidth="1.8" />
   </svg>
 );
 
 const BriefcaseIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <rect
-      x="3"
-      y="7"
-      width="18"
-      height="13"
-      rx="2.5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="3" y="7" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
     <path
       d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7M3 12h18M10 12v2h4v-2"
       fill="none"
@@ -137,36 +101,14 @@ const BriefcaseIcon = () => (
 );
 
 const MailIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <rect
-      x="3"
-      y="5"
-      width="18"
-      height="14"
-      rx="2.5"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-    />
-    <path
-      d="m4 7 8 6 8-6"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="3" y="5" width="18" height="14" rx="2.5" fill="none" stroke="currentColor" strokeWidth="1.8" />
+    <path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const PhoneIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
+  <svg viewBox="0 0 24 24" aria-hidden="true">
     <path
       d="M7.2 3.5 5 4.4a2 2 0 0 0-1.2 2.3c1.2 6.2 7.3 12.3 13.5 13.5a2 2 0 0 0 2.3-1.2l.9-2.2a1.5 1.5 0 0 0-.7-1.9l-2.7-1.4a1.5 1.5 0 0 0-1.8.3l-1.2 1.2a13.6 13.6 0 0 1-4.4-4.4l1.2-1.2a1.5 1.5 0 0 0 .3-1.8L9.1 4.2a1.5 1.5 0 0 0-1.9-.7Z"
       fill="none"
@@ -179,10 +121,7 @@ const PhoneIcon = () => (
 );
 
 const MessageIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
+  <svg viewBox="0 0 24 24" aria-hidden="true">
     <path
       d="M20 11.5a7.5 7.5 0 0 1-8 7.5 8.8 8.8 0 0 1-3.2-.6L4 20l1.4-3.5A7.2 7.2 0 0 1 4 12c0-4.1 3.6-7.5 8-7.5s8 3.4 8 7.5Z"
       fill="none"
@@ -194,176 +133,72 @@ const MessageIcon = () => (
 );
 
 const CartIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path
-      d="M4 5h2l1.5 10h10.7L20 8H7"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-    <circle
-      cx="9"
-      cy="19"
-      r="1.2"
-      fill="currentColor"
-    />
-    <circle
-      cx="17"
-      cy="19"
-      r="1.2"
-      fill="currentColor"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 5h2l1.5 10h10.7L20 8H7" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="9" cy="19" r="1.2" fill="currentColor" />
+    <circle cx="17" cy="19" r="1.2" fill="currentColor" />
   </svg>
 );
 
 const CheckIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path
-      d="m6 12.5 4 4L18.5 8"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="m6 12.5 4 4L18.5 8" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const ArrowIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path
-      d="M5 12h13M13 6l6 6-6 6"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.8"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
-
-/* =========================================================
-   STEPPER
-   ========================================================= */
-
-const CheckoutStepper = ({
-  onCart,
-}: {
-  onCart: () => void;
-}) => {
-  return (
-    <nav
-      className={Styles.checkoutSteps}
-      aria-label="Этап оформления заказа"
-    >
-      <button
-        type="button"
-        className={`${Styles.checkoutStep} ${Styles.checkoutStepCompleted}`}
-        onClick={onCart}
-        aria-label="Вернуться в корзину"
-      >
-        <span
-          className={`${Styles.stepNumber} ${Styles.stepNumberCompleted}`}
-        >
-          <CheckIcon />
-        </span>
-
-        <span className={Styles.stepInfo}>
-          <span className={Styles.stepLabel}>
-            Корзина
-          </span>
-
-          <span className={Styles.stepDescription}>
-            Товары
-          </span>
-        </span>
-      </button>
-
-      <span
-        className={`${Styles.stepConnector} ${Styles.stepConnectorActive}`}
-        aria-hidden="true"
-      />
-
-      <div
-        className={`${Styles.checkoutStep} ${Styles.checkoutStepCurrent}`}
-        aria-current="step"
-      >
-        <span
-          className={`${Styles.stepNumber} ${Styles.stepNumberCurrent}`}
-        >
-          02
-        </span>
-
-        <span className={Styles.stepInfo}>
-          <span className={Styles.stepLabel}>
-            Оформление
-          </span>
-
-          <span className={Styles.stepDescription}>
-            Контактные данные
-          </span>
-        </span>
-      </div>
-    </nav>
-  );
-};
 
 /* =========================================================
    ORDER
    ========================================================= */
 
-export const Order = ({
-  onBack,
-  onFinish = onBack,
-}: OrderProps) => {
+export const Order = ({ onBack, onFinish = onBack, onClose = onFinish, active = true }: OrderProps) => {
+  const formId = useId();
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  const [name, setName] = useState('');
-  const [position, setPosition] = useState('');
-  const [company, setCompany] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [comment, setComment] = useState('');
-
-  const [consent, setConsent] = useState(false);
-  const [offerAgreement, setOfferAgreement] =
-    useState(false);
+  const [form, setForm, clearDraft] = useFormDraft('order', emptyForm);
+  const { name, position, company, email, phone, comment, consent, offerAgreement } = form;
+  const setField = <K extends keyof typeof emptyForm,>(field: K, value: (typeof emptyForm)[K]) => {
+    setForm(previous => ({ ...previous, [field]: value }));
+  };
+  const [acceptedDocument, setAcceptedDocument] = useState<OrderPdfData | null>(null);
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [pdfError, setPdfError] = useState('');
+  const pdfPendingRef = useRef(false);
 
   const [errors, setErrors] = useState<Errors>({});
-  const [successMessage, setSuccessMessage] =
-    useState('');
-  const [confirmedOrderId, setConfirmedOrderId] =
-    useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [confirmedOrderId, setConfirmedOrderId] = useState('');
   const [confirmationSent, setConfirmationSent] = useState(false);
   const [confirmationEmail, setConfirmationEmail] = useState('');
-  const [submitError, setSubmitError] =
-    useState('');
-  const [summaryExpanded, setSummaryExpanded] =
-    useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [summaryExpanded, setSummaryExpanded] = useState(false);
 
-  const [isSubmitting, setIsSubmitting] =
-    useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const submittingRef = useRef(false);
 
-  const contentRef =
-    useRef<HTMLDivElement | null>(null);
+  const contentRef = useRef<HTMLDivElement | null>(null);
+  const submitErrorRef = useRef<HTMLParagraphElement | null>(null);
 
-  const consentRef =
-    useRef<HTMLDivElement | null>(null);
+  const consentRef = useRef<HTMLDivElement | null>(null);
 
-  const offerRef =
-    useRef<HTMLDivElement | null>(null);
+  const offerRef = useRef<HTMLDivElement | null>(null);
 
+  useEffect(() => {
+    if (active && getCart().length > 0) {
+      setSuccessMessage('');
+      setAcceptedDocument(null);
+      setPdfError('');
+    }
+  }, [active]);
+
+  useEffect(() => {
+    if (active && submitError) submitErrorRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [active, submitError]);
 
   /* =========================================================
      CART
@@ -376,16 +211,10 @@ export const Order = ({
 
     updateCart();
 
-    window.addEventListener(
-      'cartUpdated',
-      updateCart
-    );
+    window.addEventListener('cartUpdated', updateCart);
 
     return () => {
-      window.removeEventListener(
-        'cartUpdated',
-        updateCart
-      );
+      window.removeEventListener('cartUpdated', updateCart);
     };
   }, []);
 
@@ -401,74 +230,50 @@ export const Order = ({
 
     const result = Number(normalized);
 
-    return Number.isFinite(result)
-      ? result
-      : 0;
+    return Number.isFinite(result) ? result : 0;
   };
 
   const totalPrice = useMemo(() => {
-    return cart.reduce(
-      (sum, item) =>
-        sum +
-        parsePrice(item.price) * item.count,
-      0
-    );
+    return cart.reduce((sum, item) => sum + parsePrice(item.price) * item.count, 0);
   }, [cart]);
 
   const totalCount = useMemo(() => {
-    return cart.reduce(
-      (sum, item) => sum + item.count,
-      0
-    );
+    return cart.reduce((sum, item) => sum + item.count, 0);
   }, [cart]);
 
   /* =========================================================
      VALIDATION
      ========================================================= */
 
-  const validateField = (
-    key: keyof Errors,
-    value: string
-  ): string | undefined => {
+  const validateField = (key: keyof Errors, value: string): string | undefined => {
     const trimmed = value.trim();
 
     switch (key) {
+      case 'position':
+        return undefined;
       case 'email':
         if (!trimmed) {
           return 'Обязательно заполнить';
         }
 
-        return /^\S+@\S+\.\S+$/.test(trimmed)
-          ? undefined
-          : 'Введите корректный email';
+        return /^\S+@\S+\.\S+$/.test(trimmed) ? undefined : 'Введите корректный email';
 
       case 'phone': {
         if (!trimmed) {
           return 'Обязательно заполнить';
         }
 
-        const normalizedPhone =
-          trimmed.replace(/[\s()-]/g, '');
+        const normalizedPhone = trimmed.replace(/[\s()-]/g, '');
 
-        return /^\+?\d{10,15}$/.test(
-          normalizedPhone
-        )
-          ? undefined
-          : 'Введите корректный номер телефона';
+        return /^\+?\d{10,15}$/.test(normalizedPhone) ? undefined : 'Введите корректный номер телефона';
       }
 
       default:
-        return trimmed
-          ? undefined
-          : 'Обязательно заполнить';
+        return trimmed ? undefined : 'Обязательно заполнить';
     }
   };
 
-  const updateField = (
-    key: keyof Errors,
-    value: string,
-    setter: (value: string) => void
-  ) => {
+  const updateField = (key: keyof Errors, value: string, setter: (value: string) => void) => {
     setter(value);
 
     /*
@@ -476,12 +281,9 @@ export const Order = ({
      * если пользователь начал редактировать поле,
      * ошибка сразу пересчитывается.
      */
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
-      [key]:
-        value.trim().length > 0
-          ? validateField(key, value)
-          : undefined,
+      [key]: prev[key] ? validateField(key, value) : undefined,
     }));
   };
 
@@ -489,49 +291,49 @@ export const Order = ({
      SCROLL TO ERROR
      ========================================================= */
 
-  const scrollToElement = (
-    element: HTMLElement | null
-  ) => {
-    if (
-      !element ||
-      !contentRef.current
-    ) {
+  const scrollToElement = (element: HTMLElement | null) => {
+    if (!element || !contentRef.current) {
       return;
     }
 
-    const container =
-      contentRef.current;
+    const container = contentRef.current;
 
-    const elementTop =
-      element.getBoundingClientRect().top;
+    const elementTop = element.getBoundingClientRect().top;
 
-    const containerTop =
-      container
-        .getBoundingClientRect()
-        .top;
+    const containerTop = container.getBoundingClientRect().top;
 
     const offset = 24;
 
     container.scrollTo({
-      top:
-        container.scrollTop +
-        elementTop -
-        containerTop -
-        offset,
+      top: container.scrollTop + elementTop - containerTop - offset,
       behavior: 'smooth',
     });
+  };
+
+  const handlePdfDownload = async () => {
+    if (!acceptedDocument || pdfPendingRef.current) return;
+    pdfPendingRef.current = true;
+    setIsGeneratingPdf(true);
+    setPdfError('');
+    try {
+      const { downloadOrderPdf } = await import('../../utils/orderPdf');
+      await downloadOrderPdf(acceptedDocument);
+    } catch {
+      setPdfError('Не удалось подготовить PDF. Попробуйте скачать ещё раз.');
+    } finally {
+      pdfPendingRef.current = false;
+      setIsGeneratingPdf(false);
+    }
   };
 
   /* =========================================================
      SUBMIT
      ========================================================= */
 
-  const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (isSubmitting) {
+    if (submittingRef.current) {
       return;
     }
 
@@ -553,24 +355,11 @@ export const Order = ({
     const newErrors: Errors = {
       name: validateField('name', name),
       position: validateField('position', position),
-      company: validateField(
-        'company',
-        company
-      ),
-      email: validateField(
-        'email',
-        email
-      ),
-      phone: validateField(
-        'phone',
-        phone
-      ),
-      consent: consent
-        ? undefined
-        : 'Необходимо дать согласие на обработку персональных данных',
-      offerAgreement: offerAgreement
-        ? undefined
-        : 'Необходимо подтвердить ознакомление с офертой и условиями возврата',
+      company: validateField('company', company),
+      email: validateField('email', email),
+      phone: validateField('phone', phone),
+      consent: consent ? undefined : 'Необходимо дать согласие на обработку персональных данных',
+      offerAgreement: offerAgreement ? undefined : 'Необходимо подтвердить ознакомление с офертой и условиями возврата',
     };
 
     setErrors(newErrors);
@@ -579,59 +368,29 @@ export const Order = ({
      * Находим первое обязательное поле
      * с ошибкой.
      */
-    const firstInvalidId =
-      newErrors.name
-        ? 'order-name'
-        : newErrors.position
-          ? 'order-position'
-          : newErrors.company
-            ? 'order-company'
-            : newErrors.email
-              ? 'order-email'
-              : newErrors.phone
-                ? 'order-phone'
-                : null;
-
-    if (firstInvalidId) {
-      const firstInvalidField =
-        document.getElementById(
-          firstInvalidId
-        );
-
-      if (firstInvalidField) {
-        scrollToElement(
-          firstInvalidField
-        );
-
-        window.setTimeout(() => {
-          firstInvalidField.focus();
-        }, 250);
-      }
-
+    const firstInvalidKey = FIELDS.find(({ key }) => newErrors[key])?.key;
+    if (firstInvalidKey) {
+      const field = document.getElementById(`${formId}-${firstInvalidKey}`);
+      field?.focus({ preventScroll: true });
+      scrollToElement(field);
       return;
     }
 
     if (newErrors.consent) {
-      scrollToElement(
-        consentRef.current
-      );
+      consentRef.current?.querySelector('input')?.focus({ preventScroll: true });
+      scrollToElement(consentRef.current);
 
       return;
     }
 
     if (newErrors.offerAgreement) {
-      scrollToElement(
-        offerRef.current
-      );
+      offerRef.current?.querySelector('input')?.focus({ preventScroll: true });
+      scrollToElement(offerRef.current);
 
       return;
     }
 
-    if (
-      Object.values(newErrors).some(
-        Boolean
-      )
-    ) {
+    if (Object.values(newErrors).some(Boolean)) {
       return;
     }
 
@@ -649,56 +408,52 @@ export const Order = ({
 
     const orderedItems = cart.map(({ cartKey, count, lineId }) => ({ cartKey, count, lineId }));
 
+    submittingRef.current = true;
     try {
       setIsSubmitting(true);
       const requestId = await getOrderRequestId(orderData);
       const requestData = { ...orderData, requestId };
 
-      const response = await fetch(
-        '/sendOrder.php',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type':
-              'application/json',
-          },
-          body: JSON.stringify(
-            requestData
-          ),
-        }
-      );
+      const response = await fetch('/sendOrder.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestData),
+      });
 
-      const result =
-        (await response.json()) as {
-          success?: boolean;
-          error?: string;
-          orderId?: string;
-          confirmationSent?: boolean;
-        };
+      const result = (await response.json()) as {
+        success?: boolean;
+        error?: string;
+        orderId?: string;
+        confirmationSent?: boolean;
+        receipt?: OrderReceipt;
+      };
 
-      if (
-        response.ok &&
-        result.success
-      ) {
-        setSuccessMessage(
-          'Спасибо за заказ!'
-        );
+      if (response.ok && result.success) {
+        setSuccessMessage('Спасибо за заказ!');
         setConfirmedOrderId(result.orderId || '');
         setConfirmationSent(result.confirmationSent === true);
         setConfirmationEmail(email.trim());
+        setAcceptedDocument(
+          result.receipt
+            ? {
+                receipt: result.receipt,
+                contact: {
+                  name: orderData.name,
+                  company: orderData.company,
+                  position: orderData.position,
+                  email: orderData.email,
+                  phone: orderData.phone,
+                  comment: orderData.comment,
+                },
+              }
+            : null,
+        );
+        setPdfError('');
 
         removeOrderedItems(orderedItems, requestId);
         finishOrderRequest(requestId);
 
-        setName('');
-        setPosition('');
-        setCompany('');
-        setEmail('');
-        setPhone('');
-        setComment('');
-
-        setConsent(false);
-        setOfferAgreement(false);
+        clearDraft();
         setErrors({});
 
         contentRef.current?.scrollTo({
@@ -713,6 +468,7 @@ export const Order = ({
 
       setSubmitError('Ошибка сети. Проверьте подключение и попробуйте ещё раз.');
     } finally {
+      submittingRef.current = false;
       setIsSubmitting(false);
     }
   };
@@ -721,10 +477,7 @@ export const Order = ({
      FIELD VALUES
      ========================================================= */
 
-  const fieldValues: Record<
-    FieldConfig['key'],
-    string
-  > = {
+  const fieldValues: Record<FieldConfig['key'], string> = {
     name,
     position,
     company,
@@ -732,21 +485,15 @@ export const Order = ({
     phone,
   };
 
-  const fieldSetters: Record<
-    FieldConfig['key'],
-    (value: string) => void
-  > = {
-    name: setName,
-    position: setPosition,
-    company: setCompany,
-    email: setEmail,
-    phone: setPhone,
+  const fieldSetters: Record<FieldConfig['key'], (value: string) => void> = {
+    name: value => setField('name', value),
+    position: value => setField('position', value),
+    company: value => setField('company', value),
+    email: value => setField('email', value),
+    phone: value => setField('phone', value),
   };
 
-  const fieldIcons: Record<
-    FieldConfig['key'],
-    React.ReactNode
-  > = {
+  const fieldIcons: Record<FieldConfig['key'], React.ReactNode> = {
     name: <UserIcon />,
     position: <BriefcaseIcon />,
     company: <BriefcaseIcon />,
@@ -762,72 +509,27 @@ export const Order = ({
     <div className={Styles.orderPage}>
       {/* HEADER */}
 
-      <header className={Styles.header}>
-        {successMessage ? (
-          <div aria-hidden="true" />
-        ) : (
-          <button
-            type="button"
-            className={Styles.backButton}
-            onClick={onBack}
-            aria-label="Вернуться в корзину"
-          >
-            <img
-              src={back.src}
-              alt=""
-              aria-hidden="true"
-            />
-
-            <span>Корзина</span>
-          </button>
-        )}
-
-        <div className={Styles.headerCenter}>
-          <h1>Оформление заказа</h1>
-          <span>
-            Контактные данные
-          </span>
-        </div>
-
-        <div className={Styles.headerRight}>
-          {totalCount > 0 && (
-            <>
-              <CartIcon />
-              <span>
-                {totalCount}{' '}
-                {totalCount === 1
-                  ? 'товар'
-                  : totalCount >= 2 &&
-                    totalCount <= 4
-                    ? 'товара'
-                    : 'товаров'}
-              </span>
-            </>
-          )}
-        </div>
-      </header>
-
-      {/* STEPPER */}
-
-      {cart.length > 0 && (
-        <CheckoutStepper
-          onCart={onBack}
-        />
-      )}
+      <CheckoutHeader
+        title={successMessage ? 'Заявка отправлена' : 'Оформление заявки'}
+        onClose={onClose}
+        backAction={
+          !successMessage && (
+            <button type="button" onClick={onBack} aria-label="Вернуться в корзину" title="Назад в корзину">
+              <ArrowLeft size={18} aria-hidden="true" />
+              <span>Назад в корзину</span>
+            </button>
+          )
+        }
+      />
 
       {/* CONTENT */}
 
-      <div
-        ref={contentRef}
-        className={Styles.content}
-      >
+      <div ref={contentRef} className={Styles.content}>
         <AnimatePresence mode="wait">
           {successMessage ? (
             <motion.div
               key="success"
-              className={
-                Styles.successWrapper
-              }
+              className={Styles.successWrapper}
               initial={{
                 opacity: 0,
                 y: 12,
@@ -844,43 +546,17 @@ export const Order = ({
                 duration: 0.25,
               }}
             >
-              <div
-                className={
-                  Styles.successCard
-                }
-              >
-                <div
-                  className={
-                    Styles.successIcon
-                  }
-                >
+              <div className={Styles.successCard} role="status">
+                <div className={Styles.successIcon}>
                   <CheckIcon />
                 </div>
 
-                <div
-                  className={
-                    Styles.successContent
-                  }
-                >
-                  <span
-                    className={
-                      Styles.successEyebrow
-                    }
-                  >
-                    Заявка отправлена
-                  </span>
+                <div className={Styles.successContent}>
+                  <span className={Styles.successEyebrow}>Заявка отправлена</span>
 
-                  <h2>
-                    Заявка успешно
-                    отправлена
-                  </h2>
+                  <h2>Заявка успешно отправлена</h2>
 
-                  <p>
-                    Спасибо! Мы получили
-                    вашу заявку и свяжемся
-                    с вами в ближайшее
-                    время.
-                  </p>
+                  <p>Спасибо! Мы получили вашу заявку и свяжемся с вами в ближайшее время.</p>
 
                   {confirmedOrderId && (
                     <p className={Styles.successReference}>
@@ -893,24 +569,35 @@ export const Order = ({
                       : 'Заявка принята, но письмо с подтверждением отправить не удалось. Сохраните номер заявки.'}
                   </p>
 
-                  <button
-                    type="button"
-                    className={
-                      Styles.successButton
-                    }
-                    onClick={onFinish}
-                  >
-                    Закрыть
-                  </button>
+                  <div className={Styles.successActions}>
+                    {acceptedDocument && (
+                      <button
+                        type="button"
+                        className={Styles.pdfButton}
+                        onClick={handlePdfDownload}
+                        disabled={isGeneratingPdf}
+                        aria-busy={isGeneratingPdf}
+                      >
+                        <Download size={18} aria-hidden="true" />
+                        {isGeneratingPdf ? 'Готовим PDF…' : 'Скачать заявку в PDF'}
+                      </button>
+                    )}
+                    <button type="button" className={Styles.successButton} onClick={onFinish}>
+                      Закрыть
+                    </button>
+                  </div>
+                  {pdfError && (
+                    <p className={Styles.pdfError} role="alert">
+                      {pdfError}
+                    </p>
+                  )}
                 </div>
               </div>
             </motion.div>
           ) : !cart.length ? (
             <motion.div
               key="empty"
-              className={
-                Styles.emptyState
-              }
+              className={Styles.emptyState}
               initial={{
                 opacity: 0,
                 y: 8,
@@ -920,30 +607,15 @@ export const Order = ({
                 y: 0,
               }}
             >
-              <div
-                className={
-                  Styles.emptyIcon
-                }
-              >
+              <div className={Styles.emptyIcon}>
                 <CartIcon />
               </div>
 
-              <h2>
-                Корзина пуста
-              </h2>
+              <h2>Корзина пуста</h2>
 
-              <p>
-                Добавьте товары в корзину,
-                чтобы оформить заказ.
-              </p>
+              <p>Добавьте товары в корзину, чтобы оформить заказ.</p>
 
-              <button
-                type="button"
-                className={
-                  Styles.emptyButton
-                }
-                onClick={onBack}
-              >
+              <button type="button" className={Styles.emptyButton} onClick={onBack}>
                 Вернуться в корзину
               </button>
             </motion.div>
@@ -969,146 +641,56 @@ export const Order = ({
             >
               {/* LEFT — FORM */}
 
-              <form
-                className={Styles.formCard}
-                onSubmit={handleSubmit}
-                noValidate
-              >
-                <div
-                  className={
-                    Styles.formHeader
-                  }
-                >
-                  <div>
-                    <span
-                      className={
-                        Styles.eyebrow
-                      }
-                    >
-                      Контактные данные
-                    </span>
-
-                    <h2>
-                      Оформление заказа
-                    </h2>
-
-                    <p>
-                      Укажите данные для
-                      связи. Менеджер
-                      свяжется с вами и
-                      уточнит детали
-                      поставки.
-                    </p>
-                  </div>
+              <form className={Styles.formCard} onSubmit={handleSubmit} noValidate id={formId} aria-busy={isSubmitting}>
+                <div className={Styles.formHeader}>
+                  <h2>Кто оформляет заявку</h2>
+                  <p>Укажите контакты для связи с менеджером. Поля со звёздочкой * обязательны.</p>
                 </div>
 
                 {/* FIELDS */}
 
-                <div
-                  className={Styles.fields}
-                >
-                  {FIELDS.map(field => {
-                    const value =
-                      fieldValues[
-                      field.key
-                      ];
+                <div className={Styles.fields}>
+                  {FIELDS.map((field) => {
+                    const value = fieldValues[field.key];
 
-                    const error =
-                      errors[
-                      field.key
-                      ];
+                    const error = errors[field.key];
 
                     return (
-                      <div
-                        key={field.key}
-                        className={`${Styles.field} ${error
-                            ? Styles.fieldError
-                            : ''
-                          }`}
-                      >
-                        <div
-                          className={
-                            Styles.inputWrapper
-                          }
-                        >
-                          <span
-                            className={
-                              Styles.fieldIcon
-                            }
-                            aria-hidden="true"
-                          >
-                            {
-                              fieldIcons[
-                              field.key
-                              ]
-                            }
+                      <div key={field.key} className={`${Styles.field} ${error ? Styles.fieldError : ''}`}>
+                        <div className={Styles.inputWrapper}>
+                          <span className={Styles.fieldIcon} aria-hidden="true">
+                            {fieldIcons[field.key]}
                           </span>
 
                           <input
-                            id={`order-${field.key}`}
-                            name={
-                              field.key
-                            }
-                            type={
-                              field.type ||
-                              'text'
-                            }
+                            id={`${formId}-${field.key}`}
+                            name={field.key}
+                            type={field.type || 'text'}
                             value={value}
-                            autoComplete={
-                              field.autocomplete
-                            }
+                            autoComplete={field.autocomplete}
                             placeholder=" "
                             required
-                            aria-invalid={Boolean(
-                              error
-                            )}
-                            aria-describedby={
-                              error
-                                ? `error-${field.key}`
-                                : undefined
-                            }
-                            onChange={event =>
-                              updateField(
-                                field.key,
-                                event.target
-                                  .value,
-                                fieldSetters[
-                                field.key
-                                ]
-                              )
-                            }
-                            onBlur={event => {
-                              const fieldValue =
-                                event.target
-                                  .value;
+                            maxLength={field.key === 'company' ? 300 : field.key === 'email' ? 254 : field.key === 'phone' ? 30 : 200}
+                            aria-invalid={Boolean(error)}
+                            aria-describedby={error ? `${formId}-error-${field.key}` : undefined}
+                            onChange={(event) => updateField(field.key, event.target.value, fieldSetters[field.key])}
+                            onBlur={(event) => {
+                              const fieldValue = event.target.value;
 
-                              setErrors(
-                                prev => ({
-                                  ...prev,
-                                  [field.key]:
-                                    validateField(
-                                      field.key,
-                                      fieldValue
-                                    ),
-                                })
-                              );
+                              setErrors((prev) => ({
+                                ...prev,
+                                [field.key]: validateField(field.key, fieldValue),
+                              }));
                             }}
                           />
 
-                          <label
-                            htmlFor={`order-${field.key}`}
-                          >
-                            {field.label}
+                          <label htmlFor={`${formId}-${field.key}`}>
+                            {field.label} <span aria-hidden="true">*</span>
                           </label>
                         </div>
 
                         {error && (
-                          <span
-                            id={`error-${field.key}`}
-                            className={
-                              Styles.errorText
-                            }
-                          >
+                          <span id={`${formId}-error-${field.key}`} className={Styles.errorText}>
                             {error}
                           </span>
                         )}
@@ -1117,117 +699,90 @@ export const Order = ({
                   })}
                 </div>
 
-                {/* COMMENT */}
-
-                <div
-                  className={
-                    Styles.field
-                  }
-                >
-                  <div
-                    className={`${Styles.inputWrapper} ${Styles.commentInputWrapper}`}
-                  >
-                    <span className={Styles.fieldIcon} aria-hidden="true">
-                      <MessageIcon />
+                <details className={Styles.optionalDetails}>
+                  <summary>
+                    <span className={Styles.disclosureIcon}>
+                      <MessageSquareText size={19} aria-hidden="true" />
                     </span>
-
-                    <textarea
-                      id="order-comment"
-                      name="comment"
-                      value={comment}
-                      rows={4}
-                      placeholder=" "
-                      onChange={event =>
-                        setComment(
-                          event.target.value
-                        )
-                      }
-                    />
-
-                    <label htmlFor="order-comment">
-                      Комментарий к заказу
-                    </label>
+                    <span className={Styles.disclosureText}>
+                      <span className={Styles.disclosureTitle}>Должность и комментарий</span>
+                      <span className={Styles.disclosureHint}>Необязательно</span>
+                    </span>
+                    <ChevronDown size={18} className={Styles.disclosureChevron} aria-hidden="true" />
+                  </summary>
+                  <div className={Styles.optionalFields}>
+                    <div className={Styles.inputWrapper}>
+                      <span className={Styles.fieldIcon} aria-hidden="true">
+                        <BriefcaseIcon />
+                      </span>
+                      <input
+                        id={`${formId}-position`}
+                        name="position"
+                        autoComplete="organization-title"
+                        value={position}
+                        maxLength={200}
+                        placeholder=" "
+                        onChange={(event) => setField('position', event.target.value)}
+                      />
+                      <label htmlFor={`${formId}-position`}>Должность</label>
+                    </div>
+                    <div className={`${Styles.inputWrapper} ${Styles.commentInputWrapper}`}>
+                      <span className={Styles.fieldIcon} aria-hidden="true">
+                        <MessageIcon />
+                      </span>
+                      <textarea
+                        id={`${formId}-comment`}
+                        name="comment"
+                        value={comment}
+                        rows={3}
+                        maxLength={5000}
+                        placeholder=" "
+                        onChange={(event) => setField('comment', event.target.value)}
+                      />
+                      <label htmlFor={`${formId}-comment`}>Комментарий к заявке</label>
+                    </div>
                   </div>
-                </div>
+                </details>
 
                 {/* AGREEMENTS */}
 
-                <div
-                  className={
-                    Styles.agreements
-                  }
-                >
+                <div className={Styles.agreements}>
+                  <h3>Подтверждение</h3>
                   {/* PERSONAL DATA */}
 
-                  <div
-                    ref={consentRef}
-                    className={`${Styles.checkboxContainer} ${errors.consent
-                        ? Styles.errorState
-                        : ''
-                      }`}
-                  >
-                    <label
-                      className={
-                        Styles.checkboxLabel
-                      }
-                    >
+                  <div ref={consentRef} className={`${Styles.checkboxContainer} ${errors.consent ? Styles.errorState : ''}`}>
+                    <label className={Styles.checkboxLabel}>
                       <input
                         type="checkbox"
                         checked={consent}
-                        onChange={event => {
-                          const checked =
-                            event.target
-                              .checked;
+                        aria-invalid={Boolean(errors.consent)}
+                        aria-describedby={errors.consent ? `${formId}-consent-error` : undefined}
+                        onChange={(event) => {
+                          const checked = event.target.checked;
 
-                          setConsent(
-                            checked
-                          );
+                          setField('consent', checked);
 
-                          setErrors(
-                            prev => ({
-                              ...prev,
-                              consent:
-                                checked
-                                  ? undefined
-                                  : 'Необходимо дать согласие на обработку персональных данных',
-                            })
-                          );
+                          setErrors((prev) => ({
+                            ...prev,
+                            consent: checked ? undefined : 'Необходимо дать согласие на обработку персональных данных',
+                          }));
                         }}
                       />
 
-                      <span
-                        className={
-                          Styles.customCheckbox
-                        }
-                        aria-hidden="true"
-                      >
+                      <span className={Styles.customCheckbox} aria-hidden="true">
                         <CheckIcon />
                       </span>
 
-                      <span
-                        className={
-                          Styles.checkboxText
-                        }
-                      >
+                      <span className={Styles.checkboxText}>
                         Я даю согласие на{' '}
-                        <a
-                          href="/file/personal_data_v1.pdf"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          обработку моих
-                          персональных
-                          данных
+                        <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">
+                          обработку моих персональных данных
                         </a>
                       </span>
                     </label>
 
                     {errors.consent && (
-                      <span
-                        className={
-                          Styles.checkboxError
-                        }
-                      >
+                      <span id={`${formId}-consent-error`} className={Styles.checkboxError}>
                         {errors.consent}
                       </span>
                     )}
@@ -1235,87 +790,44 @@ export const Order = ({
 
                   {/* OFFER */}
 
-                  <div
-                    ref={offerRef}
-                    className={`${Styles.checkboxContainer} ${errors.offerAgreement
-                        ? Styles.errorState
-                        : ''
-                      }`}
-                  >
-                    <label
-                      className={
-                        Styles.checkboxLabel
-                      }
-                    >
+                  <div ref={offerRef} className={`${Styles.checkboxContainer} ${errors.offerAgreement ? Styles.errorState : ''}`}>
+                    <label className={Styles.checkboxLabel}>
                       <input
                         type="checkbox"
-                        checked={
-                          offerAgreement
-                        }
-                        onChange={event => {
-                          const checked =
-                            event.target
-                              .checked;
+                        checked={offerAgreement}
+                        aria-invalid={Boolean(errors.offerAgreement)}
+                        aria-describedby={errors.offerAgreement ? `${formId}-offer-error` : undefined}
+                        onChange={(event) => {
+                          const checked = event.target.checked;
 
-                          setOfferAgreement(
-                            checked
-                          );
+                          setField('offerAgreement', checked);
 
-                          setErrors(
-                            prev => ({
-                              ...prev,
-                              offerAgreement:
-                                checked
-                                  ? undefined
-                                  : 'Необходимо подтвердить ознакомление с офертой и условиями возврата',
-                            })
-                          );
+                          setErrors((prev) => ({
+                            ...prev,
+                            offerAgreement: checked ? undefined : 'Необходимо подтвердить ознакомление с офертой и условиями возврата',
+                          }));
                         }}
                       />
 
-                      <span
-                        className={
-                          Styles.customCheckbox
-                        }
-                        aria-hidden="true"
-                      >
+                      <span className={Styles.customCheckbox} aria-hidden="true">
                         <CheckIcon />
                       </span>
 
-                      <span
-                        className={
-                          Styles.checkboxText
-                        }
-                      >
-                        Я ознакомлен(а) и
-                        согласен(на) с{' '}
-                        <a
-                          href="/file/offer_v1.pdf"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                      <span className={Styles.checkboxText}>
+                        Я ознакомлен(а) и согласен(на) с{' '}
+                        <a href="/file/offer_v1.pdf" target="_blank" rel="noopener noreferrer">
                           договором оферты
                         </a>{' '}
                         и{' '}
-                        <a
-                          href="/file/return_v1.pdf"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <a href="/file/return_v1.pdf" target="_blank" rel="noopener noreferrer">
                           условиями возврата
                         </a>
                       </span>
                     </label>
 
                     {errors.offerAgreement && (
-                      <span
-                        className={
-                          Styles.checkboxError
-                        }
-                      >
-                        {
-                          errors.offerAgreement
-                        }
+                      <span id={`${formId}-offer-error`} className={Styles.checkboxError}>
+                        {errors.offerAgreement}
                       </span>
                     )}
                   </div>
@@ -1324,242 +836,101 @@ export const Order = ({
                 {/* SUBMIT */}
 
                 {submitError && (
-                  <p className={Styles.submitError} role="alert">
+                  <p ref={submitErrorRef} className={Styles.submitError} role="alert">
                     {submitError}
                   </p>
                 )}
-
-                <motion.button
-                  type="submit"
-                  className={
-                    Styles.submitButton
-                  }
-                  disabled={isSubmitting}
-                  whileTap={
-                    !isSubmitting
-                      ? {
-                        scale: 0.985,
-                      }
-                      : undefined
-                  }
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span
-                        className={
-                          Styles.spinner
-                        }
-                      />
-                      Отправляем
-                      заказ...
-                    </>
-                  ) : (
-                    <>
-                      Отправить заказ
-
-                      <span
-                        className={
-                          Styles.submitArrow
-                        }
-                      >
-                        <ArrowIcon />
-                      </span>
-                    </>
-                  )}
-                </motion.button>
-
-                <p
-                  className={
-                    Styles.formNote
-                  }
-                >
-                  Нажимая «Отправить
-                  заказ», вы подтверждаете
-                  корректность указанных
-                  данных.
-                </p>
+                <div className={Styles.formSubmit}>
+                  <div className={Styles.finalTotal}>
+                    <span>Стоимость товаров без НДС</span>
+                    <strong>{formatCartPrice(totalPrice)} ₽</strong>
+                  </div>
+                  <motion.button
+                    type="submit"
+                    className={Styles.submitButton}
+                    disabled={isSubmitting}
+                    whileTap={
+                      !isSubmitting
+                        ? {
+                            scale: 0.985,
+                          }
+                        : undefined
+                    }
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <span className={Styles.spinner} />
+                        Отправляем заявку...
+                      </>
+                    ) : (
+                      <>
+                        Отправить заявку
+                        <span className={Styles.submitArrow}>
+                          <ArrowIcon />
+                        </span>
+                      </>
+                    )}
+                  </motion.button>
+                  <p className={Styles.paymentNote}>
+                    <LockKeyhole size={15} aria-hidden="true" /> Заявка без онлайн-оплаты
+                  </p>
+                  <p className={Styles.nextStepNote}>После отправки менеджер уточнит комплектацию, сроки и доставку.</p>
+                </div>
               </form>
 
               {/* RIGHT — ORDER SUMMARY */}
 
-              <aside
-                className={
-                  Styles.summaryColumn
-                }
-              >
-                <section
-                  className={
-                    Styles.summaryCard
-                  }
-                >
-                  <div
-                    className={
-                      Styles.summaryHeader
-                    }
-                  >
-                    <div>
-                      <span
-                        className={
-                          Styles.eyebrow
-                        }
-                      >
-                        Ваш заказ
-                      </span>
-
-                      <h2>
-                        Состав заказа
-                      </h2>
-                    </div>
-
-                    <span
-                      className={
-                        Styles.itemCount
-                      }
-                    >
-                      {totalCount}{' '}
-                      {totalCount === 1
-                        ? 'товар'
-                        : totalCount >= 2 &&
-                          totalCount <= 4
-                          ? 'товара'
-                          : 'товаров'}
-                    </span>
+              <aside className={Styles.summaryColumn}>
+                <section className={Styles.summaryCard} aria-label="Стоимость заявки">
+                  <h2>Ваш заказ</h2>
+                  <div className={Styles.total}>
+                    <span>Стоимость товаров</span>
+                    <strong>{formatCartPrice(totalPrice)} ₽</strong>
                   </div>
-
+                  <p className={Styles.vat}>Без НДС · доставка согласуется отдельно</p>
+                </section>
+                <section className={Styles.summaryProducts} aria-label="Состав заявки" data-expanded={summaryExpanded}>
                   <button
                     type="button"
                     className={Styles.summaryToggle}
                     aria-expanded={summaryExpanded}
-                    aria-controls="order-summary-products"
+                    aria-controls={`${formId}-products`}
                     onClick={() => setSummaryExpanded((expanded) => !expanded)}
                   >
-                    {summaryExpanded ? 'Скрыть товары' : `Показать товары (${cart.length})`}
-                    <span aria-hidden="true">{summaryExpanded ? '−' : '+'}</span>
+                    <span className={Styles.disclosureIcon}>
+                      <ShoppingBag size={19} aria-hidden="true" />
+                    </span>
+                    <span className={Styles.disclosureText}>
+                      <span className={Styles.disclosureTitle}>Состав заявки</span>
+                      <span className={Styles.disclosureHint}>
+                        {totalCount} {getProductWord(totalCount)}
+                      </span>
+                    </span>
+                    <ChevronDown size={18} className={Styles.disclosureChevron} aria-hidden="true" />
                   </button>
-
                   <div
-                    id="order-summary-products"
-                    className={`${Styles.products} ${summaryExpanded ? Styles.productsExpanded : ''}`}
+                    id={`${formId}-products`}
+                    className={Styles.products}
+                    hidden={!summaryExpanded}
+                    role="region"
+                    aria-label="Товары в заявке"
+                    tabIndex={summaryExpanded ? 0 : -1}
                   >
-                    {cart.map(item => {
-                      const itemTotal =
-                        parsePrice(
-                          item.price
-                        ) *
-                        item.count;
-
-                      return (
-                        <div
-                          key={item.cartKey}
-                          className={
-                            Styles.product
-                          }
-                        >
-                          <div
-                            className={
-                              Styles.productImage
-                            }
-                          >
-                            <img
-                              src={item.image}
-                              alt=""
-                            />
-                          </div>
-
-                          <div
-                            className={
-                              Styles.productInfo
-                            }
-                          >
-                            <span
-                              className={
-                                Styles.productTitle
-                              }
-                            >
-                              {item.title}
-                            </span>
-
-                            <span
-                              className={
-                                Styles.productMeta
-                              }
-                            >
-                              {item.count} ×{' '}
-                              {item.price}
-                            </span>
-                          </div>
-
-                          <strong
-                            className={
-                              Styles.productPrice
-                            }
-                          >
-                            {itemTotal.toLocaleString(
-                              'ru-RU'
-                            )}{' '}
-                            ₽
-                          </strong>
+                    {cart.map((item) => (
+                      <div key={item.cartKey} className={Styles.product}>
+                        <div className={Styles.productImage}>{item.image ? <img src={item.image} alt="" /> : <CartIcon />}</div>
+                        <div className={Styles.productInfo}>
+                          <span className={Styles.productTitle}>{item.title}</span>
+                          <span className={Styles.productMeta}>
+                            {item.count} × {item.price} ₽
+                          </span>
+                          <span className={Styles.productMeta}>Поставка: {item.deliveryTime || 'по запросу'}</span>
+                          <strong className={Styles.productPrice}>{formatCartPrice(parsePrice(item.price) * item.count)} ₽</strong>
                         </div>
-                      );
-                    })}
-                  </div>
-
-                  <div
-                    className={Styles.total}
-                  >
-                    <span>
-                      Стоимость товаров
-                    </span>
-
-                    <strong>
-                      {totalPrice.toLocaleString(
-                        'ru-RU'
-                      )}{' '}
-                      ₽
-                    </strong>
-                  </div>
-
-                  <div
-                    className={Styles.vat}
-                  >
-                    Без НДС
-                  </div>
-
-                  <div
-                    className={
-                      Styles.summaryInfo
-                    }
-                  >
-                    <div
-                      className={
-                        Styles.infoIcon
-                      }
-                    >
-                      <CheckIcon />
-                    </div>
-
-                    <span>
-                      После отправки заявки
-                      менеджер свяжется с
-                      вами для подтверждения
-                      заказа и условий
-                      поставки.
-                    </span>
+                      </div>
+                    ))}
                   </div>
                 </section>
-
-                <button
-                  type="button"
-                  className={
-                    Styles.backToCart
-                  }
-                  onClick={onBack}
-                >
-                  <span>
-                    ←
-                  </span>
-                  Изменить заказ
-                </button>
               </aside>
             </motion.div>
           )}

@@ -328,7 +328,7 @@ export const Products = () => {
           <Breadcrumbs path="/products/" />
           <div className={Styles.heroTopline}>
             <span className={Styles.eyebrow}>
-              Продукция · Собственное производство
+              Собственное производство
             </span>
           </div>
 

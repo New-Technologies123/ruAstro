@@ -1,0 +1,46 @@
+{
+ "start": "2026-11-27T07:33:27.480Z",
+ "round": 0,
+ "idle": 0,
+ "errors": 1,
+ "status": "error",
+ "history": [
+  {
+   "at": "2026-11-27T07:35:21.114Z",
+   "mode": "manual",
+   "status": "error",
+   "fails": 0,
+   "round": 0,
+   "reused": false,
+   "stopHookActive": false
+  }
+ ],
+ "max": 3,
+ "marker": {
+  "page": "dist/products/index.html",
+  "url": null,
+  "root": "dist",
+  "kind": "tech",
+  "category": "Оборудование для нефтегазовой отрасли",
+  "primary": "Смотреть оборудование",
+  "rounds": 3,
+  "start": "2026-11-27T07:33:27.480Z",
+  "by": "gate.mjs --start"
+ },
+ "manual": true,
+ "fp": "29a00a12788e71ba",
+ "page": "dist/products/index.html",
+ "found": {
+  "fails": [],
+  "warns": [],
+  "crashed": [
+   "the gate itself failed: spawn EPERM"
+  ],
+  "seconds": {}
+ },
+ "open": [],
+ "waived": [],
+ "warnCount": 0,
+ "note": "the gate itself failed: spawn EPERM",
+ "at": "2026-11-27T07:35:21.116Z"
+}

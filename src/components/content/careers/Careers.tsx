@@ -469,10 +469,6 @@ export const Careers = () => {
         <div className={Styles.heroInner}>
           <div className={Styles.heroContent} data-motion-ignore>
             <Breadcrumbs path="/careers/" />
-            <div className={Styles.eyebrow}>
-              <span className={Styles.eyebrowDot} />
-              КАРЬЕРА В НОВЫХ ТЕХНОЛОГИЯХ
-            </div>
 
             <h1>
               Работа в <span>«Новых Технологиях»</span>

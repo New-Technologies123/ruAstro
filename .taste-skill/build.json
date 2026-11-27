@@ -1,0 +1,11 @@
+{
+ "page": "dist/products/index.html",
+ "url": null,
+ "root": "dist",
+ "kind": "tech",
+ "category": "Оборудование для нефтегазовой отрасли",
+ "primary": "Смотреть оборудование",
+ "rounds": 3,
+ "start": "2026-11-27T07:33:27.480Z",
+ "by": "gate.mjs --start"
+}

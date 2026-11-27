@@ -19,13 +19,7 @@ interface QuestionFormProps {
   submitError: string;
 }
 
-export const QuestionForm: React.FC<QuestionFormProps> = ({
-  formData,
-  onChange,
-  onSubmit,
-  isSubmitting,
-  submitError,
-}) => {
+export const QuestionForm: React.FC<QuestionFormProps> = ({ formData, onChange, onSubmit, isSubmitting, submitError }) => {
   const [showConsentErrors, setShowConsentErrors] = useState(false);
   const [showPhoneError, setShowPhoneError] = useState(false);
 
@@ -46,60 +40,66 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
   return (
     <form className={Styles.questionForm} onSubmit={handleSubmit}>
       <div className={Styles.fieldGroup}>
-        <label htmlFor="question-name" className={Styles.fieldLabel}>Ваше имя</label>
-        <input
-          id="question-name"
-          name="name"
-          type="text"
-          autoComplete="name"
-          placeholder="Как к вам обращаться"
-          value={formData.name}
-          onChange={event => onChange('name', event.target.value)}
-          required
-        />
+        <div className={Styles.floatingField}>
+          <input
+            id="question-name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            placeholder=" "
+            value={formData.name}
+            onChange={(event) => onChange('name', event.target.value)}
+            required
+          />
+          <label htmlFor="question-name">Ваше имя</label>
+        </div>
       </div>
 
       <div className={Styles.contactRow}>
         <div className={Styles.fieldGroup}>
-          <label htmlFor="question-email" className={Styles.fieldLabel}>Электронная почта</label>
-          <input
-            id="question-email"
-            name="email"
-            type="email"
-            autoComplete="email"
-            placeholder="name@example.ru"
-            value={formData.email}
-            onChange={event => onChange('email', event.target.value)}
-            required
-          />
+          <div className={Styles.floatingField}>
+            <input
+              id="question-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder=" "
+              value={formData.email}
+              onChange={(event) => onChange('email', event.target.value)}
+              required
+            />
+            <label htmlFor="question-email">Электронная почта</label>
+          </div>
         </div>
 
         <div className={Styles.fieldGroup}>
-          <label htmlFor="question-phone" className={Styles.fieldLabel}>Телефон</label>
-          <InputMask
-            mask="+7 (999) 999-99-99"
-            maskChar={null}
-            value={formData.phone}
-            onChange={event => {
-              onChange('phone', event.target.value);
-              if (showPhoneError) setShowPhoneError(false);
-            }}
-          >
-            {(inputProps: any) => (
-              <input
-                {...inputProps}
-                id="question-phone"
-                name="phone"
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                placeholder="+7 (999) 999-99-99"
-                aria-invalid={showPhoneError}
-                aria-describedby={showPhoneError ? 'question-phone-error' : undefined}
-                required
-              />
-            )}
-          </InputMask>
+          <div className={Styles.floatingField}>
+            <InputMask
+              mask="+7 (999) 999-99-99"
+              maskChar={null}
+              value={formData.phone}
+              onChange={(event) => {
+                onChange('phone', event.target.value);
+                if (showPhoneError) setShowPhoneError(false);
+              }}
+            >
+              {(inputProps: any) => (
+                <input
+                  {...inputProps}
+                  id="question-phone"
+                  name="phone"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  placeholder=" "
+                  aria-invalid={showPhoneError}
+                  aria-describedby={showPhoneError ? 'question-phone-error' : undefined}
+                  required
+                />
+              )}
+            </InputMask>
+            <label htmlFor="question-phone">Телефон</label>
+          </div>
           {showPhoneError && (
             <span id="question-phone-error" className={Styles.errorText} role="alert">
               Проверьте номер телефона
@@ -109,16 +109,18 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
       </div>
 
       <div className={Styles.fieldGroup}>
-        <label htmlFor="question-message" className={Styles.fieldLabel}>Ваш вопрос</label>
-        <textarea
-          id="question-message"
-          name="message"
-          placeholder="Коротко опишите вопрос или задачу"
-          value={formData.message}
-          onChange={event => onChange('message', event.target.value)}
-          rows={3}
-          required
-        />
+        <div className={Styles.floatingField}>
+          <textarea
+            id="question-message"
+            name="message"
+            placeholder=" "
+            value={formData.message}
+            onChange={(event) => onChange('message', event.target.value)}
+            rows={3}
+            required
+          />
+          <label htmlFor="question-message">Ваш вопрос</label>
+        </div>
       </div>
 
       <div className={Styles.agreements}>
@@ -127,7 +129,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
             <input
               type="checkbox"
               checked={formData.agreement}
-              onChange={event => onChange('agreement', event.target.checked)}
+              onChange={(event) => onChange('agreement', event.target.checked)}
               aria-invalid={showConsentErrors && !formData.agreement}
               aria-describedby={showConsentErrors && !formData.agreement ? 'question-agreement-error' : undefined}
             />
@@ -152,7 +154,7 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
             <input
               type="checkbox"
               checked={formData.privacyAgreement}
-              onChange={event => onChange('privacyAgreement', event.target.checked)}
+              onChange={(event) => onChange('privacyAgreement', event.target.checked)}
               aria-invalid={showConsentErrors && !formData.privacyAgreement}
               aria-describedby={showConsentErrors && !formData.privacyAgreement ? 'question-privacy-error' : undefined}
             />
@@ -173,13 +175,24 @@ export const QuestionForm: React.FC<QuestionFormProps> = ({
         </div>
       </div>
 
-      {submitError && <div className={Styles.submitError} role="alert">{submitError}</div>}
+      {submitError && (
+        <div className={Styles.submitError} role="alert">
+          {submitError}
+        </div>
+      )}
 
       <button type="submit" className={Styles.submitButton} disabled={isSubmitting}>
         <span>{isSubmitting ? 'Отправляем…' : 'Отправить вопрос'}</span>
         {!isSubmitting && (
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M4 12h15m-6-6 6 6-6 6" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            <path
+              d="M4 12h15m-6-6 6 6-6 6"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         )}
       </button>

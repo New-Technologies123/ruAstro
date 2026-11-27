@@ -1,2016 +1,792 @@
 @use '../../../styles/buttons' as buttons;
-
-/* =========================================================
-   ORDER PAGE
-   ========================================================= */
+@use '../../../styles/floating-field' as floating;
 
 .orderPage {
-  --bg: var(--site-surface);
-  --surface: #ffffff;
-  --surface-soft: #f8fafc;
+  --surface: #fff;
+  --surface-soft: #f3f6f9;
   --text: var(--site-ink);
-  --text-secondary: var(--site-muted);
-  --text-muted: #98a2b3;
+  --muted: var(--site-muted);
   --border: var(--site-line);
-  --border-soft: #edf0f3;
-  --border-strong: #d6dce5;
   --accent: var(--site-blue);
-  --accent-hover: var(--site-blue-hover);
-  --accent-soft: var(--site-blue-soft);
-  --success: #12b76a;
-  --success-soft: #ecfdf3;
-  --error: #d92d20;
-  --error-soft: #fff3f2;
-  --radius-sm: 10px;
-  --radius-md: 14px;
-  --radius-lg: 18px;
-
-  width: 100%;
+  --error: #b42318;
   height: 100%;
-  min-width: 0;
   min-height: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-sizing: border-box;
-
-  color: var(--text);
-
-  font-family: inherit;
-
-  background: var(--bg);
-}
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.header {
-  position: relative;
-  z-index: 10;
-  flex: 0 0 auto;
-
-  min-height: 70px;
-
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-
-  gap: 16px;
-  padding: 12px 22px;
-
-  box-sizing: border-box;
-
-  background: rgba(255, 255, 255, 0.96);
-  border-bottom: 1px solid var(--border-soft);
-
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-
-/* =========================================================
-   BACK
-   ========================================================= */
-
-.backButton {
-  justify-self: start;
-
-  min-height: 42px;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 8px;
-  padding: 0 13px 0 9px;
-
-  border: 1px solid var(--border);
-  border-radius: 12px;
-
   background: var(--surface);
-  color: var(--text-secondary);
-
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.04);
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.backButton img {
-  width: 19px;
-  height: 19px;
-  display: block;
-
-  transition:
-    transform 0.2s ease;
-}
-
-.backButton:hover {
-  background: var(--surface-soft);
-  border-color: var(--border-strong);
   color: var(--text);
-
-  transform: translateX(-1px);
-
-  box-shadow:
-    0 5px 14px rgba(15, 23, 42, 0.07);
+  &,
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  button,
+  input,
+  textarea {
+    font-family: inherit;
+  }
+  button,
+  a,
+  summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button {
+    cursor: pointer;
+  }
+  button:focus-visible,
+  a:focus-visible,
+  summary:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 4px;
+  }
 }
-
-.backButton:hover img {
-  transform: translateX(-2px);
-}
-
-.backButton:active {
-  transform: scale(0.97);
-}
-
-.backButton:focus-visible {
-  outline: none;
-
-  box-shadow:
-    0 0 0 4px var(--accent-soft),
-    0 1px 2px rgba(15, 23, 42, 0.04);
-}
-
-/* =========================================================
-   HEADER CENTER
-   ========================================================= */
-
-.headerCenter {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  text-align: center;
-}
-
-.headerCenter h1 {
-  margin: 0;
-
-  color: var(--text);
-
-  font-size: 20px;
-  line-height: 1.25;
-  font-weight: 750;
-
-  letter-spacing: -0.025em;
-}
-
-.headerCenter span {
-  margin-top: 3px;
-
-  color: var(--text-muted);
-
-  font-size: 10px;
-  line-height: 1.3;
-  font-weight: 600;
-
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-/* =========================================================
-   HEADER RIGHT
-   ========================================================= */
-
-.headerRight {
-  justify-self: end;
-
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-
-  gap: 7px;
-
-  color: var(--text-muted);
-
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.headerRight svg {
-  width: 17px;
-  height: 17px;
-
-  color: var(--accent);
-}
-
-/* =========================================================
-   CHECKOUT STEPS
-   ========================================================= */
-
-.checkoutSteps {
-  width: 100%;
-  max-width: 1000px;
-
-  background: none;
-
-  flex: 0 0 auto;
-
-  margin: 0 auto;
-  padding: 15px 22px 10px;
-
-  box-sizing: border-box;
-
-  display: flex;
-  align-items: center;
-}
-
-.checkoutStep {
-  min-width: 0;
-
-  display: flex;
-  align-items: center;
-
-  gap: 9px;
-
-  padding: 0;
-
-  border: 0;
-  background: transparent;
-
-  font-family: inherit;
-  text-align: left;
-
-  cursor: pointer;
-}
-
-.checkoutStepCurrent {
-  cursor: default;
-}
-
-/* =========================================================
-   STEP NUMBER
-   ========================================================= */
-
-.stepNumber {
-  flex: 0 0 31px;
-
-  width: 31px;
-  height: 31px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  box-sizing: border-box;
-
-  border-radius: 50%;
-
-  font-size: 9px;
-  font-weight: 800;
-
-  letter-spacing: 0.03em;
-}
-
-.stepNumber svg {
-  width: 15px;
-  height: 15px;
-}
-
-/* COMPLETED */
-
-.stepNumberCompleted {
-  color: var(--accent);
-  background: var(--accent-soft);
-
-  border: 1px solid rgba(21, 94, 239, 0.22);
-}
-
-/* CURRENT */
-
-.stepNumberCurrent {
-  color: #fff;
-  background: var(--accent);
-
-  border: 1px solid var(--accent);
-
-  box-shadow:
-    0 0 0 4px rgba(21, 94, 239, 0.08),
-    0 4px 12px rgba(21, 94, 239, 0.16);
-}
-
-/* =========================================================
-   STEP TEXT
-   ========================================================= */
-
-.stepInfo {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 1px;
-}
-
-.stepLabel {
-  color: var(--text);
-
-  font-size: 11px;
-  line-height: 1.2;
-  font-weight: 700;
-}
-
-.stepDescription {
-  color: var(--text-muted);
-
-  font-size: 9px;
-  line-height: 1.2;
-  font-weight: 500;
-}
-
-/* =========================================================
-   CONNECTOR
-   ========================================================= */
-
-.stepConnector {
-  position: relative;
-
-  flex: 1 1 auto;
-
-  height: 2px;
-  min-width: 35px;
-
-  margin: 0 14px;
-
-  border-radius: 999px;
-
-  background: #e4e8ee;
-
-  overflow: hidden;
-}
-
-.stepConnector::after {
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  background: var(--accent);
-}
-
-/* =========================================================
-   CONTENT
-   ========================================================= */
-
 .content {
-  flex: 1 1 0;
-
-  min-width: 0;
+  flex: 1;
   min-height: 0;
-
-  width: 100%;
-
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  padding: 10px 22px 34px;
-
-  box-sizing: border-box;
-
-  scrollbar-width: thin;
-  scrollbar-color: #d4d9e1 transparent;
-
-  -webkit-overflow-scrolling: touch;
-
-  overscroll-behavior-y: contain;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 30px 32px 32px;
+  scrollbar-gutter: stable;
 }
-
-.content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.content::-webkit-scrollbar-thumb {
-  background: #d4d9e1;
-  border-radius: 999px;
-}
-
-.content::-webkit-scrollbar-thumb:hover {
-  background: #c5cbd5;
-}
-
-/* =========================================================
-   MAIN TWO COLUMN LAYOUT
-   ========================================================= */
-
 .checkoutLayout {
-  width: 100%;
-  max-width: 1000px;
-
-  margin: 0 auto;
-
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr) 330px;
-
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 32px;
   align-items: start;
-
-  gap: 18px;
 }
-
-/* =========================================================
-   FORM CARD
-   ========================================================= */
-
 .formCard {
-  min-width: 0;
-
-  padding: 22px;
-
-  box-sizing: border-box;
-
   display: flex;
   flex-direction: column;
-
-  gap: 20px;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.035);
+  gap: 24px;
+  min-width: 0;
+  padding: 0;
 }
-
-/* =========================================================
-   FORM HEADER
-   ========================================================= */
-
-.formHeader {
-  padding-bottom: 2px;
-}
-
-.eyebrow {
-  display: block;
-
-  color: var(--text-muted);
-
-  font-size: 10px;
-  line-height: 1.2;
-  font-weight: 750;
-
-  letter-spacing: 0.075em;
-  text-transform: uppercase;
-}
-
 .formHeader h2 {
-  margin: 5px 0 6px;
-
+  margin: 0;
   color: var(--text);
-
-  font-size: 21px;
-  line-height: 1.25;
-  font-weight: 750;
-
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.3;
   letter-spacing: -0.025em;
 }
-
 .formHeader p {
-  max-width: 580px;
-
-  margin: 0;
-
-  color: var(--text-secondary);
-
+  max-width: 52ch;
+  margin: 10px 0 0;
+  color: var(--muted);
   font-size: 13px;
-  line-height: 1.55;
-  font-weight: 400;
+  line-height: 1.65;
 }
-
-/* =========================================================
-   FIELDS
-   ========================================================= */
-
 .fields {
   display: grid;
-
-  grid-template-columns:
-    minmax(0, 1fr) minmax(0, 1fr);
-
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px 16px;
 }
-
 .field {
   min-width: 0;
-  position: relative;
 }
-
-/* =========================================================
-   INPUT WRAPPER
-   ========================================================= */
-
 .inputWrapper {
-  position: relative;
-
+  --label-surface: var(--surface);
   width: 100%;
+  @include floating.label(42px, 36px);
 }
-
 .inputWrapper input,
 .inputWrapper textarea {
   width: 100%;
-
-  box-sizing: border-box;
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-
+  border: 1px solid transparent;
+  border-radius: 12px;
   outline: none;
-
-  background: var(--surface);
+  background: #f3f6f9;
   color: var(--text);
-
-  font-family: inherit;
-
-  font-size: 14px;
-  font-weight: 500;
-
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.025);
-
+  font-size: 16px;
+  font-weight: 400;
   transition:
-    border-color 0.18s ease,
-    box-shadow 0.18s ease,
-    background 0.18s ease;
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+  &:hover {
+    background: #edf2f7;
+  }
+  &:focus {
+    background: #fff;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(21, 94, 239, 0.09);
+  }
 }
-
 .inputWrapper input {
-  height: 58px;
-
-  padding:
-    22px 14px 7px 44px;
+  height: 56px;
+  padding: 15px 14px 15px 42px;
 }
-
 .inputWrapper textarea {
   min-height: 116px;
-
+  padding: 16px 14px 14px 42px;
   resize: vertical;
-
-  padding:
-    25px 14px 10px 44px;
-
-  line-height: 1.5;
+  line-height: 1.6;
 }
-
-/* =========================================================
-   FIELD ICON
-   ========================================================= */
-
 .fieldIcon {
   position: absolute;
-
-  left: 15px;
-  top: 50%;
-
   width: 18px;
   height: 18px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  color: #a1a9b6;
-
-  pointer-events: none;
-
+  left: 14px;
+  top: 28px;
   transform: translateY(-50%);
-
-  z-index: 2;
-
-  transition:
-    color 0.18s ease;
+  color: #73849a;
+  pointer-events: none;
 }
-
 .fieldIcon svg {
   width: 18px;
   height: 18px;
 }
-
-/* =========================================================
-   LABEL
-   ========================================================= */
-
-.inputWrapper label {
-  position: absolute;
-
-  left: 44px;
-  top: 50%;
-
-  color: var(--text-muted);
-
-  font-size: 14px;
-  font-weight: 500;
-
-  pointer-events: none;
-
-  transform: translateY(-50%);
-
-  transition:
-    top 0.18s ease,
-    transform 0.18s ease,
-    font-size 0.18s ease,
-    color 0.18s ease,
-    background 0.18s ease;
-}
-
-.inputWrapper textarea + label {
-  top: 25px;
-  transform: none;
-}
-
 .commentInputWrapper .fieldIcon {
-  top: 25px;
-  transform: none;
+  top: 27px;
 }
-
-.commentInputWrapper:focus-within .fieldIcon {
-  color: var(--accent);
+.fieldError input {
+  border-color: var(--error);
+  background: #fff6f5;
 }
-
-/* =========================================================
-   FLOATING LABEL
-   ========================================================= */
-
-.inputWrapper input:focus + label,
-.inputWrapper input:not(:placeholder-shown) + label,
-.inputWrapper textarea:focus + label,
-.inputWrapper textarea:not(:placeholder-shown) + label {
-  top: 0;
-
-  transform: translateY(-50%);
-
-  padding: 0 5px;
-
-  color: var(--accent);
-
-  background: var(--surface);
-
-  font-size: 10px;
-  font-weight: 700;
-}
-
-.inputWrapper textarea:focus + label,
-.inputWrapper textarea:not(:placeholder-shown) + label {
-  top: 0;
-  transform: translateY(-50%);
-}
-
-/* =========================================================
-   FOCUS
-   ========================================================= */
-
-.inputWrapper input:focus,
-.inputWrapper textarea:focus {
-  border-color: rgba(21, 94, 239, 0.62);
-
-  background: #fff;
-
-  box-shadow:
-    0 0 0 4px rgba(21, 94, 239, 0.085);
-}
-
-.inputWrapper input:focus ~ .fieldIcon,
-.inputWrapper textarea:focus ~ .fieldIcon {
-  color: var(--accent);
-}
-
-/* =========================================================
-   ERROR — VERY IMPORTANT
-   ========================================================= */
-
-.fieldError .inputWrapper input,
-.fieldError .inputWrapper textarea {
-  border-color: var(--error) !important;
-
-  background: #fffafa;
-
-  box-shadow:
-    0 0 0 3px rgba(217, 45, 32, 0.09) !important;
-}
-
-.fieldError .inputWrapper input:focus,
-.fieldError .inputWrapper textarea:focus {
-  border-color: var(--error) !important;
-
-  box-shadow:
-    0 0 0 4px rgba(217, 45, 32, 0.11) !important;
-}
-
+.fieldError .inputWrapper label,
 .fieldError .fieldIcon {
   color: var(--error);
 }
-
-.fieldError .inputWrapper label {
-  color: var(--error);
-}
-
-.fieldError .inputWrapper input:not(:placeholder-shown) + label,
-.fieldError .inputWrapper textarea:not(:placeholder-shown) + label {
-  color: var(--error);
-}
-
-.errorText {
+.errorText,
+.checkboxError {
   display: block;
-
   margin-top: 6px;
-  padding-left: 3px;
-
   color: var(--error);
-
-  font-size: 11px;
-  line-height: 1.35;
-  font-weight: 500;
+  font-size: 13px;
+  line-height: 1.6;
 }
-
-/* =========================================================
-   AGREEMENTS
-   ========================================================= */
-
+.optionalDetails {
+  min-width: 0;
+  border: 1px solid #e2eaf3;
+  border-radius: 16px;
+  background: #f8fafd;
+  overflow: clip;
+}
+.optionalDetails summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 16px;
+  cursor: pointer;
+  list-style: none;
+  transition: background 180ms ease;
+}
+.optionalDetails summary::-webkit-details-marker {
+  display: none;
+}
+.optionalDetails summary::marker {
+  content: '';
+}
+.optionalDetails summary:hover {
+  background: #f0f5fb;
+}
+.optionalDetails summary:focus-visible {
+  outline-offset: -3px;
+}
+.optionalDetails[open] .disclosureChevron {
+  transform: rotate(180deg);
+}
+.disclosureIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #e9f1fc;
+  color: var(--accent);
+}
+.disclosureText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+.disclosureTitle {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.disclosureHint {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.disclosureChevron {
+  flex: 0 0 18px;
+  color: #70869d;
+  transition: transform 180ms ease;
+}
+.optionalFields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0 16px;
+  padding: 20px 0;
+  border-top: 1px solid #e2eaf3;
+}
+.optionalFields .inputWrapper {
+  --label-surface: #f8fafd;
+}
+.optionalFields .inputWrapper input,
+.optionalFields .inputWrapper textarea {
+  background: #fff;
+  border-color: #dfe7f0;
+}
+.optionalFields .inputWrapper input:focus,
+.optionalFields .inputWrapper textarea:focus {
+  border-color: var(--accent);
+}
 .agreements {
   display: flex;
   flex-direction: column;
-
-  gap: 8px;
-
+  gap: 10px;
+}
+.successContent .pdfError {
+  margin: 0;
+  color: var(--error);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.successActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 22px;
+}
+.pdfButton {
+  @include buttons.primary();
+}
+.successActions .successButton {
   margin-top: 0;
+  @include buttons.secondary();
 }
-
 .checkboxContainer {
-  position: relative;
-
-  padding: 11px 12px;
-
-  box-sizing: border-box;
-
-  border: 1px solid transparent;
-  border-radius: 12px;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease;
+  min-width: 0;
+  border-radius: 8px;
 }
-
-.checkboxContainer:hover {
-  background: var(--surface-soft);
-  border-color: var(--border-soft);
-}
-
-/* =========================================================
-   CHECKBOX
-   ========================================================= */
-
-/*
-  ВАЖНО:
-  Не используем width: 1px + pointer-events: none.
-  На мобильных устройствах это может приводить к проблемам
-  с обработкой клика по label.
-
-  Сам input остаётся полностью рабочим, но прозрачным.
-*/
-
 .checkboxLabel {
   position: relative;
-
   display: flex;
   align-items: flex-start;
-
-  gap: 10px;
-
-  width: 100%;
-  min-width: 0;
-
+  gap: 12px;
+  // min-height: 44px;
+  padding: 4px 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
   cursor: pointer;
-
-  color: var(--text-secondary);
-
-  font-size: 12px;
-  line-height: 1.5;
-  font-weight: 500;
 }
-
 .checkboxLabel input {
   position: absolute;
-
+  width: 24px;
+  height: 24px;
+  top: 4px;
   left: 0;
-  top: 1px;
-
-  width: 20px;
-  height: 20px;
-
   margin: 0;
-  padding: 0;
-
   opacity: 0;
-
-  cursor: pointer;
-
-  /*
-    Input остаётся кликабельным.
-    Это ключевое исправление.
-  */
-  pointer-events: auto;
-
   z-index: 2;
-
-  appearance: none;
-  -webkit-appearance: none;
+  cursor: pointer;
 }
-
-/* =========================================================
-   CUSTOM CHECKBOX
-   ========================================================= */
-
 .customCheckbox {
-  position: relative;
-
-  z-index: 1;
-
-  flex: 0 0 20px;
-
-  width: 20px;
-  height: 20px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-top: 1px;
-
-  box-sizing: border-box;
-
-  border: 1.5px solid #cbd2dc;
-  border-radius: 6px;
-
+  display: grid;
+  place-items: center;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid #b5c2d0;
+  border-radius: 7px;
   background: #fff;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    box-shadow 0.18s ease;
 }
-
 .customCheckbox svg {
-  width: 13px;
-  height: 13px;
-
-  color: #fff;
-
+  width: 17px;
+  height: 17px;
   opacity: 0;
-
-  transform: scale(0.5);
-
-  transition:
-    opacity 0.16s ease,
-    transform 0.16s ease;
 }
-
 .checkboxLabel input:checked + .customCheckbox {
   border-color: var(--accent);
-
   background: var(--accent);
-
-  box-shadow:
-    0 2px 7px rgba(21, 94, 239, 0.18);
+  color: #fff;
 }
-
 .checkboxLabel input:checked + .customCheckbox svg {
   opacity: 1;
-  transform: scale(1);
 }
-
-.checkboxLabel:hover .customCheckbox {
-  border-color: var(--accent);
-}
-
 .checkboxLabel input:focus-visible + .customCheckbox {
-  box-shadow:
-    0 0 0 4px rgba(21, 94, 239, 0.11);
+  outline: 3px solid var(--accent);
+  outline-offset: 4px;
 }
-
-/* =========================================================
-   CHECKBOX TEXT
-   ========================================================= */
-
 .checkboxText {
+  flex: 1;
   min-width: 0;
-
-  flex: 1 1 auto;
 }
-
 .checkboxText a {
-  position: relative;
-  z-index: 3;
-
   color: var(--accent);
-
-  font-weight: 600;
-
-  text-decoration: none;
-  text-underline-offset: 2px;
-
-  transition:
-    color 0.18s ease;
-}
-
-.checkboxText a:hover {
-  color: var(--accent-hover);
-
   text-decoration: underline;
+  text-underline-offset: 3px;
 }
-
-/* =========================================================
-   AGREEMENT ERROR
-   ========================================================= */
-
-.errorState {
-  background: var(--error-soft);
-
-  border-color:
-    rgba(217, 45, 32, 0.16);
+.checkboxText a:hover {
+  color: var(--site-blue-hover);
 }
-
 .errorState .customCheckbox {
   border-color: var(--error);
 }
-
 .checkboxError {
-  display: block;
-
-  margin-top: 6px;
-
-  padding-left: 30px;
-
-  color: var(--error);
-
-  font-size: 11px;
-  line-height: 1.35;
-  font-weight: 500;
-}
-
-/* =========================================================
-   SUBMIT
-   ========================================================= */
-
-.submitButton {
-    width: 100%;
-  @include buttons.primary();
-}
-
-.submitError {
-  margin: 0;
-  padding: 12px 14px;
-  border: 1px solid #f1b6b6;
-  border-radius: 11px;
-  background: #fff3f3;
-  color: #a52d2d;
-  font-size: 13px;
+  margin-top: 0;
+  padding-left: 36px;
   line-height: 1.45;
 }
-
-.submitButton:focus-visible {
-  outline: none;
-
-  box-shadow:
-    0 0 0 4px rgba(21, 94, 239, 0.13),
-    0 8px 20px rgba(21, 94, 239, 0.19);
+.formSubmit {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
 }
-
-.submitButton:disabled {
-  cursor: not-allowed;
-
-  opacity: 0.7;
-
-  box-shadow: none;
+.formSubmit .submitButton {
+  width: auto;
+  min-width: 240px;
 }
-
-/* =========================================================
-   SUBMIT ARROW
-   ========================================================= */
-
-.submitArrow {
-  width: 19px;
-  height: 19px;
-
+.finalTotal {
+  display: none;
+}
+.paymentNote {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 7px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
 }
-
+.paymentNote svg {
+  flex-shrink: 0;
+  color: #7389a0;
+}
+.nextStepNote {
+  max-width: 52ch;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.65;
+}
+.agreements h3 {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.5;
+}
+.submitButton {
+  width: 100%;
+  @include buttons.primary();
+}
+.submitButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.submitArrow,
 .submitArrow svg {
-  width: 19px;
-  height: 19px;
-
-  transition:
-    transform 0.2s ease;
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
 }
-
-.submitButton:hover:not(:disabled) .submitArrow svg {
-  transform: translateX(3px);
+.submitError {
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid #f1b6b6;
+  border-radius: 12px;
+  background: #fff3f3;
+  color: var(--error);
+  font-size: 14px;
+  line-height: 1.6;
 }
-
-/* =========================================================
-   SPINNER
-   ========================================================= */
-
 .spinner {
   width: 16px;
   height: 16px;
-
-  box-sizing: border-box;
-
-  border: 2px solid rgba(255, 255, 255, 0.35);
+  border: 2px solid rgba(255, 255, 255, 0.4);
   border-top-color: #fff;
-
   border-radius: 50%;
-
-  animation:
-    orderSpinner 0.7s linear infinite;
+  animation: orderSpinner 700ms linear infinite;
 }
-
 @keyframes orderSpinner {
   to {
     transform: rotate(360deg);
   }
 }
-
-/* =========================================================
-   FORM NOTE
-   ========================================================= */
-
-.formNote {
-  margin: -9px 4px 0;
-
-  color: var(--text-muted);
-
-  font-size: 10px;
-  line-height: 1.45;
-
-  text-align: center;
-}
-
-/* =========================================================
-   SUMMARY COLUMN
-   ========================================================= */
-
 .summaryColumn {
-  min-width: 0;
-
+  --summary-surface: #eaf4ff;
+  --summary-border: #cfe3fa;
   position: sticky;
   top: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 10px;
-}
-
-/* =========================================================
-   SUMMARY CARD
-   ========================================================= */
-
-.summaryCard {
   min-width: 0;
-
-  padding: 18px;
-
-  box-sizing: border-box;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.035);
 }
-
-/* =========================================================
-   SUMMARY HEADER
-   ========================================================= */
-
-.summaryHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  gap: 12px;
-
-  margin-bottom: 10px;
-}
-
-.summaryHeader h2 {
-  margin: 4px 0 0;
-
+.summaryCard {
+  padding: 24px;
+  border: 1px solid var(--summary-border);
+  border-radius: 16px;
+  background: var(--summary-surface);
   color: var(--text);
-
-  font-size: 17px;
+}
+.summaryCard h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.4;
+}
+.total {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 20px;
+}
+.total > span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+.total strong {
+  color: var(--text);
+  font-size: 24px;
   line-height: 1.3;
   font-weight: 700;
-
-  letter-spacing: -0.015em;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
 }
-
-.itemCount {
-  flex: 0 0 auto;
-
-  padding: 6px 9px;
-
-  border-radius: 999px;
-
-  background: var(--accent-soft);
-  color: var(--accent);
-
-  font-size: 11px;
-  line-height: 1;
-  font-weight: 700;
+.vat {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
 }
-
+.summaryProducts {
+  margin-top: 18px;
+  border: 1px solid var(--summary-border);
+  border-radius: 16px;
+  background: var(--summary-surface);
+  overflow: clip;
+}
 .summaryToggle {
-  display: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 76px;
+  padding: 16px;
+  border: 0;
+  background: var(--summary-surface);
+  color: var(--text);
+  text-align: left;
+  transition: background 180ms ease;
 }
-
-/* =========================================================
-   PRODUCTS
-   ========================================================= */
-
+.summaryToggle:hover {
+  background: #deedff;
+}
+.summaryToggle .disclosureIcon {
+  background: #d6e9ff;
+}
+.summaryToggle:focus-visible {
+  outline-offset: -3px;
+}
+.summaryProducts[data-expanded='true'] .disclosureChevron {
+  transform: rotate(180deg);
+}
 .products {
   display: flex;
   flex-direction: column;
+  max-height: 500px;
+  padding: 0 16px;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  border-top: 1px solid var(--summary-border);
 }
-
+.products[hidden] {
+  display: none;
+}
+.products:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
 .product {
-  min-width: 0;
-
   display: grid;
-
-  grid-template-columns:
-    52px minmax(0, 1fr) auto;
-
-  align-items: center;
-
-  gap: 10px;
-
-  padding: 12px 0;
-
-  border-bottom: 1px solid var(--border-soft);
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 12px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
 }
-
 .product:last-child {
   border-bottom: 0;
 }
-
-/* =========================================================
-   PRODUCT IMAGE
-   ========================================================= */
-
 .productImage {
+  display: grid;
+  place-items: center;
   width: 52px;
-  height: 52px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  height: 62px;
   padding: 5px;
-
-  box-sizing: border-box;
-
-  border: 1px solid var(--border-soft);
-  border-radius: 11px;
-
-  background: var(--surface-soft);
-
+  border-radius: 10px;
+  background: #f3f6f9;
+  color: var(--muted);
   overflow: hidden;
 }
-
 .productImage img {
   width: 100%;
   height: 100%;
-
-  display: block;
-
   object-fit: contain;
 }
-
-/* =========================================================
-   PRODUCT INFO
-   ========================================================= */
-
+.productImage svg {
+  width: 24px;
+  height: 24px;
+}
 .productInfo {
-  min-width: 0;
-
   display: flex;
   flex-direction: column;
-
-  gap: 4px;
+  min-width: 0;
+  gap: 6px;
 }
-
 .productTitle {
-  display: -webkit-box;
-
-  overflow: hidden;
-
-  color: var(--text);
-
-  font-size: 12px;
-  line-height: 1.35;
+  font-size: 13px;
   font-weight: 600;
-
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
 }
-
 .productMeta {
-  color: var(--text-muted);
-
-  font-size: 10px;
-  line-height: 1.3;
-  font-weight: 500;
-}
-
-.productPrice {
-  flex: 0 0 auto;
-
-  color: var(--text);
-
   font-size: 12px;
-  line-height: 1.2;
-  font-weight: 700;
-
-  white-space: nowrap;
+  color: var(--muted);
+  line-height: 1.5;
 }
-
-/* =========================================================
-   TOTAL
-   ========================================================= */
-
-.total {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-
-  gap: 12px;
-
-  margin-top: 5px;
-  padding-top: 15px;
-
-  border-top: 1px solid var(--border);
-
-  color: var(--text);
-
+.productPrice {
+  margin-top: 2px;
   font-size: 15px;
-  line-height: 1.3;
-  font-weight: 600;
+  font-weight: 650;
+  font-variant-numeric: tabular-nums;
 }
-
-.total strong {
-  font-size: 19px;
-  line-height: 1.2;
-  font-weight: 750;
-
-  letter-spacing: -0.02em;
-}
-
-.vat {
-  margin-top: 3px;
-
-  color: var(--text-muted);
-
-  font-size: 10px;
-  line-height: 1.3;
-
-  text-align: right;
-}
-
-/* =========================================================
-   SUMMARY INFO
-   ========================================================= */
-
-.summaryInfo {
-  display: flex;
-  align-items: flex-start;
-
-  gap: 9px;
-
-  margin-top: 16px;
-  padding: 11px;
-
-  border-radius: 11px;
-
-  background: var(--surface-soft);
-  color: var(--text-secondary);
-
-  font-size: 10px;
-  line-height: 1.45;
-  font-weight: 500;
-}
-
-.infoIcon {
-  flex: 0 0 19px;
-
-  width: 19px;
-  height: 19px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: var(--success-soft);
-  color: var(--success);
-}
-
-.infoIcon svg {
-  width: 13px;
-  height: 13px;
-}
-
-/* =========================================================
-   BACK TO CART
-   ========================================================= */
-
-.backToCart {
-  width: 100%;
-
-  min-height: 42px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  gap: 7px;
-
-  padding: 0 12px;
-
-  border: 1px solid var(--border);
-  border-radius: 11px;
-
-  background: transparent;
-  color: var(--text-secondary);
-
-  font-family: inherit;
-
-  font-size: 11px;
-  font-weight: 600;
-
-  cursor: pointer;
-
-  transition:
-    background 0.18s ease,
-    border-color 0.18s ease,
-    color 0.18s ease;
-}
-
-.backToCart span {
-  font-size: 15px;
-}
-
-.backToCart:hover {
-  background: var(--surface);
-
-  border-color: var(--border-strong);
-
-  color: var(--text);
-}
-
-/* =========================================================
-   SUCCESS
-   ========================================================= */
-
 .successWrapper {
-  width: 100%;
-  max-width: 720px;
-
-  margin: 15px auto;
+  max-width: 560px;
+  margin: 50px auto;
 }
-
 .successCard {
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
-
-  gap: 18px;
-
-  padding: 25px;
-
-  background: var(--surface);
-
-  border: 1px solid rgba(18, 183, 106, 0.16);
-  border-radius: var(--radius-lg);
-
-  box-shadow:
-    0 1px 2px rgba(15, 23, 42, 0.035);
+  gap: 22px;
 }
-
 .successIcon {
-  flex: 0 0 48px;
-
-  width: 48px;
-  height: 48px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: var(--success-soft);
-  color: var(--success);
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  color: #128653;
+  background: #eaf9f1;
 }
-
 .successIcon svg {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
 }
-
 .successContent {
   min-width: 0;
+  width: 100%;
 }
-
 .successEyebrow {
-  display: block;
-
-  margin-bottom: 4px;
-
-  color: var(--success);
-
-  font-size: 10px;
-  font-weight: 750;
-
-  letter-spacing: 0.07em;
-  text-transform: uppercase;
+  display: none;
 }
-
 .successContent h2 {
-  margin: 0 0 6px;
-
-  color: var(--text);
-
-  font-size: 22px;
+  margin: 0 0 14px;
+  font-size: 28px;
   line-height: 1.25;
-  font-weight: 750;
-
-  letter-spacing: -0.025em;
+  font-weight: 700;
+  letter-spacing: -0.035em;
 }
-
 .successContent p {
-  margin: 0;
-
-  color: var(--text-secondary);
-
-  font-size: 13px;
-  line-height: 1.5;
+  margin: 10px 0;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--muted);
 }
-
 .successContent .successReference {
-  margin-top: 14px;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: var(--surface-soft);
-  font-size: 13px;
+  margin: 22px 0;
+  padding: 20px 22px;
+  border-radius: 16px;
+  background: var(--site-navy, #0c2b40);
+  color: #c0d3e5;
 }
-
 .successReference strong {
-  color: var(--text);
-  font-weight: 750;
+  display: block;
+  margin-top: 8px;
+  color: #fff;
+  font-size: 18px;
+  overflow-wrap: anywhere;
   user-select: all;
 }
-
 .successButton {
-    margin-top: 18px;
+  margin-top: 16px;
+  min-width: 180px;
   @include buttons.primary();
 }
-
-/* =========================================================
-   EMPTY
-   ========================================================= */
-
 .emptyState {
-  width: 100%;
-  max-width: 540px;
-
-  margin: 35px auto;
-
-  padding: 40px 25px;
-
-  box-sizing: border-box;
-
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 24px 12px;
   text-align: center;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
 }
-
 .emptyIcon {
-  width: 50px;
-  height: 50px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin: 0 auto 15px;
-
-  border-radius: 15px;
-
-  background: var(--accent-soft);
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 22px;
+  border-radius: 24px;
+  background: #f0f5fb;
   color: var(--accent);
 }
-
 .emptyIcon svg {
-  width: 25px;
-  height: 25px;
+  width: 44px;
+  height: 44px;
 }
-
 .emptyState h2 {
-  margin: 0 0 7px;
-
-  font-size: 20px;
-  font-weight: 750;
-
-  letter-spacing: -0.02em;
+  margin: 0;
+  font-size: 24px;
+  letter-spacing: -0.025em;
 }
-
 .emptyState p {
-  max-width: 380px;
-
-  margin: 0 auto;
-
-  color: var(--text-secondary);
-
-  font-size: 13px;
-  line-height: 1.5;
+  margin: 12px 0 26px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
 }
-
 .emptyButton {
-    margin-top: 18px;
   @include buttons.primary();
 }
 
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 900px) {
+@media (max-width: 1100px) {
+  .content {
+    padding: 26px;
+  }
   .checkoutLayout {
-    grid-template-columns:
-      minmax(0, 1fr) 300px;
-
-    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 24px;
   }
-
-  .formCard {
-    padding: 19px;
-  }
-
-  .summaryCard {
-    padding: 16px;
-  }
-
-  .product {
-    grid-template-columns:
-      46px minmax(0, 1fr) auto;
-  }
-
-  .productImage {
-    width: 46px;
-    height: 46px;
-  }
-
-  .productTitle {
-    font-size: 11px;
-  }
-
-  .productPrice {
-    font-size: 11px;
-  }
-}
-
-/* =========================================================
-   MOBILE / ONE COLUMN
-   ========================================================= */
-
-@media (max-width: 760px) {
-  .header {
-    min-height: 64px;
-
-    grid-template-columns:
-      auto minmax(0, 1fr) auto;
-
-    padding:
-      10px 15px;
-
-    gap: 10px;
-  }
-
-  .backButton {
-    min-height: 40px;
-
-    width: 40px;
-
-    padding: 0;
-
-    border-radius: 11px;
-  }
-
-  .backButton span {
-    display: none;
-  }
-
-  .headerCenter h1 {
-    font-size: 18px;
-  }
-
-  .headerCenter span {
-    font-size: 9px;
-  }
-
-  .headerRight span {
-    display: none;
-  }
-
-  .headerRight svg {
-    width: 19px;
-    height: 19px;
-  }
-
-  .checkoutSteps {
-    padding:
-      12px 15px 8px;
-  }
-
-  .checkoutLayout {
+  .fields {
     grid-template-columns: 1fr;
   }
-
+  .summaryCard {
+    padding: 24px;
+  }
+}
+@media (max-width: 900px) {
+  .checkoutLayout {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
   .summaryColumn {
     position: static;
     order: -1;
   }
-
-  .fields {
-    grid-template-columns: 1fr;
-  }
-
-  .formCard {
-    padding: 17px;
-
-    border-radius: 16px;
-  }
-
   .summaryCard {
-    border-radius: 16px;
+    display: none;
   }
-
-  .summaryToggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    min-height: 40px;
-    padding: 0 4px;
-    border: 0;
-    background: transparent;
-    color: var(--accent);
-    font: inherit;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
+  .summaryProducts {
+    margin: 0;
   }
-
-  .summaryToggle span {
-    font-size: 20px;
-    line-height: 1;
-  }
-
-  .summaryToggle:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
-  }
-
   .products {
-    display: none;
+    max-height: none;
+    overflow: visible;
   }
-
-  .productsExpanded {
+  .finalTotal {
     display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+    width: 100%;
+    margin-bottom: 4px;
   }
-
-  .summaryInfo {
-    display: none;
+  .finalTotal span {
+    color: var(--muted);
+    font-size: 13px;
   }
-
-  /*
-    Только исправление взаимодействия чекбокса
-    на мобильном. Остальная компоновка не меняется.
-  */
-  .checkboxContainer {
+  .finalTotal strong {
+    color: var(--text);
+    font-size: 22px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .formSubmit .submitButton {
     width: 100%;
     min-width: 0;
   }
-
+  .formCard {
+    gap: 22px;
+  }
   .checkboxLabel {
-    position: relative;
-
-    width: 100%;
-    min-width: 0;
-
-    align-items: flex-start;
+    min-height: 44px;
   }
-
-  .checkboxLabel input {
-    left: 0;
-    top: 1px;
-
-    width: 20px;
-    height: 20px;
-
-    opacity: 0;
-
-    pointer-events: auto;
-
-    z-index: 2;
-  }
-
-  .customCheckbox {
-    flex: 0 0 20px;
-
-    width: 20px;
-    height: 20px;
-
-    margin-top: 1px;
-
-    z-index: 1;
-  }
-
-  .checkboxText {
-    min-width: 0;
-    flex: 1 1 auto;
-
-    overflow-wrap: anywhere;
-  }
-
-  .checkboxError {
-    padding-left: 30px;
+  .fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
 @media (max-width: 600px) {
   .content {
-    padding:
-      9px 12px 25px;
+    padding: 16px 20px calc(24px + env(safe-area-inset-bottom));
+    scrollbar-gutter: auto;
   }
-
-  .checkoutSteps {
-    padding:
-      11px 12px 7px;
+  .fields {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
-
-  .checkoutStep {
-    gap: 7px;
+  .agreements {
+    gap: 6px;
   }
-
-  .stepNumber {
-    flex-basis: 28px;
-
-    width: 28px;
-    height: 28px;
+  .formSubmit {
+    padding-top: 20px;
   }
-
-  .stepInfo {
-    gap: 0;
-  }
-
-  .stepLabel {
-    font-size: 10px;
-  }
-
-  .stepDescription {
-    display: none;
-  }
-
-  .stepConnector {
-    min-width: 24px;
-
-    margin:
-      0 8px;
-  }
-
-  .formHeader h2 {
-    font-size: 19px;
-  }
-
-  .formHeader p {
-    font-size: 12px;
-  }
-
-  .formCard {
-    gap: 17px;
-  }
-
-  .inputWrapper input {
-    height: 55px;
-  }
-
-  .inputWrapper textarea {
-    min-height: 105px;
-  }
-
-  .submitButton {
+  .orderPage .submitButton,
+  .orderPage .successButton,
+  .orderPage .pdfButton,
+  .orderPage .emptyButton {
     min-height: 52px;
+    font-size: 15px;
   }
-
-  .summaryHeader h2 {
-    font-size: 16px;
+  .successWrapper {
+    margin: 32px auto;
   }
-
-  .product {
-    grid-template-columns:
-      50px minmax(0, 1fr) auto;
-
-    gap: 9px;
-  }
-
-  .productImage {
-    width: 50px;
-    height: 50px;
-  }
-
-  .productTitle {
-    font-size: 12px;
-  }
-
-  .total strong {
-    font-size: 18px;
-  }
-
-  .successCard {
-    padding: 19px;
-
-    gap: 13px;
-  }
-
-  .successIcon {
-    flex-basis: 40px;
-
-    width: 40px;
-    height: 40px;
-  }
-
-  .successIcon svg {
-    width: 21px;
-    height: 21px;
-  }
-
   .successContent h2 {
-    font-size: 19px;
+    font-size: 25px;
+  }
+  .successButton {
+    width: 100%;
+  }
+  .successActions {
+    width: 100%;
+  }
+  .pdfButton {
+    width: 100%;
+  }
+  .emptyState {
+    margin: 32px auto;
   }
 }
-
-/* =========================================================
-   SMALL PHONES
-   ========================================================= */
-
-@media (max-width: 380px) {
+@media (max-width: 360px) {
   .content {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .header {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .headerCenter h1 {
-    font-size: 17px;
-  }
-
-  .checkoutSteps {
-    padding-left: 10px;
-    padding-right: 10px;
-  }
-
-  .stepInfo {
-    display: none;
-  }
-
-  .stepConnector {
-    min-width: 30px;
-  }
-
-  .formCard {
-    padding: 14px;
-  }
-
-  .summaryCard {
-    padding: 14px;
-  }
-
-  .checkboxContainer {
-    padding: 9px;
-  }
-
-  .checkboxLabel {
-    gap: 8px;
-
-    font-size: 11px;
-  }
-
-  .checkboxLabel input {
-    width: 20px;
-    height: 20px;
-  }
-
-  .customCheckbox {
-    flex-basis: 20px;
-
-    width: 20px;
-    height: 20px;
-  }
-
-  .checkboxText {
-    min-width: 0;
-
-    overflow-wrap: anywhere;
-  }
-
-  .checkboxError {
-    padding-left: 28px;
-
-    font-size: 10px;
-  }
-
-  .product {
-    grid-template-columns:
-      45px minmax(0, 1fr) auto;
-  }
-
-  .productImage {
-    width: 45px;
-    height: 45px;
-  }
-
-  .productPrice {
-    font-size: 10px;
+    padding: 16px 16px calc(24px + env(safe-area-inset-bottom));
   }
 }
-
-/* =========================================================
-   SAFE AREA
-   ========================================================= */
-
-@supports (padding: env(safe-area-inset-bottom)) {
-  .content {
-    padding-bottom:
-      calc(25px + env(safe-area-inset-bottom));
-  }
-}
-
-/* =========================================================
-   REDUCED MOTION
-   ========================================================= */
-
 @media (prefers-reduced-motion: reduce) {
-  .orderPage *,
-  .orderPage *::before,
-  .orderPage *::after {
-    animation-duration:
-      0.01ms !important;
-
-    animation-iteration-count:
-      1 !important;
-
-    transition-duration:
-      0.01ms !important;
-
-    scroll-behavior:
-      auto !important;
+  .orderPage * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }

@@ -684,20 +684,6 @@ export function Documents() {
         <div className={Styles.heroInner}>
           <div className={Styles.heroMain}>
             <Breadcrumbs path="/documents/" />
-            <span
-              className={
-                Styles.eyebrow
-              }
-            >
-              <span
-                className={
-                  Styles.eyebrowDot
-                }
-                aria-hidden="true"
-              />
-
-              Документальный центр
-            </span>
 
             <h1
               className={

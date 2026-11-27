@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Styles from './question-form.module.scss';
 import { QuestionForm } from './QuestionForm';
 import type { QuestionFormData } from './QuestionForm';
+import { useFormDraft } from '../../../hooks/useFormDraft';
 
 const emptyForm: QuestionFormData = {
   name: '',
@@ -14,7 +15,7 @@ const emptyForm: QuestionFormData = {
 
 export const QuestionFormWrapper: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState<QuestionFormData>(emptyForm);
+  const [formData, setFormData, clearDraft] = useFormDraft('question', emptyForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState('');
@@ -73,7 +74,7 @@ export const QuestionFormWrapper: React.FC = () => {
         return;
       }
 
-      setFormData(emptyForm);
+      clearDraft();
       setSubmitted(true);
     } catch {
       setSubmitError('Нет соединения с сервером. Попробуйте ещё раз.');

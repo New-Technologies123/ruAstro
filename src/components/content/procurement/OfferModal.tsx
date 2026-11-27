@@ -2,6 +2,17 @@ import { ArrowUpRightIcon } from "../../ui/icon/ArrowUpRightIcon";
 import React, { useState, useEffect, useRef } from "react";
 import Styles from "./forma.module.scss";
 import InputMask from "react-input-mask";
+import { useFormDraft } from '../../../hooks/useFormDraft';
+
+const emptyForm = {
+  fullName: '',
+  company: '',
+  email: '',
+  inn: '',
+  phone: '',
+  consent: false,
+  privacyAgreement: false,
+};
 
 type Item = { id: number; name: string | null; quantity: number | string; unit: string; note: string | null };
 type Group = { note: string; items: Item[] };
@@ -39,15 +50,7 @@ const MAX_FILES_BYTES = 12 * 1024 * 1024;
 const DOCUMENT_EXTENSIONS = ['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'];
 
 export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
-  const [form, setForm] = useState({
-    fullName: "",
-    company: "",
-    email: "",
-    inn: "",
-    phone: "",
-    consent: false,        // согласие на обработку данных
-    privacyAgreement: false // согласие с политикой конфиденциальности
-  });
+  const [form, setForm, clearDraft] = useFormDraft(`procurement:${group.note}`, emptyForm);
 
   const [files, setFiles] = useState<{[key:string]: File | null}>({
     egrul: null, charter: null, partnerCard: null, directorDecision: null, offerFile: null, invoicePDF: null
@@ -249,219 +252,329 @@ export const OfferModal: React.FC<Props> = ({ group, onClose }) => {
     try {
       const response = await fetch('/submit.php', { method: "POST", body: formData });
       const result = await response.json();
-      if (response.ok && result.success) { setSubmitted(true); }
+      if (response.ok && result.success) { clearDraft(); setSubmitted(true); }
       else { setSubmitError(result.error || 'Не удалось отправить предложение. Попробуйте ещё раз.'); }
     } catch { setSubmitError('Не удалось связаться с сервером. Попробуйте ещё раз.'); }
     finally { setLoading(false); }
   };
 
   return (
-    <div className={Styles.modalBg} onMouseDown={e => { if (e.target === e.currentTarget) onClose(); }}>
-      <div ref={dialogRef} className={Styles.modal} role="dialog" aria-modal="true" aria-labelledby="offer-title" onKeyDown={handleDialogKeyDown}>
+    <div
+      className={Styles.modalBg}
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div
+        ref={dialogRef}
+        className={Styles.modal}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="offer-title"
+        onKeyDown={handleDialogKeyDown}
+      >
         <div className={Styles.modalHeader}>
           <div>
             <span className={Styles.modalEyebrow}>ПОСТАВЩИКАМ · ЛОТ {group.note}</span>
             <h2 id="offer-title">{submitted ? 'Предложение принято' : 'Добавить предложение'}</h2>
             <p>{submitted ? 'Спасибо за участие в закупке.' : 'Оставьте контакты и приложите документы для участия в закупке.'}</p>
           </div>
-          <button ref={closeRef} type="button" className={Styles.closeButton} onClick={onClose} aria-label="Закрыть форму">×</button>
-        </div>
-
-        <div className={Styles.modalBody}>
-        {submitted ? (
-          <div ref={successRef} className={Styles.successMessage} role="status" tabIndex={-1}>
-            <span className={Styles.successIcon} aria-hidden="true">✓</span>
-            <h3>Вы подали заявку на закупку лота {group.note}</h3>
-            <p>Ваше предложение отправлено и принято в обработку.</p>
-            <button type="button" className={Styles.downloadButton} onClick={onClose}>Закрыть</button>
-          </div>
-        ) : (
-        <>
-        <div className={Styles.downloadBlock}>
-          <div><strong>Перечень закупаемых МТР</strong><span>Скачайте файл, заполните предложение и прикрепите его ниже.</span></div>
-          <button type="button" className={Styles.downloadButton} disabled={downloading} onClick={downloadExcel}>
-            {downloading ? 'Готовим Excel…' : 'Скачать Excel'} <span aria-hidden="true">↓</span>
+          <button ref={closeRef} type="button" className={Styles.closeButton} onClick={onClose} aria-label="Закрыть форму">
+            ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className={Styles.form} noValidate>
-          {submitError && <p className={Styles.error} role="alert">{submitError}</p>}
-          <div className={Styles.sectionHeading}><span>01</span><div><h3>Контактные данные</h3><p>Как с вами связаться</p></div></div>
-          <div className={Styles.fieldGrid}>
-          <div>
-            <label htmlFor="offer-full-name">ФИО</label>
-            <input
-              id="offer-full-name"
-              type="text"
-              placeholder="Иванов Иван Иванович"
-              value={form.fullName}
-              onChange={e => handleFormChange("fullName", e.target.value)}
-              className={`${Styles.input} ${errors.fullName ? Styles.errorInput : ""}`}
-              aria-invalid={!!errors.fullName}
-            />
-            {errors.fullName && <p className={Styles.error}>{errors.fullName}</p>}
-          </div>
-
-          <div>
-            <label htmlFor="offer-company">Компания</label>
-            <input
-              id="offer-company"
-              type="text"
-              placeholder="Название компании"
-              value={form.company}
-              onChange={e => handleFormChange("company", e.target.value)}
-              className={`${Styles.input} ${errors.company ? Styles.errorInput : ""}`}
-              aria-invalid={!!errors.company}
-            />
-            {errors.company && <p className={Styles.error}>{errors.company}</p>}
-          </div>
-
-          <div>
-            <label htmlFor="offer-email">Электронная почта</label>
-            <input
-              id="offer-email"
-              type="email"
-              placeholder="mail@company.ru"
-              value={form.email}
-              onChange={e => handleFormChange("email", e.target.value)}
-              className={`${Styles.input} ${errors.email ? Styles.errorInput : ""}`}
-              aria-invalid={!!errors.email}
-            />
-            {errors.email && <p className={Styles.error}>{errors.email}</p>}
-          </div>          
-
-          <div>
-            <label htmlFor="offer-phone">Телефон</label>
-            <InputMask
-              id="offer-phone"
-              mask="+7 (999) 999-99-99"
-              placeholder="+7 (999) 000-00-00"
-              value={form.phone}
-              onChange={e => handleFormChange("phone", e.target.value)}
-              className={`${Styles.input} ${errors.phone ? Styles.errorInput : ""}`}
-              aria-invalid={!!errors.phone}
-            />
-            {errors.phone && <p className={Styles.error}>{errors.phone}</p>}
-          </div>
-
-          <div>
-            <label htmlFor="offer-inn">ИНН компании</label>
-            <input
-              id="offer-inn"
-              type="text"
-              placeholder="10 или 12 цифр"
-              value={form.inn}
-              onChange={e => handleFormChange("inn", e.target.value)}
-              className={`${Styles.input} ${errors.inn ? Styles.errorInput : ""}`}
-              aria-invalid={!!errors.inn}
-            />
-            {errors.inn && <p className={Styles.error}>{errors.inn}</p>}
-          </div>
-
-          </div>
-
-          <div className={Styles.sectionHeading}><span>02</span><div><h3>Документы</h3><p>До 3 МБ на файл, суммарно до 12 МБ. Документы: PDF, DOC, DOCX, JPG, PNG; предложение: XLSX или XLS; счёт: PDF.</p></div></div>
-          {Object.keys(fileLabels).some((key) => errors[key]) && (
-            <div className={Styles.missingFiles} role="alert">
-              <strong>Не хватает документов:</strong>
-              <span>{Object.keys(fileLabels).filter((key) => errors[key]).map((key) => fileLabels[key]).join(", ")}</span>
+        <div className={Styles.modalBody}>
+          {submitted ? (
+            <div ref={successRef} className={Styles.successMessage} role="status" tabIndex={-1}>
+              <span className={Styles.successIcon} aria-hidden="true">
+                ✓
+              </span>
+              <h3>Вы подали заявку на закупку лота {group.note}</h3>
+              <p>Ваше предложение отправлено и принято в обработку.</p>
+              <button type="button" className={Styles.downloadButton} onClick={onClose}>
+                Закрыть
+              </button>
             </div>
+          ) : (
+            <>
+              <div className={Styles.downloadBlock}>
+                <div>
+                  <strong>Перечень закупаемых МТР</strong>
+                  <span>Скачайте файл, заполните предложение и прикрепите его ниже.</span>
+                </div>
+                <button type="button" className={Styles.downloadButton} disabled={downloading} onClick={downloadExcel}>
+                  {downloading ? 'Готовим Excel…' : 'Скачать Excel'} <span aria-hidden="true">↓</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleSubmit} className={Styles.form} noValidate>
+                {submitError && (
+                  <p className={Styles.error} role="alert">
+                    {submitError}
+                  </p>
+                )}
+                <div className={Styles.sectionHeading}>
+                  <span>01</span>
+                  <div>
+                    <h3>Контактные данные</h3>
+                    <p>Как с вами связаться</p>
+                  </div>
+                </div>
+                <div className={Styles.fieldGrid}>
+                  <div>
+                    <div className={Styles.floatingField}>
+                      <input
+                        id="offer-full-name"
+                        type="text"
+                        placeholder=" "
+                        value={form.fullName}
+                        onChange={(e) => handleFormChange('fullName', e.target.value)}
+                        className={`${Styles.input} ${errors.fullName ? Styles.errorInput : ''}`}
+                        aria-invalid={!!errors.fullName}
+                      />
+                      <label htmlFor="offer-full-name">ФИО</label>
+                    </div>
+                    {errors.fullName && <p className={Styles.error}>{errors.fullName}</p>}
+                  </div>
+
+                  <div>
+                    <div className={Styles.floatingField}>
+                      <input
+                        id="offer-company"
+                        type="text"
+                        placeholder=" "
+                        value={form.company}
+                        onChange={(e) => handleFormChange('company', e.target.value)}
+                        className={`${Styles.input} ${errors.company ? Styles.errorInput : ''}`}
+                        aria-invalid={!!errors.company}
+                      />
+                      <label htmlFor="offer-company">Компания</label>
+                    </div>
+                    {errors.company && <p className={Styles.error}>{errors.company}</p>}
+                  </div>
+
+                  <div>
+                    <div className={Styles.floatingField}>
+                      <input
+                        id="offer-email"
+                        type="email"
+                        placeholder=" "
+                        value={form.email}
+                        onChange={(e) => handleFormChange('email', e.target.value)}
+                        className={`${Styles.input} ${errors.email ? Styles.errorInput : ''}`}
+                        aria-invalid={!!errors.email}
+                      />
+                      <label htmlFor="offer-email">Электронная почта</label>
+                    </div>
+                    {errors.email && <p className={Styles.error}>{errors.email}</p>}
+                  </div>
+
+                  <div>
+                    <div className={Styles.floatingField}>
+                      <InputMask
+                        id="offer-phone"
+                        mask="+7 (999) 999-99-99"
+                        placeholder=" "
+                        value={form.phone}
+                        onChange={(e) => handleFormChange('phone', e.target.value)}
+                        className={`${Styles.input} ${errors.phone ? Styles.errorInput : ''}`}
+                        aria-invalid={!!errors.phone}
+                      />
+                      <label htmlFor="offer-phone">Телефон</label>
+                    </div>
+                    {errors.phone && <p className={Styles.error}>{errors.phone}</p>}
+                  </div>
+
+                  <div>
+                    <div className={Styles.floatingField}>
+                      <input
+                        id="offer-inn"
+                        type="text"
+                        placeholder=" "
+                        value={form.inn}
+                        onChange={(e) => handleFormChange('inn', e.target.value)}
+                        className={`${Styles.input} ${errors.inn ? Styles.errorInput : ''}`}
+                        aria-invalid={!!errors.inn}
+                      />
+                      <label htmlFor="offer-inn">ИНН компании</label>
+                    </div>
+                    {errors.inn && <p className={Styles.error}>{errors.inn}</p>}
+                  </div>
+                </div>
+
+                <div className={Styles.sectionHeading}>
+                  <span>02</span>
+                  <div>
+                    <h3>Документы</h3>
+                    <p>До 3 МБ на файл, суммарно до 12 МБ. Документы: PDF, DOC, DOCX, JPG, PNG; предложение: XLSX или XLS; счёт: PDF.</p>
+                  </div>
+                </div>
+                {Object.keys(fileLabels).some((key) => errors[key]) && (
+                  <div className={Styles.missingFiles} role="alert">
+                    <strong>Не хватает документов:</strong>
+                    <span>
+                      {Object.keys(fileLabels)
+                        .filter((key) => errors[key])
+                        .map((key) => fileLabels[key])
+                        .join(', ')}
+                    </span>
+                  </div>
+                )}
+                <div className={Styles.fileGrid}>
+                  <div className={errors.egrul ? Styles.fileError : ''}>
+                    <label htmlFor="offer-egrul">Выписка ЕГРЮЛ</label>
+                    <input
+                      id="offer-egrul"
+                      type="file"
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                      aria-invalid={!!errors.egrul}
+                      onChange={(e) => handleFileChange('egrul', e.target.files?.[0] || null)}
+                    />
+                    <p className={`${Styles.fileStatus} ${files.egrul ? Styles.fileChosen : ''}`}>
+                      {files.egrul ? `✓ ${files.egrul.name}` : 'Файл не выбран'}
+                    </p>
+                    {errors.egrul && <p className={Styles.error}>{errors.egrul}</p>}
+                  </div>
+                  <div className={errors.charter ? Styles.fileError : ''}>
+                    <label htmlFor="offer-charter">Устав компании</label>
+                    <input
+                      id="offer-charter"
+                      type="file"
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                      aria-invalid={!!errors.charter}
+                      onChange={(e) => handleFileChange('charter', e.target.files?.[0] || null)}
+                    />
+                    <p className={`${Styles.fileStatus} ${files.charter ? Styles.fileChosen : ''}`}>
+                      {files.charter ? `✓ ${files.charter.name}` : 'Файл не выбран'}
+                    </p>
+                    {errors.charter && <p className={Styles.error}>{errors.charter}</p>}
+                  </div>
+                  <div className={errors.partnerCard ? Styles.fileError : ''}>
+                    <label htmlFor="offer-partner-card">Карта партнёра</label>
+                    <input
+                      id="offer-partner-card"
+                      type="file"
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                      aria-invalid={!!errors.partnerCard}
+                      onChange={(e) => handleFileChange('partnerCard', e.target.files?.[0] || null)}
+                    />
+                    <p className={`${Styles.fileStatus} ${files.partnerCard ? Styles.fileChosen : ''}`}>
+                      {files.partnerCard ? `✓ ${files.partnerCard.name}` : 'Файл не выбран'}
+                    </p>
+                    {errors.partnerCard && <p className={Styles.error}>{errors.partnerCard}</p>}
+                  </div>
+                  <div className={errors.directorDecision ? Styles.fileError : ''}>
+                    <label htmlFor="offer-director-decision">Решение директора</label>
+                    <input
+                      id="offer-director-decision"
+                      type="file"
+                      accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                      aria-invalid={!!errors.directorDecision}
+                      onChange={(e) => handleFileChange('directorDecision', e.target.files?.[0] || null)}
+                    />
+                    <p className={`${Styles.fileStatus} ${files.directorDecision ? Styles.fileChosen : ''}`}>
+                      {files.directorDecision ? `✓ ${files.directorDecision.name}` : 'Файл не выбран'}
+                    </p>
+                    {errors.directorDecision && <p className={Styles.error}>{errors.directorDecision}</p>}
+                  </div>
+                  <div className={errors.invoicePDF ? Styles.fileError : ''}>
+                    <label htmlFor="offer-invoice">Счёт с подписью и печатью (PDF)</label>
+                    <input
+                      id="offer-invoice"
+                      type="file"
+                      accept=".pdf"
+                      aria-invalid={!!errors.invoicePDF}
+                      onChange={(e) => handleFileChange('invoicePDF', e.target.files?.[0] || null)}
+                    />
+                    <p className={`${Styles.fileStatus} ${files.invoicePDF ? Styles.fileChosen : ''}`}>
+                      {files.invoicePDF ? `✓ ${files.invoicePDF.name}` : 'Файл не выбран'}
+                    </p>
+                    {errors.invoicePDF && <p className={Styles.error}>{errors.invoicePDF}</p>}
+                  </div>
+                  <div className={errors.offerFile ? Styles.fileError : ''}>
+                    <label htmlFor="offer-excel">Файл с предложением (Excel)</label>
+                    <input
+                      id="offer-excel"
+                      type="file"
+                      accept=".xlsx,.xls"
+                      aria-invalid={!!errors.offerFile}
+                      onChange={(e) => handleOfferFileChange(e.target.files?.[0] || null)}
+                    />
+                    <p className={`${Styles.fileStatus} ${files.offerFile ? Styles.fileChosen : ''}`}>
+                      {checkingOfferFile ? 'Проверяем файл…' : files.offerFile ? `✓ ${files.offerFile.name}` : 'Файл не выбран'}
+                    </p>
+                    {errors.offerFile && <p className={Styles.error}>{errors.offerFile}</p>}
+                  </div>
+                </div>
+
+                <div className={Styles.sectionHeading}>
+                  <span>03</span>
+                  <div>
+                    <h3>Согласия</h3>
+                    <p>Подтвердите условия обработки данных</p>
+                  </div>
+                </div>
+                <div className={Styles.consents}>
+                  {/* Первый чекбокс - согласие на обработку данных */}
+                  <div className={Styles.checkboxWrapper}>
+                    <label className={`${Styles.checkbox} ${errors.consent ? Styles.error : ''}`}>
+                      <input
+                        id="offer-consent"
+                        type="checkbox"
+                        checked={form.consent}
+                        onChange={(e) => handleCheckboxChange('consent', e.target.checked)}
+                        aria-invalid={!!errors.consent}
+                      />
+                      <span className={Styles.customCheckbox}></span>
+                      <span className={Styles.checkboxText}>
+                        Я даю согласие на{' '}
+                        <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">
+                          обработку моих персональных данных
+                        </a>
+                        , включая загрузку и обработку прилагаемых документов.
+                      </span>
+                    </label>
+                    {errors.consent && <div className={Styles.errorText}>⚠️ {errors.consent}</div>}
+                  </div>
+
+                  {/* Второй чекбокс - согласие с политикой конфиденциальности */}
+                  <div className={Styles.checkboxWrapper}>
+                    <label className={`${Styles.checkbox} ${errors.privacyAgreement ? Styles.error : ''}`}>
+                      <input
+                        id="offer-privacy"
+                        type="checkbox"
+                        checked={form.privacyAgreement}
+                        onChange={(e) => handleCheckboxChange('privacyAgreement', e.target.checked)}
+                        aria-invalid={!!errors.privacyAgreement}
+                      />
+                      <span className={Styles.customCheckbox}></span>
+                      <span className={Styles.checkboxText}>
+                        С{' '}
+                        <a href="/file/privacy_v1.pdf" target="_blank" rel="noopener noreferrer">
+                          политикой конфиденциальности
+                        </a>{' '}
+                        ознакомлен(а) и согласен(на).
+                      </span>
+                    </label>
+                    {errors.privacyAgreement && <div className={Styles.errorText}>⚠️ {errors.privacyAgreement}</div>}
+                  </div>
+                </div>
+
+                <div className={Styles.buttons}>
+                  <button type="button" onClick={onClose}>
+                    Отмена
+                  </button>
+                  <button type="submit" disabled={loading || checkingOfferFile}>
+                    {loading ? 'Отправка…' : checkingOfferFile ? 'Проверяем Excel…' : 'Отправить предложение'}{' '}
+                    <span aria-hidden="true">
+                      <ArrowUpRightIcon />
+                    </span>
+                  </button>
+                </div>
+              </form>
+            </>
           )}
-          <div className={Styles.fileGrid}>
-          <div className={errors.egrul ? Styles.fileError : ""}>
-            <label htmlFor="offer-egrul">Выписка ЕГРЮЛ</label>
-            <input id="offer-egrul" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" aria-invalid={!!errors.egrul} onChange={e => handleFileChange("egrul", e.target.files?.[0] || null)} />
-            <p className={`${Styles.fileStatus} ${files.egrul ? Styles.fileChosen : ""}`}>{files.egrul ? `✓ ${files.egrul.name}` : "Файл не выбран"}</p>
-            {errors.egrul && <p className={Styles.error}>{errors.egrul}</p>}
-          </div>
-          <div className={errors.charter ? Styles.fileError : ""}>
-            <label htmlFor="offer-charter">Устав компании</label>
-            <input id="offer-charter" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" aria-invalid={!!errors.charter} onChange={e => handleFileChange("charter", e.target.files?.[0] || null)} />
-            <p className={`${Styles.fileStatus} ${files.charter ? Styles.fileChosen : ""}`}>{files.charter ? `✓ ${files.charter.name}` : "Файл не выбран"}</p>
-            {errors.charter && <p className={Styles.error}>{errors.charter}</p>}
-          </div>
-          <div className={errors.partnerCard ? Styles.fileError : ""}>
-            <label htmlFor="offer-partner-card">Карта партнёра</label>
-            <input id="offer-partner-card" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" aria-invalid={!!errors.partnerCard} onChange={e => handleFileChange("partnerCard", e.target.files?.[0] || null)} />
-            <p className={`${Styles.fileStatus} ${files.partnerCard ? Styles.fileChosen : ""}`}>{files.partnerCard ? `✓ ${files.partnerCard.name}` : "Файл не выбран"}</p>
-            {errors.partnerCard && <p className={Styles.error}>{errors.partnerCard}</p>}
-          </div>
-          <div className={errors.directorDecision ? Styles.fileError : ""}>
-            <label htmlFor="offer-director-decision">Решение директора</label>
-            <input id="offer-director-decision" type="file" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" aria-invalid={!!errors.directorDecision} onChange={e => handleFileChange("directorDecision", e.target.files?.[0] || null)} />
-            <p className={`${Styles.fileStatus} ${files.directorDecision ? Styles.fileChosen : ""}`}>{files.directorDecision ? `✓ ${files.directorDecision.name}` : "Файл не выбран"}</p>
-            {errors.directorDecision && <p className={Styles.error}>{errors.directorDecision}</p>}
-          </div>
-          <div className={errors.invoicePDF ? Styles.fileError : ""}>
-            <label htmlFor="offer-invoice">Счёт с подписью и печатью (PDF)</label>
-            <input id="offer-invoice" type="file" accept=".pdf" aria-invalid={!!errors.invoicePDF} onChange={e => handleFileChange("invoicePDF", e.target.files?.[0] || null)} />
-            <p className={`${Styles.fileStatus} ${files.invoicePDF ? Styles.fileChosen : ""}`}>{files.invoicePDF ? `✓ ${files.invoicePDF.name}` : "Файл не выбран"}</p>
-            {errors.invoicePDF && <p className={Styles.error}>{errors.invoicePDF}</p>}
-          </div>
-          <div className={errors.offerFile ? Styles.fileError : ""}>
-            <label htmlFor="offer-excel">Файл с предложением (Excel)</label>
-            <input id="offer-excel" type="file" accept=".xlsx,.xls" aria-invalid={!!errors.offerFile} onChange={e => handleOfferFileChange(e.target.files?.[0] || null)} />
-            <p className={`${Styles.fileStatus} ${files.offerFile ? Styles.fileChosen : ""}`}>{checkingOfferFile ? "Проверяем файл…" : files.offerFile ? `✓ ${files.offerFile.name}` : "Файл не выбран"}</p>
-            {errors.offerFile && <p className={Styles.error}>{errors.offerFile}</p>}
-          </div>
-
-          </div>
-
-          <div className={Styles.sectionHeading}><span>03</span><div><h3>Согласия</h3><p>Подтвердите условия обработки данных</p></div></div>
-          <div className={Styles.consents}>
-            {/* Первый чекбокс - согласие на обработку данных */}
-            <div className={Styles.checkboxWrapper}>
-              <label className={`${Styles.checkbox} ${errors.consent ? Styles.error : ''}`}>
-                <input
-                  id="offer-consent"
-                  type="checkbox"
-                  checked={form.consent}
-                  onChange={e => handleCheckboxChange('consent', e.target.checked)}
-                  aria-invalid={!!errors.consent}
-                />
-                <span className={Styles.customCheckbox}></span>
-                <span className={Styles.checkboxText}>
-                  Я даю согласие на <a href="/file/personal_data_v1.pdf" target="_blank" rel="noopener noreferrer">обработку моих персональных данных</a>
-                  , включая загрузку и обработку прилагаемых документов.
-                </span>
-              </label>
-              {errors.consent && (
-                <div className={Styles.errorText}>
-                  ⚠️ {errors.consent}
-                </div>
-              )}
-            </div>
-
-            {/* Второй чекбокс - согласие с политикой конфиденциальности */}
-            <div className={Styles.checkboxWrapper}>
-              <label className={`${Styles.checkbox} ${errors.privacyAgreement ? Styles.error : ''}`}>
-                <input
-                  id="offer-privacy"
-                  type="checkbox"
-                  checked={form.privacyAgreement}
-                  onChange={e => handleCheckboxChange('privacyAgreement', e.target.checked)}
-                  aria-invalid={!!errors.privacyAgreement}
-                />
-                <span className={Styles.customCheckbox}></span>
-                <span className={Styles.checkboxText}>
-                  С <a href="/file/privacy_v1.pdf" target="_blank" rel="noopener noreferrer">политикой конфиденциальности</a> ознакомлен(а) и согласен(на).
-                </span>
-              </label>
-              {errors.privacyAgreement && (
-                <div className={Styles.errorText}>
-                  ⚠️ {errors.privacyAgreement}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className={Styles.buttons}>
-            <button type="button" onClick={onClose}>Отмена</button>
-            <button type="submit" disabled={loading || checkingOfferFile}>{loading ? "Отправка…" : checkingOfferFile ? "Проверяем Excel…" : "Отправить предложение"} <span aria-hidden="true"><ArrowUpRightIcon /></span></button>
-          </div>
-        </form>
-        </>
-        )}
         </div>
       </div>
     </div>

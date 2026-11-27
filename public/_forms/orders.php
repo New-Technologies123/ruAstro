@@ -4,6 +4,45 @@ namespace RuAstro\Forms;
 
 if (!defined('RUASTRO_FORM_ENTRY')) { http_response_code(404); exit; }
 
+function multipartOrderBody(): array
+{
+    $payload = $_POST['payload'] ?? null;
+    if (!is_string($payload)) throw new FormError('Ожидается объект заявки.', 400);
+    if (strlen($payload) > 32768) throw new FormError('Превышен размер заявки.', 413);
+    try {
+        $data = json_decode($payload, true, 32, JSON_THROW_ON_ERROR);
+    } catch (\JsonException $error) {
+        throw new FormError('Неверный JSON.', 400);
+    }
+    if (!is_array($data) || !str_starts_with(ltrim($payload), '{')) throw new FormError('Ожидается объект заявки.', 400);
+    return $data;
+}
+
+function orderAttachment(): ?array
+{
+    if (array_diff(array_keys($_FILES), ['attachment'])) throw new FormError('К заявке можно прикрепить только один файл.');
+    if (!isset($_FILES['attachment']) || ($_FILES['attachment']['error'] ?? null) === UPLOAD_ERR_NO_FILE) return null;
+    $file = attachment('attachment', ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png']);
+    $file['label'] = text(['filename' => $_FILES['attachment']['name']], 'filename', 'Название файла', 255);
+    $file['sha256'] = hash_file('sha256', $file['path']);
+    return $file;
+}
+
+function sendOrderMessage(string $subject, string $message, string $email, ?array $file): bool
+{
+    if ($file === null) return sendText('tendernt@tech-new.ru', $subject, $message, $email);
+    $boundary = 'ruastro_' . bin2hex(random_bytes(24));
+    $headers = mailHeaders($email) . "Content-Type: multipart/mixed; boundary=\"$boundary\"\r\n";
+    $body = "--$boundary\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n";
+    $body .= chunk_split(base64_encode($message)) . "\r\n";
+    $body .= "--$boundary\r\nContent-Type: {$file['mime']}\r\nContent-Transfer-Encoding: base64\r\n";
+    $body .= "Content-Disposition: attachment; filename=\"{$file['name']}\"\r\n\r\n";
+    $contents = file_get_contents($file['path']);
+    if ($contents === false) throw new FormError('Не удалось прочитать вложение. Повторите отправку.', 502);
+    $body .= chunk_split(base64_encode($contents)) . "\r\n--$boundary--\r\n";
+    return mail('tendernt@tech-new.ru', '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $headers);
+}
+
 function orderOnce(array $data, callable $send): array
 {
     $requestId = text($data, 'requestId', 'Идентификатор заявки', 36);
@@ -35,7 +74,7 @@ function orderOnce(array $data, callable $send): array
         ];
         writeOrderRecord($path, $record);
         try {
-            $response = $send($record['id'], $order);
+            $response = $send($record['id'], $order, $record['time']);
         } catch (FormError $error) {
             // An explicit rejection is safe to retry; ambiguous failures stay pending.
             if ($error->status < 500 || $error->status === 502) {

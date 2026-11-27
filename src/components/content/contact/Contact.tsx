@@ -22,7 +22,6 @@ export const Contact = () => (
         <header className={Styles.hero}>
           <div className={Styles.heroContent}>
             <Breadcrumbs path="/contact/" />
-            <span className={Styles.heroEyebrow}>Контакты · Новые Технологии</span>
             <h1>Контакты <span>предприятия</span></h1>
             <p>Поможем с подбором оборудования, комплектацией и сервисом.</p>
             <div className={Styles.heroActions}>

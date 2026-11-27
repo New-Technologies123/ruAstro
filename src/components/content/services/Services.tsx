@@ -357,19 +357,6 @@ export const Services = () => {
           <div className={styles.heroInner}>
             <div className={styles.heroContent}>
               <Breadcrumbs path="/services/" />
-              <div
-                className={styles.eyebrow}
-              >
-                <span
-                  className={
-                    styles.eyebrowLine
-                  }
-                />
-
-                <span>
-                  СЕРВИСНЫЕ УСЛУГИ
-                </span>
-              </div>
 
               <h1
                 className={

@@ -193,36 +193,6 @@ export const Home = memo(() => {
                 alt="Оборудование для нефтегазовой отрасли"
                 className={Styles.heroImage}
               />
-
-              <div className={Styles.heroImageShade} />
-
-              <div className={Styles.heroCoordinates}>
-                <span>НТ/ 2026</span>
-                <span>Уфа / Россия</span>
-              </div>
-
-              <div className={Styles.heroImageLabel}>
-                <i />
-                <span>Технические решения</span>
-              </div>
-
-              <div className={Styles.heroFloatingCard}>
-                <span>Полный цикл</span>
-
-                <strong>
-                  От задачи
-                  <br />
-                  до поставки
-                </strong>
-
-                <div className={Styles.floatingProgress}>
-                  <i />
-                </div>
-
-                <small>
-                  Проектирование · производство · сервис
-                </small>
-              </div>
             </div>
           </div>
         </div>

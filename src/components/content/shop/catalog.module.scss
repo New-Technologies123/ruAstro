@@ -36,16 +36,6 @@
 .catalog select:focus-visible {
   outline: none;
 }
-.visuallyHidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
 
 .shopHeader {
   min-height: 0;
@@ -73,30 +63,16 @@
   box-shadow: 0 0 0 42px rgba(255, 255, 255, 0.035);
   pointer-events: none;
 }
-.shopEyebrow {
-  color: #aedaff;
-  font-size: 11px;
-  font-weight: 750;
-  letter-spacing: 0.09em;
-  text-transform: uppercase;
-}
 .shopHeader h1 {
   margin: 8px 0 10px;
   font-size: clamp(28px, 3.2vw, 44px);
   line-height: 1.12;
-}
-.shopHeader p {
-  margin: 0;
-  color: #d9eafa;
-  font-size: 14px;
-  line-height: 1.55;
 }
 
 .searchRow {
   display: flex;
   min-width: 0;
   gap: 10px;
-  margin-bottom: 20px;
 }
 .searchField {
   display: flex;
@@ -352,13 +328,17 @@
 .sortField select {
   height: 40px;
   max-width: 195px;
-  padding: 0 11px;
+  appearance: none;
+  padding: 0 36px 0 12px;
   border: 1px solid #dbe4ee;
   border-radius: 10px;
-  background: #fff;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='m4 6 4 4 4-4' fill='none' stroke='%23354d65' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") right 12px center / 16px no-repeat;
   color: #354d65;
   font-size: 13px;
   font-weight: 650;
+}
+@media (forced-colors: active) {
+  .sortField select { appearance: auto; background-image: none; }
 }
 .sortField select:focus-visible {
   border-color: #8fa1b3;
@@ -780,16 +760,6 @@ a.productTitle:hover {
     font-size: clamp(28px, 3.2vw, 44px);
   }
 
-  .shopHeader p {
-  line-height: 1.55;
-
-    max-width: 34ch;
-    font-size: 14px;
-  }
-
-  .searchRow {
-    margin-top: 12px;
-  }
 
   .searchField {
     min-height: 50px;
@@ -1057,10 +1027,9 @@ a.productTitle:hover {
   background: repeating-linear-gradient(135deg, transparent 0 25px, rgba(255, 255, 255, .04) 25px 26px);
   box-shadow: none;
 }
+.shopHeaderContent { min-width: 0; }
 .shopHeaderContent, .shopHeaderStats { position: relative; z-index: 1; }
-.shopEyebrow { color: #abd2ef; font-size: 12px; letter-spacing: .13em; }
 .shopHeader h1 { max-width: 780px; margin: 8px 0 10px; font-size: clamp(28px, 3.2vw, 44px); line-height: 1.06; letter-spacing: -.045em; }
-.shopHeader p { max-width: 58ch; font-size: 14px; line-height: 1.55; color: #c8dceb; }
 .shopHeaderLink {
     margin-top: 25px;
   @include buttons.primary();
@@ -1071,7 +1040,6 @@ a.productTitle:hover {
 .shopHeaderStats > div { min-height: 0; padding: 10px 12px; border: 1px solid rgba(255,255,255,.16); border-radius: 14px; background: #0d4268; color: #fff; }
 .shopHeaderStats strong { display: block; font-size: 22px; line-height: 1; letter-spacing: -.04em; }
 .shopHeaderStats span { display: block; margin-top: 9px; color: #d6e5f0; font-size: 11px; line-height: 1.35; }
-.searchRow { margin: 24px 0 16px; }
 .searchField { min-height: 60px; border-radius: 12px; box-shadow: 0 2px 12px rgba(16,45,72,.04); }
 .searchField:focus-within { border-color: #2275bd; box-shadow: 0 0 0 3px rgba(34,117,189,.12); }
 .sidebar { border-radius: 16px; box-shadow: 0 4px 20px rgba(15,45,70,.04); }
@@ -1105,14 +1073,10 @@ a.productTitle:hover {
   .shopHeader h1 {
   margin: 8px 0 10px;
  font-size: clamp(28px, 3.2vw, 44px); }
-  .shopHeader p {
-  line-height: 1.55;
- font-size: 14px; }
   .shopHeaderLink { margin-top: 18px; }
   .shopHeaderStats > div { min-height: 0; padding: 10px 12px; }
   .shopHeaderStats strong { font-size: 22px; }
   .shopHeaderStats span { margin-top: 5px; }
-  .searchRow { margin: 14px 0; }
   .productCard { grid-template-columns: 112px minmax(0, 1fr); }
   .productMedia { min-height: 190px; }
   .productBody { padding: 12px; }
@@ -1184,14 +1148,14 @@ a.productTitle:hover {
   .applyFilters:hover { background: #0f4b77; }
 }
 @media (max-width: 500px) {
+  .mobileFilterButton { min-width: 50px; padding: 0 12px; }
+  .mobileFilterLabel { display: none; }
   .sidebar { width: calc(100vw - 24px); border-radius: 18px 0 0 18px; }
   .filterGroup, .filterGroup:last-of-type { padding: 16px; }
 }
 @media (max-width: 360px) {
   .sidebarHeadingIcon { flex-basis: 34px; width: 34px; height: 34px; }
   .resetButton { padding: 9px 12px; font-size: 12px; }
-  .mobileFilterButton { min-width: 50px; padding: 0 12px; }
-  .mobileFilterLabel { display: none; }
   .cartState { flex-direction: column; }
   .cartState .inCartButton { flex: none; min-height: 44px; }
   .cartState .quantity { width: 100%; }

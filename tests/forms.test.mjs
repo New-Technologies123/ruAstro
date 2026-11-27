@@ -97,7 +97,7 @@ test('method, content type, JSON and foreign Origin are rejected', async () => {
 test('all forms reject missing consents, wrong types and header injection', async () => {
   for (const invalid of [
     { ...order(), consent: false }, { ...order(), offerAgreement: 'false' }, { ...order(), name: [] },
-    { ...order(), email: 'a@example.test\r\nBcc: stolen@example.test' }, { ...order(), position: '' },
+    { ...order(), email: 'a@example.test\r\nBcc: stolen@example.test' }, { ...order(), position: [] },
     { ...order(), phone: '123' }, { ...order(), company: 'a'.repeat(301) },
   ]) assert.equal((await json('/sendOrder.php', invalid)).response.status, 422);
   assert.equal((await json('/send-question.php', { ...question(), agreement: false })).response.status, 422);
@@ -105,11 +105,23 @@ test('all forms reject missing consents, wrong types and header injection', asyn
   assert.equal((await json('/send-question.php', { ...question(), privacyAgreement: false })).response.status, 422);
 });
 
+test('an order accepts an omitted or empty optional position', async () => {
+  for (const position of ['', undefined]) {
+    const result = await json('/sendOrder.php', { ...order(), position });
+    assert.equal(result.response.status, 200);
+    assert.equal(result.data.success, true);
+  }
+});
+
 test('prices and titles come from the server catalog, not the payload', async () => {
   const before = (await messages().catch(() => [])).length;
   const result = await json('/sendOrder.php', { ...order(), cart: [{ sku, count: 2, price: '-1', title: 'Подменённый товар' }] });
   assert.equal(result.response.status, 200);
   assert.equal(result.data.totalMinor, product.priceMinor * 2);
+  assert.equal(result.data.receipt.id, result.data.orderId);
+  assert.equal(result.data.receipt.totalMinor, product.priceMinor * 2);
+  assert.deepEqual(result.data.receipt.lines, [{ title: product.title, count: 2, priceMinor: product.priceMinor, totalMinor: product.priceMinor * 2 }]);
+  assert.ok(Number.isFinite(Date.parse(result.data.receipt.createdAt)));
   const sent = (await messages()).slice(before);
   assert.equal(sent.length, 2);
   const mail = sent[0];
@@ -127,6 +139,65 @@ test('prices and titles come from the server catalog, not the payload', async ()
     assert.ok(message.message.includes(result.data.orderId));
     const subject = Buffer.from(message.subject.match(/\?B\?(.+)\?=/)[1], 'base64').toString('utf8');
     assert.ok(subject.includes(result.data.orderId));
+  }
+});
+
+function orderWithAttachment(payload = order(), contents = '%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\n%%EOF\n', name = 'Спецификация.pdf') {
+  const body = new FormData();
+  body.append('payload', typeof payload === 'string' ? payload : JSON.stringify(payload));
+  if (contents !== null) body.append('attachment', new Blob([contents]), name);
+  return body;
+}
+
+test('an optional order upload reaches the manager and retries preserve the accepted receipt', async () => {
+  const before = (await messages()).length;
+  const payload = order();
+  const send = async () => {
+    const response = await fetch(base + '/sendOrder.php', { method: 'POST', body: orderWithAttachment(payload) });
+    return { response, data: await response.json() };
+  };
+  const first = await send();
+  assert.equal(first.response.status, 200, JSON.stringify(first.data));
+  assert.equal(first.data.success, true);
+  assert.equal(first.data.receipt.lines[0].title, product.title);
+  assert.deepEqual((await send()).data, first.data);
+  const sent = (await messages()).slice(before);
+  assert.equal(sent.length, 2);
+  assert.ok(sent[0].headers.includes('multipart/mixed'));
+  assert.equal((sent[0].message.match(/Content-Disposition: attachment/g) || []).length, 1);
+  assert.ok(sent[0].message.includes('filename="attachment.pdf"'));
+  const textPart = sent[0].message.split('\r\n\r\n')[1].split('\r\n--')[0];
+  assert.ok(Buffer.from(textPart.replace(/\s/g, ''), 'base64').toString('utf8').includes('Спецификация.pdf'));
+  const attachmentPart = sent[0].message.split('filename="attachment.pdf"\r\n\r\n')[1].split('\r\n--')[0];
+  assert.ok(Buffer.from(attachmentPart.replace(/\s/g, ''), 'base64').toString('utf8').startsWith('%PDF-'));
+  assert.ok(!sent[1].headers.includes('multipart/mixed'));
+  const changed = await fetch(base + '/sendOrder.php', { method: 'POST', body: orderWithAttachment(payload, '%PDF-1.4\nDIFFERENT\n%%EOF') });
+  assert.equal(changed.status, 409);
+  assert.equal((await messages()).length, before + 2);
+});
+
+test('orders reject invalid, empty, oversized and extra uploads before sending', async () => {
+  const before = (await messages()).length;
+  for (const body of [
+    orderWithAttachment(order(), 'not a PDF'),
+    orderWithAttachment(order(), 'script', 'bad.php'),
+    orderWithAttachment(order(), ''),
+    orderWithAttachment(order(), Buffer.alloc(3 * 1024 * 1024 + 1, 65)),
+  ]) {
+    const response = await fetch(base + '/sendOrder.php', { method: 'POST', body });
+    assert.ok([413, 422].includes(response.status), await response.text());
+  }
+  const extra = orderWithAttachment();
+  extra.append('other', new Blob(['other']), 'other.pdf');
+  assert.equal((await fetch(base + '/sendOrder.php', { method: 'POST', body: extra })).status, 422);
+  assert.equal((await fetch(base + '/sendOrder.php', { method: 'POST', body: orderWithAttachment('{', null) })).status, 400);
+  assert.equal((await messages()).length, before);
+});
+
+test('multipart orders accept no upload and validated Office documents', async () => {
+  for (const body of [orderWithAttachment(order(), null), orderWithAttachment(order(), excel(), 'Реквизиты.xlsx')]) {
+    const response = await fetch(base + '/sendOrder.php', { method: 'POST', body });
+    assert.equal(response.status, 200, await response.text());
   }
 });
 

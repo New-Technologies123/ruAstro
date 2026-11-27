@@ -1,4 +1,5 @@
 @use '../../../styles/buttons' as buttons;
+@use '../../../styles/floating-field' as floating;
 
 .questionWidget {
   --question-navy: #123a68;
@@ -522,7 +523,7 @@
 
 .questionForm {
   display: grid;
-  gap: 15px;
+  gap: 20px;
 }
 
 .fieldGroup {
@@ -532,38 +533,13 @@
   gap: 6px;
 }
 
-.fieldLabel {
-  color: #344860;
-  font-size: 12.5px;
-  font-weight: 650;
-  line-height: 1.3;
+.floatingField {
+  @include floating.label();
 }
 
 .questionForm input:not([type='checkbox']),
 .questionForm textarea {
-  display: block;
-  width: 100%;
-  min-width: 0;
-  min-height: 44px;
-  padding: 10px 12px;
-  border: 1px solid var(--question-border);
-  border-radius: 10px;
-  outline: 0;
-  background: #f8fafc;
-  color: var(--question-text);
-  font: inherit;
-  font-size: 14px;
-  line-height: 1.4;
-  transition: background .2s ease, border-color .2s ease, box-shadow .2s ease;
-
-  &::placeholder { color: #93a2b2; opacity: 1; }
-  &:hover { border-color: #afc6db; }
-  &:focus {
-    border-color: #488fc9;
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(72, 143, 201, .14);
-  }
-  &[aria-invalid='true'] { border-color: #ce5761; }
+  @include floating.control();
 }
 
 .questionForm textarea {
@@ -759,7 +735,7 @@
   .chatHeader { padding: 18px 18px 16px; }
   .chatBody { padding: 18px; }
   .contactRow { grid-template-columns: 1fr; }
-  .questionForm { gap: 14px; }
+  .questionForm { gap: 20px; }
 }
 
 @media (max-width: 380px) {
@@ -779,7 +755,7 @@
     max-height: calc(100dvh - 24px - env(safe-area-inset-bottom));
   }
 
-  .questionForm { gap: 12px; }
+  .questionForm { gap: 20px; }
   .chatHeader { padding: 16px 15px 14px; }
   .chatBody { padding: 15px; }
 }
